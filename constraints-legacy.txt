@@ -1,0 +1,3 @@
+# Oldest supported versions of major libraries can be added to this
+# file. They'll be tested with Python 2.7.
+jsonschema==2.3.0

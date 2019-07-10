@@ -1,0 +1,6 @@
+attrs
+more-executors
+koji
+six
+pushcollector
+PyYAML

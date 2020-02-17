@@ -180,7 +180,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">rpm_path</span><span class="p">:</span>
                 <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                     <span class="s2">&quot;RPM not found in koji with signing key(s) </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">),</span>
+                    <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">]),</span>
                     <span class="n">rpm</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="n">notfound</span>
@@ -213,8 +213,7 @@
 
         <span class="c1"># Convert them to lists of push items</span>
         <span class="n">rpm_push_items_fs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpm_meta</span><span class="p">,</span> <span class="n">rpm</span><span class="o">=</span><span class="n">rpm</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpm_fs</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpm_meta</span><span class="p">,</span> <span class="n">rpm</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpm_fs</span>
         <span class="p">]</span>
 
         <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">rpm_push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>

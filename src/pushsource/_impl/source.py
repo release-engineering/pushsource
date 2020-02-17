@@ -4,6 +4,21 @@ import functools
 from six.moves.urllib import parse
 
 
+def getfullargspec(x):
+    # Helper for py2 vs py3 differences.
+
+    if not hasattr(inspect, "getfullargspec"):  # pragma: no cover
+        # 1. Must use older, deprecated getargspec.
+        # 2. getfullargspec works fine when called on a class and
+        #    returns spec of constructor, but getargspec complains.
+        #    Make it work more like getfullargspec.
+        if isinstance(x, type):
+            x = x.__init__
+        return inspect.getargspec(x)  # pylint: disable=deprecated-method
+
+    return inspect.getfullargspec(x)
+
+
 class Source(object):
     """A source of push items.
 
@@ -92,13 +107,7 @@ class Source(object):
             if isinstance(value, list) and len(value) == 1:
                 url_kwargs[key] = value[0]
 
-        # Note: getargspec is deprecated but needed for Python 2.
-        getargspec = (
-            inspect.getfullargspec
-            if hasattr(inspect, "getfullargspec")
-            else inspect.getargspec
-        )
-        sig = getargspec(klass)
+        sig = getfullargspec(klass)
 
         if "url" in sig.args and parsed.path is not query:
             # If the source accepts a url argument, then the 'path' part
@@ -113,10 +122,7 @@ class Source(object):
             url_kwargs["url"] = parsed.path
 
         # Coerce some standard arguments to the right type.
-        for (key, converter) in [
-            ("threads", int),
-            ("timeout", int),
-        ]:
+        for (key, converter) in [("threads", int), ("timeout", int)]:
             if key in url_kwargs:
                 url_kwargs[key] = converter(url_kwargs[key])
 

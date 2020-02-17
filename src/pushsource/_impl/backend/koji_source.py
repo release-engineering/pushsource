@@ -147,7 +147,7 @@ class KojiSource(Source):
             if not rpm_path:
                 LOG.error(
                     "RPM not found in koji with signing key(s) %s: %s",
-                    ", ".join(self._signing_key),
+                    ", ".join([str(x) for x in self._signing_key]),
                     rpm,
                 )
                 return notfound
@@ -180,8 +180,7 @@ class KojiSource(Source):
 
         # Convert them to lists of push items
         rpm_push_items_fs = [
-            f_map(f, partial(self._push_items_from_rpm_meta, rpm=rpm))
-            for f, rpm in rpm_fs
+            f_map(f, partial(self._push_items_from_rpm_meta, rpm)) for f, rpm in rpm_fs
         ]
 
         completed_fs = futures.as_completed(rpm_push_items_fs, timeout=self._timeout)

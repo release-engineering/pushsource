@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pushsource._impl.backend.errata_source &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.backend.errata_source</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">six.moves.urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">from</span> <span class="nn">six.moves.xmlrpc_client</span> <span class="kn">import</span> <span class="n">ServerProxy</span>
+<span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
+<span class="kn">from</span> <span class="nn">more_executors.futures</span> <span class="kn">import</span> <span class="n">f_map</span><span class="p">,</span> <span class="n">f_zip</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ErrataSource"><a class="viewcode-back" href="../../../../api/sources.html#pushsource.ErrataSource">[docs]</a><span class="k">class</span> <span class="nc">ErrataSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Uses an advisory from Errata Tool as the source of push items.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">errata</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;cdn&quot;</span><span class="p">,</span>
+        <span class="n">koji_source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new source.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            url (src)</span>
+<span class="sd">                Base URL of Errata Tool, e.g. &quot;http://errata.example.com&quot;,</span>
+<span class="sd">                &quot;https://errata.example.com:8123&quot;.</span>
+
+<span class="sd">            errata (str, list[str])</span>
+<span class="sd">                Advisory ID(s) to be used as push item source.</span>
+<span class="sd">                If a single string is given, multiple IDs may be</span>
+<span class="sd">                comma-separated.</span>
+
+<span class="sd">            target (str)</span>
+<span class="sd">                The target type used when querying Errata Tool.</span>
+<span class="sd">                The target type may influence the content produced,</span>
+<span class="sd">                depending on the Errata Tool settings.</span>
+
+<span class="sd">                Valid values include at least: &quot;cdn&quot;, &quot;rhn&quot;, &quot;ftp&quot;.</span>
+
+<span class="sd">            koji_source (str)</span>
+<span class="sd">                URL of a koji source associated with this Errata Tool</span>
+<span class="sd">                instance.</span>
+
+<span class="sd">            threads (int)</span>
+<span class="sd">                Number of threads used for concurrent queries to Errata Tool</span>
+<span class="sd">                and koji.</span>
+
+<span class="sd">            timeout (int)</span>
+<span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
+<span class="sd">                made during queries to Errata Tool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">errata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+        <span class="c1"># We set aside a separate thread pool for koji so that there are separate</span>
+        <span class="c1"># queues for ET and koji calls, yet we avoid creating a new thread pool for</span>
+        <span class="c1"># each koji source.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span> <span class="o">=</span> <span class="n">koji_source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_factory</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="p">{},</span> <span class="n">executor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_errata_service_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># URL for the errata_service XML-RPC endpoint provided by ET.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Note the odd handling of scheme here. The reason is that</span>
+        <span class="c1"># ET oddly provides different APIs over http and https.</span>
+        <span class="c1">#</span>
+        <span class="c1"># This XML-RPC API is available anonymously over *http* only,</span>
+        <span class="c1"># but since this might change in the future, the caller is</span>
+        <span class="c1"># allowed to provide http or https scheme and we&#39;ll apply the</span>
+        <span class="c1"># scheme we know is actually needed.</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span> <span class="o">+</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;errata/errata_service&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_errata_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># XML-RPC client connected to errata_service.</span>
+        <span class="c1"># Each thread uses a separate client.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tls</span><span class="p">,</span> <span class="s2">&quot;errata_service&quot;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating XML-RPC client for Errata Tool: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span><span class="o">.</span><span class="n">errata_service</span> <span class="o">=</span> <span class="n">ServerProxy</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span><span class="o">.</span><span class="n">errata_service</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_advisory_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: other cases (comma-separated; plain string)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span>
+
+    <span class="k">def</span> <span class="nf">_get_advisory_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">):</span>
+        <span class="c1"># TODO: use CDN API even for RHN?</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errata_service</span><span class="o">.</span><span class="n">get_advisory_cdn_metadata</span><span class="p">(</span><span class="n">advisory_id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_advisory_file_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">):</span>
+        <span class="c1"># TODO: look at the target hint</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errata_service</span><span class="o">.</span><span class="n">get_advisory_cdn_file_list</span><span class="p">(</span><span class="n">advisory_id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_and_file_list</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span> <span class="o">=</span> <span class="n">metadata_and_file_list</span>
+
+        <span class="n">erratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_push_item_from_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_files</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
+
+        <span class="c1"># The erratum should go to all the same destinations as the files.</span>
+        <span class="n">erratum_dest</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">dest</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
+                <span class="n">erratum_dest</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">files</span>
+
+    <span class="k">def</span> <span class="nf">_erratum_push_item_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+
+        <span class="c1"># Translate from a raw metadata dict as provided by ET</span>
+        <span class="c1"># into an ErratumPushItem object.</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Fill in the base push item attributes first.</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PENDING&quot;</span>
+
+        <span class="c1"># Now the erratum-specific fields.</span>
+        <span class="c1"># Many are accepted verbatim from ET; these are mandatory (i.e. we&#39;ll crash</span>
+        <span class="c1"># if the field is missing from ET).</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;release&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pushcount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;reboot_suggested&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rights&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;issued&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;severity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+
+        <span class="c1"># Workaround to avoid python keyword</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;from_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If the metadata has a cdn_repo field, this sets the destinations for the</span>
+        <span class="c1"># push item; used for text-only errata.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Note that dest may also be added to later based on the file list in</span>
+        <span class="c1"># the advisory.</span>
+        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;dest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If there are content type hints, copy those while dropping the</span>
+        <span class="c1"># pulp-specific terminology</span>
+        <span class="n">pulp_user_metadata</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pulp_user_metadata&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_types&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ErratumPushItem</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">file_list</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">file_list</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
+        <span class="n">rpms</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">signing_key</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="n">sha256sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">md5sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="c1"># Get a koji source which will yield all desired push items from this build.</span>
+        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_factory</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+            <span class="c1"># Sanity check that the lookup by RPM filename matched the build</span>
+            <span class="c1"># NVR expected by ET</span>
+            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span> <span class="o">!=</span> <span class="n">build_nvr</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Push item NVR is wrong; expected: </span><span class="si">%s</span><span class="s2">, item: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">build_nvr</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">push_item</span><span class="p">))</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
+            <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+                <span class="n">push_item</span><span class="p">,</span>
+                <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">md5sum</span><span class="o">=</span><span class="n">md5sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">dest</span><span class="o">=</span><span class="n">rpms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over push items for the given errata.</span>
+
+<span class="sd">        - Yields :ref:`~pushsource.ErratumPushItem` instances for erratum metadata</span>
+<span class="sd">        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs</span>
+
+<span class="sd">        Other content types are not yet supported (most notably, container images).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get file list of all advisories first.</span>
+        <span class="c1">#</span>
+        <span class="c1"># We get the file list first because it contains koji build NVRs,</span>
+        <span class="c1"># so by getting these first we can issue koji build queries and advisory</span>
+        <span class="c1"># metadata queries concurrently.</span>
+        <span class="n">file_list_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_advisory_file_list</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">advisory_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advisory_ids</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Then get metadata.</span>
+        <span class="n">metadata_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_advisory_metadata</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">advisory_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advisory_ids</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Zip up the metadata and file list for each advisory, since both are</span>
+        <span class="c1"># needed together in order to make push items.</span>
+        <span class="n">advisory_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">f_zip</span><span class="p">(</span><span class="n">metadata_f</span><span class="p">,</span> <span class="n">file_list_f</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">metadata_f</span><span class="p">,</span> <span class="n">file_list_f</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">metadata_fs</span><span class="p">,</span> <span class="n">file_list_fs</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="n">advisory_push_items_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_raw</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">advisory_fs</span>
+        <span class="p">]</span>
+
+        <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span>
+            <span class="n">advisory_push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">completed_fs</span><span class="p">:</span>
+            <span class="c1"># If an exception occurred, this is where it will be raised.</span>
+            <span class="k">for</span> <span class="n">pushitem</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+                <span class="k">yield</span> <span class="n">pushitem</span></div>
+
+
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;errata&quot;</span><span class="p">,</span> <span class="n">ErrataSource</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/sources.html">API Reference: sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/pushitems.html">API Reference: push items</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

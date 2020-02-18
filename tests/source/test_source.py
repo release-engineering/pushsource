@@ -4,14 +4,6 @@ from pytest import raises, fixture
 from pushsource import Source
 
 
-@fixture(autouse=True)
-def clean_backends():
-    """Reset any modifications of Source._BACKENDS performed during tests."""
-    backends = copy.deepcopy(Source._BACKENDS)
-    yield
-    Source._BACKENDS = backends
-
-
 def test_source_abstract():
     """Source is an abstract base class, can't be iterated over directly."""
     instance = Source()

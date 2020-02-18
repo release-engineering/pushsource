@@ -120,6 +120,8 @@ class StagedSource(Source, StagedFilesMixin):
     def _push_items_for_topdir(self, topdir):
         LOG.debug("Checking files in: %s", topdir)
 
+        metadata = self._load_metadata(topdir)
+
         destdirs = []
         for entry in scandir(topdir):
             if entry.is_dir() and entry.name != "logs":
@@ -127,9 +129,12 @@ class StagedSource(Source, StagedFilesMixin):
 
         if not destdirs:
             LOG.warning("%s has no destination directories", topdir)
+            # If there's no directories AND no metadata file, the caller most likely
+            # provided an incorrect path. (If the caller expects to provide empty
+            # staging areas sometimes, they can signal this by including empty metadata.)
+            if not metadata.filename:
+                raise IOError("%s does not appear to be a staging directory" % topdir)
             return
-
-        metadata = self._load_metadata(topdir)
 
         # All directories which may contain files to be processed
         all_leaf_dirs = []

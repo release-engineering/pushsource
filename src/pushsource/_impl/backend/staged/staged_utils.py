@@ -29,10 +29,10 @@ class StagingMetadata(object):
     # A private class modelling the content of staging metadata files
 
     # Filename from which metadata was loaded.
-    filename = attr.ib(type=str)
+    filename = attr.ib(type=str, default=None)
 
     # Metadata per file, keyed by relative path within staging area
-    file_metadata = attr.ib(type=dict)
+    file_metadata = attr.ib(type=dict, default=attr.Factory(dict))
 
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):

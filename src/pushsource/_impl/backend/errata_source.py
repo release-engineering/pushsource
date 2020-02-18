@@ -11,7 +11,12 @@ from more_executors.futures import f_map, f_zip
 
 from .. import compat_attr as attr
 from ..source import Source
-from ..model import ErratumPushItem
+from ..model import (
+    ErratumPushItem,
+    ErratumReference,
+    ErratumPackageCollection,
+    ErratumPackage,
+)
 from ..helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
@@ -67,10 +72,8 @@ class ErrataSource(Source):
         # queues for ET and koji calls, yet we avoid creating a new thread pool for
         # each koji source.
         self._koji_executor = Executors.thread_pool(max_workers=threads).with_retry()
+        self._koji_cache = {}
         self._koji_source_url = koji_source
-        self._koji_factory = Source.get_partial(
-            self._koji_source_url, cache={}, executor=self._koji_executor
-        )
         self._target = target
         self._timeout = timeout
         self._tls = threading.local()
@@ -89,6 +92,16 @@ class ErrataSource(Source):
         parsed = parse.urlparse(self._url)
         base = "http://" + parsed.netloc
         return os.path.join(base, parsed.path, "errata/errata_service")
+
+    def _koji_source(self, **kwargs):
+        if not self._koji_source_url:
+            raise ValueError("A Koji source is required but none is specified")
+        return Source.get(
+            self._koji_source_url,
+            cache=self._koji_cache,
+            executor=self._koji_executor,
+            **kwargs
+        )
 
     @property
     def _errata_service(self):
@@ -125,7 +138,7 @@ class ErrataSource(Source):
             for dest in file.dest:
                 erratum_dest.add(dest)
 
-        erratum = attr.evolve(erratum, dest=list(erratum_dest))
+        erratum = attr.evolve(erratum, dest=sorted(erratum_dest))
 
         return [erratum] + files
 
@@ -177,7 +190,62 @@ class ErrataSource(Source):
         if pulp_user_metadata.get("content_types"):
             kwargs["content_types"] = pulp_user_metadata["content_types"]
 
+        kwargs["references"] = self._erratum_references_from_metadata(
+            metadata.get("references") or []
+        )
+        kwargs["pkglist"] = self._erratum_packages_from_metadata(
+            metadata.get("pkglist") or []
+        )
+
         return ErratumPushItem(**kwargs)
+
+    def _erratum_references_from_metadata(self, raw_refs):
+        out = []
+        for raw in raw_refs:
+            out.append(
+                ErratumReference(
+                    href=raw["href"], id=raw["id"], title=raw["title"], type=raw["type"]
+                )
+            )
+        return out
+
+    def _erratum_packages_from_metadata(self, raw_pkglist):
+        out = []
+        for raw in raw_pkglist:
+            packages = []
+            for raw_pkg in raw.get("packages") or []:
+                sums = {}
+                raw_sum = raw_pkg.pop("sum", [])
+                while raw_sum:
+                    sums[raw_sum[0]] = raw_sum[1]
+                    raw_sum = raw_sum[2:]
+
+                packages.append(
+                    ErratumPackage(
+                        arch=raw_pkg["arch"],
+                        epoch=raw_pkg["epoch"],
+                        filename=raw_pkg["filename"],
+                        name=raw_pkg["name"],
+                        version=raw_pkg["version"],
+                        release=raw_pkg["release"],
+                        src=raw_pkg["src"],
+                        md5sum=sums.get("md5"),
+                        sha1sum=sums.get("sha1"),
+                        sha256sum=sums.get("sha256"),
+                    )
+                )
+
+            if packages:
+                out.append(
+                    ErratumPackageCollection(
+                        name=raw["name"],
+                        short=raw["short"],
+                        packages=packages,
+                        # TODO: module
+                    )
+                )
+
+        return out
 
     def _push_items_from_files(self, erratum, file_list):
         out = []
@@ -194,11 +262,18 @@ class ErrataSource(Source):
         md5sums = (build_info.get("checksums") or {}).get("md5") or {}
 
         # Get a koji source which will yield all desired push items from this build.
-        koji_source = self._koji_factory(rpm=list(rpms.keys()), signing_key=signing_key)
+        koji_source = self._koji_source(rpm=list(rpms.keys()), signing_key=signing_key)
 
         out = []
 
         for push_item in koji_source:
+            # Do not allow to proceed if RPM was absent
+            if push_item.state == "NOTFOUND":
+                raise ValueError(
+                    "Advisory refers to %s but RPM was not found in koji"
+                    % push_item.name
+                )
+
             # Sanity check that the lookup by RPM filename matched the build
             # NVR expected by ET
             if push_item.build != build_nvr:

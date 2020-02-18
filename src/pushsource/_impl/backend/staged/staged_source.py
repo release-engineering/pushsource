@@ -22,7 +22,7 @@ from ...source import Source
 from .staged_utils import StagingMetadata, StagingLeafDir
 
 # from ..model import RpmPushItem
-from ...helpers import list_argument
+from pushsource.helpers import list_argument
 
 from .staged_files import StagedFilesMixin
 

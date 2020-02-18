@@ -17,7 +17,7 @@ from ..model import (
     ErratumPackageCollection,
     ErratumPackage,
 )
-from ..helpers import list_argument
+from pushsource.helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
 

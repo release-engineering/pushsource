@@ -44,7 +44,12 @@
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ErratumPushItem</span><span class="p">,</span>
+    <span class="n">ErratumReference</span><span class="p">,</span>
+    <span class="n">ErratumPackageCollection</span><span class="p">,</span>
+    <span class="n">ErratumPackage</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
@@ -100,10 +105,8 @@
         <span class="c1"># queues for ET and koji calls, yet we avoid creating a new thread pool for</span>
         <span class="c1"># each koji source.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span> <span class="o">=</span> <span class="n">koji_source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_factory</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="p">{},</span> <span class="n">executor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span>
-        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
@@ -122,6 +125,16 @@
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
         <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span> <span class="o">+</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;errata/errata_service&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_koji_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A Koji source is required but none is specified&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_cache</span><span class="p">,</span>
+            <span class="n">executor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_errata_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -158,7 +171,7 @@
             <span class="k">for</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
                 <span class="n">erratum_dest</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
 
-        <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">files</span>
 
@@ -210,7 +223,62 @@
         <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_types&quot;</span><span class="p">):</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span>
 
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_references_from_metadata</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;references&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pkglist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_packages_from_metadata</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pkglist&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
         <span class="k">return</span> <span class="n">ErratumPushItem</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_erratum_references_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_refs</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">raw_refs</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ErratumReference</span><span class="p">(</span>
+                    <span class="n">href</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_erratum_packages_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_pkglist</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">raw_pkglist</span><span class="p">:</span>
+            <span class="n">packages</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">raw_pkg</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;packages&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+                <span class="n">sums</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_pkg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">while</span> <span class="n">raw_sum</span><span class="p">:</span>
+                    <span class="n">sums</span><span class="p">[</span><span class="n">raw_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+                <span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ErratumPackage</span><span class="p">(</span>
+                        <span class="n">arch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">],</span>
+                        <span class="n">epoch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;epoch&quot;</span><span class="p">],</span>
+                        <span class="n">filename</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                        <span class="n">src</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
+                        <span class="n">md5sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span>
+                        <span class="n">sha1sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">),</span>
+                        <span class="n">sha256sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">packages</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ErratumPackageCollection</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">short</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;short&quot;</span><span class="p">],</span>
+                        <span class="n">packages</span><span class="o">=</span><span class="n">packages</span><span class="p">,</span>
+                        <span class="c1"># TODO: module</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="nf">_push_items_from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">file_list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
@@ -227,11 +295,18 @@
         <span class="n">md5sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
 
         <span class="c1"># Get a koji source which will yield all desired push items from this build.</span>
-        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_factory</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
+        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+            <span class="c1"># Do not allow to proceed if RPM was absent</span>
+            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;NOTFOUND&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Advisory refers to </span><span class="si">%s</span><span class="s2"> but RPM was not found in koji&quot;</span>
+                    <span class="o">%</span> <span class="n">push_item</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+
             <span class="c1"># Sanity check that the lookup by RPM filename matched the build</span>
             <span class="c1"># NVR expected by ET</span>
             <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span> <span class="o">!=</span> <span class="n">build_nvr</span><span class="p">:</span>

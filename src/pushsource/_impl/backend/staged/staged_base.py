@@ -25,9 +25,6 @@ class StagedBaseMixin(object):
     # Helper mixin for staged classes handling specific pieces of content.
     _FILE_TYPES = {}
 
-    # Make this non-empty in subclass
-    _HANDLES_TYPES = []
-
     def __init__(self, *args, **kwargs):
         super(StagedBaseMixin, self).__init__(*args, **kwargs)
         self._FILE_TYPES = self._FILE_TYPES.copy()

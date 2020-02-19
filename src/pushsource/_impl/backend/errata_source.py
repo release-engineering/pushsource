@@ -11,12 +11,7 @@ from more_executors.futures import f_map, f_zip
 
 from .. import compat_attr as attr
 from ..source import Source
-from ..model import (
-    ErratumPushItem,
-    ErratumReference,
-    ErratumPackageCollection,
-    ErratumPackage,
-)
+from ..model import ErratumPushItem
 from pushsource.helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
@@ -129,7 +124,7 @@ class ErrataSource(Source):
     def _push_items_from_raw(self, metadata_and_file_list):
         (metadata, file_list) = metadata_and_file_list
 
-        erratum = self._erratum_push_item_from_metadata(metadata)
+        erratum = ErratumPushItem._from_data(metadata)
         files = self._push_items_from_files(erratum, file_list)
 
         # The erratum should go to all the same destinations as the files.
@@ -141,111 +136,6 @@ class ErrataSource(Source):
         erratum = attr.evolve(erratum, dest=sorted(erratum_dest))
 
         return [erratum] + files
-
-    def _erratum_push_item_from_metadata(self, metadata):
-
-        # Translate from a raw metadata dict as provided by ET
-        # into an ErratumPushItem object.
-        kwargs = {}
-
-        # Fill in the base push item attributes first.
-        kwargs["name"] = metadata["id"]
-        kwargs["state"] = "PENDING"
-
-        # Now the erratum-specific fields.
-        # Many are accepted verbatim from ET; these are mandatory (i.e. we'll crash
-        # if the field is missing from ET).
-        for field in [
-            "type",
-            "release",
-            "status",
-            "pushcount",
-            "reboot_suggested",
-            "rights",
-            "title",
-            "description",
-            "version",
-            "updated",
-            "issued",
-            "severity",
-            "summary",
-            "solution",
-        ]:
-            kwargs[field] = metadata[field]
-
-        # Workaround to avoid python keyword
-        kwargs["from_"] = metadata["from"]
-
-        # If the metadata has a cdn_repo field, this sets the destinations for the
-        # push item; used for text-only errata.
-        #
-        # Note that dest may also be added to later based on the file list in
-        # the advisory.
-        if metadata.get("cdn_repo"):
-            kwargs["dest"] = metadata["cdn_repo"]
-
-        # If there are content type hints, copy those while dropping the
-        # pulp-specific terminology
-        pulp_user_metadata = metadata.get("pulp_user_metadata") or {}
-        if pulp_user_metadata.get("content_types"):
-            kwargs["content_types"] = pulp_user_metadata["content_types"]
-
-        kwargs["references"] = self._erratum_references_from_metadata(
-            metadata.get("references") or []
-        )
-        kwargs["pkglist"] = self._erratum_packages_from_metadata(
-            metadata.get("pkglist") or []
-        )
-
-        return ErratumPushItem(**kwargs)
-
-    def _erratum_references_from_metadata(self, raw_refs):
-        out = []
-        for raw in raw_refs:
-            out.append(
-                ErratumReference(
-                    href=raw["href"], id=raw["id"], title=raw["title"], type=raw["type"]
-                )
-            )
-        return out
-
-    def _erratum_packages_from_metadata(self, raw_pkglist):
-        out = []
-        for raw in raw_pkglist:
-            packages = []
-            for raw_pkg in raw.get("packages") or []:
-                sums = {}
-                raw_sum = raw_pkg.pop("sum", [])
-                while raw_sum:
-                    sums[raw_sum[0]] = raw_sum[1]
-                    raw_sum = raw_sum[2:]
-
-                packages.append(
-                    ErratumPackage(
-                        arch=raw_pkg["arch"],
-                        epoch=raw_pkg["epoch"],
-                        filename=raw_pkg["filename"],
-                        name=raw_pkg["name"],
-                        version=raw_pkg["version"],
-                        release=raw_pkg["release"],
-                        src=raw_pkg["src"],
-                        md5sum=sums.get("md5"),
-                        sha1sum=sums.get("sha1"),
-                        sha256sum=sums.get("sha256"),
-                    )
-                )
-
-            if packages:
-                out.append(
-                    ErratumPackageCollection(
-                        name=raw["name"],
-                        short=raw["short"],
-                        packages=packages,
-                        # TODO: module
-                    )
-                )
-
-        return out
 
     def _push_items_from_files(self, erratum, file_list):
         out = []

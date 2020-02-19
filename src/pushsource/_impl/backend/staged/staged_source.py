@@ -21,6 +21,7 @@ from .staged_utils import StagingMetadata, StagingLeafDir
 from pushsource.helpers import list_argument
 
 from .staged_files import StagedFilesMixin
+from .staged_errata import StagedErrataMixin
 from .staged_channel_dumps import StagedChannelDumpsMixin
 
 LOG = logging.getLogger("pushsource")
@@ -28,7 +29,9 @@ METADATA_FILES = ["staged.yaml", "staged.yml", "staged.json", "pub-mapfile.json"
 CACHE_LOCK = threading.RLock()
 
 
-class StagedSource(Source, StagedFilesMixin, StagedChannelDumpsMixin):
+class StagedSource(
+    Source, StagedFilesMixin, StagedErrataMixin, StagedChannelDumpsMixin
+):
     """Uses a directory with a predefined layout (a "staging directory") as
     the source of push items."""
 
@@ -68,12 +71,9 @@ class StagedSource(Source, StagedFilesMixin, StagedChannelDumpsMixin):
     #         FILE_TYPE_PATHS = {
     #     'rpm': ['RPMS', 'SRPMS'],
     #     'comps': ['COMPS'],
-    #     'iso': ['ISOS', 'FILES'],
-    #     'docker': ['DOCKER'],
+    #     'docker': ['DOCKER'], # TODO: verify this is unused
     #     'productid': ['PRODUCTID'],
     #     'modulemd': ['MODULEMD'],
-    #     'erratum': ['ERRATA'],
-    #     'channel_dump': ['CHANNEL_DUMPS'],
     #     'aws_image': ['AWS_IMAGES'],
     # }
 

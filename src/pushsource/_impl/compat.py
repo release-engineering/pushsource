@@ -3,7 +3,7 @@
 try:
     from os import scandir
 except ImportError:  # pragma: no cover
-    # TODO: is scandir able to work on python 2.6?
+    # expected path for python <3.5
     from scandir import scandir
 
 __all__ = ["scandir"]

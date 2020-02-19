@@ -26,6 +26,16 @@ class ErratumReference(object):
     - "other": any other kind of reference
     """
 
+    @classmethod
+    def _from_data(cls, data):
+        # Convert from raw list/dict as provided in ET APIs into model
+        if isinstance(data, list):
+            return [cls._from_data(elem) for elem in data]
+
+        return cls(
+            href=data["href"], id=data["id"], title=data["title"], type=data["type"]
+        )
+
 
 @attr.s()
 class ErratumModule(object):
@@ -110,6 +120,47 @@ class ErratumPackageCollection(object):
     with, if any.
     """
 
+    @classmethod
+    def _from_data(cls, data):
+        # Convert from raw list/dict as provided in ET APIs into model.
+        # Data is expected to be 'pkglist' object.
+        if isinstance(data, list):
+            out = [cls._from_data(elem) for elem in data]
+            # only include non-empty collections
+            return [elem for elem in out if elem.packages]
+
+        packages = []
+        for raw_pkg in data.get("packages") or []:
+            # parse the odd 'sum' structure, which is a list of form:
+            # [<algo>, <hexdigest>, <algo>, <hexdigest>, ...]
+            sums = {}
+            raw_sum = raw_pkg.pop("sum", [])
+            while raw_sum:
+                sums[raw_sum[0]] = raw_sum[1]
+                raw_sum = raw_sum[2:]
+
+            packages.append(
+                ErratumPackage(
+                    arch=raw_pkg["arch"],
+                    epoch=raw_pkg["epoch"],
+                    filename=raw_pkg["filename"],
+                    name=raw_pkg["name"],
+                    version=raw_pkg["version"],
+                    release=raw_pkg["release"],
+                    src=raw_pkg["src"],
+                    md5sum=sums.get("md5"),
+                    sha1sum=sums.get("sha1"),
+                    sha256sum=sums.get("sha256"),
+                )
+            )
+
+        return cls(
+            name=data["name"],
+            short=data["short"],
+            packages=packages,
+            # TODO: module
+        )
+
 
 @attr.s()
 class ErratumPushItem(PushItem):
@@ -189,3 +240,61 @@ class ErratumPushItem(PushItem):
 
     def __str__(self):
         return "%s: %s" % (self.name, self.title or "<untitled advisory>")
+
+    @classmethod
+    def _from_data(cls, data):
+        # Helper to load an instance from the raw dicts used in various places:
+        #
+        # - json/yaml files in staging area
+        # - output of get_advisory_cdn_metadata method in ET
+        # - erratum unit metadata in Pulp2's API
+        #
+
+        kwargs = {}
+
+        # Fill in the base push item attributes first.
+        kwargs["name"] = data["id"]
+        kwargs["state"] = "PENDING"
+
+        # Now the erratum-specific fields.
+        # Many are accepted verbatim from raw input; these are mandatory
+        # (i.e. we'll crash if the field is missing from input).
+        for field in [
+            "type",
+            "release",
+            "status",
+            "pushcount",
+            "reboot_suggested",
+            "rights",
+            "title",
+            "description",
+            "version",
+            "updated",
+            "issued",
+            "severity",
+            "summary",
+            "solution",
+        ]:
+            kwargs[field] = data[field]
+
+        # Workaround to avoid python keyword
+        kwargs["from_"] = data["from"]
+
+        # If the metadata has a cdn_repo field, this sets the destinations for the
+        # push item; used for text-only errata.
+        if data.get("cdn_repo"):
+            kwargs["dest"] = data["cdn_repo"]
+
+        # If there are content type hints, copy those while dropping the
+        # pulp-specific terminology
+        pulp_user_metadata = data.get("pulp_user_metadata") or {}
+        if pulp_user_metadata.get("content_types"):
+            kwargs["content_types"] = pulp_user_metadata["content_types"]
+
+        kwargs["references"] = ErratumReference._from_data(data.get("references") or [])
+
+        kwargs["pkglist"] = ErratumPackageCollection._from_data(
+            data.get("pkglist") or []
+        )
+
+        return cls(**kwargs)

@@ -5,23 +5,10 @@ REQUIRED_VERSION = "0.2"
 
 @attr.s()
 class StagingFileMetadata(object):
-    # A private class modelling a single entry in staging metadata
-    # {
-    #     "attributes": {
-    #         "description": "Red Hat Ceph 4.0 Binary DVD for RHEL 8 Hosts"
-    #     },
-    #     "filename": "rhceph-4.0-rhel-8-x86_64.iso",
-    #     "relative_path": "rhceph-4-for-rhel-8-x86_64-files/ISOS/rhceph-4.0-rhel-8-x86_64.iso",
-    #     "sha256sum": "197cb195354dc55d78323e6d095c84e324f52e08bbd4f69d0514ca8c2f90a2bf",
-    #     "version": "4.0"
-    # },
-
     attributes = attr.ib(type=dict)
     filename = attr.ib(type=str)
     relative_path = attr.ib(type=str)
     sha256sum = attr.ib(type=str)
-    # Not sure what this is??
-    # version = attr.ib(type=str)
 
 
 @attr.s()
@@ -29,15 +16,15 @@ class StagingMetadata(object):
     # A private class modelling the content of staging metadata files
 
     # Filename from which metadata was loaded.
-    filename = attr.ib(type=str)
+    filename = attr.ib(type=str, default=None)
 
     # Metadata per file, keyed by relative path within staging area
-    file_metadata = attr.ib(type=dict)
+    file_metadata = attr.ib(type=dict, default=attr.Factory(dict))
 
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):
         header = data.get("header") or {}
-        version = header.get("version")
+        version = str(header.get("version"))
 
         # TODO: make a jsonschema and then validate it here.
 

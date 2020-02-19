@@ -11,7 +11,7 @@ import json
 
 try:
     from os import scandir
-except ImportError:
+except ImportError:  # pragma: no cover
     # TODO: is scandir able to work on python 2.6?
     from scandir import scandir
 
@@ -61,10 +61,11 @@ class StagedSource(Source, StagedFilesMixin):
         self._url = list_argument(url)
         self._threads = threads
         self._timeout = timeout
-        self._executor = (
-            Executors.thread_pool(max_workers=threads)
-            .with_timeout(timeout)
-            .with_retry()
+
+        # Note: this executor does not have a retry.
+        # NFS already does a lot of its own retries.
+        self._executor = Executors.thread_pool(max_workers=threads).with_timeout(
+            timeout
         )
 
     #         FILE_TYPE_PATHS = {

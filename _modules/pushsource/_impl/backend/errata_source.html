@@ -44,12 +44,7 @@
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ErratumPushItem</span><span class="p">,</span>
-    <span class="n">ErratumReference</span><span class="p">,</span>
-    <span class="n">ErratumPackageCollection</span><span class="p">,</span>
-    <span class="n">ErratumPackage</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span>
 <span class="kn">from</span> <span class="nn">pushsource.helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
@@ -162,7 +157,7 @@
     <span class="k">def</span> <span class="nf">_push_items_from_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata_and_file_list</span><span class="p">):</span>
         <span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span> <span class="o">=</span> <span class="n">metadata_and_file_list</span>
 
-        <span class="n">erratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_push_item_from_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">ErratumPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
         <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_files</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
 
         <span class="c1"># The erratum should go to all the same destinations as the files.</span>
@@ -174,111 +169,6 @@
         <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">files</span>
-
-    <span class="k">def</span> <span class="nf">_erratum_push_item_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
-
-        <span class="c1"># Translate from a raw metadata dict as provided by ET</span>
-        <span class="c1"># into an ErratumPushItem object.</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="c1"># Fill in the base push item attributes first.</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PENDING&quot;</span>
-
-        <span class="c1"># Now the erratum-specific fields.</span>
-        <span class="c1"># Many are accepted verbatim from ET; these are mandatory (i.e. we&#39;ll crash</span>
-        <span class="c1"># if the field is missing from ET).</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;release&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;status&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;pushcount&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;reboot_suggested&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;rights&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;updated&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;issued&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;severity&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;summary&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
-        <span class="p">]:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
-
-        <span class="c1"># Workaround to avoid python keyword</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;from_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">]</span>
-
-        <span class="c1"># If the metadata has a cdn_repo field, this sets the destinations for the</span>
-        <span class="c1"># push item; used for text-only errata.</span>
-        <span class="c1">#</span>
-        <span class="c1"># Note that dest may also be added to later based on the file list in</span>
-        <span class="c1"># the advisory.</span>
-        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;dest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">]</span>
-
-        <span class="c1"># If there are content type hints, copy those while dropping the</span>
-        <span class="c1"># pulp-specific terminology</span>
-        <span class="n">pulp_user_metadata</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pulp_user_metadata&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_types&quot;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span>
-
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_references_from_metadata</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;references&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="p">)</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pkglist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_erratum_packages_from_metadata</span><span class="p">(</span>
-            <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pkglist&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ErratumPushItem</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_erratum_references_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_refs</span><span class="p">):</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">raw_refs</span><span class="p">:</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">ErratumReference</span><span class="p">(</span>
-                    <span class="n">href</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span>
-
-    <span class="k">def</span> <span class="nf">_erratum_packages_from_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_pkglist</span><span class="p">):</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">raw_pkglist</span><span class="p">:</span>
-            <span class="n">packages</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">raw_pkg</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;packages&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
-                <span class="n">sums</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_pkg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="p">[])</span>
-                <span class="k">while</span> <span class="n">raw_sum</span><span class="p">:</span>
-                    <span class="n">sums</span><span class="p">[</span><span class="n">raw_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
-
-                <span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">ErratumPackage</span><span class="p">(</span>
-                        <span class="n">arch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">],</span>
-                        <span class="n">epoch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;epoch&quot;</span><span class="p">],</span>
-                        <span class="n">filename</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                        <span class="n">version</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
-                        <span class="n">release</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
-                        <span class="n">src</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
-                        <span class="n">md5sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span>
-                        <span class="n">sha1sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">),</span>
-                        <span class="n">sha256sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">packages</span><span class="p">:</span>
-                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">ErratumPackageCollection</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                        <span class="n">short</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;short&quot;</span><span class="p">],</span>
-                        <span class="n">packages</span><span class="o">=</span><span class="n">packages</span><span class="p">,</span>
-                        <span class="c1"># TODO: module</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="nf">_push_items_from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">file_list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>

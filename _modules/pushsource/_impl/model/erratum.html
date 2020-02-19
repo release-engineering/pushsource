@@ -57,7 +57,17 @@
 <span class="sd">    - &quot;self&quot;: reference to a page for this advisory</span>
 <span class="sd">    - &quot;bugzilla&quot;: reference to a bug</span>
 <span class="sd">    - &quot;other&quot;: any other kind of reference</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Convert from raw list/dict as provided in ET APIs into model</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">href</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ErratumModule"><a class="viewcode-back" href="../../../../api/pushitems.html#pushsource.ErratumModule">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -141,7 +151,48 @@
     <span class="n">module</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">ErratumModule</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;An :class:`~ErratumModule` defining the module this entry is associated</span>
 <span class="sd">    with, if any.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Convert from raw list/dict as provided in ET APIs into model.</span>
+        <span class="c1"># Data is expected to be &#39;pkglist&#39; object.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+            <span class="c1"># only include non-empty collections</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">out</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">packages</span><span class="p">]</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">raw_pkg</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;packages&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="c1"># parse the odd &#39;sum&#39; structure, which is a list of form:</span>
+            <span class="c1"># [&lt;algo&gt;, &lt;hexdigest&gt;, &lt;algo&gt;, &lt;hexdigest&gt;, ...]</span>
+            <span class="n">sums</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_pkg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">while</span> <span class="n">raw_sum</span><span class="p">:</span>
+                <span class="n">sums</span><span class="p">[</span><span class="n">raw_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+            <span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ErratumPackage</span><span class="p">(</span>
+                    <span class="n">arch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">],</span>
+                    <span class="n">epoch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;epoch&quot;</span><span class="p">],</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                    <span class="n">version</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                    <span class="n">release</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
+                    <span class="n">md5sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span>
+                    <span class="n">sha1sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">),</span>
+                    <span class="n">sha256sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">short</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;short&quot;</span><span class="p">],</span>
+            <span class="n">packages</span><span class="o">=</span><span class="n">packages</span><span class="p">,</span>
+            <span class="c1"># TODO: module</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ErratumPushItem"><a class="viewcode-back" href="../../../../api/pushitems.html#pushsource.ErratumPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -221,7 +272,65 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;&lt;untitled advisory&gt;&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;&lt;untitled advisory&gt;&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Helper to load an instance from the raw dicts used in various places:</span>
+        <span class="c1">#</span>
+        <span class="c1"># - json/yaml files in staging area</span>
+        <span class="c1"># - output of get_advisory_cdn_metadata method in ET</span>
+        <span class="c1"># - erratum unit metadata in Pulp2&#39;s API</span>
+        <span class="c1">#</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Fill in the base push item attributes first.</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PENDING&quot;</span>
+
+        <span class="c1"># Now the erratum-specific fields.</span>
+        <span class="c1"># Many are accepted verbatim from raw input; these are mandatory</span>
+        <span class="c1"># (i.e. we&#39;ll crash if the field is missing from input).</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;release&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pushcount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;reboot_suggested&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rights&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;issued&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;severity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+
+        <span class="c1"># Workaround to avoid python keyword</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;from_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If the metadata has a cdn_repo field, this sets the destinations for the</span>
+        <span class="c1"># push item; used for text-only errata.</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;dest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If there are content type hints, copy those while dropping the</span>
+        <span class="c1"># pulp-specific terminology</span>
+        <span class="n">pulp_user_metadata</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pulp_user_metadata&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_types&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErratumReference</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;references&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pkglist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErratumPackageCollection</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pkglist&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

@@ -8,3 +8,4 @@ from .erratum import (
 )
 from .rpm import RpmPushItem
 from .file import FilePushItem
+from .channel_dump import ChannelDumpPushItem

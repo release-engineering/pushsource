@@ -9,11 +9,7 @@ from concurrent import futures
 import yaml
 import json
 
-try:
-    from os import scandir
-except ImportError:  # pragma: no cover
-    # TODO: is scandir able to work on python 2.6?
-    from scandir import scandir
+from pushsource._impl.compat import scandir
 
 from pushcollector import Collector
 from more_executors import Executors
@@ -25,13 +21,14 @@ from .staged_utils import StagingMetadata, StagingLeafDir
 from pushsource.helpers import list_argument
 
 from .staged_files import StagedFilesMixin
+from .staged_channel_dumps import StagedChannelDumpsMixin
 
 LOG = logging.getLogger("pushsource")
 METADATA_FILES = ["staged.yaml", "staged.yml", "staged.json", "pub-mapfile.json"]
 CACHE_LOCK = threading.RLock()
 
 
-class StagedSource(Source, StagedFilesMixin):
+class StagedSource(Source, StagedFilesMixin, StagedChannelDumpsMixin):
     """Uses a directory with a predefined layout (a "staging directory") as
     the source of push items."""
 

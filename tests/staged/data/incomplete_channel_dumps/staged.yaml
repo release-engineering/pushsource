@@ -1,0 +1,20 @@
+header:
+    version: 0.2
+
+payload:
+    files:
+
+    - relative_path: somedest/CHANNEL_DUMPS/myfile.txt
+      sha256sum: 9481d6638081ff26556e09844ae1fbf680ad83fb98afa2f3f88718537b41f8b9
+      attributes:
+        # This will not work because some mandatory attributes were omitted.
+        allowed_eng_products: 1,2,3
+        channel_dump_arch: x86_64
+        channel_dump_content: some content
+        channel_dump_date: 2020-02-19T11:05
+        channel_dump_product_name: a product
+        channel_dump_product_version: ABCD
+        channel_dump_type: base
+        channel_dump_included_channels: ch1,ch2
+        description: test channel dump 1
+

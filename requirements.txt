@@ -4,3 +4,5 @@ koji
 six
 pushcollector
 PyYAML
+frozenlist2
+python-dateutil

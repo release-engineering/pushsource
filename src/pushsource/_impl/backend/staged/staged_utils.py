@@ -42,7 +42,7 @@ class StagingMetadata(object):
         for entry in files:
             md = StagingFileMetadata(
                 attributes=entry.get("attributes") or {},
-                filename=entry["filename"],
+                filename=entry.get("filename"),
                 relative_path=entry["relative_path"],
                 sha256sum=entry["sha256sum"],
             )

@@ -1,3 +1,5 @@
+from frozenlist2 import frozenlist
+
 from .. import compat_attr as attr
 
 
@@ -42,7 +44,7 @@ class PushItem(object):
     """
 
     # TODO: validate
-    dest = attr.ib(type=list, default=attr.Factory(list))
+    dest = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
     """Destination of this push item.
 
     The meaning of "dest" differs depending on the source used and its configuration.

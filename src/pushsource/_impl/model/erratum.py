@@ -1,3 +1,5 @@
+from frozenlist2 import frozenlist
+
 from .base import PushItem
 from .. import compat_attr as attr
 
@@ -107,7 +109,9 @@ class ErratumPackageCollection(object):
     but must be unique within an advisory.
     """
 
-    packages = attr.ib(type=list)
+    packages = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """List of packages (:class:`ErratumPackage`) within this collection."""
 
     short = attr.ib(type=str, default="")
@@ -186,10 +190,12 @@ class ErratumPushItem(PushItem):
     reboot_suggested = attr.ib(type=bool, default=False)
     """True if rebooting host machine is recommended after installing this advisory."""
 
-    references = attr.ib(type=list, default=attr.Factory(list))
+    references = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """A list of references (:class:`ErratumReference`) associated with the advisory."""
 
-    pkglist = attr.ib(type=list, default=attr.Factory(list))
+    pkglist = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
     """A list of package collections (:class:`ErratumPackageCollection`)
     associated with the advisory."""
 
@@ -231,7 +237,9 @@ class ErratumPushItem(PushItem):
     solution = attr.ib(type=str, default=None)
     """Text explaining how to apply the advisory."""
 
-    content_types = attr.ib(type=list, default=attr.Factory(list))
+    content_types = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """A list of content types associated with the advisory.
 
     For example, "docker" may be found in this list if the advisory deals

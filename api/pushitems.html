@@ -37,7 +37,7 @@
 <h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pushsource.PushItem">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">PushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest: list = NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.PushItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">PushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest=NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.PushItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A PushItem represents a single piece of content to be published.
 This may be an RPM, an advisory, a generic file, and so on.</p>
 <dl class="attribute">
@@ -123,7 +123,7 @@ doesn’t enforce this.</p>
 <h2>RPMs<a class="headerlink" href="#rpms" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pushsource.RpmPushItem">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">RpmPushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest: list = NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/rpm.html#RpmPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.RpmPushItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">RpmPushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest=NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/rpm.html#RpmPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.RpmPushItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A push item representing a single RPM.</p>
 </dd></dl>
 
@@ -132,7 +132,7 @@ doesn’t enforce this.</p>
 <h2>Errata<a class="headerlink" href="#errata" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pushsource.ErratumPushItem">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest: list = NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em>, <em class="sig-param">type: str = 'bugfix'</em>, <em class="sig-param">release: str = '0'</em>, <em class="sig-param">status: str = 'final'</em>, <em class="sig-param">pushcount: str = '1'</em>, <em class="sig-param">reboot_suggested: bool = False</em>, <em class="sig-param">references: list = NOTHING</em>, <em class="sig-param">pkglist: list = NOTHING</em>, <em class="sig-param">from_: str = None</em>, <em class="sig-param">rights: str = None</em>, <em class="sig-param">title: str = None</em>, <em class="sig-param">description: str = None</em>, <em class="sig-param">version: str = '1'</em>, <em class="sig-param">updated: str = None</em>, <em class="sig-param">issued: str = None</em>, <em class="sig-param">severity: str = None</em>, <em class="sig-param">summary: str = None</em>, <em class="sig-param">solution: str = None</em>, <em class="sig-param">content_types: list = NOTHING</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPushItem</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">state: str = 'PENDING'</em>, <em class="sig-param">src: str = None</em>, <em class="sig-param">dest=NOTHING</em>, <em class="sig-param">md5sum: str = None</em>, <em class="sig-param">sha256sum: str = None</em>, <em class="sig-param">origin: str = None</em>, <em class="sig-param">build: str = None</em>, <em class="sig-param">signing_key: str = None</em>, <em class="sig-param">type: str = 'bugfix'</em>, <em class="sig-param">release: str = '0'</em>, <em class="sig-param">status: str = 'final'</em>, <em class="sig-param">pushcount: str = '1'</em>, <em class="sig-param">reboot_suggested: bool = False</em>, <em class="sig-param">references=NOTHING</em>, <em class="sig-param">pkglist=NOTHING</em>, <em class="sig-param">from_: str = None</em>, <em class="sig-param">rights: str = None</em>, <em class="sig-param">title: str = None</em>, <em class="sig-param">description: str = None</em>, <em class="sig-param">version: str = '1'</em>, <em class="sig-param">updated: str = None</em>, <em class="sig-param">issued: str = None</em>, <em class="sig-param">severity: str = None</em>, <em class="sig-param">summary: str = None</em>, <em class="sig-param">solution: str = None</em>, <em class="sig-param">content_types=NOTHING</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A push item representing a single erratum (also known as “advisory”).</p>
 <p>Note that many fields on erratum objects which appear to be numeric
 are instead represented as strings (‘release’ and ‘pushcount’ being two
@@ -297,7 +297,7 @@ and includes at least:</p>
 
 <dl class="class">
 <dt id="pushsource.ErratumPackageCollection">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPackageCollection</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">packages: list</em>, <em class="sig-param">short: str = ''</em>, <em class="sig-param">module: pushsource._impl.model.erratum.ErratumModule = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPackageCollection</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">packages=NOTHING</em>, <em class="sig-param">short: str = ''</em>, <em class="sig-param">module: pushsource._impl.model.erratum.ErratumModule = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collection of packages found within an <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
 <p>A non-modular advisory typically contains only a single collection, while modular
 advisories typically contain one collection per module.</p>
@@ -332,20 +332,8 @@ with, if any.</p>
 
 <dl class="class">
 <dt id="pushsource.ErratumModule">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumModule</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">arch: str</em>, <em class="sig-param">context: str</em>, <em class="sig-param">name: str</em>, <em class="sig-param">stream: str</em>, <em class="sig-param">version: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumModule</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">name: str</em>, <em class="sig-param">stream: str</em>, <em class="sig-param">version: str</em>, <em class="sig-param">context: str</em>, <em class="sig-param">arch: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>A module entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
-<dl class="attribute">
-<dt id="pushsource.ErratumModule.arch">
-<code class="sig-name descname">arch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Module architecture.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pushsource.ErratumModule.context">
-<code class="sig-name descname">context</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.context" title="Permalink to this definition">¶</a></dt>
-<dd><p>Module context.</p>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="pushsource.ErratumModule.name">
 <code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.name" title="Permalink to this definition">¶</a></dt>
@@ -362,6 +350,18 @@ with, if any.</p>
 <dt id="pushsource.ErratumModule.version">
 <code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Module version.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pushsource.ErratumModule.context">
+<code class="sig-name descname">context</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module context.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pushsource.ErratumModule.arch">
+<code class="sig-name descname">arch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module architecture.</p>
 </dd></dl>
 
 </dd></dl>

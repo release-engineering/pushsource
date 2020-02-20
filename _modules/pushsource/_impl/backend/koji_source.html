@@ -37,31 +37,108 @@
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
 <span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
+<span class="kn">from</span> <span class="nn">six.moves.queue</span> <span class="kn">import</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 
 <span class="kn">import</span> <span class="nn">koji</span>
 <span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
 <span class="kn">from</span> <span class="nn">more_executors.futures</span> <span class="kn">import</span> <span class="n">f_map</span>
 
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModulemdPushItem</span>
 <span class="kn">from</span> <span class="nn">pushsource.helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
 
 
+<span class="k">class</span> <span class="nc">ListArchivesCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">build</span> <span class="o">=</span> <span class="n">build</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
+        <span class="n">archives_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;archives&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">ident</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">ident</span> <span class="ow">in</span> <span class="n">archives_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji archives </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">listArchives</span><span class="p">(</span><span class="n">ident</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+
+
+<span class="k">class</span> <span class="nc">GetBuildCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="o">=</span> <span class="n">ident</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_archives</span> <span class="o">=</span> <span class="n">list_archives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
+        <span class="n">build_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="ow">in</span> <span class="n">build_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji build </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">getBuild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">build</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Build is saved under both NVR and ID</span>
+            <span class="n">build</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+            <span class="k">if</span> <span class="n">build</span><span class="p">:</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="n">build</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_archives</span> <span class="ow">and</span> <span class="n">build</span><span class="p">:</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">ListArchivesCommand</span><span class="p">(</span><span class="n">build</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">GetRpmCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="o">=</span> <span class="n">ident</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
+        <span class="n">rpm_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;rpm&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="ow">in</span> <span class="n">rpm_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji RPM </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">getRPM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+        <span class="c1"># We have to get the RPM&#39;s build as well.</span>
+        <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]:</span>
+            <span class="n">build_id</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">][</span><span class="s2">&quot;build_id&quot;</span><span class="p">]</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">build_id</span><span class="p">))</span>
+
+
 <div class="viewcode-block" id="KojiSource"><a class="viewcode-back" href="../../../../api/sources.html#pushsource.KojiSource">[docs]</a><span class="k">class</span> <span class="nc">KojiSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Uses koji artifacts as the source of push items.&quot;&quot;&quot;</span>
+
+    <span class="n">_BATCH_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KOJI_BATCH_SIZE&quot;</span><span class="p">,</span> <span class="s2">&quot;100&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">url</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rpm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">module_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">basedir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>
         <span class="n">cache</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">executor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -77,6 +154,12 @@
 
 <span class="sd">            rpm (list[str, int])</span>
 <span class="sd">                RPM identifier(s). Can be koji IDs (integers) or filenames.</span>
+<span class="sd">                The source will yield all RPMs identified by this list.</span>
+
+<span class="sd">            module_build (list[str, int])</span>
+<span class="sd">                Build identifier(s). Can be koji IDs (integers) or build NVRs.</span>
+<span class="sd">                The source will yield all modulemd files belonging to these</span>
+<span class="sd">                build(s).</span>
 
 <span class="sd">            signing_key (list[str])</span>
 <span class="sd">                GPG signing key ID(s). If provided, content must be signed</span>
@@ -107,16 +190,16 @@
 
 <span class="sd">            executor (concurrent.futures.Executor)</span>
 <span class="sd">                A custom executor used to submit calls to koji.</span>
-
-<span class="sd">                If provided, `threads` has no effect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">PathInfo</span><span class="p">(</span><span class="n">basedir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">executor</span> <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
         <span class="p">)</span>
@@ -133,20 +216,13 @@
         <span class="k">return</span> <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span>
 
     <span class="k">def</span> <span class="nf">_get_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">CACHE_LOCK</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">rpm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;rpm&quot;</span><span class="p">,</span> <span class="p">{}):</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji RPM </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rpm</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="n">rpm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">getRPM</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="n">rpm</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_get_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">CACHE_LOCK</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">build_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="p">{}):</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji build </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">build_id</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">getBuild</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_archives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_push_items_from_rpm_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;RPM metadata for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
@@ -190,8 +266,6 @@
             <span class="c1"># is ported from old code and is not necessarily the best way.</span>
             <span class="n">rpm_path</span> <span class="o">=</span> <span class="n">unsigned_path</span>
 
-        <span class="c1"># TODO: RpmPushItem?</span>
-
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">RpmPushItem</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">rpm_path</span><span class="p">),</span>
@@ -202,21 +276,147 @@
             <span class="p">)</span>
         <span class="p">]</span>
 
+    <span class="k">def</span> <span class="nf">_push_items_from_module_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for modulemd on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Module build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;module&quot;</span><span class="p">]</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">),</span> <span class="n">module</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="c1"># Possible TODO: koji also provides a checksum, which could be filled</span>
+            <span class="c1"># in here. However, it seems to be only MD5?</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ModulemdPushItem</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">module</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span>
+                    <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
+                    <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_rpm_futures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get info from each requested RPM.</span>
+        <span class="n">rpm_fs</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_rpm</span><span class="p">,</span> <span class="n">rpm</span><span class="p">),</span> <span class="n">rpm</span><span class="p">)</span> <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span><span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpm_meta</span><span class="p">,</span> <span class="n">rpm</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpm_fs</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_modulemd_futures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get info from each requested module build.</span>
+        <span class="n">module_build_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_build</span><span class="p">,</span> <span class="n">build</span><span class="p">),</span> <span class="n">build</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_module_build</span><span class="p">,</span> <span class="n">build</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">module_build_fs</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_do_fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">pending_commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">multicall</span><span class="p">(</span>
+                    <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_BATCH_SIZE</span>
+                <span class="p">)</span>
+
+                <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">command</span> <span class="o">=</span> <span class="n">koji_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                        <span class="n">count</span> <span class="o">+=</span> <span class="n">command</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+                        <span class="n">pending_commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="n">Empty</span><span class="p">:</span>
+                        <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji fetch queue emptied&quot;</span><span class="p">)</span>
+
+                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji multicall: about to execute </span><span class="si">%s</span><span class="s2"> call(s)&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+
+                <span class="n">session</span><span class="o">.</span><span class="n">call_all</span><span class="p">()</span>
+
+                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji multicall: executed </span><span class="si">%s</span><span class="s2"> call(s)&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+
+                <span class="c1"># multicall is now done.</span>
+                <span class="c1"># Save the result to cache from each command.</span>
+                <span class="c1"># This could potentially result in new queue entries.</span>
+                <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">pending_commands</span><span class="p">:</span>
+                    <span class="n">command</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">)</span>
+
+                <span class="c1"># If there were any commands processed, queue might no longer be</span>
+                <span class="c1"># empty, so re-check it</span>
+                <span class="k">if</span> <span class="n">pending_commands</span><span class="p">:</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error during koji fetches&quot;</span><span class="p">)</span>
+            <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span>
+
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over push items.</span>
 
 <span class="sd">        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Get info from each requested RPM.</span>
-        <span class="n">rpm_fs</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_rpm</span><span class="p">,</span> <span class="n">rpm</span><span class="p">),</span> <span class="n">rpm</span><span class="p">)</span> <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span><span class="p">]</span>
+        <span class="c1"># Queue holding all requests we need to make to koji.</span>
+        <span class="c1"># We try to fetch as much as we can early to make efficient use</span>
+        <span class="c1"># of multicall.</span>
+        <span class="n">koji_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
 
-        <span class="c1"># Convert them to lists of push items</span>
-        <span class="n">rpm_push_items_fs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpm_meta</span><span class="p">,</span> <span class="n">rpm</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpm_fs</span>
+        <span class="c1"># We&#39;ll need to obtain all RPMs referenced by filename</span>
+        <span class="k">for</span> <span class="n">rpm_filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span><span class="p">:</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetRpmCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">rpm_filename</span><span class="p">))</span>
+
+        <span class="c1"># We&#39;ll need to obtain all builds from which we want modules,</span>
+        <span class="c1"># as well as the archives from those</span>
+        <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span><span class="p">:</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1"># Put some threads to work on the queue.</span>
+        <span class="n">fetch_exceptions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fetch_threads</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Thread</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;koji-</span><span class="si">%s</span><span class="s2">-fetch-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
+                <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_do_fetch</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">koji_queue</span><span class="p">,</span> <span class="n">fetch_exceptions</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span><span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">rpm_push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="c1"># Wait for all fetches to finish</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">fetch_threads</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">fetch_threads</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+
+        <span class="c1"># Re-raise exceptions, if any.</span>
+        <span class="c1"># If we got more than one, we&#39;re only propagating the first.</span>
+        <span class="k">if</span> <span class="n">fetch_exceptions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">fetch_exceptions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># The queue must be empty now</span>
+        <span class="k">assert</span> <span class="n">koji_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+
+        <span class="n">push_items_fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modulemd_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_futures</span><span class="p">()</span>
+
+        <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">completed_fs</span><span class="p">:</span>
             <span class="c1"># If an exception occurred, this is where it will be raised.</span>
             <span class="k">for</span> <span class="n">pushitem</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>

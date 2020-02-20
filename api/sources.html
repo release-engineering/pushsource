@@ -124,7 +124,7 @@ the <a class="reference internal" href="#pushsource.Source" title="pushsource.So
 
 <dl class="class">
 <dt id="pushsource.KojiSource">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">KojiSource</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">dest=None</em>, <em class="sig-param">rpm=None</em>, <em class="sig-param">signing_key=None</em>, <em class="sig-param">basedir=None</em>, <em class="sig-param">threads=4</em>, <em class="sig-param">timeout=120</em>, <em class="sig-param">cache=None</em>, <em class="sig-param">executor=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.KojiSource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">KojiSource</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">dest=None</em>, <em class="sig-param">rpm=None</em>, <em class="sig-param">module_build=None</em>, <em class="sig-param">signing_key=None</em>, <em class="sig-param">basedir=None</em>, <em class="sig-param">threads=4</em>, <em class="sig-param">timeout=1800</em>, <em class="sig-param">cache=None</em>, <em class="sig-param">executor=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.KojiSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses koji artifacts as the source of push items.</p>
 <p>Create a new source.</p>
 <dl class="field-list simple">
@@ -133,7 +133,11 @@ the <a class="reference internal" href="#pushsource.Source" title="pushsource.So
 <li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – URL of the XML-RPC endpoint for koji hub.</p></li>
 <li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The destination(s) to fill in for push items created by this
 source. If omitted, all push items have empty destinations.</p></li>
-<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.</p></li>
+<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.
+The source will yield all RPMs identified by this list.</p></li>
+<li><p><strong>module_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+The source will yield all modulemd files belonging to these
+build(s).</p></li>
 <li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
 using one of the provided keys. Include <code class="docutils literal notranslate"><span class="pre">None</span></code> if unsigned
 should also be permitted.</p>
@@ -151,9 +155,7 @@ will create more than a single instance of KojiSource. In this
 case, some calls may be avoided by passing the same cache
 to each instance.</p>
 </p></li>
-<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.8)"><em>concurrent.futures.Executor</em></a>) – <p>A custom executor used to submit calls to koji.</p>
-<p>If provided, <cite>threads</cite> has no effect.</p>
-</p></li>
+<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.8)"><em>concurrent.futures.Executor</em></a>) – A custom executor used to submit calls to koji.</p></li>
 </ul>
 </dd>
 </dl>

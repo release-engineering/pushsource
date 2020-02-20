@@ -31,17 +31,26 @@ def run(args):
     source = Source.get(args.src_url)
     log.info("Loaded source %s", args.src_url)
     itemcount = 0
+
+    by_dest = {}
     for pushitem in source:
-        log.info("\nItem: %s", pushitem)
         for dest in pushitem.dest:
-            log.info("  To: %s", dest)
+            by_dest.setdefault(dest, []).append(pushitem)
         itemcount += 1
+
+    for dest in by_dest:
+        log.info("\n === %s ========================", dest)
+        for item in by_dest[dest]:
+            if item.src:
+                log.info("  %s %s", type(item).__name__, item.src)
+            else:
+                log.info("  %s", item)
+
     log.info("%s item(s) found in source", itemcount)
 
 
 def main():
     log.setLevel(logging.INFO)
-    logging.basicConfig(format="%(threadName)s %(message)s")
 
     parser = ArgumentParser(
         description="Report on all push items(s) available from a given source"
@@ -52,8 +61,11 @@ def main():
     p = parser.parse_args()
 
     if p.debug:
+        logging.basicConfig(format="%(threadName)s %(message)s")
         log.setLevel(logging.DEBUG)
         logging.getLogger("pushsource").setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(format="%(message)s")
 
     run(p)
 

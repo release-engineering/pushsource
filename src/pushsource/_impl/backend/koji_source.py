@@ -4,31 +4,108 @@ import logging
 from functools import partial
 
 from concurrent import futures
+from six.moves.queue import Queue, Empty
+from threading import Thread
 
 import koji
 from more_executors import Executors
 from more_executors.futures import f_map
 
 from ..source import Source
-from ..model import RpmPushItem
+from ..model import RpmPushItem, ModulemdPushItem
 from pushsource.helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
 
 
+class ListArchivesCommand(object):
+    def __init__(self, build):
+        self.build = build
+        self.call = None
+
+    def execute(self, source, session):
+        archives_cache = source._cache.setdefault("archives", {})
+        ident = self.build["id"]
+        if ident in archives_cache:
+            return 0
+
+        LOG.debug("Get koji archives %s", ident)
+        self.call = session.listArchives(ident)
+        return 1
+
+    def save(self, source, _):
+        if self.call is not None:
+            source._cache["archives"][self.build["id"]] = self.call.result
+            source._cache["archives"][self.build["nvr"]] = self.call.result
+
+
+class GetBuildCommand(object):
+    def __init__(self, ident, list_archives=False):
+        self.ident = ident
+        self.list_archives = list_archives
+        self.call = None
+
+    def execute(self, source, session):
+        build_cache = source._cache.setdefault("build", {})
+        if self.ident in build_cache:
+            return 0
+        LOG.debug("Get koji build %s", self.ident)
+        self.call = session.getBuild(self.ident)
+        return 1
+
+    def save(self, source, koji_queue):
+        if self.call is None:
+            build = source._cache["build"][self.ident]
+        else:
+            # Build is saved under both NVR and ID
+            build = self.call.result
+            if build:
+                source._cache["build"][build["id"]] = build
+                source._cache["build"][build["nvr"]] = build
+            else:
+                source._cache["build"][self.ident] = build
+        if self.list_archives and build:
+            koji_queue.put(ListArchivesCommand(build))
+
+
+class GetRpmCommand(object):
+    def __init__(self, ident):
+        self.ident = ident
+        self.call = None
+
+    def execute(self, source, session):
+        rpm_cache = source._cache.setdefault("rpm", {})
+        if self.ident in rpm_cache:
+            return 0
+        LOG.debug("Get koji RPM %s", self.ident)
+        self.call = session.getRPM(self.ident)
+        return 1
+
+    def save(self, source, koji_queue):
+        if self.call is not None:
+            source._cache["rpm"][self.ident] = self.call.result
+        # We have to get the RPM's build as well.
+        if source._cache["rpm"][self.ident]:
+            build_id = source._cache["rpm"][self.ident]["build_id"]
+            koji_queue.put(GetBuildCommand(build_id))
+
+
 class KojiSource(Source):
     """Uses koji artifacts as the source of push items."""
+
+    _BATCH_SIZE = int(os.environ.get("PUSHSOURCE_KOJI_BATCH_SIZE", "100"))
 
     def __init__(
         self,
         url,
         dest=None,
         rpm=None,
+        module_build=None,
         signing_key=None,
         basedir=None,
         threads=4,
-        timeout=60 * 2,
+        timeout=60 * 30,
         cache=None,
         executor=None,
     ):
@@ -44,6 +121,12 @@ class KojiSource(Source):
 
             rpm (list[str, int])
                 RPM identifier(s). Can be koji IDs (integers) or filenames.
+                The source will yield all RPMs identified by this list.
+
+            module_build (list[str, int])
+                Build identifier(s). Can be koji IDs (integers) or build NVRs.
+                The source will yield all modulemd files belonging to these
+                build(s).
 
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
@@ -74,16 +157,16 @@ class KojiSource(Source):
 
             executor (concurrent.futures.Executor)
                 A custom executor used to submit calls to koji.
-
-                If provided, `threads` has no effect.
         """
         self._url = url
         self._rpm = list_argument(rpm)
+        self._module_build = list_argument(module_build)
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout
         self._pathinfo = koji.PathInfo(basedir)
         self._cache = {} if cache is None else cache
+        self._threads = threads
         self._executor = (
             executor or Executors.thread_pool(max_workers=threads).with_retry()
         )
@@ -100,20 +183,13 @@ class KojiSource(Source):
         return tls.koji_session
 
     def _get_rpm(self, rpm):
-        with CACHE_LOCK:
-            if rpm not in self._cache.setdefault("rpm", {}):
-                LOG.debug("Get koji RPM %s", rpm)
-                self._cache["rpm"][rpm] = self._koji_session.getRPM(rpm)
-
         return self._cache["rpm"][rpm]
 
     def _get_build(self, build_id):
-        with CACHE_LOCK:
-            if build_id not in self._cache.setdefault("build", {}):
-                LOG.debug("Get koji build %s", build_id)
-                self._cache["build"][build_id] = self._koji_session.getBuild(build_id)
-
         return self._cache["build"][build_id]
+
+    def _get_archives(self, build_id):
+        return self._cache["archives"][build_id]
 
     def _push_items_from_rpm_meta(self, rpm, meta):
         LOG.debug("RPM metadata for %s: %s", rpm, meta)
@@ -157,8 +233,6 @@ class KojiSource(Source):
             # is ported from old code and is not necessarily the best way.
             rpm_path = unsigned_path
 
-        # TODO: RpmPushItem?
-
         return [
             RpmPushItem(
                 name=os.path.basename(rpm_path),
@@ -169,21 +243,147 @@ class KojiSource(Source):
             )
         ]
 
+    def _push_items_from_module_build(self, nvr, meta):
+        LOG.debug("Looking for modulemd on %s, %s", nvr, meta)
+
+        if not meta:
+            message = "Module build not found in koji: %s" % nvr
+            LOG.error(message)
+            raise ValueError(message)
+
+        build_id = meta["id"]
+        archives = self._get_archives(build_id)
+        modules = [elem for elem in archives if elem.get("btype") == "module"]
+
+        out = []
+        for module in modules:
+            file_path = os.path.join(
+                self._pathinfo.typedir(meta, "module"), module["filename"]
+            )
+            # Possible TODO: koji also provides a checksum, which could be filled
+            # in here. However, it seems to be only MD5?
+            out.append(
+                ModulemdPushItem(
+                    name=module["filename"],
+                    src=file_path,
+                    dest=self._dest,
+                    build=meta["nvr"],
+                )
+            )
+        return out
+
+    def _rpm_futures(self):
+        # Get info from each requested RPM.
+        rpm_fs = [(self._executor.submit(self._get_rpm, rpm), rpm) for rpm in self._rpm]
+
+        # Convert them to lists of push items
+        return [
+            f_map(f, partial(self._push_items_from_rpm_meta, rpm)) for f, rpm in rpm_fs
+        ]
+
+    def _modulemd_futures(self):
+        # Get info from each requested module build.
+        module_build_fs = [
+            (self._executor.submit(self._get_build, build), build)
+            for build in self._module_build
+        ]
+
+        # Convert them to lists of push items
+        return [
+            f_map(f, partial(self._push_items_from_module_build, build))
+            for f, build in module_build_fs
+        ]
+
+    def _do_fetch(self, koji_queue, exceptions):
+        try:
+            done = False
+
+            while not done:
+                count = 0
+                pending_commands = []
+
+                session = self._koji_session.multicall(
+                    strict=True, batch=self._BATCH_SIZE
+                )
+
+                while not done:
+                    try:
+                        command = koji_queue.get_nowait()
+                        count += command.execute(self, session)
+                        pending_commands.append(command)
+                    except Empty:
+                        done = True
+                        LOG.debug("koji fetch queue emptied")
+
+                LOG.debug("koji multicall: about to execute %s call(s)", count)
+
+                session.call_all()
+
+                LOG.debug("koji multicall: executed %s call(s)", count)
+
+                # multicall is now done.
+                # Save the result to cache from each command.
+                # This could potentially result in new queue entries.
+                for command in pending_commands:
+                    command.save(self, koji_queue)
+
+                # If there were any commands processed, queue might no longer be
+                # empty, so re-check it
+                if pending_commands:
+                    done = False
+        except Exception as e:
+            LOG.exception("Error during koji fetches")
+            exceptions.append(e)
+            raise
+
     def __iter__(self):
         """Iterate over push items.
 
         - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs
         """
 
-        # Get info from each requested RPM.
-        rpm_fs = [(self._executor.submit(self._get_rpm, rpm), rpm) for rpm in self._rpm]
+        # Queue holding all requests we need to make to koji.
+        # We try to fetch as much as we can early to make efficient use
+        # of multicall.
+        koji_queue = Queue()
 
-        # Convert them to lists of push items
-        rpm_push_items_fs = [
-            f_map(f, partial(self._push_items_from_rpm_meta, rpm)) for f, rpm in rpm_fs
+        # We'll need to obtain all RPMs referenced by filename
+        for rpm_filename in self._rpm:
+            koji_queue.put(GetRpmCommand(ident=rpm_filename))
+
+        # We'll need to obtain all builds from which we want modules,
+        # as well as the archives from those
+        for build_id in self._module_build:
+            koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
+
+        # Put some threads to work on the queue.
+        fetch_exceptions = []
+        fetch_threads = [
+            Thread(
+                name="koji-%s-fetch-%s" % (id(self), i),
+                target=self._do_fetch,
+                args=(koji_queue, fetch_exceptions),
+            )
+            for i in range(0, self._threads)
         ]
 
-        completed_fs = futures.as_completed(rpm_push_items_fs, timeout=self._timeout)
+        # Wait for all fetches to finish
+        for t in fetch_threads:
+            t.start()
+        for t in fetch_threads:
+            t.join(self._timeout)
+
+        # Re-raise exceptions, if any.
+        # If we got more than one, we're only propagating the first.
+        if fetch_exceptions:
+            raise fetch_exceptions[0]
+
+        # The queue must be empty now
+        assert koji_queue.empty()
+
+        push_items_fs = self._modulemd_futures() + self._rpm_futures()
+
+        completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
         for f in completed_fs:
             # If an exception occurred, this is where it will be raised.
             for pushitem in f.result():

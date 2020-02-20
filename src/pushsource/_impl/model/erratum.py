@@ -1,3 +1,5 @@
+from frozenlist2 import frozenlist
+
 from .base import PushItem
 from .. import compat_attr as attr
 
@@ -41,12 +43,6 @@ class ErratumReference(object):
 class ErratumModule(object):
     """A module entry within a :meth:`~ErratumPushItem.pkglist`."""
 
-    arch = attr.ib(type=str)
-    """Module architecture."""
-
-    context = attr.ib(type=str)
-    """Module context."""
-
     name = attr.ib(type=str)
     """Module name."""
 
@@ -55,6 +51,27 @@ class ErratumModule(object):
 
     version = attr.ib(type=str)
     """Module version."""
+
+    context = attr.ib(type=str)
+    """Module context."""
+
+    arch = attr.ib(type=str)
+    """Module architecture."""
+
+    def __str__(self):
+        return ":".join([self.name, self.stream, self.version, self.context, self.arch])
+
+    @classmethod
+    def _from_data(cls, data):
+        if not data:
+            return None
+        return cls(
+            arch=data["arch"],
+            context=data["context"],
+            name=data["name"],
+            stream=data["stream"],
+            version=data["version"],
+        )
 
 
 @attr.s()
@@ -107,7 +124,9 @@ class ErratumPackageCollection(object):
     but must be unique within an advisory.
     """
 
-    packages = attr.ib(type=list)
+    packages = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """List of packages (:class:`ErratumPackage`) within this collection."""
 
     short = attr.ib(type=str, default="")
@@ -158,7 +177,7 @@ class ErratumPackageCollection(object):
             name=data["name"],
             short=data["short"],
             packages=packages,
-            # TODO: module
+            module=ErratumModule._from_data(data.get("module")),
         )
 
 
@@ -186,10 +205,12 @@ class ErratumPushItem(PushItem):
     reboot_suggested = attr.ib(type=bool, default=False)
     """True if rebooting host machine is recommended after installing this advisory."""
 
-    references = attr.ib(type=list, default=attr.Factory(list))
+    references = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """A list of references (:class:`ErratumReference`) associated with the advisory."""
 
-    pkglist = attr.ib(type=list, default=attr.Factory(list))
+    pkglist = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
     """A list of package collections (:class:`ErratumPackageCollection`)
     associated with the advisory."""
 
@@ -231,7 +252,9 @@ class ErratumPushItem(PushItem):
     solution = attr.ib(type=str, default=None)
     """Text explaining how to apply the advisory."""
 
-    content_types = attr.ib(type=list, default=attr.Factory(list))
+    content_types = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """A list of content types associated with the advisory.
 
     For example, "docker" may be found in this list if the advisory deals

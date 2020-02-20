@@ -3,6 +3,7 @@ from pushsource._impl.model import (
     PushItem,
     FilePushItem,
     ChannelDumpPushItem,
+    ModulemdPushItem,
     RpmPushItem,
     ErratumPushItem,
     ErratumReference,

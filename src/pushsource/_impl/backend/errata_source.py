@@ -141,11 +141,37 @@ class ErrataSource(Source):
         out = []
 
         for build_nvr, build_info in six.iteritems(file_list):
-            out.extend(self._push_items_from_build(erratum, build_nvr, build_info))
+            out.extend(self._rpm_push_items_from_build(erratum, build_info))
+            out.extend(
+                self._module_push_items_from_build(erratum, build_nvr, build_info)
+            )
 
         return out
 
-    def _push_items_from_build(self, erratum, build_nvr, build_info):
+    def _module_push_items_from_build(self, erratum, build_nvr, build_info):
+        modules = build_info.get("modules") or {}
+
+        # Get a koji source which will yield all modules from the build
+        koji_source = self._koji_source(module_build=[build_nvr])
+
+        out = []
+
+        for push_item in koji_source:
+            # The koji source yielded *all* modulemds on the build.
+            # We filter to only those requested by Errata Tool.
+            if push_item.name not in modules:
+                continue
+
+            dest = modules[push_item.name]
+
+            # Fill in more push item details based on the info provided by ET.
+            push_item = attr.evolve(push_item, dest=dest, origin=erratum.name)
+
+            out.append(push_item)
+
+        return out
+
+    def _rpm_push_items_from_build(self, erratum, build_info):
         rpms = build_info.get("rpms") or {}
         signing_key = build_info.get("sig_key") or None
         sha256sums = (build_info.get("checksums") or {}).get("sha256") or {}
@@ -164,13 +190,12 @@ class ErrataSource(Source):
                     % push_item.name
                 )
 
-            # Sanity check that the lookup by RPM filename matched the build
-            # NVR expected by ET
-            if push_item.build != build_nvr:
-                raise ValueError(
-                    "Push item NVR is wrong; expected: %s, item: %s"
-                    % (build_nvr, repr(push_item))
-                )
+            # Note, we can't sanity check here that the push item's build
+            # equals ET's NVR, because it's not always the case.
+            # Example:
+            #  RPM: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+            #  belongs to build: 1015162 (pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09)
+            #  but ET refers instead to module build: postgresql-12-8010120191120141335.e4e244f9.
 
             # Fill in more push item details based on the info provided by ET.
             push_item = attr.evolve(

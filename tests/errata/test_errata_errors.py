@@ -55,32 +55,3 @@ def test_errata_missing_koji_rpms(fake_errata_tool):
         "Advisory refers to sudo-1.8.25p1-4.el8_0.3.x86_64.rpm but RPM was not found in koji"
         in str(exc.value)
     )
-
-
-def test_errata_mismatch_koji_rpms(fake_errata_tool):
-    """Can't obtain errata if referenced RPMs in koji belong to wrong build"""
-
-    class BadKojiSource(object):
-        def __init__(self, **kwargs):
-            pass
-
-        def __iter__(self):
-            yield RpmPushItem(
-                name="sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
-                state="PENDING",
-                build="some-unexpected-build-1.2.3",
-            )
-
-    Source.register_backend("badkoji", BadKojiSource)
-
-    source = Source.get(
-        "errata:https://errata.example.com?errata=RHSA-2020:0509",
-        koji_source="badkoji:",
-    )
-
-    with raises(Exception) as exc:
-        list(source)
-
-    # It should raise because RPM was found, but in a different build
-    # than the one expected by ET
-    assert "Push item NVR is wrong" in str(exc.value)

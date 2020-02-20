@@ -43,12 +43,6 @@ class ErratumReference(object):
 class ErratumModule(object):
     """A module entry within a :meth:`~ErratumPushItem.pkglist`."""
 
-    arch = attr.ib(type=str)
-    """Module architecture."""
-
-    context = attr.ib(type=str)
-    """Module context."""
-
     name = attr.ib(type=str)
     """Module name."""
 
@@ -57,6 +51,27 @@ class ErratumModule(object):
 
     version = attr.ib(type=str)
     """Module version."""
+
+    context = attr.ib(type=str)
+    """Module context."""
+
+    arch = attr.ib(type=str)
+    """Module architecture."""
+
+    def __str__(self):
+        return ":".join([self.name, self.stream, self.version, self.context, self.arch])
+
+    @classmethod
+    def _from_data(cls, data):
+        if not data:
+            return None
+        return cls(
+            arch=data["arch"],
+            context=data["context"],
+            name=data["name"],
+            stream=data["stream"],
+            version=data["version"],
+        )
 
 
 @attr.s()
@@ -162,7 +177,7 @@ class ErratumPackageCollection(object):
             name=data["name"],
             short=data["short"],
             packages=packages,
-            # TODO: module
+            module=ErratumModule._from_data(data.get("module")),
         )
 
 

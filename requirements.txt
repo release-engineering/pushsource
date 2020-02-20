@@ -1,6 +1,6 @@
 attrs
 more-executors
-koji
+koji>=1.18
 six
 pushcollector
 PyYAML

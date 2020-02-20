@@ -97,6 +97,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
     }
 
     fake_koji.build_data[1234] = {
+        "id": 1234,
         "name": "sudo",
         "version": "1.8.25p1",
         "release": "4.el8_0.3",

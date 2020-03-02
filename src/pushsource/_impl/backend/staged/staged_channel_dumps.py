@@ -52,8 +52,7 @@ class StagedChannelDumpsMixin(StagedBaseMixin):
             name=file_md.filename or entry.name,
             src=entry.path,
             sha256sum=file_md.sha256sum,
-            # TODO: decide if this is correct field for origin.
-            origin="staged",
+            origin=leafdir.topdir,
             dest=[leafdir.dest],
             **kwargs
         )

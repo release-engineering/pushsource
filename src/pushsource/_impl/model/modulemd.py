@@ -3,7 +3,7 @@ from .. import compat_attr as attr
 
 
 @attr.s()
-class ModulemdPushItem(PushItem):
+class ModuleMdPushItem(PushItem):
     """A push item representing a modulemd stream.
 
     For push items of this type, the ``src`` attribute refers to a

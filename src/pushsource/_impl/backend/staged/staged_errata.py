@@ -25,5 +25,5 @@ class StagedErrataMixin(StagedBaseMixin):
 
         item = ErratumPushItem._from_data(raw)
         return attr.evolve(
-            item, origin="staged", src=entry.path, dest=item.dest + [leafdir.dest]
+            item, origin=leafdir.topdir, src=entry.path, dest=item.dest + [leafdir.dest]
         )

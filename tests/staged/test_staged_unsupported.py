@@ -16,11 +16,6 @@ def test_staged_unsupported(caplog):
     assert files == []
 
     # But it should log about some unsupported files
-    for path in [
-        "dest1/AWS_IMAGES/img1",
-        "dest1/AWS_IMAGES/img2",
-        "dest2/DOCKER/dimg1",
-        "dest2/DOCKER/dimg2",
-    ]:
+    for path in ["dest2/DOCKER/dimg1", "dest2/DOCKER/dimg2"]:
         msg = "Unsupported content found: %s" % os.path.join(staged_dir, path)
         assert msg in caplog.messages

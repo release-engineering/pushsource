@@ -33,8 +33,9 @@ def test_staged_nometa_channel_dumps(tmpdir):
     with raises(ValueError) as exc_info:
         list(source)
 
-    assert "staged.json doesn't contain data for dest/CHANNEL_DUMPS/testfile" in str(
-        exc_info.value
+    assert (
+        "No metadata available for dest/CHANNEL_DUMPS/testfile in staged.json"
+        in str(exc_info.value)
     )
 
 

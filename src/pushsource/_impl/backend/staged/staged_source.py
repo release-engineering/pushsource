@@ -19,6 +19,7 @@ from .staged_utils import StagingMetadata, StagingLeafDir
 
 from pushsource.helpers import list_argument
 
+from .staged_ami import StagedAmiMixin
 from .staged_files import StagedFilesMixin
 from .staged_errata import StagedErrataMixin
 from .staged_channel_dumps import StagedChannelDumpsMixin
@@ -35,6 +36,7 @@ CACHE_LOCK = threading.RLock()
 
 class StagedSource(
     Source,
+    StagedAmiMixin,
     StagedFilesMixin,
     StagedErrataMixin,
     StagedChannelDumpsMixin,

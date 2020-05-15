@@ -69,7 +69,7 @@ def test_staged_file_with_no_metadata(tmpdir):
     with raises(ValueError) as exc_info:
         list(source)
 
-    assert "staged.json doesn't contain data for dest/FILES/some-file" in str(
+    assert "No metadata available for dest/FILES/some-file in staged.json" in str(
         exc_info.value
     )
 

@@ -7,6 +7,8 @@ from pushsource._impl.model import (
     ModuleMdPushItem,
     ProductIdPushItem,
     RpmPushItem,
+    AmiPushItem,
+    AmiRelease,
     ErratumPushItem,
     ErratumReference,
     ErratumModule,

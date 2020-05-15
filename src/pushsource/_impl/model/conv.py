@@ -47,3 +47,18 @@ def timestamp(value):
         value = value.replace(tzinfo=tz.tzutc())
 
     return value
+
+
+def datestr(value):
+    if isinstance(value, six.string_types):
+        for fmt in ("%Y%m%d", "%Y-%m-%d"):
+            try:
+                value = datetime.datetime.strptime(value, fmt)
+                value = datetime.date(value.year, value.month, value.day)
+                break
+            except ValueError:
+                LOG.debug("can't parse %s using %s", value, fmt, exc_info=1)
+        else:
+            raise ValueError("can't parse %s as a date" % repr(value))
+
+    return value

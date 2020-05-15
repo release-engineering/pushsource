@@ -21,6 +21,18 @@ class StagingMetadata(object):
     # Metadata per file, keyed by relative path within staging area
     file_metadata = attr.ib(type=dict, default=attr.Factory(dict))
 
+    def file_metadata_or_die(self, relative_path):
+        # Return StagingFileMetadata corresponding to relative_path, or raise a fatal error
+        # if not available.
+        file_md = self.file_metadata.get(relative_path)
+        if file_md is None:
+            message = "No metadata available for %s" % relative_path
+            if self.filename:
+                message = "%s in %s" % (message, self.filename)
+            raise ValueError(message)
+
+        return file_md
+
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):
         header = data.get("header") or {}

@@ -12,7 +12,7 @@ from more_executors import Executors
 from more_executors.futures import f_map
 
 from ..source import Source
-from ..model import RpmPushItem, ModulemdPushItem
+from ..model import RpmPushItem, ModuleMdPushItem
 from pushsource.helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
@@ -263,7 +263,7 @@ class KojiSource(Source):
             # Possible TODO: koji also provides a checksum, which could be filled
             # in here. However, it seems to be only MD5?
             out.append(
-                ModulemdPushItem(
+                ModuleMdPushItem(
                     name=module["filename"],
                     src=file_path,
                     dest=self._dest,

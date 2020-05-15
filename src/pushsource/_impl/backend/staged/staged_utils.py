@@ -44,7 +44,7 @@ class StagingMetadata(object):
                 attributes=entry.get("attributes") or {},
                 filename=entry.get("filename"),
                 relative_path=entry["relative_path"],
-                sha256sum=entry["sha256sum"],
+                sha256sum=entry.get("sha256sum"),
             )
             if md.relative_path in file_metadata:
                 raise ValueError(
@@ -61,3 +61,4 @@ class StagingLeafDir(object):
     file_type = attr.ib(type=str)
     dest = attr.ib(type=str)
     path = attr.ib(type=str)
+    topdir = attr.ib(type=str)

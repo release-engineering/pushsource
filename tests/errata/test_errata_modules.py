@@ -12,7 +12,7 @@ from pushsource import (
     ErratumPackageCollection,
     ErratumReference,
     RpmPushItem,
-    ModulemdPushItem,
+    ModuleMdPushItem,
 )
 
 
@@ -201,7 +201,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
 
     errata_items = [i for i in items if isinstance(i, ErratumPushItem)]
     rpm_items = [i for i in items if isinstance(i, RpmPushItem)]
-    modulemd_items = [i for i in items if isinstance(i, ModulemdPushItem)]
+    modulemd_items = [i for i in items if isinstance(i, ModuleMdPushItem)]
 
     # It should have found the one advisory
     assert len(errata_items) == 1
@@ -227,7 +227,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
 
     # It should have found the modulemd files
     assert sorted(modulemd_items, key=lambda item: item.src) == [
-        ModulemdPushItem(
+        ModuleMdPushItem(
             name="modulemd.aarch64.txt",
             state="PENDING",
             src=os.path.join(
@@ -242,7 +242,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
             build="postgresql-12-8010120191120141335.e4e244f9",
             signing_key=None,
         ),
-        ModulemdPushItem(
+        ModuleMdPushItem(
             name="modulemd.ppc64le.txt",
             state="PENDING",
             src=os.path.join(
@@ -257,7 +257,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
             build="postgresql-12-8010120191120141335.e4e244f9",
             signing_key=None,
         ),
-        ModulemdPushItem(
+        ModuleMdPushItem(
             name="modulemd.s390x.txt",
             state="PENDING",
             src=os.path.join(
@@ -272,7 +272,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
             build="postgresql-12-8010120191120141335.e4e244f9",
             signing_key=None,
         ),
-        ModulemdPushItem(
+        ModuleMdPushItem(
             name="modulemd.x86_64.txt",
             state="PENDING",
             src=os.path.join(

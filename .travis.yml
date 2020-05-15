@@ -1,5 +1,10 @@
 sudo: false
 language: python
+
+before_install:
+  # for rpm-py-installer
+  - sudo apt-get install -y rpm
+
 install: pip install tox
 matrix:
   include:
@@ -7,8 +12,6 @@ matrix:
     env: TOX_ENV=py27
   - python: "3.8"
     env: TOX_ENV=static
-  - python: "3.8"
-    env: TOX_ENV=pidiff
   - python: "3.8"
     env: TOX_ENV=cov-travis DEPLOY=1
   - python: "3.8"

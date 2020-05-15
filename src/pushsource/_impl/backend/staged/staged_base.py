@@ -42,6 +42,8 @@ class StagedBaseMixin(object):
 
         for entry in scandir(leafdir.path):
             if entry.is_file():
-                out.append(delegate(leafdir, metadata, entry))
+                item = delegate(leafdir, metadata, entry)
+                if item:
+                    out.append(item)
 
         return out

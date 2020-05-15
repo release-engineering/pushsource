@@ -6,3 +6,4 @@ pushcollector
 PyYAML
 frozenlist2
 python-dateutil
+kobo

@@ -24,7 +24,6 @@ class StagedFilesMixin(StagedBaseMixin):
             src=entry.path,
             description=file_md.attributes.get("description"),
             sha256sum=file_md.sha256sum,
-            # TODO: decide if this is correct field for origin.
-            origin="staged",
+            origin=leafdir.topdir,
             dest=[leafdir.dest],
         )

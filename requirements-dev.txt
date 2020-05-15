@@ -1,2 +1,7 @@
 black
 pre-commit
+
+# rpm-py-installer is listed as a dev requirement because
+# rpm Python bindings must be available "somehow", but
+# not necessarily via this package.
+rpm-py-installer

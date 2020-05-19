@@ -44,16 +44,31 @@
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#binding-partially-configured-backends">Binding partially-configured backends</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/sources.html">API Reference: sources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/sources.html#module-pushsource.helpers">Helpers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staged-source-urls">Staged source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staging-structure">Staging structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sources/staged.html#python-api-reference">Python API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/pushitems.html">API Reference: push items</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/pushitems.html#common">Common</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/pushitems.html#rpms">RPMs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/pushitems.html#errata">Errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sources/koji.html#koji-source-urls">koji source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sources/koji.html#python-api-reference">Python API reference</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sources/errata.html#errata-source-urls">errata source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sources/errata.html#python-api-reference">Python API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/channeldumps.html">Push items: channel dump</a></li>
 </ul>
 </div>
 <div class="section" id="quick-start">
@@ -62,7 +77,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pushsource</span>
 </pre></div>
 </div>
-<p>In your python code, obtain a <a class="reference internal" href="api/sources.html#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a> instance and
+<p>In your python code, obtain a <code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code> instance and
 iterate over the returned push items:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pushsource</span> <span class="kn">import</span> <span class="n">Source</span>
 
@@ -100,8 +115,18 @@ iterate over the returned push items:</p>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/sources.html">API Reference: sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/pushitems.html">API Reference: push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/channeldumps.html">Push items: channel dump</a></li>
 </ul>
 
 

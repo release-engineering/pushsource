@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Source: errata &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Push items" href="../model/base.html" />
+    <link rel="prev" title="Source: koji" href="koji.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="source-errata">
+<h1>Source: errata<a class="headerlink" href="#source-errata" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">errata</span></code> push source allows the loading of content from an instance of
+Errata Tool (or “ET”).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This push source is currently provided as a technical preview only and is
+not recommended for production use!</p>
+<ul class="simple">
+<li><p>Lacks support for container images</p></li>
+<li><p>Lacks support for Errata Tool targets other than <code class="docutils literal notranslate"><span class="pre">cdn</span></code></p></li>
+<li><p>There is moderate risk of backwards-incompatible API changes in future releases
+of the pushsource library</p></li>
+</ul>
+</div>
+<p>Supported content types:</p>
+<ul class="simple">
+<li><p>RPMs</p></li>
+<li><p>Advisories</p></li>
+</ul>
+<div class="section" id="errata-source-urls">
+<h2>errata source URLs<a class="headerlink" href="#errata-source-urls" title="Permalink to this headline">¶</a></h2>
+<p>The base form of an errata source URL is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:errata-tool-url?advisory=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]</span></code></p>
+<p>For example, referencing a single advisory would look like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234</span></code></p>
+<p>The provided Errata Tool URL should be the base URL of the service,
+and not any specific API endpoint.</p>
+<div class="section" id="setting-the-koji-source">
+<h3>Setting the koji source<a class="headerlink" href="#setting-the-koji-source" title="Permalink to this headline">¶</a></h3>
+<p>In order to obtain metadata about RPMs, the errata source
+needs to be configured to point at the same koji environment as used by
+the connected ET environment.  This can be done by providing a partial URL
+for a koji source in the <code class="docutils literal notranslate"><span class="pre">koji_source</span></code> parameter (leave parameters for selecting
+content, such as <code class="docutils literal notranslate"><span class="pre">rpm</span></code>, blank - the errata source will fill them in as needed).</p>
+<p>For example, if our ET environment is connected to Fedora Koji, we could configure
+this as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234&amp;koji_source=https://koji.fedoraproject.org/kojihub</span></code></p>
+<p>Although it is technically possible to configure the koji source behavior using
+any of the parameters documented in <a class="reference internal" href="koji.html#source-koji"><span class="std std-ref">Source: koji</span></a>, in practice this results
+in unwieldy URLs with multiple levels of URL encoding.  Thus it’s recommended
+that developers integrating this library with their services should preconfigure
+commonly used koji sources, so that they can be referred to by a short identifier.</p>
+<p>For example, if the <code class="docutils literal notranslate"><span class="pre">fedkoji</span></code> source has been configured as explained in <a class="reference internal" href="../userguide.html#binding"><span class="std std-ref">Binding partially-configured backends</span></a>,
+the source can be referred to more succintly as in:</p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234&amp;koji_source=fedkoji</span></code></p>
+</div>
+</div>
+<div class="section" id="python-api-reference">
+<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pushsource.ErrataSource">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErrataSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">errata</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">'cdn'</span></em>, <em class="sig-param"><span class="n">koji_source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threads</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">14400</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/errata_source.html#ErrataSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErrataSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses an advisory from Errata Tool as the source of push items.</p>
+<p>Create a new source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>src</em>) – Base URL of Errata Tool, e.g. “<a class="reference external" href="http://errata.example.com">http://errata.example.com</a>”,
+“<a class="reference external" href="https://errata.example.com:8123">https://errata.example.com:8123</a>”.</p></li>
+<li><p><strong>errata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – Advisory ID(s) to be used as push item source.
+If a single string is given, multiple IDs may be
+comma-separated.</p></li>
+<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>The target type used when querying Errata Tool.
+The target type may influence the content produced,
+depending on the Errata Tool settings.</p>
+<p>Valid values include at least: “cdn”, “rhn”, “ftp”.</p>
+</p></li>
+<li><p><strong>koji_source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – URL of a koji source associated with this Errata Tool
+instance.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of threads used for concurrent queries to Errata Tool
+and koji.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+made during queries to Errata Tool.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="koji.html">Source: koji</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source: errata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#errata-source-urls">errata source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api-reference">Python API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="koji.html" title="previous chapter">Source: koji</a></li>
+      <li>Next: <a href="../model/base.html" title="next chapter">Push items</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/sources/errata.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>pushsource._impl.model.channel_dump &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.model.channel_dump</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+<span class="kn">from</span> <span class="nn">.file</span> <span class="kn">import</span> <span class="n">FilePushItem</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">sloppyintlist</span><span class="p">,</span> <span class="n">sloppylist</span><span class="p">,</span> <span class="n">timestamp</span>
+
+
+<div class="viewcode-block" id="ChannelDumpPushItem"><a class="viewcode-back" href="../../../../model/channeldumps.html#pushsource.ChannelDumpPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ChannelDumpPushItem</span><span class="p">(</span><span class="n">FilePushItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A push item representing a channel dump file.</span>
+
+<span class="sd">    A channel dump is a special type of ISO disc image containing</span>
+<span class="sd">    channels exported from RHN Classic.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Architecture of this channel dump (e.g. &quot;x86_64&quot;).&quot;&quot;&quot;</span>
+
+    <span class="n">eng_product_ids</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sloppyintlist</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Engineering product ID(s) (integers) associated with this channel dump.&quot;&quot;&quot;</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Brief label for content within this channel dump.&quot;&quot;&quot;</span>
+
+    <span class="n">datetime</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;UTC date/time at which this channel dump was generated.&quot;&quot;&quot;</span>
+
+    <span class="n">disk_number</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Disk number. May be a value greater than 1 where a channel dump</span>
+<span class="sd">    spans multiple disk images.&quot;&quot;&quot;</span>
+
+    <span class="n">channels</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sloppylist</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;List of RHN Classic channel(s) included in this channel dump.&quot;&quot;&quot;</span>
+
+    <span class="n">product_name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Name of the primary product included in this channel dump.&quot;&quot;&quot;</span>
+
+    <span class="n">product_version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Version of the primary product included in this channel dump.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Type of the channel dump:</span>
+
+<span class="sd">    - &quot;base&quot;: channel dump is intended for standalone use, contains all</span>
+<span class="sd">              content from dumped channels</span>
+<span class="sd">    - &quot;incremental&quot;: channel dump is intended for use in combination with</span>
+<span class="sd">              earlier &quot;base&quot; dump, contains only a subset of content</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/channeldumps.html">Push items: channel dump</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

@@ -8,8 +8,18 @@ A library for accessing push items from various sources.
    :caption: Contents:
 
    userguide
-   api/sources
-   api/pushitems
+   sources/staged
+   sources/koji
+   sources/errata
+   model/base
+   model/files
+   model/rpm
+   model/modulemd
+   model/errata
+   model/ami
+   model/productid
+   model/comps
+   model/channeldumps
 
 Quick Start
 -----------

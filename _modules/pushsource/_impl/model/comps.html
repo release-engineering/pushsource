@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pushsource._impl.model.rpm &#8212; pushsource  documentation</title>
+    <title>pushsource._impl.model.comps &#8212; pushsource  documentation</title>
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,17 +30,21 @@
 
           <div class="body" role="main">
             
-  <h1>Source code for pushsource._impl.model.rpm</h1><div class="highlight"><pre>
+  <h1>Source code for pushsource._impl.model.comps</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 
 
-<div class="viewcode-block" id="RpmPushItem"><a class="viewcode-back" href="../../../../model/rpm.html#pushsource.RpmPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">RpmPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A push item representing a single RPM.&quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="CompsXmlPushItem"><a class="viewcode-back" href="../../../../model/comps.html#pushsource.CompsXmlPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">CompsXmlPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A push item representing a comps XML file.</span>
 
-    <span class="c1"># no RPM-specific metadata is implemented yet; the class exists</span>
-    <span class="c1"># only for the purpose of instanceof checks</span>
+<span class="sd">    For push items of this type, the ``src`` attribute refers to a</span>
+<span class="sd">    file containing a comps XML file (package group definitions)</span>
+<span class="sd">    in the format used by yum &amp; dnf.</span>
+
+<span class="sd">    This library does not verify that the referenced file is valid.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 
           </div>

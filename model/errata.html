@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Push items: errata &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Push items: AMI" href="ami.html" />
+    <link rel="prev" title="Push items: modulemd" href="modulemd.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="push-items-errata">
+<h1>Push items: errata<a class="headerlink" href="#push-items-errata" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pushsource.ErratumPushItem">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPushItem</code><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>A push item representing a single erratum (also known as “advisory”).</p>
+<p>Note that many fields on erratum objects which appear to be numeric
+are instead represented as strings (‘release’ and ‘pushcount’ being two
+examples).</p>
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.type">
+<code class="sig-name descname">type</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>‘bugfix’, ‘security’ or ‘enhancement’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.release">
+<code class="sig-name descname">release</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release number. Typically an integer-string, initially ‘0’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.status">
+<code class="sig-name descname">status</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status, typically ‘final’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.pushcount">
+<code class="sig-name descname">pushcount</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.pushcount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of times advisory has been revised and published (starting at ‘1’).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.reboot_suggested">
+<code class="sig-name descname">reboot_suggested</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.reboot_suggested" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if rebooting host machine is recommended after installing this advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.references">
+<code class="sig-name descname">references</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.references" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of references (<a class="reference internal" href="#pushsource.ErratumReference" title="pushsource.ErratumReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumReference</span></code></a>) associated with the advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.pkglist">
+<code class="sig-name descname">pkglist</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.pkglist" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of package collections (<a class="reference internal" href="#pushsource.ErratumPackageCollection" title="pushsource.ErratumPackageCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPackageCollection</span></code></a>)
+associated with the advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.from_">
+<code class="sig-name descname">from_</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.from_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contact email address for the owner of the advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.rights">
+<code class="sig-name descname">rights</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.rights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copyright message.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.title">
+<code class="sig-name descname">title</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of the advisory (e.g. ‘bash bugfix and enhancement’).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Full human-readable description of the advisory, usually multiple lines.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.version">
+<code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advisory version. Starts counting at “1”, and some systems require updating
+the version whenever an advisory is modified.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.updated">
+<code class="sig-name descname">updated</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timestamp of the last update to this advisory.</p>
+<p>Typically of the form ‘2019-12-31 06:54:41 UTC’, but this is not enforced.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.issued">
+<code class="sig-name descname">issued</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.issued" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timestamp of the initial release of this advisory.</p>
+<p>Uses the same format as <a class="reference internal" href="#pushsource.ErratumPushItem.updated" title="pushsource.ErratumPushItem.updated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updated()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.severity">
+<code class="sig-name descname">severity</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.severity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Severity of the advisory, e.g. “low”, “moderate”, “important” or “critical”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.summary">
+<code class="sig-name descname">summary</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Typically a single sentence briefly describing the advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.solution">
+<code class="sig-name descname">solution</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text explaining how to apply the advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPushItem.content_types">
+<code class="sig-name descname">content_types</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPushItem.content_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of content types associated with the advisory.</p>
+<p>For example, “docker” may be found in this list if the advisory deals
+with container images.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pushsource.ErratumReference">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumReference</code><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumReference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>A reference within a <a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a> list.</p>
+<dl class="py attribute">
+<dt id="pushsource.ErratumReference.href">
+<code class="sig-name descname">href</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumReference.href" title="Permalink to this definition">¶</a></dt>
+<dd><p>A URL.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumReference.id">
+<code class="sig-name descname">id</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumReference.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A short ID for the reference, unique within this erratum.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumReference.title">
+<code class="sig-name descname">title</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumReference.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>A title for the reference; analogous to the ‘title’ attribute
+in HTML.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumReference.type">
+<code class="sig-name descname">type</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumReference.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of reference. This defines the expected target of the URL
+and includes at least:</p>
+<ul class="simple">
+<li><p>“self”: reference to a page for this advisory</p></li>
+<li><p>“bugzilla”: reference to a bug</p></li>
+<li><p>“other”: any other kind of reference</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pushsource.ErratumPackageCollection">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPackageCollection</code><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of packages found within an <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p>A non-modular advisory typically contains only a single collection, while modular
+advisories typically contain one collection per module.</p>
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackageCollection.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackageCollection.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A name for this collection. The collection name has no specific meaning,
+but must be unique within an advisory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackageCollection.packages">
+<code class="sig-name descname">packages</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackageCollection.packages" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of packages (<a class="reference internal" href="#pushsource.ErratumPackage" title="pushsource.ErratumPackage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPackage</span></code></a>) within this collection.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackageCollection.short">
+<code class="sig-name descname">short</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackageCollection.short" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alternative name for this collection. In practice, this field
+is typically blank.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackageCollection.module">
+<code class="sig-name descname">module</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackageCollection.module" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#pushsource.ErratumModule" title="pushsource.ErratumModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumModule</span></code></a> defining the module this entry is associated
+with, if any.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pushsource.ErratumModule">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumModule</code><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>A module entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="pushsource.ErratumModule.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumModule.stream">
+<code class="sig-name descname">stream</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module stream.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumModule.version">
+<code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module version.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumModule.context">
+<code class="sig-name descname">context</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module context.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumModule.arch">
+<code class="sig-name descname">arch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module architecture.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pushsource.ErratumPackage">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">ErratumPackage</code><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.ErratumPackage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A package (RPM) entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.arch">
+<code class="sig-name descname">arch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM architecture.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.filename">
+<code class="sig-name descname">filename</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM filename (basename).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.epoch">
+<code class="sig-name descname">epoch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.epoch" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM epoch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM name (e.g. “bash-4.0.1-1.el7.x86_64.rpm” name is “bash”)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.version">
+<code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM version (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “4.0.1”)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.release">
+<code class="sig-name descname">release</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>RPM release (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “1.el7”)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.src">
+<code class="sig-name descname">src</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filename of the source RPM from which this RPM was built; equal to
+<a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a> for the source RPM itself.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.md5sum">
+<code class="sig-name descname">md5sum</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.md5sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>MD5 checksum of this RPM in hex string form, if available.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.sha1sum">
+<code class="sig-name descname">sha1sum</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.sha1sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>SHA1 checksum of this RPM in hex string form, if available.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.sha256sum">
+<code class="sig-name descname">sha256sum</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.ErratumPackage.sha256sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>SHA256 checksum of this RPM in hex string form, if available.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="channeldumps.html">Push items: channel dump</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="modulemd.html" title="previous chapter">Push items: modulemd</a></li>
+      <li>Next: <a href="ami.html" title="next chapter">Push items: AMI</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/model/errata.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

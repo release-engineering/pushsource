@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Source: koji &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Source: errata" href="errata.html" />
+    <link rel="prev" title="Source: staged" href="staged.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="source-koji">
+<span id="id1"></span><h1>Source: koji<a class="headerlink" href="#source-koji" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">koji</span></code> push source allows the loading of content from an instance of
+<a class="reference external" href="https://pagure.io/koji/">koji</a>.</p>
+<p>Supported content types:</p>
+<ul class="simple">
+<li><p>RPMs</p></li>
+<li><p>modulemd YAML streams (yum repo metadata)</p></li>
+</ul>
+<p>Note that many features of the koji source requires having koji’s volume(s) mounted
+locally.</p>
+<div class="section" id="koji-source-urls">
+<h2>koji source URLs<a class="headerlink" href="#koji-source-urls" title="Permalink to this headline">¶</a></h2>
+<p>The base form of a Koji source URL is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:koji-xmlrpc-endpoint?contenttype1=...[&amp;contenttype2=...[&amp;...]]</span></code></p>
+<p>For example, accessing a couple of RPMs from Fedora koji may be achieved by
+URL:</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm</span></code></p>
+<p>The next subsections provide more detail on specific content types.</p>
+<div class="section" id="accessing-rpms">
+<h3>Accessing RPMs<a class="headerlink" href="#accessing-rpms" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">rpm</span></code> parameter to request RPMs by filename.</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm</span></code></p>
+<p>This will yield unsigned RPMs by default.  If you require signed RPMs,
+specify the signing key(s) in the <code class="docutils literal notranslate"><span class="pre">signing_key</span></code> parameter. You must use
+the same short key IDs as used on the koji instance, and a fatal error will
+occur if signed RPMs are not available.</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm&amp;signing_key=12c944d0</span></code></p>
+</div>
+<div class="section" id="accessing-modulemd-streams">
+<h3>Accessing modulemd streams<a class="headerlink" href="#accessing-modulemd-streams" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">module_build</span></code> parameter to request modulemd streams from one or more
+builds.  Builds can be specified by NVR.  Use the NVR of build(s) containing modulemd
+text files as archives (shown as “Module Archives” in the Koji UI).</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102</span></code></p>
+</div>
+<div class="section" id="setting-the-destination-for-push-items">
+<h3>Setting the destination for push items<a class="headerlink" href="#setting-the-destination-for-push-items" title="Permalink to this headline">¶</a></h3>
+<p>As koji itself contains no policy regarding where content should be pushed,
+a koji source by default yields all push items with an empty destination.</p>
+<p>If you know ahead of time the destination(s) to which your push items should be distributed,
+you may include these in the <code class="docutils literal notranslate"><span class="pre">dest</span></code> parameter, as in example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&amp;dest=target-repo1,target-repo2</span></code></p>
+</div>
+<div class="section" id="adjusting-koji-basedir">
+<h3>Adjusting <code class="docutils literal notranslate"><span class="pre">koji.BASEDIR</span></code><a class="headerlink" href="#adjusting-koji-basedir" title="Permalink to this headline">¶</a></h3>
+<p>Some features of the koji source require read-only access to koji’s working volume(s).
+The top-level path by default is provided by the <code class="docutils literal notranslate"><span class="pre">koji</span></code> library as <code class="docutils literal notranslate"><span class="pre">/mnt/koji</span></code>.</p>
+<p>To use a different path, include <code class="docutils literal notranslate"><span class="pre">basedir</span></code> in the source URL:</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&amp;basedir=/mnt/my-local-koji</span></code></p>
+</div>
+</div>
+<div class="section" id="python-api-reference">
+<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pushsource.KojiSource">
+<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">KojiSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">dest</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rpm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">module_build</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">signing_key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">basedir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threads</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">1800</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">executor</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.KojiSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses koji artifacts as the source of push items.</p>
+<p>Create a new source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – URL of the XML-RPC endpoint for koji hub.</p></li>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The destination(s) to fill in for push items created by this
+source. If omitted, all push items have empty destinations.</p></li>
+<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.
+The source will yield all RPMs identified by this list.</p></li>
+<li><p><strong>module_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+The source will yield all modulemd files belonging to these
+build(s).</p></li>
+<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
+using one of the provided keys. Include <code class="docutils literal notranslate"><span class="pre">None</span></code> if unsigned
+should also be permitted.</p>
+<p>Keys should be listed in the order of preference.</p>
+</p></li>
+<li><p><strong>basedir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Base directory of koji content (e.g. /mnt/koji).
+This directory must be readable locally.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of threads used for concurrent queries to koji.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+made during queries to koji.</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – <p>A cache used to retain the results of XML-RPC calls, to avoid
+repeated calls.</p>
+<p>Providing a cache only gives a benefit if the current process
+will create more than a single instance of KojiSource. In this
+case, some calls may be avoided by passing the same cache
+to each instance.</p>
+</p></li>
+<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.8)"><em>concurrent.futures.Executor</em></a>) – A custom executor used to submit calls to koji.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staged.html">Source: staged</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source: koji</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#koji-source-urls">koji source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api-reference">Python API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="staged.html" title="previous chapter">Source: staged</a></li>
+      <li>Next: <a href="errata.html" title="next chapter">Source: errata</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/sources/koji.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

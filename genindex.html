@@ -41,11 +41,9 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
- | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
- | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -60,10 +58,18 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule.arch">arch (pushsource.ErratumModule attribute)</a>
+      <li><a href="model/ami.html#pushsource.AmiPushItem">AmiPushItem (class in pushsource)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiRelease">AmiRelease (class in pushsource)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.arch">arch (pushsource.ChannelDumpPushItem attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumPackage.arch">(pushsource.ErratumPackage attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumModule.arch">(pushsource.ErratumModule attribute)</a>
+</li>
+        <li><a href="model/errata.html#pushsource.ErratumPackage.arch">(pushsource.ErratumPackage attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -72,7 +78,7 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.PushItem.build">build (pushsource.PushItem attribute)</a>
+      <li><a href="model/base.html#pushsource.PushItem.build">build (pushsource.PushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -80,11 +86,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.content_types">content_types (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem">ChannelDumpPushItem (class in pushsource)</a>
+</li>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.channels">channels (pushsource.ChannelDumpPushItem attribute)</a>
+</li>
+      <li><a href="model/comps.html#pushsource.CompsXmlPushItem">CompsXmlPushItem (class in pushsource)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule.context">context (pushsource.ErratumModule attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.content">content (pushsource.ChannelDumpPushItem attribute)</a>
+</li>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.content_types">content_types (pushsource.ErratumPushItem attribute)</a>
+</li>
+      <li><a href="model/errata.html#pushsource.ErratumModule.context">context (pushsource.ErratumModule attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -92,11 +106,19 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.description">description (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.datetime">datetime (pushsource.ChannelDumpPushItem attribute)</a>
 </li>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.description">description (pushsource.ErratumPushItem attribute)</a>
+
+      <ul>
+        <li><a href="model/files.html#pushsource.FilePushItem.description">(pushsource.FilePushItem attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.PushItem.dest">dest (pushsource.PushItem attribute)</a>
+      <li><a href="model/base.html#pushsource.PushItem.dest">dest (pushsource.PushItem attribute)</a>
+</li>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.disk_number">disk_number (pushsource.ChannelDumpPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -104,21 +126,23 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.epoch">epoch (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.eng_product_ids">eng_product_ids (pushsource.ChannelDumpPushItem attribute)</a>
 </li>
-      <li><a href="api/sources.html#pushsource.ErrataSource">ErrataSource (class in pushsource)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.epoch">epoch (pushsource.ErratumPackage attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule">ErratumModule (class in pushsource)</a>
+      <li><a href="sources/errata.html#pushsource.ErrataSource">ErrataSource (class in pushsource)</a>
+</li>
+      <li><a href="model/errata.html#pushsource.ErratumModule">ErratumModule (class in pushsource)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage">ErratumPackage (class in pushsource)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage">ErratumPackage (class in pushsource)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackageCollection">ErratumPackageCollection (class in pushsource)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackageCollection">ErratumPackageCollection (class in pushsource)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem">ErratumPushItem (class in pushsource)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem">ErratumPushItem (class in pushsource)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumReference">ErratumReference (class in pushsource)</a>
+      <li><a href="model/errata.html#pushsource.ErratumReference">ErratumReference (class in pushsource)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -126,23 +150,13 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.filename">filename (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.filename">filename (pushsource.ErratumPackage attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.from_">from_ (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/files.html#pushsource.FilePushItem">FilePushItem (class in pushsource)</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="G">G</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/sources.html#pushsource.Source.get">get() (pushsource.Source class method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/sources.html#pushsource.Source.get_partial">get_partial() (pushsource.Source class method)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.from_">from_ (pushsource.ErratumPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -150,7 +164,7 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumReference.href">href (pushsource.ErratumReference attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumReference.href">href (pushsource.ErratumReference attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -158,11 +172,11 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumReference.id">id (pushsource.ErratumReference attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumReference.id">id (pushsource.ErratumReference attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.issued">issued (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.issued">issued (pushsource.ErratumPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -170,15 +184,7 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/sources.html#pushsource.KojiSource">KojiSource (class in pushsource)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="L">L</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/sources.html#pushsource.helpers.list_argument">list_argument() (in module pushsource.helpers)</a>
+      <li><a href="sources/koji.html#pushsource.KojiSource">KojiSource (class in pushsource)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -186,22 +192,17 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.md5sum">md5sum (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.md5sum">md5sum (pushsource.ErratumPackage attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.PushItem.md5sum">(pushsource.PushItem attribute)</a>
+        <li><a href="model/base.html#pushsource.PushItem.md5sum">(pushsource.PushItem attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="api/sources.html#module-pushsource.helpers">pushsource.helpers</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackageCollection.module">module (pushsource.ErratumPackageCollection attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackageCollection.module">module (pushsource.ErratumPackageCollection attribute)</a>
+      <li><a href="model/modulemd.html#pushsource.ModuleMdPushItem">ModuleMdPushItem (class in pushsource)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -209,14 +210,14 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule.name">name (pushsource.ErratumModule attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumModule.name">name (pushsource.ErratumModule attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumPackage.name">(pushsource.ErratumPackage attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPackage.name">(pushsource.ErratumPackage attribute)</a>
 </li>
-        <li><a href="api/pushitems.html#pushsource.ErratumPackageCollection.name">(pushsource.ErratumPackageCollection attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPackageCollection.name">(pushsource.ErratumPackageCollection attribute)</a>
 </li>
-        <li><a href="api/pushitems.html#pushsource.PushItem.name">(pushsource.PushItem attribute)</a>
+        <li><a href="model/base.html#pushsource.PushItem.name">(pushsource.PushItem attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -225,7 +226,7 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.PushItem.origin">origin (pushsource.PushItem attribute)</a>
+      <li><a href="model/base.html#pushsource.PushItem.origin">origin (pushsource.PushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -233,46 +234,43 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackageCollection.packages">packages (pushsource.ErratumPackageCollection attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackageCollection.packages">packages (pushsource.ErratumPackageCollection attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.pkglist">pkglist (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.pkglist">pkglist (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.pushcount">pushcount (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.product_name">product_name (pushsource.ChannelDumpPushItem attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.PushItem">PushItem (class in pushsource)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.product_version">product_version (pushsource.ChannelDumpPushItem attribute)</a>
 </li>
-      <li>
-    pushsource.helpers
-
-      <ul>
-        <li><a href="api/sources.html#module-pushsource.helpers">module</a>
+      <li><a href="model/productid.html#pushsource.ProductIdPushItem">ProductIdPushItem (class in pushsource)</a>
 </li>
-      </ul></li>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.pushcount">pushcount (pushsource.ErratumPushItem attribute)</a>
+</li>
+      <li><a href="model/base.html#pushsource.PushItem">PushItem (class in pushsource)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.reboot_suggested">reboot_suggested (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.reboot_suggested">reboot_suggested (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.references">references (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.references">references (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/sources.html#pushsource.Source.register_backend">register_backend() (pushsource.Source class method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.release">release (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.release">release (pushsource.ErratumPackage attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumPushItem.release">(pushsource.ErratumPushItem attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPushItem.release">(pushsource.ErratumPushItem attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.rights">rights (pushsource.ErratumPushItem attribute)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.rights">rights (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.RpmPushItem">RpmPushItem (class in pushsource)</a>
+      <li><a href="model/rpm.html#pushsource.RpmPushItem">RpmPushItem (class in pushsource)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -280,39 +278,39 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.severity">severity (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.severity">severity (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.sha1sum">sha1sum (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.sha1sum">sha1sum (pushsource.ErratumPackage attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.sha256sum">sha256sum (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.sha256sum">sha256sum (pushsource.ErratumPackage attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.PushItem.sha256sum">(pushsource.PushItem attribute)</a>
+        <li><a href="model/base.html#pushsource.PushItem.sha256sum">(pushsource.PushItem attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackageCollection.short">short (pushsource.ErratumPackageCollection attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackageCollection.short">short (pushsource.ErratumPackageCollection attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.PushItem.signing_key">signing_key (pushsource.PushItem attribute)</a>
+      <li><a href="model/base.html#pushsource.PushItem.signing_key">signing_key (pushsource.PushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.solution">solution (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.solution">solution (pushsource.ErratumPushItem attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/sources.html#pushsource.Source">Source (class in pushsource)</a>
-</li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPackage.src">src (pushsource.ErratumPackage attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPackage.src">src (pushsource.ErratumPackage attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.PushItem.src">(pushsource.PushItem attribute)</a>
+        <li><a href="model/base.html#pushsource.PushItem.src">(pushsource.PushItem attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/pushitems.html#pushsource.PushItem.state">state (pushsource.PushItem attribute)</a>
+      <li><a href="sources/staged.html#pushsource.StagedSource">StagedSource (class in pushsource)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.status">status (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/base.html#pushsource.PushItem.state">state (pushsource.PushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule.stream">stream (pushsource.ErratumModule attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.status">status (pushsource.ErratumPushItem attribute)</a>
 </li>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.summary">summary (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumModule.stream">stream (pushsource.ErratumModule attribute)</a>
+</li>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.summary">summary (pushsource.ErratumPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -320,18 +318,20 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.title">title (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.title">title (pushsource.ErratumPushItem attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumReference.title">(pushsource.ErratumReference attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumReference.title">(pushsource.ErratumReference attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.type">type (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/channeldumps.html#pushsource.ChannelDumpPushItem.type">type (pushsource.ChannelDumpPushItem attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumReference.type">(pushsource.ErratumReference attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPushItem.type">(pushsource.ErratumPushItem attribute)</a>
+</li>
+        <li><a href="model/errata.html#pushsource.ErratumReference.type">(pushsource.ErratumReference attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -340,7 +340,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumPushItem.updated">updated (pushsource.ErratumPushItem attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumPushItem.updated">updated (pushsource.ErratumPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -348,12 +348,12 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pushitems.html#pushsource.ErratumModule.version">version (pushsource.ErratumModule attribute)</a>
+      <li><a href="model/errata.html#pushsource.ErratumModule.version">version (pushsource.ErratumModule attribute)</a>
 
       <ul>
-        <li><a href="api/pushitems.html#pushsource.ErratumPackage.version">(pushsource.ErratumPackage attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPackage.version">(pushsource.ErratumPackage attribute)</a>
 </li>
-        <li><a href="api/pushitems.html#pushsource.ErratumPushItem.version">(pushsource.ErratumPushItem attribute)</a>
+        <li><a href="model/errata.html#pushsource.ErratumPushItem.version">(pushsource.ErratumPushItem attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -384,8 +384,18 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/sources.html">API Reference: sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/pushitems.html">API Reference: push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/channeldumps.html">Push items: channel dump</a></li>
 </ul>
 
 

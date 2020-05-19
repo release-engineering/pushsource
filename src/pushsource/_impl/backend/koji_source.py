@@ -159,6 +159,7 @@ class KojiSource(Source):
                 A custom executor used to submit calls to koji.
         """
         self._url = url
+        # TODO: do IDs actually work for these? Doesn't against fedkoji...
         self._rpm = list_argument(rpm)
         self._module_build = list_argument(module_build)
         self._signing_key = list_argument(signing_key)

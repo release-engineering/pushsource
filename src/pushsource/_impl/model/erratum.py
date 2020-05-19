@@ -191,7 +191,7 @@ class ErratumPushItem(PushItem):
     """
 
     type = attr.ib(type=str, default="bugfix")
-    """Type of advisory: 'bugfix', 'security' or 'enhancement'."""
+    """'bugfix', 'security' or 'enhancement'."""
 
     release = attr.ib(type=str, default="0")
     """Release number. Typically an integer-string, initially '0'."""

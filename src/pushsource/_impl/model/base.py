@@ -50,8 +50,9 @@ class PushItem(object):
     The meaning of "dest" differs depending on the source used and its configuration.
 
     Examples for possible uses of "dest" include:
-    - a path to a directory (for items pushed using rsync)
-    - a Pulp repository name (for items pushed using Pulp)
+
+    * a path to a directory (for items pushed using rsync)
+    * a Pulp repository name (for items pushed using Pulp)
     """
 
     # TODO: validate

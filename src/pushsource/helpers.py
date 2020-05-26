@@ -2,6 +2,6 @@
 a :class:`~pushsource.Source` class.
 """
 
-from pushsource._impl.helpers import list_argument
+from pushsource._impl.helpers import list_argument, try_int
 
-__all__ = ["list_argument"]
+__all__ = ["list_argument", "try_int"]

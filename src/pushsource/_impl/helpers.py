@@ -26,3 +26,28 @@ def list_argument(value):
     if isinstance(value, six.string_types):
         return value.split(",")
     return [value]
+
+
+def try_int(value):
+    """Convert strings into integers where possible.
+
+    This function is intended for use in :class:`~pushsource.Source` constructors
+    to ease the processing of arguments passed via URL.
+
+    Parameters:
+        value
+            Any value.
+
+    Returns:
+        int
+            ``value`` converted to an integer, if it was a string representation
+            of an integer.
+        other
+            ``value`` unmodified, in any other case.
+    """
+    if not isinstance(value, six.string_types):
+        return value
+    try:
+        return int(value)
+    except ValueError:
+        return value

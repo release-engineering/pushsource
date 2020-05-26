@@ -13,7 +13,7 @@ from more_executors.futures import f_map
 
 from ..source import Source
 from ..model import RpmPushItem, ModuleMdPushItem
-from pushsource.helpers import list_argument
+from pushsource.helpers import list_argument, try_int
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
@@ -159,9 +159,8 @@ class KojiSource(Source):
                 A custom executor used to submit calls to koji.
         """
         self._url = url
-        # TODO: do IDs actually work for these? Doesn't against fedkoji...
-        self._rpm = list_argument(rpm)
-        self._module_build = list_argument(module_build)
+        self._rpm = [try_int(x) for x in list_argument(rpm)]
+        self._module_build = [try_int(x) for x in list_argument(module_build)]
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout

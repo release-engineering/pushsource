@@ -39,6 +39,7 @@ def test_staged_simple_files():
             build=None,
             signing_key=None,
             description=None,
+            version="1.2.3",
         ),
         FilePushItem(
             name="some-iso",

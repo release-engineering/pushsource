@@ -81,10 +81,6 @@ class StagedSource(
             timeout
         )
 
-        #         FILE_TYPE_PATHS = {
-        #     'aws_image': ['AWS_IMAGES'],  # waiting on DEVOPSA-6421
-        # }
-
     def __iter__(self):
         """Iterate over push items."""
 

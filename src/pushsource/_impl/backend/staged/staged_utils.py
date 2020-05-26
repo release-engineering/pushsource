@@ -1,3 +1,6 @@
+import jsonschema
+
+from ...schema import get_schema
 from ... import compat_attr as attr
 
 REQUIRED_VERSION = "0.2"
@@ -9,6 +12,7 @@ class StagingFileMetadata(object):
     filename = attr.ib(type=str)
     relative_path = attr.ib(type=str)
     sha256sum = attr.ib(type=str)
+    version = attr.ib(type=str)
 
 
 @attr.s()
@@ -35,17 +39,9 @@ class StagingMetadata(object):
 
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):
-        header = data.get("header") or {}
-        version = str(header.get("version"))
 
-        # TODO: make a jsonschema and then validate it here.
-
-        # Currently the only supported version...
-        if version != REQUIRED_VERSION:
-            raise ValueError(
-                "%s has unsupported version (has: %s, required: %s)"
-                % (filename, version, REQUIRED_VERSION)
-            )
+        schema = get_schema("staged")
+        jsonschema.validate(data, schema)
 
         payload = data.get("payload") or {}
         files = payload.get("files") or []
@@ -57,6 +53,7 @@ class StagingMetadata(object):
                 filename=entry.get("filename"),
                 relative_path=entry["relative_path"],
                 sha256sum=entry.get("sha256sum"),
+                version=entry.get("version"),
             )
             if md.relative_path in file_metadata:
                 raise ValueError(

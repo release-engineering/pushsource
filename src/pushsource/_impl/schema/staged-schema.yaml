@@ -1,0 +1,306 @@
+---
+# Schema for metadata file "staged.yaml" or "pub-mapfile.json"
+# accompanying a staged source.
+#
+# For general information about staging directories, see:
+# https://release-engineering.github.io/pushsource/sources/staged.html
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/staged-schema.yaml
+
+
+###############################################################################
+#  Subschemas
+definitions:
+
+    header:
+        type: object
+        properties:
+            version:
+                # Version of the file format.
+                # There is only a single supported version now.
+                const: "0.2"
+
+        requiredProperties:
+        - version
+
+        additionalProperties: false
+
+    payload:
+        type: object
+        properties:
+            files:
+                $ref: "#/definitions/file_list"
+        additionalProperties: false
+
+    attributes_any:
+        type: object
+        anyOf:
+        - $ref: "#/definitions/attributes_channel_dump"
+        - $ref: "#/definitions/attributes_ami"
+        - $ref: "#/definitions/attributes_file"
+
+    attributes_channel_dump:
+        # Attributes for channel dump ISO images.
+        properties:
+            allowed_eng_products:
+                oneOf:
+                    # Comma-separated IDs of products with content in this channel dump.
+                    - type: string
+                      pattern: "^[0-9,]+"
+
+                    # Or, real integer IDs.
+                    - type: array
+                      items:
+                        type: integer
+                        minimum: 1
+
+            channel_dump_arch:
+                # Architecture of this channel dump
+                type: string
+                minLength: 2
+
+            channel_dump_content:
+                # TODO: what is this?
+                type: string
+                minLength: 1
+
+            channel_dump_date:
+                # ISO8601 timestamp at which this dump was generated
+                type: string
+                minLength: 1
+
+            channel_dump_disc_number:
+                # Disc number. Starts counting at 1; values greater than 1
+                # will be observed for channel dumps spanning multiple disc
+                # images.
+                type: integer
+                minimum: 1
+
+            channel_dump_included_channels:
+                oneOf:
+
+                    # Comma-separated list of channel names included in this dump
+                    - type: string
+                      minLength: 1
+
+                    # Or, an actual list.
+                    - type: array
+                      items:
+                        type: string
+                        minLength: 1
+
+            channel_dump_product_name:
+                # Short name of product associated with this dump
+                # TODO: clarify meaning
+                type: string
+                minLength: 1
+
+            channel_dump_product_version:
+                # Product version associated with this dump
+                # TODO: clarify meaning
+                type: string
+                minLength: 1
+
+            channel_dump_type:
+                # 'base' if this channel dump can be used standalone,
+                # 'incremental' if it is intended to be combined with earlier
+                # channel dumps
+                type: string
+                enum:
+                - base
+                - incremental
+
+            description:
+                # Brief human-readable string summarizing this channel dump
+                type: string
+                minLength: 1
+                maxLength: 1000
+
+        required:
+        - allowed_eng_products
+        - channel_dump_arch
+        - channel_dump_content
+        - channel_dump_date
+        - channel_dump_included_channels
+        - channel_dump_product_name
+        - channel_dump_product_version
+        - channel_dump_type
+        - description
+
+        additionalProperties: false
+
+    attributes_ami:
+        # Attributes for Amazon Machine Images (AMIs).
+        properties:
+
+            release:
+                $ref: "#/definitions/ami_release"
+
+            region:
+                # AWS region to which this AMI should be pushed.
+                type: string
+                minLength: 1
+
+            type:
+                # Billing type for the image.
+                type: string
+                enum:
+                - hourly
+                - access
+
+            virtualization:
+                # Virtualization type.
+                type: string
+                enum:
+                - hvm
+
+            volume:
+                type: string
+                enum:
+                - standard
+                - gp2
+                - io1
+                - st1
+                - sc1
+
+            root_device:
+                type: string
+                minLength: 1
+
+            description:
+                $ref: "#/definitions/optional_string"
+
+            sriov_net_support:
+                type:
+                - string
+                - "null"
+                enum:
+                - simple
+                - null
+
+            ena_support:
+                type:
+                - boolean
+                - "null"
+
+        required:
+        - release
+        - region
+        - type
+        - virtualization
+        - volume
+        - root_device
+
+        additionalProperties: false
+
+    attributes_file:
+        # Attributes for generic files.
+        properties:
+
+            description:
+                # Human-readable brief description of the file, e.g.
+                # appropriate for use in a file browsing UI
+                type: string
+                minLength: 1
+
+        required:
+        - description
+        additionalProperties: false
+
+    file_list:
+        type: array
+        items:
+            $ref: "#/definitions/file"
+        uniqueItems: true
+
+    file:
+        type: object
+        properties:
+            filename:
+                # Desired name of this file on the target system.
+                # Need not match the filename used in the staging area.
+                type: string
+                minLength: 1
+
+            relative_path:
+                # Relative path to the file being pushed within the staging
+                # area.
+                type: string
+                minLength: 3
+
+            sha256sum:
+                # SHA256 checksum of this file's content, as a hex digest.
+                type: string
+                minLength: 64
+                maxLength: 64
+                pattern: "^[0-9a-fA-F]+$"
+
+            version:
+                # A version string for display purposes
+                # TODO: missing from model?
+                type: string
+                minLength: 1
+
+            attributes:
+                # Additional metadata, differs per content type.
+                $ref: "#/definitions/attributes_any"
+
+        additionalProperties: false
+
+    ami_release:
+        # Release metadata for an AMI.
+        type: object
+        properties:
+            product:
+                type: string
+                minLength: 1
+            version:
+                $ref: "#/definitions/optional_string"
+            base_product:
+                $ref: "#/definitions/optional_string"
+            base_version:
+                $ref: "#/definitions/optional_string"
+            variant:
+                $ref: "#/definitions/optional_string"
+            arch:
+                type: string
+                enum:
+                - arm64
+                - x86_64
+            respin:
+                type: integer
+            type:
+                $ref: "#/definitions/optional_string"
+                enum: ['ga', 'beta', null]
+            date:
+                type: string
+                minLength: 1
+                pattern: "^[0-9]{8}$"
+        required:
+        - product
+        - date
+        - arch
+        - respin
+
+    optional_string:
+        # A field which may hold a non-empty string, or null.
+        type:
+        - string
+        - "null"
+        minLength: 1
+
+###############################################################################
+#  Main schema
+type: object
+properties:
+    header:
+        $ref: "#/definitions/header"
+    payload:
+        $ref: "#/definitions/payload"
+
+required:
+- header
+
+additionalProperties: false

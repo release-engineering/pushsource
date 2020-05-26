@@ -1,5 +1,5 @@
 header:
-    version: 0.2
+    version: "0.2"
 
 payload:
     files:

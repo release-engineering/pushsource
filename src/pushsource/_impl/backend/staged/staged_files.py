@@ -18,6 +18,7 @@ class StagedFilesMixin(StagedBaseMixin):
             name=file_md.filename or entry.name,
             src=entry.path,
             description=file_md.attributes.get("description"),
+            version=file_md.version,
             sha256sum=file_md.sha256sum,
             origin=leafdir.topdir,
             dest=[leafdir.dest],

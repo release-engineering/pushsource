@@ -46,7 +46,7 @@
 
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdPushItem</span>
-<span class="kn">from</span> <span class="nn">pushsource.helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
+<span class="kn">from</span> <span class="nn">pushsource.helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
@@ -192,9 +192,8 @@
 <span class="sd">                A custom executor used to submit calls to koji.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
-        <span class="c1"># TODO: do IDs actually work for these? Doesn&#39;t against fedkoji...</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>

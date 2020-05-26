@@ -98,8 +98,7 @@ To implement a backend, follow these steps:
 * Create a class inheriting from :class:`~pushsource.Source`.
 * In your constructor, add any arguments you'd like to be usable in URLs for your backend,
   while following these conventions:
-    * Remember that all arguments from URLs will be provided as strings. Use conversions
-      from :mod:`~pushsource.helpers` where needed.
+    * Remember that all arguments from URLs will be provided as strings.
     * Accept a `url` argument if and only if you want your backend URL to accept a URL
       immediately after the backend scheme (as in example ``backend:url?arg=val&arg=val&...``).
     * If your backend uses a customizable number of threads, use an argument named `threads`

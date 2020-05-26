@@ -12,7 +12,7 @@ from more_executors.futures import f_map, f_zip
 from .. import compat_attr as attr
 from ..source import Source
 from ..model import ErratumPushItem
-from pushsource.helpers import list_argument
+from ..helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
 

@@ -118,6 +118,74 @@ def test_koji_rpms(fake_koji, koji_dir):
     assert items[1] == RpmPushItem(name="notfound-2.0-1.noarch.rpm", state="NOTFOUND")
 
 
+def test_koji_rpm_by_int(fake_koji, koji_dir):
+    """Koji source yields requested RPM by ID"""
+
+    source = Source.get(
+        "koji:https://koji.example.com/",
+        basedir=koji_dir,
+        # source is expected to accept both real ints and integer strings,
+        # the latter coming from URLs.
+        rpm=["12345", 23456],
+    )
+
+    # It should not have done anything yet (lazy loading)
+    assert not fake_koji.last_url
+
+    # Insert some data. Keys are using real integers, which tests that
+    # the source is converting integer strings to real integers before calling
+    # to koji.
+    fake_koji.rpm_data[12345] = {
+        "arch": "x86_64",
+        "name": "foo",
+        "version": "1.0",
+        "release": "1",
+        "build_id": 1234,
+    }
+    fake_koji.rpm_data[23456] = {
+        "arch": "noarch",
+        "name": "foo",
+        "version": "1.0",
+        "release": "1",
+        "build_id": 1234,
+    }
+    fake_koji.build_data[1234] = {
+        "id": 1234,
+        "name": "foobuild",
+        "version": "1.0",
+        "release": "1.el8",
+        "nvr": "foobuild-1.0-1.el8",
+        "volume_name": "somevol",
+    }
+
+    # Eagerly fetch
+    items = list(source)
+
+    # It should have constructed a session for the given URL
+    assert fake_koji.last_url == "https://koji.example.com/"
+
+    # It should have returned push items for the two RPMs
+    assert len(items) == 2
+
+    items = sorted(items, key=lambda pi: pi.name)
+
+    # It should have yielded the two RPMs.
+    assert items[0] == RpmPushItem(
+        name="foo-1.0-1.noarch.rpm",
+        state="PENDING",
+        src="%s/vol/somevol/packages/foobuild/1.0/1.el8/noarch/foo-1.0-1.noarch.rpm"
+        % koji_dir,
+        build="foobuild-1.0-1.el8",
+    )
+    assert items[1] == RpmPushItem(
+        name="foo-1.0-1.x86_64.rpm",
+        state="PENDING",
+        src="%s/vol/somevol/packages/foobuild/1.0/1.el8/x86_64/foo-1.0-1.x86_64.rpm"
+        % koji_dir,
+        build="foobuild-1.0-1.el8",
+    )
+
+
 def test_koji_missing_signing_key(fake_koji, koji_dir, caplog):
     """RPM is NOTFOUND if requested signing key is not available."""
 

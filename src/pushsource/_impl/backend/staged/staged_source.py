@@ -15,10 +15,9 @@ from pushcollector import Collector
 from more_executors import Executors
 
 from ...source import Source
+from ...helpers import list_argument
+
 from .staged_utils import StagingMetadata, StagingLeafDir
-
-from pushsource.helpers import list_argument
-
 from .staged_ami import StagedAmiMixin
 from .staged_files import StagedFilesMixin
 from .staged_errata import StagedErrataMixin

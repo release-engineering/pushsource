@@ -13,7 +13,7 @@ from more_executors.futures import f_map
 
 from ..source import Source
 from ..model import RpmPushItem, ModuleMdPushItem
-from pushsource.helpers import list_argument, try_int
+from ..helpers import list_argument, try_int
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()

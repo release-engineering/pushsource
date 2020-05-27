@@ -9,16 +9,36 @@ from .conv import datestr
 class AmiRelease(object):
     """Release metadata associated with an AMI."""
 
-    # TODO: document these
     product = attr.ib(type=str)
+    """A short product name, for example "RHEL" if this is an image for Red Hat
+    Enterprise Linux."""
+
     date = attr.ib(type=datetime.date, converter=datestr)
+    """Date at which this image was generated."""
+
     arch = attr.ib(type=str)
+    """Architecture of the image, for example "x86_64"."""
+
     respin = attr.ib(type=int)
+    """Respin count. 0 for original build of an image, incremented by one for
+    each rebuild."""
+
     version = attr.ib(type=str, default=None)
+    """A <major>.<minor> version string for the image's product version, for example
+    "7.9" if this is an image for Red Hat Enterprise Linux 7.9.x."""
+
     base_product = attr.ib(type=str, default=None)
+    """For layered products, name of the base product for which the image should be used."""
+
     base_version = attr.ib(type=str, default=None)
+    """For layered products, version of the base product for which the image should be used."""
+
     variant = attr.ib(type=str, default=None)
+    """Variant of this image's product (only for products which have variants).  For example,
+    "Server", for Red Hat Enterprise Linux Server."""
+
     type = attr.ib(type=str, default=None)
+    """Release type, typically "ga" or "beta"."""
 
 
 @attr.s()
@@ -33,13 +53,29 @@ class AmiPushItem(PushItem):
     snapshot.
     """
 
-    # TODO: document these
     release = attr.ib(type=AmiRelease, default=None)
+    """Release metadata (:class:`AmiRelease`) associated with this image."""
+
     type = attr.ib(type=str, default=None)
+    """Billing type associated with the image, e.g. "hourly" or "access"."""
+
     region = attr.ib(type=str, default=None)
+    """Region to which this image should be pushed."""
+
     virtualization = attr.ib(type=str, default=None)
+    """Virtualization type, e.g. "hvm" or "pv"."""
+
     volume = attr.ib(type=str, default=None)
+    """EBS volume type, e.g. "gp2" or "io1"."""
+
     root_device = attr.ib(type=str, default=None)
+    """Root device node used with this image, e.g. "/dev/sda1"."""
+
     description = attr.ib(type=str, default=None)
+    """A brief human-readable description of the image."""
+
     sriov_net_support = attr.ib(type=str, default=None)
+    """"simple" if the image is SRIOV-enabled."""
+
     ena_support = attr.ib(type=bool, default=None)
+    """``True`` if the image supports Elastic Network Adapter (ENA)."""

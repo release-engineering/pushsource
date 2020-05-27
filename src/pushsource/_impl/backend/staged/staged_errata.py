@@ -23,6 +23,8 @@ class StagedErrataMixin(StagedBaseMixin):
         # itself encodes the destinations.
         raw.pop("cdn_repo", None)
 
+        # TODO: errata schema?
+
         item = ErratumPushItem._from_data(raw)
         return attr.evolve(
             item, origin=leafdir.topdir, src=entry.path, dest=item.dest + [leafdir.dest]

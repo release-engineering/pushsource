@@ -1,5 +1,5 @@
 header:
-    version: 0.2
+    version: "0.2"
 
 payload:
     files:
@@ -14,6 +14,7 @@ payload:
     - filename: some-file.txt
       relative_path: dest2/FILES/some-file
       sha256sum: 315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3
+      version: 1.2.3
 
     # a file with some attributes
     - filename: some-iso

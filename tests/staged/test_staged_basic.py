@@ -1,6 +1,7 @@
 import os
 
 from pytest import raises
+from jsonschema import ValidationError
 
 from pushsource import Source
 
@@ -41,10 +42,8 @@ def test_staged_no_header_metadata(tmpdir):
     empty.join("pub-mapfile.json").write("{}")
     source = Source.get("staged:%s" % empty)
 
-    with raises(ValueError) as exc_info:
+    with raises(ValidationError) as exc_info:
         list(source)
-
-    assert "pub-mapfile.json has unsupported version" in str(exc_info.value)
 
 
 def test_staged_dupe_metadata():

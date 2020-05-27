@@ -20,6 +20,7 @@ A library for accessing push items from various sources.
    model/productid
    model/comps
    model/channeldumps
+   schema/staged
 
 Quick Start
 -----------

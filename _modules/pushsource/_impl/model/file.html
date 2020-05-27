@@ -40,7 +40,17 @@
     <span class="sd">&quot;&quot;&quot;A push item representing a single generic file.&quot;&quot;&quot;</span>
 
     <span class="n">description</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A human-readable brief description of the file.&quot;&quot;&quot;</span></div>
+    <span class="sd">&quot;&quot;&quot;A human-readable brief description of the file.&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;A version string associated with the file.</span>
+
+<span class="sd">    This string is intended for display purposes only.</span>
+<span class="sd">    It may denote a product version associated with this file.</span>
+<span class="sd">    For example, a push item for ``oc-4.2.33-linux.tar.gz`` may</span>
+<span class="sd">    use a version of ``&quot;4.2.33&quot;`` to denote that the file relates</span>
+<span class="sd">    to OpenShift version 4.2.33.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 
           </div>
@@ -78,6 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/channeldumps.html">Push items: channel dump</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/staged.html">Schema: staged</a></li>
 </ul>
 
 
@@ -126,7 +137,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

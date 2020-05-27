@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Schema: staged &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Push items: channel dump" href="../model/channeldumps.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="schema-staged">
+<span id="staging-schema"></span><h1>Schema: staged<a class="headerlink" href="#schema-staged" title="Permalink to this headline">¶</a></h1>
+<p>This document shows the schema of metadata files used within the
+<a class="reference internal" href="../sources/staged.html#staging-structure"><span class="std std-ref">Staging structure</span></a> supported by this library, in
+<a class="reference external" href="https://json-schema.org/">JSON schema</a> format.</p>
+<p>The latest version of this schema is available in raw form at
+<a class="reference external" href="https://release-engineering.github.io/pushsource/staged-schema.yaml">https://release-engineering.github.io/pushsource/staged-schema.yaml</a>.</p>
+<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>---
+# Schema for metadata file &quot;staged.yaml&quot; or &quot;pub-mapfile.json&quot;
+# accompanying a staged source.
+#
+# For general information about staging directories, see:
+# https://release-engineering.github.io/pushsource/sources/staged.html
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/staged-schema.yaml
+
+
+###############################################################################
+#  Subschemas
+definitions:
+
+    header:
+        type: object
+        properties:
+            version:
+                # Version of the file format.
+                # There is only a single supported version now.
+                const: &quot;0.2&quot;
+
+        requiredProperties:
+        - version
+
+        additionalProperties: false
+
+    payload:
+        type: object
+        properties:
+            files:
+                $ref: &quot;#/definitions/file_list&quot;
+        additionalProperties: false
+
+    attributes_any:
+        type: object
+        anyOf:
+        - $ref: &quot;#/definitions/attributes_channel_dump&quot;
+        - $ref: &quot;#/definitions/attributes_ami&quot;
+        - $ref: &quot;#/definitions/attributes_file&quot;
+
+    attributes_channel_dump:
+        # Attributes for channel dump ISO images.
+        properties:
+            allowed_eng_products:
+                oneOf:
+                    # Comma-separated IDs of products with content in this channel dump.
+                    - type: string
+                      pattern: &quot;^[0-9,]+&quot;
+
+                    # Or, real integer IDs.
+                    - type: array
+                      items:
+                        type: integer
+                        minimum: 1
+
+            channel_dump_arch:
+                # Architecture of this channel dump
+                type: string
+                minLength: 2
+
+            channel_dump_content:
+                # TODO: what is this?
+                type: string
+                minLength: 1
+
+            channel_dump_date:
+                # ISO8601 timestamp at which this dump was generated
+                type: string
+                minLength: 1
+
+            channel_dump_disc_number:
+                # Disc number. Starts counting at 1; values greater than 1
+                # will be observed for channel dumps spanning multiple disc
+                # images.
+                type: integer
+                minimum: 1
+
+            channel_dump_included_channels:
+                oneOf:
+
+                    # Comma-separated list of channel names included in this dump
+                    - type: string
+                      minLength: 1
+
+                    # Or, an actual list.
+                    - type: array
+                      items:
+                        type: string
+                        minLength: 1
+
+            channel_dump_product_name:
+                # Short name of product associated with this dump
+                # TODO: clarify meaning
+                type: string
+                minLength: 1
+
+            channel_dump_product_version:
+                # Product version associated with this dump
+                # TODO: clarify meaning
+                type: string
+                minLength: 1
+
+            channel_dump_type:
+                # &#39;base&#39; if this channel dump can be used standalone,
+                # &#39;incremental&#39; if it is intended to be combined with earlier
+                # channel dumps
+                type: string
+                enum:
+                - base
+                - incremental
+
+            description:
+                # Brief human-readable string summarizing this channel dump
+                type: string
+                minLength: 1
+                maxLength: 1000
+
+        required:
+        - allowed_eng_products
+        - channel_dump_arch
+        - channel_dump_content
+        - channel_dump_date
+        - channel_dump_included_channels
+        - channel_dump_product_name
+        - channel_dump_product_version
+        - channel_dump_type
+        - description
+
+        additionalProperties: false
+
+    attributes_ami:
+        # Attributes for Amazon Machine Images (AMIs).
+        properties:
+
+            release:
+                $ref: &quot;#/definitions/ami_release&quot;
+
+            region:
+                # AWS region to which this AMI should be pushed.
+                type: string
+                minLength: 1
+
+            type:
+                # Billing type for the image.
+                type: string
+                enum:
+                - hourly
+                - access
+
+            virtualization:
+                # Virtualization type.
+                type: string
+                enum:
+                - hvm
+
+            volume:
+                type: string
+                enum:
+                - standard
+                - gp2
+                - io1
+                - st1
+                - sc1
+
+            root_device:
+                type: string
+                minLength: 1
+
+            description:
+                $ref: &quot;#/definitions/optional_string&quot;
+
+            sriov_net_support:
+                type:
+                - string
+                - &quot;null&quot;
+                enum:
+                - simple
+                - null
+
+            ena_support:
+                type:
+                - boolean
+                - &quot;null&quot;
+
+        required:
+        - release
+        - region
+        - type
+        - virtualization
+        - volume
+        - root_device
+
+        additionalProperties: false
+
+    attributes_file:
+        # Attributes for generic files.
+        properties:
+
+            description:
+                # Human-readable brief description of the file, e.g.
+                # appropriate for use in a file browsing UI
+                type: string
+                minLength: 1
+
+        required:
+        - description
+        additionalProperties: false
+
+    file_list:
+        type: array
+        items:
+            $ref: &quot;#/definitions/file&quot;
+        uniqueItems: true
+
+    file:
+        type: object
+        properties:
+            filename:
+                # Desired name of this file on the target system.
+                # Need not match the filename used in the staging area.
+                type: string
+                minLength: 1
+
+            relative_path:
+                # Relative path to the file being pushed within the staging
+                # area.
+                type: string
+                minLength: 3
+
+            sha256sum:
+                # SHA256 checksum of this file&#39;s content, as a hex digest.
+                type: string
+                minLength: 64
+                maxLength: 64
+                pattern: &quot;^[0-9a-fA-F]+$&quot;
+
+            version:
+                # A version string for display purposes
+                # TODO: missing from model?
+                type: string
+                minLength: 1
+
+            attributes:
+                # Additional metadata, differs per content type.
+                $ref: &quot;#/definitions/attributes_any&quot;
+
+        additionalProperties: false
+
+    ami_release:
+        # Release metadata for an AMI.
+        type: object
+        properties:
+            product:
+                type: string
+                minLength: 1
+            version:
+                $ref: &quot;#/definitions/optional_string&quot;
+            base_product:
+                $ref: &quot;#/definitions/optional_string&quot;
+            base_version:
+                $ref: &quot;#/definitions/optional_string&quot;
+            variant:
+                $ref: &quot;#/definitions/optional_string&quot;
+            arch:
+                type: string
+                enum:
+                - arm64
+                - x86_64
+            respin:
+                type: integer
+            type:
+                $ref: &quot;#/definitions/optional_string&quot;
+                enum: [&#39;ga&#39;, &#39;beta&#39;, null]
+            date:
+                type: string
+                minLength: 1
+                pattern: &quot;^[0-9]{8}$&quot;
+        required:
+        - product
+        - date
+        - arch
+        - respin
+
+    optional_string:
+        # A field which may hold a non-empty string, or null.
+        type:
+        - string
+        - &quot;null&quot;
+        minLength: 1
+
+###############################################################################
+#  Main schema
+type: object
+properties:
+    header:
+        $ref: &quot;#/definitions/header&quot;
+    payload:
+        $ref: &quot;#/definitions/payload&quot;
+
+required:
+- header
+
+additionalProperties: false
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Schema: staged</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../model/channeldumps.html" title="previous chapter">Push items: channel dump</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/schema/staged.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

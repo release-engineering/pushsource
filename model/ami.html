@@ -43,12 +43,124 @@ file containing an EBS snapshot.  The push item contains additional
 metadata which can be used to associate the snapshot with an image.</p>
 <p>This library does not verify that the referenced file is a valid
 snapshot.</p>
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.release">
+<code class="sig-name descname">release</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release metadata (<a class="reference internal" href="#pushsource.AmiRelease" title="pushsource.AmiRelease"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiRelease</span></code></a>) associated with this image.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.type">
+<code class="sig-name descname">type</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Billing type associated with the image, e.g. “hourly” or “access”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.region">
+<code class="sig-name descname">region</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Region to which this image should be pushed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.virtualization">
+<code class="sig-name descname">virtualization</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.virtualization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Virtualization type, e.g. “hvm” or “pv”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.volume">
+<code class="sig-name descname">volume</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>EBS volume type, e.g. “gp2” or “io1”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.root_device">
+<code class="sig-name descname">root_device</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.root_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root device node used with this image, e.g. “/dev/sda1”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A brief human-readable description of the image.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.sriov_net_support">
+<code class="sig-name descname">sriov_net_support</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.sriov_net_support" title="Permalink to this definition">¶</a></dt>
+<dd><p>“simple” if the image is SRIOV-enabled.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiPushItem.ena_support">
+<code class="sig-name descname">ena_support</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiPushItem.ena_support" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the image supports Elastic Network Adapter (ENA).</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt id="pushsource.AmiRelease">
 <em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">AmiRelease</code><a class="reference internal" href="../_modules/pushsource/_impl/model/ami.html#AmiRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.AmiRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release metadata associated with an AMI.</p>
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.product">
+<code class="sig-name descname">product</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>A short product name, for example “RHEL” if this is an image for Red Hat
+Enterprise Linux.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.date">
+<code class="sig-name descname">date</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Date at which this image was generated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.arch">
+<code class="sig-name descname">arch</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Architecture of the image, for example “x86_64”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.respin">
+<code class="sig-name descname">respin</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.respin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respin count. 0 for original build of an image, incremented by one for
+each rebuild.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.version">
+<code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>A &lt;major&gt;.&lt;minor&gt; version string for the image’s product version, for example
+“7.9” if this is an image for Red Hat Enterprise Linux 7.9.x.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.base_product">
+<code class="sig-name descname">base_product</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.base_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>For layered products, name of the base product for which the image should be used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.base_version">
+<code class="sig-name descname">base_version</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.base_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>For layered products, version of the base product for which the image should be used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.variant">
+<code class="sig-name descname">variant</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.variant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variant of this image’s product (only for products which have variants).  For example,
+“Server”, for Red Hat Enterprise Linux Server.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.AmiRelease.type">
+<code class="sig-name descname">type</code><em class="property"> = None</em><a class="headerlink" href="#pushsource.AmiRelease.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release type, typically “ga” or “beta”.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

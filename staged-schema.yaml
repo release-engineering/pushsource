@@ -239,7 +239,6 @@ definitions:
 
             version:
                 # A version string for display purposes
-                # TODO: missing from model?
                 type: string
                 minLength: 1
 

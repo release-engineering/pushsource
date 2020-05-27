@@ -63,7 +63,127 @@ Each staging directory must use the <a class="reference internal" href="#staging
 </div>
 <div class="section" id="staging-structure">
 <span id="id1"></span><h2>Staging structure<a class="headerlink" href="#staging-structure" title="Permalink to this headline">¶</a></h2>
-<p>(to be documented!)</p>
+<p>Here is a brief overview of the structure of a staging directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="o">/</span>
+<span class="n">root</span><span class="o">/</span><span class="n">staged</span><span class="o">.</span><span class="n">yaml</span>  <span class="c1"># optional</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">COMPS</span><span class="o">/*.</span><span class="n">xml</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">ERRATA</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">FILES</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">CHANNEL_DUMPS</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">PRODUCTID</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">MODULEMD</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/*.</span><span class="n">rpm</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">AWS_IMAGES</span><span class="o">/*</span>
+</pre></div>
+</div>
+<p>The staging directory consists of:</p>
+<ul class="simple">
+<li><p>an optional file including some metadata for files in the staging area</p></li>
+<li><p>a directory for each “destination” of content in this staging area</p></li>
+<li><p>subdirectories for each type of content</p></li>
+<li><p>files containing the content to be pushed or manipulated</p></li>
+</ul>
+<p>These are explained in further detail below.</p>
+<div class="section" id="root-staged-yaml">
+<h3>root/staged.yaml<a class="headerlink" href="#root-staged-yaml" title="Permalink to this headline">¶</a></h3>
+<p>This file provides additional metadata on the content in the staging area.</p>
+<p>It is generally mandatory for file types which do not embed their own metadata
+(such as <code class="docutils literal notranslate"><span class="pre">FILES</span></code> and <code class="docutils literal notranslate"><span class="pre">AWS_IMAGES</span></code>), and is unused for file types such as
+<code class="docutils literal notranslate"><span class="pre">RPMS</span></code> which have all necessary metadata built-in to the file format.</p>
+<p>Here’s an example to give an idea of the metadata controlled by this file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">header</span><span class="p">:</span>
+   <span class="n">version</span><span class="p">:</span> <span class="s2">&quot;0.2&quot;</span> <span class="c1"># current schema version - don&#39;t change</span>
+
+<span class="n">payload</span><span class="p">:</span>
+   <span class="n">files</span><span class="p">:</span>
+      <span class="c1"># desired name, doesn&#39;t need to be same as staged filename</span>
+      <span class="n">filename</span><span class="p">:</span> <span class="s2">&quot;RHEL-6.7-20150429.0-Client-i386-boot.iso&quot;</span>
+
+      <span class="c1"># path relative to staging directory</span>
+      <span class="n">relative_path</span><span class="p">:</span> <span class="s2">&quot;rhel-6-desktop-beta-isos__6Client__i386/FILES/RHEL-6.7-20150429.0-Client-i386-boot.iso&quot;</span>
+
+      <span class="c1"># SHA256 checksum</span>
+      <span class="n">sha256sum</span><span class="p">:</span> <span class="n">b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c</span>
+
+      <span class="c1"># Additional attributes</span>
+      <span class="n">attributes</span><span class="p">:</span>
+         <span class="c1"># human-readable description</span>
+         <span class="n">description</span><span class="p">:</span> <span class="s2">&quot;Red Hat Enterprise Linux 6.7 Boot DVD&quot;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../schema/staged.html#staging-schema"><span class="std std-ref">Schema: staged</span></a> provides a complete reference of the fields which can be set by this
+file.</p>
+<p>For historical reasons, the file may also be provided as JSON and named
+<code class="docutils literal notranslate"><span class="pre">pub-mapfile.json</span></code>.</p>
+</div>
+<div class="section" id="root-destination">
+<h3>root/destination/<a class="headerlink" href="#root-destination" title="Permalink to this headline">¶</a></h3>
+<p>A directory exists for each discrete destination of content in this staging area.</p>
+<p>The meaning of <code class="docutils literal notranslate"><span class="pre">destination</span></code> depends on the context in which the staging area is
+used.  For example, if this staging area is being used to publish content into a Pulp
+server, each <code class="docutils literal notranslate"><span class="pre">destination</span></code> will be a Pulp repository name.  This library does not
+enforce any semantics on these destination names.</p>
+<p>Note that, if a single piece of content should be published to multiple destinations,
+the content needs to be placed in multiple <code class="docutils literal notranslate"><span class="pre">destination</span></code> directories. Symlinks
+are often used for this to avoid duplication.</p>
+</div>
+<div class="section" id="root-destination-comps-xml">
+<h3>root/destination/COMPS/*.xml<a class="headerlink" href="#root-destination-comps-xml" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">COMPS</span></code> should be a comps XML file in the yum repo metadata format,
+defining package groups.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/comps.html#pushsource.CompsXmlPushItem" title="pushsource.CompsXmlPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompsXmlPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-errata">
+<h3>root/destination/ERRATA/*<a class="headerlink" href="#root-destination-errata" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">ERRATA</span></code> should be a YAML or JSON dump containing advisory metadata.
+The format is not currently defined here, but is essentially the same as the format
+produced by Errata Tool’s XML-RPC APIs.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/errata.html#pushsource.ErratumPushItem" title="pushsource.ErratumPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-files">
+<h3>root/destination/FILES/*<a class="headerlink" href="#root-destination-files" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">FILES</span></code> can be any type of file, to be published verbatim.
+In practice, this is often used for binary files such as ISO disc images or
+installers.</p>
+<p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
+<p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">ISOS</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/files.html#pushsource.FilePushItem" title="pushsource.FilePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilePushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-channel-dumps">
+<h3>root/destination/CHANNEL_DUMPS/*<a class="headerlink" href="#root-destination-channel-dumps" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">CHANNEL_DUMPS</span></code> should be a channel dump ISO disc image,
+for use with Satellite 5 / RHN Classic.</p>
+<p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/channeldumps.html#pushsource.ChannelDumpPushItem" title="pushsource.ChannelDumpPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelDumpPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-productid">
+<h3>root/destination/PRODUCTID/*<a class="headerlink" href="#root-destination-productid" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">PRODUCTID</span></code> should be a PEM-formatted product certificate,
+as used by Satellite 6 / RHSM.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/productid.html#pushsource.ProductIdPushItem" title="pushsource.ProductIdPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProductIdPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-modulemd">
+<h3>root/destination/MODULEMD/*<a class="headerlink" href="#root-destination-modulemd" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">MODULEMD</span></code> should be a valid YAML stream containing modulemd
+and/or modulemd-defaults documents.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/modulemd.html#pushsource.ModuleMdPushItem" title="pushsource.ModuleMdPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleMdPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-rpms-rpm">
+<h3>root/destination/RPMS/*.rpm<a class="headerlink" href="#root-destination-rpms-rpm" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">RPMS</span></code> should be an RPM. Various metadata will be parsed from
+RPM headers.</p>
+<p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">SRPMS</span></code>. It is not
+required that source RPMs are placed in the <code class="docutils literal notranslate"><span class="pre">SRPMS</span></code> directory.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/rpm.html#pushsource.RpmPushItem" title="pushsource.RpmPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a>.</p>
+</div>
+<div class="section" id="root-destination-aws-images">
+<h3>root/destination/AWS_IMAGES/*<a class="headerlink" href="#root-destination-aws-images" title="Permalink to this headline">¶</a></h3>
+<p>Each file in <code class="docutils literal notranslate"><span class="pre">AWS_IMAGES</span></code> should be an EBS snapshot for use as an
+Amazon Machine Image (AMI).</p>
+<p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a>.</p>
+</div>
 </div>
 <div class="section" id="python-api-reference">
 <h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>

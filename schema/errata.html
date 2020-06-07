@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Schema: errata &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Schema: staged" href="staged.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="schema-errata">
+<span id="errata-schema"></span><h1>Schema: errata<a class="headerlink" href="#schema-errata" title="Permalink to this headline">¶</a></h1>
+<p>This document shows the schema of erratum JSON or YAML files
+supported by this library, in <a class="reference external" href="https://json-schema.org/">JSON schema</a> format.
+These files may be used within the <code class="docutils literal notranslate"><span class="pre">ERRATA</span></code> directory within
+a <a class="reference internal" href="../sources/staged.html#staging-structure"><span class="std std-ref">Staging structure</span></a>.</p>
+<p>The latest version of this schema is available in raw form at
+<a class="reference external" href="https://release-engineering.github.io/pushsource/errata-schema.yaml">https://release-engineering.github.io/pushsource/errata-schema.yaml</a>.</p>
+<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>---
+# Schema for erratum YAML or JSON files, as used in staging directories.
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/errata-schema.yaml
+
+
+
+###############################################################################
+#  Subschemas
+definitions:
+
+    # Sloppy integer-string.
+    # Can be provided as a real integer,
+    # a string representation of an integer, or an empty string.
+    intstr:
+        anyOf:
+        - type: integer
+          minimum: 0
+        - type: string
+          pattern: &quot;^[0-9]*$&quot;
+
+    reference_list:
+        type: array
+        items:
+            $ref: &quot;#/definitions/reference&quot;
+        uniqueItems: true
+
+    reference:
+        type: object
+        properties:
+            href:
+                type: string
+            id:
+                type: string
+            title:
+                type: string
+            type:
+                type: string
+        required:
+        - href
+        - id
+        - title
+        - type
+
+    pkg_collection_list:
+        type: array
+        items:
+            $ref: &quot;#/definitions/pkg_collection&quot;
+        uniqueItems: true
+
+    pkg_collection:
+        type: object
+        properties:
+            name:
+                type: string
+            short:
+                type: string
+            packages:
+                type: array
+                items:
+                    $ref: &quot;#/definitions/pkg&quot;
+                uniqueItems: true
+        required:
+        - name
+
+    pkg:
+        type: object
+        properties:
+            arch:
+                type: string
+            epoch:
+                $ref: &quot;#/definitions/intstr&quot;
+            filename:
+                type: string
+            name:
+                type: string
+            release:
+                type: string
+            src:
+                type: string
+            version:
+                type: string
+            sum:
+                type: array
+                items:
+                    type: string
+                examples:
+                - [&quot;md5&quot;, &quot;0d56f302617696d3511e71e1669e62c0&quot;,
+                   &quot;sha256&quot;, &quot;31c4f73af90c6d267cc5281c59e4a93ae3557b2253d9a8e3fef55f3cafca6e54&quot;]
+
+        required:
+        - name
+        additionalProperties: false
+
+
+###############################################################################
+#  Main schema
+type: object
+properties:
+    description:
+        type: string
+    from:
+        type: string
+    id:
+        type: string
+    issued:
+        type: string
+    pushcount:
+        $ref: &quot;#/definitions/intstr&quot;
+    reboot_suggested:
+        type: boolean
+    release:
+        $ref: &quot;#/definitions/intstr&quot;
+    rights:
+        type: string
+    severity:
+        type: string
+    solution:
+        type: string
+    status:
+        type: string
+    summary:
+        type: string
+    title:
+        type: string
+    type:
+        type: string
+    updated:
+        type: string
+    version:
+        $ref: &quot;#/definitions/intstr&quot;
+    references:
+        $ref: &quot;#/definitions/reference_list&quot;
+    pkglist:
+        $ref: &quot;#/definitions/pkg_collection_list&quot;
+
+required:
+- description
+- from
+- id
+- issued
+- rights
+- solution
+- summary
+- title
+- type
+- updated
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staged.html">Schema: staged</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="staged.html" title="previous chapter">Schema: staged</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/schema/errata.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

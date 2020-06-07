@@ -131,8 +131,9 @@ root/destination/ERRATA/\*
 ..........................
 
 Each file in ``ERRATA`` should be a YAML or JSON dump containing advisory metadata.
-The format is not currently defined here, but is essentially the same as the format
-produced by Errata Tool's XML-RPC APIs.
+
+The format is essentially the same as that produced by Errata Tool's XML-RPC APIs.
+:ref:`errata_schema` formally documents the schema.
 
 Will yield instances of :class:`~pushsource.ErratumPushItem`.
 

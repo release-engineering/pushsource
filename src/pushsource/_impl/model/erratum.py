@@ -199,6 +199,8 @@ class ErratumPushItem(PushItem):
     status = attr.ib(type=str, default="final")
     """Status, typically 'final'."""
 
+    # TODO: converters to represent these as strings.
+
     pushcount = attr.ib(type=str, default="1")
     """Number of times advisory has been revised and published (starting at '1')."""
 

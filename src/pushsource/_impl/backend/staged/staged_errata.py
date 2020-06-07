@@ -1,12 +1,15 @@
 import logging
 import json
 import yaml
+import jsonschema
 
 from .staged_base import StagedBaseMixin, handles_type
 from ... import compat_attr as attr
 from ...model import ErratumPushItem
+from ...schema import get_schema
 
 LOG = logging.getLogger("pushsource")
+ERRATA_SCHEMA = get_schema("errata")
 
 
 class StagedErrataMixin(StagedBaseMixin):
@@ -23,7 +26,7 @@ class StagedErrataMixin(StagedBaseMixin):
         # itself encodes the destinations.
         raw.pop("cdn_repo", None)
 
-        # TODO: errata schema?
+        jsonschema.validate(raw, ERRATA_SCHEMA)
 
         item = ErratumPushItem._from_data(raw)
         return attr.evolve(

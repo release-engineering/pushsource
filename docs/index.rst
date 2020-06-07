@@ -21,6 +21,7 @@ A library for accessing push items from various sources.
    model/comps
    model/channeldumps
    schema/staged
+   schema/errata
 
 Quick Start
 -----------

@@ -4,6 +4,7 @@ from ...schema import get_schema
 from ... import compat_attr as attr
 
 REQUIRED_VERSION = "0.2"
+STAGED_SCHEMA = get_schema("staged")
 
 
 @attr.s()
@@ -39,9 +40,7 @@ class StagingMetadata(object):
 
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):
-
-        schema = get_schema("staged")
-        jsonschema.validate(data, schema)
+        jsonschema.validate(data, STAGED_SCHEMA)
 
         payload = data.get("payload") or {}
         files = payload.get("files") or []

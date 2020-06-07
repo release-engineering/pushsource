@@ -1,0 +1,149 @@
+---
+# Schema for erratum YAML or JSON files, as used in staging directories.
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/errata-schema.yaml
+
+
+
+###############################################################################
+#  Subschemas
+definitions:
+
+    # Sloppy integer-string.
+    # Can be provided as a real integer,
+    # a string representation of an integer, or an empty string.
+    intstr:
+        anyOf:
+        - type: integer
+          minimum: 0
+        - type: string
+          pattern: "^[0-9]*$"
+
+    reference_list:
+        type: array
+        items:
+            $ref: "#/definitions/reference"
+        uniqueItems: true
+
+    reference:
+        type: object
+        properties:
+            href:
+                type: string
+            id:
+                type: string
+            title:
+                type: string
+            type:
+                type: string
+        required:
+        - href
+        - id
+        - title
+        - type
+
+    pkg_collection_list:
+        type: array
+        items:
+            $ref: "#/definitions/pkg_collection"
+        uniqueItems: true
+
+    pkg_collection:
+        type: object
+        properties:
+            name:
+                type: string
+            short:
+                type: string
+            packages:
+                type: array
+                items:
+                    $ref: "#/definitions/pkg"
+                uniqueItems: true
+        required:
+        - name
+
+    pkg:
+        type: object
+        properties:
+            arch:
+                type: string
+            epoch:
+                $ref: "#/definitions/intstr"
+            filename:
+                type: string
+            name:
+                type: string
+            release:
+                type: string
+            src:
+                type: string
+            version:
+                type: string
+            sum:
+                type: array
+                items:
+                    type: string
+                examples:
+                - ["md5", "0d56f302617696d3511e71e1669e62c0",
+                   "sha256", "31c4f73af90c6d267cc5281c59e4a93ae3557b2253d9a8e3fef55f3cafca6e54"]
+
+        required:
+        - name
+        additionalProperties: false
+
+
+###############################################################################
+#  Main schema
+type: object
+properties:
+    description:
+        type: string
+    from:
+        type: string
+    id:
+        type: string
+    issued:
+        type: string
+    pushcount:
+        $ref: "#/definitions/intstr"
+    reboot_suggested:
+        type: boolean
+    release:
+        $ref: "#/definitions/intstr"
+    rights:
+        type: string
+    severity:
+        type: string
+    solution:
+        type: string
+    status:
+        type: string
+    summary:
+        type: string
+    title:
+        type: string
+    type:
+        type: string
+    updated:
+        type: string
+    version:
+        $ref: "#/definitions/intstr"
+    references:
+        $ref: "#/definitions/reference_list"
+    pkglist:
+        $ref: "#/definitions/pkg_collection_list"
+
+required:
+- description
+- from
+- id
+- issued
+- rights
+- solution
+- summary
+- title
+- type
+- updated

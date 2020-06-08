@@ -43,10 +43,10 @@ class AmiRelease(object):
 
 @attr.s()
 class AmiPushItem(PushItem):
-    """A push item representing an Amazon Machine Image (or "AMI").
+    """A :class:`~pushsource.PushItem` representing an Amazon Machine Image (or "AMI").
 
-    For push items of this type, the ``src`` attribute refers to a
-    file containing an EBS snapshot.  The push item contains additional
+    For push items of this type, the :meth:`~pushsource.PushItem.src` attribute
+    refers to a file containing an EBS snapshot.  The push item contains additional
     metadata which can be used to associate the snapshot with an image.
 
     This library does not verify that the referenced file is a valid

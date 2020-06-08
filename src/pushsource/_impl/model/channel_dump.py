@@ -8,7 +8,7 @@ from .conv import sloppyintlist, sloppylist, timestamp, optional_str, instance_o
 
 @attr.s()
 class ChannelDumpPushItem(FilePushItem):
-    """A push item representing a channel dump file.
+    """A :class:`~pushsource.FilePushItem` representing a channel dump file.
 
     A channel dump is a special type of ISO disc image containing
     channels exported from RHN Classic.

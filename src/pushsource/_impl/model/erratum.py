@@ -195,7 +195,7 @@ class ErratumPackageCollection(object):
 
 @attr.s()
 class ErratumPushItem(PushItem):
-    """A push item representing a single erratum (also known as "advisory").
+    """A :class:`~pushsource.PushItem` representing a single erratum (also known as "advisory").
 
     Note that many fields on erratum objects which appear to be numeric
     are instead represented as strings ('release' and 'pushcount' being two

@@ -4,4 +4,4 @@ from .. import compat_attr as attr
 
 @attr.s()
 class RpmPushItem(PushItem):
-    """A push item representing a single RPM."""
+    """A :class:`~pushsource.PushItem` representing a single RPM."""

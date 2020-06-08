@@ -40,10 +40,12 @@
 <li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#obtaining-a-source-by-url">Obtaining a source by URL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#available-backends">Available backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#processing-push-items">Processing push items</a></li>
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#implementing-a-backend">Implementing a backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#binding-partially-configured-backends">Binding partially-configured backends</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staged-source-urls">Staged source URLs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staging-structure">Staging structure</a></li>
@@ -79,17 +81,24 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pushsource</span>
 </pre></div>
 </div>
-<p>In your python code, obtain a <code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code> instance and
-iterate over the returned push items:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pushsource</span> <span class="kn">import</span> <span class="n">Source</span>
+<p>In your python code, obtain a <a class="reference internal" href="sources/base.html#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a> instance,
+iterate over the source to obtain push items, and perform desired operations
+according to their type and attributes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pushsource</span> <span class="kn">import</span> <span class="n">Source</span><span class="p">,</span> <span class="n">RpmPushItem</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...&#39;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
-    <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
+        <span class="c1"># do something with RPMs</span>
+        <span class="n">publish_rpm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># don&#39;t know what to do</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected item: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Sources are typically obtained by URL.</p>
+<p>For more information, see the <a class="reference internal" href="userguide.html#userguide"><span class="std std-ref">User Guide</span></a>.</p>
 </div>
 </div>
 
@@ -117,6 +126,7 @@ iterate over the returned push items:</p>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a></li>

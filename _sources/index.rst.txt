@@ -8,6 +8,7 @@ A library for accessing push items from various sources.
    :caption: Contents:
 
    userguide
+   sources/base
    sources/staged
    sources/koji
    sources/errata
@@ -32,16 +33,23 @@ Install pushsource from PyPI:
 
     pip install pushsource
 
-In your python code, obtain a :class:`~pushsource.Source` instance and
-iterate over the returned push items:
+In your python code, obtain a :class:`~pushsource.Source` instance,
+iterate over the source to obtain push items, and perform desired operations
+according to their type and attributes:
 
 .. code-block:: python
 
-    from pushsource import Source
+    from pushsource import Source, RpmPushItem
+    import logging
 
     source = Source.get('koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...')
 
     for item in source:
-        process(item)
+        if isinstance(item, RpmPushItem):
+            # do something with RPMs
+            publish_rpm(item)
+        else:
+            # don't know what to do
+            logging.getLogger().warning("Unexpected item: %s", item)
 
-Sources are typically obtained by URL.
+For more information, see the :ref:`userguide`.

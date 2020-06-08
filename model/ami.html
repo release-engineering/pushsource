@@ -37,9 +37,9 @@
 <dl class="py class">
 <dt id="pushsource.AmiPushItem">
 <em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">AmiPushItem</code><a class="reference internal" href="../_modules/pushsource/_impl/model/ami.html#AmiPushItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.AmiPushItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>A push item representing an Amazon Machine Image (or “AMI”).</p>
-<p>For push items of this type, the <code class="docutils literal notranslate"><span class="pre">src</span></code> attribute refers to a
-file containing an EBS snapshot.  The push item contains additional
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing an Amazon Machine Image (or “AMI”).</p>
+<p>For push items of this type, the <a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> attribute
+refers to a file containing an EBS snapshot.  The push item contains additional
 metadata which can be used to associate the snapshot with an image.</p>
 <p>This library does not verify that the referenced file is a valid
 snapshot.</p>
@@ -189,6 +189,7 @@ each rebuild.</p>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>

@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+import os
+import json
+import logging
+import shutil
+import datetime
+from xmlrpc.client import ServerProxy
+from argparse import ArgumentParser
+
+from pushsource import Source
+
+log = logging.getLogger("dump-pub-staged")
+
+
+def run(args):
+    pub = ServerProxy(args.pub_url + "client/")
+
+    kwargs = {"source": "staged"}
+    for kv_str in args.kv:
+        (key, value) = kv_str.split("=")
+        kwargs[key] = value
+
+    # If no date was applied, always force one to avoid overloading
+    if "date_from" not in kwargs:
+        date_from = datetime.date.today() - datetime.timedelta(days=365)
+        kwargs["date_from"] = date_from.strftime("%Y-%m-%d")
+
+    found = pub.client.push_query(kwargs)
+    found = reversed(json.loads(found))
+
+    for push in found:
+        task_info = pub.client.task_info(push["task_id"])
+        dump_task(task_info)
+
+
+def dump_task(task_info):
+    log.info("\n========= Pub task: %s =============================", task_info["id"])
+    stagedirs = (task_info.get("args") or {}).get("file_list") or []
+
+    if not stagedirs:
+        log.warning("<no staging directories found>")
+        return
+
+    log.info("STAGED: %s", ", ".join(stagedirs))
+    source = Source.get("staged:", url=stagedirs)
+    count = 0
+    for pushitem in source:
+        log.info("  %s", pushitem)
+        count += 1
+    log.info("=========== %s item(s) ================================", count)
+
+
+def main():
+    log.setLevel(logging.INFO)
+
+    parser = ArgumentParser(
+        description="Look at staged push task(s) from Pub and dump contents of staging areas"
+    )
+    parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--pub-url", default="https://pub.devel.redhat.com/pub/xmlrpc/")
+    parser.add_argument(
+        "kv",
+        nargs="*",
+        help="Extra keys/values for search, e.g. target=cdn-live, date_from=2020-01-01",
+    )
+
+    p = parser.parse_args()
+
+    if p.debug:
+        logging.basicConfig(format="%(threadName)s %(message)s")
+        logging.getLogger().setLevel(logging.DEBUG)
+        log.setLevel(logging.DEBUG)
+        logging.getLogger("pushsource").setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(format="%(message)s")
+
+    run(p)
+
+
+if __name__ == "__main__":
+    main()

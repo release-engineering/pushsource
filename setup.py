@@ -21,7 +21,7 @@ def get_requirements():
 
 setup(
     name="pushsource",
-    version="0.1.0",
+    version="0.2.0",
     packages=find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,

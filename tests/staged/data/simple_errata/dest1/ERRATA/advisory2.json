@@ -2,7 +2,7 @@
   "type": "security",
   "release": "0",
   "status": "final",
-  "pushcount": "3",
+  "pushcount": 3,
   "reboot_suggested": false,
   "references": [
     {

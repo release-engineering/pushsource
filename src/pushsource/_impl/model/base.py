@@ -1,6 +1,7 @@
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
+from .conv import md5str, sha256str, upper_if_str, instance_of_str, optional_str
 
 
 @attr.s()
@@ -9,8 +10,7 @@ class PushItem(object):
     This may be an RPM, an advisory, a generic file, and so on.
     """
 
-    # TODO: validate
-    name = attr.ib(type=str)
+    name = attr.ib(type=str, validator=instance_of_str)
     """A name for this push item.
 
     A push item's name may be any short identifying string which is meaningful
@@ -24,7 +24,6 @@ class PushItem(object):
     In all cases, a non-empty name must be provided.
     """
 
-    # TODO: enum?? validate
     state = attr.ib(type=str, default="PENDING")
     """The state of this push item.
 
@@ -35,15 +34,13 @@ class PushItem(object):
     as ``INVALIDFILE`` to indicate that the source located invalid content.
     """
 
-    # TODO: validate
-    src = attr.ib(type=str, default=None)
+    src = attr.ib(type=str, default=None, validator=optional_str)
     """The source of this push item.
 
     If the push item is a file, this will be the full path to the file.
     If the push item does not represent a file, this will generally be omitted.
     """
 
-    # TODO: validate
     dest = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
     """Destination of this push item.
 
@@ -55,16 +52,13 @@ class PushItem(object):
     * a Pulp repository name (for items pushed using Pulp)
     """
 
-    # TODO: validate
-    md5sum = attr.ib(type=str, default=None)
+    md5sum = attr.ib(type=str, default=None, converter=md5str)
     """Hex digest of MD5 checksum for this push item, if available."""
 
-    # TODO: validate
-    sha256sum = attr.ib(type=str, default=None)
+    sha256sum = attr.ib(type=str, default=None, converter=sha256str)
     """Hex digest of SHA256 checksum for this push item, if available."""
 
-    # TODO: validate
-    origin = attr.ib(type=str, default=None)
+    origin = attr.ib(type=str, default=None, validator=optional_str)
     """A string representing the origin of this push item.
 
     The "origin" field is expected to record some info on how this push item
@@ -72,12 +66,12 @@ class PushItem(object):
     in use.
     """
 
-    # TODO: validate
-    build = attr.ib(type=str, default=None)
+    build = attr.ib(type=str, default=None, validator=optional_str)
     """NVR for the koji build from which this push item was extracted, if any."""
 
-    # TODO: validate
-    signing_key = attr.ib(type=str, default=None)
+    signing_key = attr.ib(
+        type=str, default=None, validator=optional_str, converter=upper_if_str
+    )
     """If this push item was GPG signed, this should be an identifier for the
     signing key used.
 

@@ -2,24 +2,34 @@ from frozenlist2 import frozenlist
 
 from .base import PushItem
 from .. import compat_attr as attr
+from .conv import (
+    int2str,
+    md5str,
+    sha1str,
+    sha256str,
+    instance_of,
+    instance_of_str,
+    optional,
+    optional_str,
+)
 
 
 @attr.s()
 class ErratumReference(object):
     """A reference within a :meth:`~ErratumPushItem.references` list."""
 
-    href = attr.ib(type=str)
+    href = attr.ib(type=str, validator=instance_of_str)
     """A URL."""
 
-    id = attr.ib(type=str)
+    id = attr.ib(type=str, validator=instance_of_str)
     """A short ID for the reference, unique within this erratum."""
 
-    title = attr.ib(type=str)
+    title = attr.ib(type=str, validator=instance_of_str)
     """A title for the reference; analogous to the 'title' attribute
     in HTML.
     """
 
-    type = attr.ib(type=str, default="other")
+    type = attr.ib(type=str, default="other", validator=instance_of_str)
     """Type of reference. This defines the expected target of the URL
     and includes at least:
 
@@ -43,19 +53,19 @@ class ErratumReference(object):
 class ErratumModule(object):
     """A module entry within a :meth:`~ErratumPushItem.pkglist`."""
 
-    name = attr.ib(type=str)
+    name = attr.ib(type=str, validator=instance_of_str)
     """Module name."""
 
-    stream = attr.ib(type=str)
+    stream = attr.ib(type=str, validator=instance_of_str)
     """Module stream."""
 
-    version = attr.ib(type=str)
+    version = attr.ib(type=str, validator=instance_of_str)
     """Module version."""
 
-    context = attr.ib(type=str)
+    context = attr.ib(type=str, validator=instance_of_str)
     """Module context."""
 
-    arch = attr.ib(type=str)
+    arch = attr.ib(type=str, validator=instance_of_str)
     """Module architecture."""
 
     def __str__(self):
@@ -78,36 +88,36 @@ class ErratumModule(object):
 class ErratumPackage(object):
     """A package (RPM) entry within a :meth:`~ErratumPushItem.pkglist`."""
 
-    arch = attr.ib(type=str)
+    arch = attr.ib(type=str, validator=instance_of_str)
     """RPM architecture."""
 
-    filename = attr.ib(type=str)
+    filename = attr.ib(type=str, validator=instance_of_str)
     """RPM filename (basename)."""
 
-    epoch = attr.ib(type=str)
+    epoch = attr.ib(type=str, converter=int2str, validator=instance_of_str)
     """RPM epoch."""
 
-    name = attr.ib(type=str)
+    name = attr.ib(type=str, validator=instance_of_str)
     """RPM name (e.g. "bash-4.0.1-1.el7.x86_64.rpm" name is "bash")"""
 
-    version = attr.ib(type=str)
+    version = attr.ib(type=str, validator=instance_of_str)
     """RPM version (e.g. "bash-4.0.1-1.el7.x86_64.rpm" version is "4.0.1")"""
 
-    release = attr.ib(type=str)
+    release = attr.ib(type=str, validator=instance_of_str)
     """RPM release (e.g. "bash-4.0.1-1.el7.x86_64.rpm" version is "1.el7")"""
 
-    src = attr.ib(type=str)
+    src = attr.ib(type=str, validator=instance_of_str)
     """Filename of the source RPM from which this RPM was built; equal to
     :meth:`filename` for the source RPM itself.
     """
 
-    md5sum = attr.ib(type=str, default=None)
+    md5sum = attr.ib(type=str, default=None, converter=md5str)
     """MD5 checksum of this RPM in hex string form, if available."""
 
-    sha1sum = attr.ib(type=str, default=None)
+    sha1sum = attr.ib(type=str, default=None, converter=sha1str)
     """SHA1 checksum of this RPM in hex string form, if available."""
 
-    sha256sum = attr.ib(type=str, default=None)
+    sha256sum = attr.ib(type=str, default=None, converter=sha256str)
     """SHA256 checksum of this RPM in hex string form, if available."""
 
 
@@ -119,7 +129,7 @@ class ErratumPackageCollection(object):
     advisories typically contain one collection per module.
     """
 
-    name = attr.ib(type=str)
+    name = attr.ib(type=str, validator=instance_of_str)
     """A name for this collection. The collection name has no specific meaning,
     but must be unique within an advisory.
     """
@@ -129,12 +139,14 @@ class ErratumPackageCollection(object):
     )
     """List of packages (:class:`ErratumPackage`) within this collection."""
 
-    short = attr.ib(type=str, default="")
+    short = attr.ib(type=str, default="", validator=instance_of_str)
     """An alternative name for this collection. In practice, this field
     is typically blank.
     """
 
-    module = attr.ib(type=ErratumModule, default=None)
+    module = attr.ib(
+        type=ErratumModule, default=None, validator=optional(instance_of(ErratumModule))
+    )
     """An :class:`~ErratumModule` defining the module this entry is associated
     with, if any.
     """
@@ -190,21 +202,23 @@ class ErratumPushItem(PushItem):
     examples).
     """
 
-    type = attr.ib(type=str, default="bugfix")
+    type = attr.ib(type=str, default="bugfix", validator=instance_of_str)
     """'bugfix', 'security' or 'enhancement'."""
 
-    release = attr.ib(type=str, default="0")
+    release = attr.ib(
+        type=str, default="0", converter=int2str, validator=instance_of_str
+    )
     """Release number. Typically an integer-string, initially '0'."""
 
-    status = attr.ib(type=str, default="final")
+    status = attr.ib(type=str, default="final", validator=instance_of_str)
     """Status, typically 'final'."""
 
-    # TODO: converters to represent these as strings.
-
-    pushcount = attr.ib(type=str, default="1")
+    pushcount = attr.ib(
+        type=str, default="1", converter=int2str, validator=instance_of_str
+    )
     """Number of times advisory has been revised and published (starting at '1')."""
 
-    reboot_suggested = attr.ib(type=bool, default=False)
+    reboot_suggested = attr.ib(type=bool, default=False, validator=instance_of(bool))
     """True if rebooting host machine is recommended after installing this advisory."""
 
     references = attr.ib(
@@ -216,42 +230,44 @@ class ErratumPushItem(PushItem):
     """A list of package collections (:class:`ErratumPackageCollection`)
     associated with the advisory."""
 
-    from_ = attr.ib(type=str, default=None)
+    from_ = attr.ib(type=str, default=None, validator=optional_str)
     """Contact email address for the owner of the advisory."""
 
-    rights = attr.ib(type=str, default=None)
+    rights = attr.ib(type=str, default=None, validator=optional_str)
     """Copyright message."""
 
-    title = attr.ib(type=str, default=None)
+    title = attr.ib(type=str, default=None, validator=optional_str)
     """Title of the advisory (e.g. 'bash bugfix and enhancement')."""
 
-    description = attr.ib(type=str, default=None)
+    description = attr.ib(type=str, default=None, validator=optional_str)
     """Full human-readable description of the advisory, usually multiple lines."""
 
-    version = attr.ib(type=str, default="1")
+    version = attr.ib(
+        type=str, default="1", converter=int2str, validator=instance_of_str
+    )
     """Advisory version. Starts counting at "1", and some systems require updating
     the version whenever an advisory is modified.
     """
 
-    updated = attr.ib(type=str, default=None)
+    updated = attr.ib(type=str, default=None, validator=optional_str)
     """Timestamp of the last update to this advisory.
 
     Typically of the form '2019-12-31 06:54:41 UTC', but this is not enforced.
     """
 
-    issued = attr.ib(type=str, default=None)
+    issued = attr.ib(type=str, default=None, validator=optional_str)
     """Timestamp of the initial release of this advisory.
 
     Uses the same format as :meth:`updated`.
     """
 
-    severity = attr.ib(type=str, default=None)
+    severity = attr.ib(type=str, default=None, validator=optional_str)
     """Severity of the advisory, e.g. "low", "moderate", "important" or "critical"."""
 
-    summary = attr.ib(type=str, default=None)
+    summary = attr.ib(type=str, default=None, validator=optional_str)
     """Typically a single sentence briefly describing the advisory."""
 
-    solution = attr.ib(type=str, default=None)
+    solution = attr.ib(type=str, default=None, validator=optional_str)
     """Text explaining how to apply the advisory."""
 
     content_types = attr.ib(

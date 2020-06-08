@@ -194,7 +194,7 @@ class KojiSource(Source):
     def _push_items_from_rpm_meta(self, rpm, meta):
         LOG.debug("RPM metadata for %s: %s", rpm, meta)
 
-        notfound = [RpmPushItem(name=rpm, dest=self._dest, state="NOTFOUND")]
+        notfound = [RpmPushItem(name=str(rpm), dest=self._dest, state="NOTFOUND")]
 
         if not meta:
             LOG.error("RPM not found in koji: %s", rpm)

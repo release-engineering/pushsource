@@ -14,4 +14,5 @@ def s():
 
 ib = attr.ib
 evolve = attr.evolve
+validators = attr.validators
 Factory = attr.Factory

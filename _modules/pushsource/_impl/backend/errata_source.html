@@ -244,14 +244,6 @@
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Iterate over push items for the given errata.</span>
-
-<span class="sd">        - Yields :ref:`~pushsource.ErratumPushItem` instances for erratum metadata</span>
-<span class="sd">        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs</span>
-
-<span class="sd">        Other content types are not yet supported (most notably, container images).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Get file list of all advisories first.</span>
         <span class="c1">#</span>
         <span class="c1"># We get the file list first because it contains koji build NVRs,</span>

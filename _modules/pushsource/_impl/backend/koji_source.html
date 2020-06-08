@@ -370,11 +370,6 @@
             <span class="k">raise</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Iterate over push items.</span>
-
-<span class="sd">        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Queue holding all requests we need to make to koji.</span>
         <span class="c1"># We try to fetch as much as we can early to make efficient use</span>
         <span class="c1"># of multicall.</span>

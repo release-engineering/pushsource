@@ -87,6 +87,43 @@ For detailed information, see the API reference of the associated class.
 | errata | ``errata:https://errata.example.com?advisory=RHBA-2020:1234``               | :class:`~pushsource.ErrataSource` | Obtain RPMs and advisory metadata from Errata Tool |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
 
+
+Processing push items
+---------------------
+
+Once a ``Source`` instance has been obtained, it can be iterated over to obtain
+instances of :class:`~pushsource.PushItem`.
+
+Each object yielded by the source may be an instance of any ``PushItem`` subclass,
+depending on the type of content loaded by the source.  For example, RPMs will be
+yielded as instances of :class:`~pushsource.RpmPushItem` and errata will be yielded
+as instances of :class:`~pushsource.ErratumPushItem`.
+
+Commonly, different kinds of processing will be needed for different kinds of push items.
+In this case, it's recommended to use :func:`isinstance` checks to dispatch each push
+item appropriately.
+
+Consider tolerating push items of an unknown type (perhaps with a warning). This will ensure
+your code is forwards-compatible with later versions of this library, which may add new types
+of push items to existing sources.
+
+Example:
+
+::
+
+  source = Source.get(...)
+
+  for item in source:
+    if isinstance(item, RpmPushItem):
+      publish_rpm(item)
+    elif isinstance(item, ErratumPushItem):
+      publish_erratum(item)
+    elif isinstance(item, FilePushItem):
+      publish_file(item)
+    else:
+      LOG.warning("Unexpected push item type: %s", item)
+
+
 .. _implementing:
 
 Implementing a backend

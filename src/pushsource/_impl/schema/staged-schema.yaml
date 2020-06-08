@@ -62,7 +62,7 @@ definitions:
                 minLength: 2
 
             channel_dump_content:
-                # TODO: what is this?
+                # Brief label for content included in this dump
                 type: string
                 minLength: 1
 
@@ -93,13 +93,11 @@ definitions:
 
             channel_dump_product_name:
                 # Short name of product associated with this dump
-                # TODO: clarify meaning
                 type: string
                 minLength: 1
 
             channel_dump_product_version:
                 # Product version associated with this dump
-                # TODO: clarify meaning
                 type: string
                 minLength: 1
 

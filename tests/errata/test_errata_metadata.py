@@ -54,7 +54,6 @@ def test_errata_typical_metadata(fake_errata_tool):
         title="updated devtools/rust-toolset-rhel7 container image",
         updated="2020-02-17 09:14:49 UTC",
         issued="2020-02-17 09:14:49 UTC",
-        # TODO: should we automatically patch undesired "None" value from ET?
         severity="None",
         summary=(
             "Updated devtools/rust-toolset-rhel7 container image is now available "

@@ -337,11 +337,6 @@ class KojiSource(Source):
             raise
 
     def __iter__(self):
-        """Iterate over push items.
-
-        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs
-        """
-
         # Queue holding all requests we need to make to koji.
         # We try to fetch as much as we can early to make efficient use
         # of multicall.

@@ -82,8 +82,6 @@ class StagedSource(
         )
 
     def __iter__(self):
-        """Iterate over push items."""
-
         # Possible improvement would be to handle the separate dirs concurrently.
         # However, may not be worthwhile, as  in practice I'm not sure the ability
         # to pass more than a single staging directory is ever used (?)

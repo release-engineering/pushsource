@@ -211,14 +211,6 @@ class ErrataSource(Source):
         return out
 
     def __iter__(self):
-        """Iterate over push items for the given errata.
-
-        - Yields :ref:`~pushsource.ErratumPushItem` instances for erratum metadata
-        - Yields :ref:`~pushsource.RpmPushItem` instances for RPMs
-
-        Other content types are not yet supported (most notably, container images).
-        """
-
         # Get file list of all advisories first.
         #
         # We get the file list first because it contains koji build NVRs,

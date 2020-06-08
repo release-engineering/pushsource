@@ -1,15 +1,16 @@
 from .base import PushItem
 from .. import compat_attr as attr
+from .conv import optional_str
 
 
 @attr.s()
 class FilePushItem(PushItem):
     """A push item representing a single generic file."""
 
-    description = attr.ib(type=str, default=None)
+    description = attr.ib(type=str, default=None, validator=optional_str)
     """A human-readable brief description of the file."""
 
-    version = attr.ib(type=str, default=None)
+    version = attr.ib(type=str, default=None, validator=optional_str)
     """A version string associated with the file.
 
     This string is intended for display purposes only.

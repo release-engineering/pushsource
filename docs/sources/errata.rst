@@ -25,11 +25,11 @@ errata source URLs
 
 The base form of an errata source URL is:
 
-``errata:errata-tool-url?advisory=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]``
+``errata:errata-tool-url?errata=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]``
 
 For example, referencing a single advisory would look like:
 
-``errata:https://errata.example.com?advisory=RHBA-2020:1234``
+``errata:https://errata.example.com?errata=RHBA-2020:1234``
 
 The provided Errata Tool URL should be the base URL of the service,
 and not any specific API endpoint.
@@ -47,7 +47,7 @@ content, such as ``rpm``, blank - the errata source will fill them in as needed)
 For example, if our ET environment is connected to Fedora Koji, we could configure
 this as:
 
-``errata:https://errata.example.com?advisory=RHBA-2020:1234&koji_source=https://koji.fedoraproject.org/kojihub``
+``errata:https://errata.example.com?errata=RHBA-2020:1234&koji_source=https://koji.fedoraproject.org/kojihub``
 
 Although it is technically possible to configure the koji source behavior using
 any of the parameters documented in :ref:`source_koji`, in practice this results
@@ -58,7 +58,7 @@ commonly used koji sources, so that they can be referred to by a short identifie
 For example, if the ``fedkoji`` source has been configured as explained in :ref:`binding`,
 the source can be referred to more succintly as in:
 
-``errata:https://errata.example.com?advisory=RHBA-2020:1234&koji_source=fedkoji``
+``errata:https://errata.example.com?errata=RHBA-2020:1234&koji_source=fedkoji``
 
 
 Python API reference

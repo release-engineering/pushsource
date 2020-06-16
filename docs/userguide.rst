@@ -64,7 +64,7 @@ Here are some example URLs:
   koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm
 
   # Load an advisory from Errata Tool
-  errata:https://errata.example.com/?advisory=RHBA-2020:1234
+  errata:https://errata.example.com/?errata=RHBA-2020:1234
 
   # A hypothetical backend which accepts no arguments
   mock:
@@ -84,7 +84,7 @@ For detailed information, see the API reference of the associated class.
 | staged | ``staged:/mnt/vol/my/staged/content``                                       | :class:`~pushsource.StagedSource` | Obtain RPMs, files, AMIs and other content from    |
 |        |                                                                             |                                   | locally mounted filesystem                         |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
-| errata | ``errata:https://errata.example.com?advisory=RHBA-2020:1234``               | :class:`~pushsource.ErrataSource` | Obtain RPMs and advisory metadata from Errata Tool |
+| errata | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource` | Obtain RPMs and advisory metadata from Errata Tool |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
 
 

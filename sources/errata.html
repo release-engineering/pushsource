@@ -56,9 +56,9 @@ of the pushsource library</p></li>
 <div class="section" id="errata-source-urls">
 <h2>errata source URLs<a class="headerlink" href="#errata-source-urls" title="Permalink to this headline">¶</a></h2>
 <p>The base form of an errata source URL is:</p>
-<p><code class="docutils literal notranslate"><span class="pre">errata:errata-tool-url?advisory=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:errata-tool-url?errata=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]</span></code></p>
 <p>For example, referencing a single advisory would look like:</p>
-<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234</span></code></p>
 <p>The provided Errata Tool URL should be the base URL of the service,
 and not any specific API endpoint.</p>
 <div class="section" id="setting-the-koji-source">
@@ -70,7 +70,7 @@ for a koji source in the <code class="docutils literal notranslate"><span class=
 content, such as <code class="docutils literal notranslate"><span class="pre">rpm</span></code>, blank - the errata source will fill them in as needed).</p>
 <p>For example, if our ET environment is connected to Fedora Koji, we could configure
 this as:</p>
-<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234&amp;koji_source=https://koji.fedoraproject.org/kojihub</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234&amp;koji_source=https://koji.fedoraproject.org/kojihub</span></code></p>
 <p>Although it is technically possible to configure the koji source behavior using
 any of the parameters documented in <a class="reference internal" href="koji.html#source-koji"><span class="std std-ref">Source: koji</span></a>, in practice this results
 in unwieldy URLs with multiple levels of URL encoding.  Thus it’s recommended
@@ -78,7 +78,7 @@ that developers integrating this library with their services should preconfigure
 commonly used koji sources, so that they can be referred to by a short identifier.</p>
 <p>For example, if the <code class="docutils literal notranslate"><span class="pre">fedkoji</span></code> source has been configured as explained in <a class="reference internal" href="../userguide.html#binding"><span class="std std-ref">Binding partially-configured backends</span></a>,
 the source can be referred to more succintly as in:</p>
-<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?advisory=RHBA-2020:1234&amp;koji_source=fedkoji</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234&amp;koji_source=fedkoji</span></code></p>
 </div>
 </div>
 <div class="section" id="python-api-reference">

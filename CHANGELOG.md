@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Fixed
+- Fix too strict schema on erratum references; id and title are allowed to be null.
 
 ## 1.0.0 - 2020-06-16
 

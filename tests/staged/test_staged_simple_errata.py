@@ -154,8 +154,8 @@ def test_staged_simple_errata():
             references=[
                 ErratumReference(
                     href="https://access.redhat.com/errata/RHSA-2020:0509",
-                    id="RHSA-2020:0509",
-                    title="RHSA-2020:0509",
+                    id=None,
+                    title=None,
                     type="self",
                 ),
                 ErratumReference(

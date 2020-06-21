@@ -70,7 +70,7 @@ for a koji source in the <code class="docutils literal notranslate"><span class=
 content, such as <code class="docutils literal notranslate"><span class="pre">rpm</span></code>, blank - the errata source will fill them in as needed).</p>
 <p>For example, if our ET environment is connected to Fedora Koji, we could configure
 this as:</p>
-<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234&amp;koji_source=https://koji.fedoraproject.org/kojihub</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234&amp;koji_source=koji:https://koji.fedoraproject.org/kojihub</span></code></p>
 <p>Although it is technically possible to configure the koji source behavior using
 any of the parameters documented in <a class="reference internal" href="koji.html#source-koji"><span class="std std-ref">Source: koji</span></a>, in practice this results
 in unwieldy URLs with multiple levels of URL encoding.  Thus it’s recommended

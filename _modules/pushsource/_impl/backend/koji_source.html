@@ -240,6 +240,8 @@
         <span class="n">unsigned_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">rpm</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
         <span class="n">rpm_signing_key</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="n">candidate_paths</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="c1"># If signing keys requested, try them in order of preference</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
@@ -247,6 +249,7 @@
                 <span class="n">candidate</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">signed</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">candidate</span> <span class="o">=</span> <span class="n">unsigned_path</span>
+            <span class="n">candidate_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">candidate</span><span class="p">):</span>
                 <span class="n">rpm_path</span> <span class="o">=</span> <span class="n">candidate</span>
                 <span class="n">rpm_signing_key</span> <span class="o">=</span> <span class="n">key</span>
@@ -256,9 +259,7 @@
             <span class="c1"># If signing keys requested: we either found an RPM above, or an error occurs</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">rpm_path</span><span class="p">:</span>
                 <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="s2">&quot;RPM not found in koji with signing key(s) </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">]),</span>
-                    <span class="n">rpm</span><span class="p">,</span>
+                    <span class="s2">&quot;RPM not found in koji at path(s): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">candidate_paths</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="n">notfound</span>
         <span class="k">else</span><span class="p">:</span>

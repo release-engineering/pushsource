@@ -63,6 +63,12 @@ definitions:
         - type: string
           pattern: &quot;^[0-9]*$&quot;
 
+    optional_string:
+        # A field which may hold a string, or null.
+        type:
+        - string
+        - &quot;null&quot;
+
     reference_list:
         type: array
         items:
@@ -75,9 +81,9 @@ definitions:
             href:
                 type: string
             id:
-                type: string
+                $ref: &quot;#/definitions/optional_string&quot;
             title:
-                type: string
+                $ref: &quot;#/definitions/optional_string&quot;
             type:
                 type: string
         required:

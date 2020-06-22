@@ -154,7 +154,12 @@ class Source(object):
 
         url_kwargs.update(kwargs)
 
-        return functools.partial(klass, **url_kwargs)
+        @functools.wraps(klass)
+        def partial_source(*inner_args, **inner_kwargs):
+            url_kwargs.update(inner_kwargs)
+            return klass(*inner_args, **url_kwargs)
+
+        return partial_source
 
     @classmethod
     def register_backend(cls, name, factory):

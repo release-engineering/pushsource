@@ -188,7 +188,12 @@
 
         <span class="n">url_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="o">**</span><span class="n">url_kwargs</span><span class="p">)</span></div>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">partial_source</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">inner_kwargs</span><span class="p">):</span>
+            <span class="n">url_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">url_kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">partial_source</span></div>
 
 <div class="viewcode-block" id="Source.register_backend"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.register_backend">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">register_backend</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>

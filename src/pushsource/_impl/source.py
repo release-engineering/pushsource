@@ -19,6 +19,12 @@ def getfullargspec(x):
     return inspect.getfullargspec(x)
 
 
+class SourceUrlError(ValueError):
+    """Errors of this type are raised when an invalid URL is provided
+    to :meth:`~pushsource.Source.get` and related methods.
+    """
+
+
 class Source(object):
     """A source of push items.
 
@@ -50,6 +56,10 @@ class Source(object):
                 Any additional keyword arguments to be passed into
                 the backend.
 
+        Raises:
+            SourceUrlError
+                If ``source_url`` is not a valid push source URL.
+
         Returns:
             :class:`~pushsource.Source`
                 A new Source instance initialized with the given arguments.
@@ -76,6 +86,10 @@ class Source(object):
                 Any additional keyword arguments to be passed into
                 the backend.
 
+        Raises:
+            SourceUrlError
+                If ``source_url`` is not a valid push source URL.
+
         Returns:
             callable
                 A callable which accepts any number of keyword arguments
@@ -83,6 +97,16 @@ class Source(object):
         """
         parsed = parse.urlparse(source_url)
         scheme = parsed.scheme
+
+        if not scheme:
+            raise SourceUrlError("Not a valid source URL: %s" % source_url)
+
+        if scheme not in cls._BACKENDS:
+            raise SourceUrlError(
+                "Requested source '%s' but there is no registered backend '%s'"
+                % (source_url, scheme)
+            )
+
         klass = cls._BACKENDS[scheme]
 
         query = parsed.query
@@ -130,7 +154,12 @@ class Source(object):
 
         url_kwargs.update(kwargs)
 
-        return functools.partial(klass, **url_kwargs)
+        @functools.wraps(klass)
+        def partial_source(*inner_args, **inner_kwargs):
+            url_kwargs.update(inner_kwargs)
+            return klass(*inner_args, **url_kwargs)
+
+        return partial_source
 
     @classmethod
     def register_backend(cls, name, factory):

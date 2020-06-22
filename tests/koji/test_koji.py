@@ -217,10 +217,12 @@ def test_koji_missing_signing_key(fake_koji, koji_dir, caplog):
     assert items == [RpmPushItem(name="foo-1.0-1.x86_64.rpm", state="NOTFOUND")]
 
     # ...for this reason
-    assert (
-        "RPM not found in koji with signing key(s) abc123: foo-1.0-1.x86_64.rpm"
-        in caplog.messages
+    expected_path = (
+        "%s/vol/somevol/packages/foobuild/1.0/1.el8/data/signed/abc123/x86_64/foo-1.0-1.x86_64.rpm"
+        % koji_dir
     )
+    expected_msg = "RPM not found in koji at path(s): %s" % expected_path
+    assert expected_msg in caplog.messages
 
 
 def test_koji_uses_signing_key(fake_koji, koji_dir, caplog):

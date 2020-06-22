@@ -47,7 +47,7 @@ content, such as ``rpm``, blank - the errata source will fill them in as needed)
 For example, if our ET environment is connected to Fedora Koji, we could configure
 this as:
 
-``errata:https://errata.example.com?errata=RHBA-2020:1234&koji_source=https://koji.fedoraproject.org/kojihub``
+``errata:https://errata.example.com?errata=RHBA-2020:1234&koji_source=koji:https://koji.fedoraproject.org/kojihub``
 
 Although it is technically possible to configure the koji source behavior using
 any of the parameters documented in :ref:`source_koji`, in practice this results

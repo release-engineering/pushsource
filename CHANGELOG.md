@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix crash on Python 2 if using `get_partial` and `register_backend` together
 
+### Changed
+- Improved log message details in some cases of error
+
 ## 1.0.0 - 2020-06-16
 
 - Initial stable release of project

@@ -206,6 +206,8 @@ class KojiSource(Source):
         unsigned_path = os.path.join(build_path, self._pathinfo.rpm(meta))
         rpm_signing_key = None
 
+        candidate_paths = []
+
         # If signing keys requested, try them in order of preference
         for key in self._signing_key:
             if key:
@@ -213,6 +215,7 @@ class KojiSource(Source):
                 candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
             else:
                 candidate = unsigned_path
+            candidate_paths.append(candidate)
             if os.path.exists(candidate):
                 rpm_path = candidate
                 rpm_signing_key = key
@@ -222,9 +225,7 @@ class KojiSource(Source):
             # If signing keys requested: we either found an RPM above, or an error occurs
             if not rpm_path:
                 LOG.error(
-                    "RPM not found in koji with signing key(s) %s: %s",
-                    ", ".join([str(x) for x in self._signing_key]),
-                    rpm,
+                    "RPM not found in koji at path(s): %s", ", ".join(candidate_paths)
                 )
                 return notfound
         else:

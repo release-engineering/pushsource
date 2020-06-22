@@ -1,7 +1,7 @@
 import copy
 from pytest import raises, fixture
 
-from pushsource import Source
+from pushsource import Source, SourceUrlError
 
 
 def test_source_abstract():
@@ -46,3 +46,20 @@ def test_args_from_url():
             "foo": "bar,baz",
         },
     )
+
+
+def test_bad_url_no_scheme():
+    with raises(SourceUrlError) as ex_info:
+        Source.get("no-scheme")
+
+    assert "Not a valid source URL: no-scheme" in str(ex_info.value)
+
+
+def test_bad_url_missing_backend():
+    with raises(SourceUrlError) as ex_info:
+        Source.get("notexist:foo=bar&baz=quux")
+
+    assert (
+        "Requested source 'notexist:foo=bar&baz=quux' but "
+        "there is no registered backend 'notexist'"
+    ) in str(ex_info.value)

@@ -1,4 +1,4 @@
-from pushsource._impl import Source
+from pushsource._impl import Source, SourceUrlError
 from pushsource._impl.model import (
     PushItem,
     FilePushItem,

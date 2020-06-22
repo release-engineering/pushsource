@@ -21,10 +21,10 @@ class ErratumReference(object):
     href = attr.ib(type=str, validator=instance_of_str)
     """A URL."""
 
-    id = attr.ib(type=str, validator=instance_of_str)
+    id = attr.ib(type=str, validator=optional_str)
     """A short ID for the reference, unique within this erratum."""
 
-    title = attr.ib(type=str, validator=instance_of_str)
+    title = attr.ib(type=str, validator=optional_str)
     """A title for the reference; analogous to the 'title' attribute
     in HTML.
     """

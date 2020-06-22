@@ -8,8 +8,8 @@
     {
       "href": "https://access.redhat.com/errata/RHSA-2020:0509",
       "type": "self",
-      "id": "RHSA-2020:0509",
-      "title": "RHSA-2020:0509"
+      "id": null,
+      "title": null
     },
     {
       "href": "https://bugzilla.redhat.com/show_bug.cgi?id=1796944",

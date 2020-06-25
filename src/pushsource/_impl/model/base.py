@@ -1,7 +1,15 @@
+import hashlib
+import os
+import logging
+
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
 from .conv import md5str, sha256str, upper_if_str, instance_of_str, optional_str
+
+
+LOG = logging.getLogger("pushsource")
+CHUNKSIZE = int(os.environ.get("PUSHSOURCE_CHUNKSIZE") or 1024 * 1024 * 16)
 
 
 @attr.s()
@@ -53,10 +61,20 @@ class PushItem(object):
     """
 
     md5sum = attr.ib(type=str, default=None, converter=md5str)
-    """Hex digest of MD5 checksum for this push item, if available."""
+    """Hex digest of MD5 checksum for this push item, if available.
+
+    .. seealso::
+
+        :meth:`with_checksums`
+    """
 
     sha256sum = attr.ib(type=str, default=None, converter=sha256str)
-    """Hex digest of SHA256 checksum for this push item, if available."""
+    """Hex digest of SHA256 checksum for this push item, if available.
+
+    .. seealso::
+
+        :meth:`with_checksums`
+    """
 
     origin = attr.ib(type=str, default=None, validator=optional_str)
     """A string representing the origin of this push item.
@@ -78,3 +96,74 @@ class PushItem(object):
     Generally a short key ID such as "F21541EB" is used, though the library
     doesn't enforce this.
     """
+
+    def with_checksums(self):
+        """Return a copy of this push item with checksums present.
+
+        Many pushsource backends will produce push items with empty checksum attributes,
+        since checksum calculation may be expensive and may not be required in all cases.
+
+        The rule of thumb is that a pushsource will only provide checksums if they were
+        available in metadata, so that reading the push item's file was unnecessary.
+        For example:
+
+        - with ``errata`` push source, checksums are generally available by default, because
+          Errata Tool itself provides checksums on the files contained in an advisory.
+        - with ``staged`` push source, checksums are unavailable by default, because the
+          sums can only be calculated by reading file content from the staging area.
+
+        Where checksums are needed, this utility method may be used to ensure they are present
+        regardless of the push source used.
+
+        This method entails reading the entire content of the file referenced
+        by this push item, and may be:
+
+        - slow: may need to read a large file from a remote system, e.g. from an NFS volume.
+        - error-prone: reads from a remote system might fail.
+
+        As such, when dealing with a large number of push items, you may want to consider
+        using multiple threads to parallelize calls to ``with_checksums``, and retrying
+        failing operations.
+
+        If checksums are already present or if this item does not reference a file, this
+        method is a no-op and returns the current push item, unmodified.
+
+        Returns:
+            :class:`~pushsource.PushItem`
+                A copy of this item, guaranteed either to have non-empty :meth:`md5sum` and
+                :meth:`sha256sum` attributes, or an empty :meth:`src` attribute (denoting that
+                the item does not reference a file).
+
+        .. versionadded:: 1.2.0
+        """
+        if not self.src:
+            return self
+
+        hashers = []
+
+        if not self.md5sum:
+            hashers.append((hashlib.new("md5"), "md5sum"))
+        if not self.sha256sum:
+            hashers.append((hashlib.new("sha256"), "sha256sum"))
+
+        if not hashers:
+            # Nothing to do
+            return self
+
+        LOG.debug("Start read: %s", self.src)
+
+        with open(self.src, "rb") as src_file:
+            while True:
+                chunk = src_file.read(CHUNKSIZE)
+                if not chunk:
+                    break
+                for (hasher, _) in hashers:
+                    hasher.update(chunk)
+
+        LOG.debug("End read: %s", self.src)
+
+        updated_sums = {}
+        for (hasher, attribute) in hashers:
+            updated_sums[attribute] = hasher.hexdigest()
+
+        return attr.evolve(self, **updated_sums)

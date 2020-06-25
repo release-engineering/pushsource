@@ -94,12 +94,20 @@ If the push item does not represent a file, this will generally be omitted.</p>
 <dt id="pushsource.PushItem.md5sum">
 <code class="sig-name descname">md5sum</code><a class="headerlink" href="#pushsource.PushItem.md5sum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hex digest of MD5 checksum for this push item, if available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="pushsource.PushItem.sha256sum">
 <code class="sig-name descname">sha256sum</code><a class="headerlink" href="#pushsource.PushItem.sha256sum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hex digest of SHA256 checksum for this push item, if available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -124,6 +132,50 @@ in use.</p>
 signing key used.</p>
 <p>Generally a short key ID such as “F21541EB” is used, though the library
 doesn’t enforce this.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pushsource.PushItem.with_checksums">
+<code class="sig-name descname">with_checksums</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem.with_checksums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.PushItem.with_checksums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of this push item with checksums present.</p>
+<p>Many pushsource backends will produce push items with empty checksum attributes,
+since checksum calculation may be expensive and may not be required in all cases.</p>
+<p>The rule of thumb is that a pushsource will only provide checksums if they were
+available in metadata, so that reading the push item’s file was unnecessary.
+For example:</p>
+<ul class="simple">
+<li><p>with <code class="docutils literal notranslate"><span class="pre">errata</span></code> push source, checksums are generally available by default, because
+Errata Tool itself provides checksums on the files contained in an advisory.</p></li>
+<li><p>with <code class="docutils literal notranslate"><span class="pre">staged</span></code> push source, checksums are unavailable by default, because the
+sums can only be calculated by reading file content from the staging area.</p></li>
+</ul>
+<p>Where checksums are needed, this utility method may be used to ensure they are present
+regardless of the push source used.</p>
+<p>This method entails reading the entire content of the file referenced
+by this push item, and may be:</p>
+<ul class="simple">
+<li><p>slow: may need to read a large file from a remote system, e.g. from an NFS volume.</p></li>
+<li><p>error-prone: reads from a remote system might fail.</p></li>
+</ul>
+<p>As such, when dealing with a large number of push items, you may want to consider
+using multiple threads to parallelize calls to <code class="docutils literal notranslate"><span class="pre">with_checksums</span></code>, and retrying
+failing operations.</p>
+<p>If checksums are already present or if this item does not reference a file, this
+method is a no-op and returns the current push item, unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt><a class="reference internal" href="#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a></dt><dd><p>A copy of this item, guaranteed either to have non-empty <a class="reference internal" href="#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> and
+<a class="reference internal" href="#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> attributes, or an empty <a class="reference internal" href="#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> attribute (denoting that
+the item does not reference a file).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
+</div>
 </dd></dl>
 
 </dd></dl>

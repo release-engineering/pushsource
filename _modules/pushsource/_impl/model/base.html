@@ -32,10 +32,18 @@
           <div class="body" role="main">
             
   <h1>Source code for pushsource._impl.model.base</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+<span></span><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">md5str</span><span class="p">,</span> <span class="n">sha256str</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">optional_str</span>
+
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+<span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_CHUNKSIZE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PushItem"><a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -87,10 +95,20 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">md5sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">md5str</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Hex digest of MD5 checksum for this push item, if available.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Hex digest of MD5 checksum for this push item, if available.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        :meth:`with_checksums`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sha256str</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Hex digest of SHA256 checksum for this push item, if available.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Hex digest of SHA256 checksum for this push item, if available.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        :meth:`with_checksums`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;A string representing the origin of this push item.</span>
@@ -111,7 +129,78 @@
 
 <span class="sd">    Generally a short key ID such as &quot;F21541EB&quot; is used, though the library</span>
 <span class="sd">    doesn&#39;t enforce this.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PushItem.with_checksums"><a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>    <span class="k">def</span> <span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a copy of this push item with checksums present.</span>
+
+<span class="sd">        Many pushsource backends will produce push items with empty checksum attributes,</span>
+<span class="sd">        since checksum calculation may be expensive and may not be required in all cases.</span>
+
+<span class="sd">        The rule of thumb is that a pushsource will only provide checksums if they were</span>
+<span class="sd">        available in metadata, so that reading the push item&#39;s file was unnecessary.</span>
+<span class="sd">        For example:</span>
+
+<span class="sd">        - with ``errata`` push source, checksums are generally available by default, because</span>
+<span class="sd">          Errata Tool itself provides checksums on the files contained in an advisory.</span>
+<span class="sd">        - with ``staged`` push source, checksums are unavailable by default, because the</span>
+<span class="sd">          sums can only be calculated by reading file content from the staging area.</span>
+
+<span class="sd">        Where checksums are needed, this utility method may be used to ensure they are present</span>
+<span class="sd">        regardless of the push source used.</span>
+
+<span class="sd">        This method entails reading the entire content of the file referenced</span>
+<span class="sd">        by this push item, and may be:</span>
+
+<span class="sd">        - slow: may need to read a large file from a remote system, e.g. from an NFS volume.</span>
+<span class="sd">        - error-prone: reads from a remote system might fail.</span>
+
+<span class="sd">        As such, when dealing with a large number of push items, you may want to consider</span>
+<span class="sd">        using multiple threads to parallelize calls to ``with_checksums``, and retrying</span>
+<span class="sd">        failing operations.</span>
+
+<span class="sd">        If checksums are already present or if this item does not reference a file, this</span>
+<span class="sd">        method is a no-op and returns the current push item, unmodified.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`~pushsource.PushItem`</span>
+<span class="sd">                A copy of this item, guaranteed either to have non-empty :meth:`md5sum` and</span>
+<span class="sd">                :meth:`sha256sum` attributes, or an empty :meth:`src` attribute (denoting that</span>
+<span class="sd">                the item does not reference a file).</span>
+
+<span class="sd">        .. versionadded:: 1.2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="n">hashers</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">md5sum</span><span class="p">:</span>
+            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span> <span class="s2">&quot;md5sum&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sha256sum</span><span class="p">:</span>
+            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span> <span class="s2">&quot;sha256sum&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hashers</span><span class="p">:</span>
+            <span class="c1"># Nothing to do</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start read: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">src_file</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">src_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">CHUNKSIZE</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">hasher</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
+                    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;End read: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+
+        <span class="n">updated_sums</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">hasher</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
+            <span class="n">updated_sums</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_sums</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

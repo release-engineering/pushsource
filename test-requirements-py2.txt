@@ -125,9 +125,9 @@ koji==1.21.1 \
     --hash=sha256:b0e9a12ab1038713dbfa6af4fdfcf7cb4ecf4f058f036ca60affdbfca9c04586 \
     --hash=sha256:fee3ff72e275278f29f8206d8fb3bb1de845ce2a135bc0a88d07836c54266f3a \
     # via -r ./test-requirements-py2.in
-mock==3.0.5 \
-    --hash=sha256:83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3 \
-    --hash=sha256:d157e52d4e5b938c550f39eb2fd15610db062441a9c2747d3dbfa9298211d0f8 \
+mock==4.0.2 \
+    --hash=sha256:3f9b2c0196c60d21838f307f5825a7b86b678cedc58ab9e50a8988187b4d81e0 \
+    --hash=sha256:dd33eb70232b6118298d516bbcecd26704689c386594f0f3c4f13867b2c56f72 \
     # via -r ./test-requirements-py2.in
 monotonic==1.5 \
     --hash=sha256:23953d55076df038541e648a53676fb24980f7a1be290cdda21300b3bc21dfb0 \

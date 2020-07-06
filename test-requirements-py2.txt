@@ -117,8 +117,8 @@ jsonschema==2.3.0 \
     --hash=sha256:a79dcee3769d7cf749836da840966a83cd2e33e361264e77b74df9490ffe5c89 \
     --hash=sha256:c085fca29eeb7e42500aa2769f933b003becd95a95819b4565a734170de84497 \
     # via -r ./test-requirements-py2.in, pushcollector
-kobo==0.15.1 \
-    --hash=sha256:b4d69e69c3ef4a672fafffb99d442236d728d63cfb6126f3b5a3368f4393815f \
+kobo==0.16.0 \
+    --hash=sha256:4978d50c9f65fbf26a3e9a14a2aad47cdd89fbf6bb74c445bc1117a2b4099a45 \
     # via -r ./test-requirements-py2.in
 koji==1.21.1 \
     --hash=sha256:03aab30238968a8d59c416a4ed3e737829c21788c248098adfafe28e3f5796b8 \

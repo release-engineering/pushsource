@@ -98,9 +98,9 @@ coverage==5.2 \
     --hash=sha256:10f2a618a6e75adf64329f828a6a5b40244c1c50f5ef4ce4109e904e69c71bd2 \
     --hash=sha256:1874bdc943654ba46d28f179c1846f5710eda3aeb265ff029e0ac2b52daae404 \
     # via coveralls, pytest-cov
-coveralls==2.0.0 \
-    --hash=sha256:41bd57b60321dfd5b56e990ab3f7ed876090691c21a9e3b005e1f6e42e6ba4b9 \
-    --hash=sha256:d213f5edd49053d03f0db316ccabfe17725f2758147afc9a37eaca9d8e8602b5 \
+coveralls==2.1.1 \
+    --hash=sha256:3726d35c0f93a28631a003880e2aa6cc93c401d62bc6919c5cb497217ba30c55 \
+    --hash=sha256:afe359cd5b350e1b3895372bda32af8f0260638c7c4a31a5c0f15aa6a96f40d9 \
     # via -r ./test-requirements.txt
 cryptography==2.9.2 \
     --hash=sha256:091d31c42f444c6f519485ed528d8b451d1a0c7bf30e8ca583a0cac44b8a0df6 \

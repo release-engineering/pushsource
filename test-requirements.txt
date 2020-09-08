@@ -149,10 +149,10 @@ jsonschema==3.2.0 \
 kobo==0.16.0 \
     --hash=sha256:4978d50c9f65fbf26a3e9a14a2aad47cdd89fbf6bb74c445bc1117a2b4099a45 \
     # via -r ./test-requirements.txt
-koji==1.21.1 \
-    --hash=sha256:03aab30238968a8d59c416a4ed3e737829c21788c248098adfafe28e3f5796b8 \
-    --hash=sha256:b0e9a12ab1038713dbfa6af4fdfcf7cb4ecf4f058f036ca60affdbfca9c04586 \
-    --hash=sha256:fee3ff72e275278f29f8206d8fb3bb1de845ce2a135bc0a88d07836c54266f3a \
+koji==1.22.1 \
+    --hash=sha256:a2ab6913b702d58780c2fa89690d433d6f4364ccd84135283a30a50cfb7b2ab5 \
+    --hash=sha256:151322367aa0f44433025eab03a5552431021c2aedce01bf72238eb6c52ba752 \
+    --hash=sha256:f2ba8a186aefedfd329953233db2f81d7fb15c75492491da34d8bb20b3723c9e \
     # via -r ./test-requirements.txt
 lazy-object-proxy==1.5.1 \
     --hash=sha256:92cedd6e26712505adb1c17fab64651a498cc0102a80ba562ff4a2451088f57a \

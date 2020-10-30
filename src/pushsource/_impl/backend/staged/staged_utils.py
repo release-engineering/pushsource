@@ -1,10 +1,11 @@
-import jsonschema
+import logging
 
-from ...schema import get_schema
+from ...validator import Validator
 from ... import compat_attr as attr
 
 REQUIRED_VERSION = "0.2"
-STAGED_SCHEMA = get_schema("staged")
+VALIDATOR = Validator("staged", ids=["relative_path"])
+LOG = logging.getLogger("pushsource")
 
 
 @attr.s()
@@ -40,7 +41,7 @@ class StagingMetadata(object):
 
     @classmethod
     def from_data(cls, data, filename="<unknown file>"):
-        jsonschema.validate(data, STAGED_SCHEMA)
+        VALIDATOR.validate(data, filename)
 
         payload = data.get("payload") or {}
         files = payload.get("files") or []

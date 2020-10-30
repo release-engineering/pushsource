@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Added
+
+- Added some user-friendly logs when advisory or staged metadata fails validation.
 
 ## [1.2.0] - 2020-07-06
 

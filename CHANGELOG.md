@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added some user-friendly logs when advisory or staged metadata fails validation.
+### Removed
+
+- Removed support for obsolete "channel dump" push items:
+   - `ChannelDumpPushItem` class was removed (backwards-incompatible API change)
+   - `CHANNEL_DUMPS` directory in staging areas should no longer be used
+     (will generate a warning)
 
 ## [1.2.0] - 2020-07-06
 

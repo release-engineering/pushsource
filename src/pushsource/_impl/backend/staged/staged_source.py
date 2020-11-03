@@ -21,7 +21,6 @@ from .staged_utils import StagingMetadata, StagingLeafDir
 from .staged_ami import StagedAmiMixin
 from .staged_files import StagedFilesMixin
 from .staged_errata import StagedErrataMixin
-from .staged_channel_dumps import StagedChannelDumpsMixin
 from .staged_compsxml import StagedCompsXmlMixin
 from .staged_modulemd import StagedModuleMdMixin
 from .staged_productid import StagedProductIdMixin
@@ -38,7 +37,6 @@ class StagedSource(
     StagedAmiMixin,
     StagedFilesMixin,
     StagedErrataMixin,
-    StagedChannelDumpsMixin,
     StagedCompsXmlMixin,
     StagedModuleMdMixin,
     StagedProductIdMixin,
@@ -121,7 +119,7 @@ class StagedSource(
         return self._FILE_TYPES[leafdir.file_type](leafdir=leafdir, metadata=metadata)
 
     def _push_items_for_topdir(self, topdir):
-        LOG.debug("Checking files in: %s", topdir)
+        LOG.info("Checking files in: %s", topdir)
 
         metadata = self._load_metadata(topdir)
 

@@ -119,7 +119,7 @@ class StagedSource(
         return self._FILE_TYPES[leafdir.file_type](leafdir=leafdir, metadata=metadata)
 
     def _push_items_for_topdir(self, topdir):
-        LOG.debug("Checking files in: %s", topdir)
+        LOG.info("Checking files in: %s", topdir)
 
         metadata = self._load_metadata(topdir)
 

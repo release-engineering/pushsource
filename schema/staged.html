@@ -6,8 +6,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Schema: staged &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Schema: errata" href="errata.html" />
-    <link rel="prev" title="Push items: channel dump" href="../model/channeldumps.html" />
+    <link rel="prev" title="Push items: comps.xml" href="../model/comps.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -79,97 +79,8 @@ definitions:
     attributes_any:
         type: object
         anyOf:
-        - $ref: &quot;#/definitions/attributes_channel_dump&quot;
         - $ref: &quot;#/definitions/attributes_ami&quot;
         - $ref: &quot;#/definitions/attributes_file&quot;
-
-    attributes_channel_dump:
-        # Attributes for channel dump ISO images.
-        properties:
-            allowed_eng_products:
-                oneOf:
-                    # Comma-separated IDs of products with content in this channel dump.
-                    - type: string
-                      pattern: &quot;^[0-9,]+&quot;
-
-                    # Or, real integer IDs.
-                    - type: array
-                      items:
-                        type: integer
-                        minimum: 1
-
-            channel_dump_arch:
-                # Architecture of this channel dump
-                type: string
-                minLength: 2
-
-            channel_dump_content:
-                # Brief label for content included in this dump
-                type: string
-                minLength: 1
-
-            channel_dump_date:
-                # ISO8601 timestamp at which this dump was generated
-                type: string
-                minLength: 1
-
-            channel_dump_disc_number:
-                # Disc number. Starts counting at 1; values greater than 1
-                # will be observed for channel dumps spanning multiple disc
-                # images.
-                type: integer
-                minimum: 1
-
-            channel_dump_included_channels:
-                oneOf:
-
-                    # Comma-separated list of channel names included in this dump
-                    - type: string
-                      minLength: 1
-
-                    # Or, an actual list.
-                    - type: array
-                      items:
-                        type: string
-                        minLength: 1
-
-            channel_dump_product_name:
-                # Short name of product associated with this dump
-                type: string
-                minLength: 1
-
-            channel_dump_product_version:
-                # Product version associated with this dump
-                type: string
-                minLength: 1
-
-            channel_dump_type:
-                # &#39;base&#39; if this channel dump can be used standalone,
-                # &#39;incremental&#39; if it is intended to be combined with earlier
-                # channel dumps
-                type: string
-                enum:
-                - base
-                - incremental
-
-            description:
-                # Brief human-readable string summarizing this channel dump
-                type: string
-                minLength: 1
-                maxLength: 1000
-
-        required:
-        - allowed_eng_products
-        - channel_dump_arch
-        - channel_dump_content
-        - channel_dump_date
-        - channel_dump_included_channels
-        - channel_dump_product_name
-        - channel_dump_product_version
-        - channel_dump_type
-        - description
-
-        additionalProperties: false
 
     attributes_ami:
         # Attributes for Amazon Machine Images (AMIs).
@@ -383,7 +294,6 @@ additionalProperties: false
 <li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Schema: errata</a></li>
 </ul>
@@ -403,7 +313,7 @@ additionalProperties: false
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../model/channeldumps.html" title="previous chapter">Push items: channel dump</a></li>
+      <li>Previous: <a href="../model/comps.html" title="previous chapter">Push items: comps.xml</a></li>
       <li>Next: <a href="errata.html" title="next chapter">Schema: errata</a></li>
   </ul></li>
 </ul>
@@ -434,7 +344,7 @@ additionalProperties: false
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

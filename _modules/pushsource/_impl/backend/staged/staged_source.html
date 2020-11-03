@@ -6,8 +6,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.backend.staged.staged_source &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -55,7 +55,6 @@
 <span class="kn">from</span> <span class="nn">.staged_ami</span> <span class="kn">import</span> <span class="n">StagedAmiMixin</span>
 <span class="kn">from</span> <span class="nn">.staged_files</span> <span class="kn">import</span> <span class="n">StagedFilesMixin</span>
 <span class="kn">from</span> <span class="nn">.staged_errata</span> <span class="kn">import</span> <span class="n">StagedErrataMixin</span>
-<span class="kn">from</span> <span class="nn">.staged_channel_dumps</span> <span class="kn">import</span> <span class="n">StagedChannelDumpsMixin</span>
 <span class="kn">from</span> <span class="nn">.staged_compsxml</span> <span class="kn">import</span> <span class="n">StagedCompsXmlMixin</span>
 <span class="kn">from</span> <span class="nn">.staged_modulemd</span> <span class="kn">import</span> <span class="n">StagedModuleMdMixin</span>
 <span class="kn">from</span> <span class="nn">.staged_productid</span> <span class="kn">import</span> <span class="n">StagedProductIdMixin</span>
@@ -72,7 +71,6 @@
     <span class="n">StagedAmiMixin</span><span class="p">,</span>
     <span class="n">StagedFilesMixin</span><span class="p">,</span>
     <span class="n">StagedErrataMixin</span><span class="p">,</span>
-    <span class="n">StagedChannelDumpsMixin</span><span class="p">,</span>
     <span class="n">StagedCompsXmlMixin</span><span class="p">,</span>
     <span class="n">StagedModuleMdMixin</span><span class="p">,</span>
     <span class="n">StagedProductIdMixin</span><span class="p">,</span>
@@ -155,7 +153,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">[</span><span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span><span class="p">](</span><span class="n">leafdir</span><span class="o">=</span><span class="n">leafdir</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_push_items_for_topdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topdir</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Checking files in: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking files in: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
 
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_metadata</span><span class="p">(</span><span class="n">topdir</span><span class="p">)</span>
 
@@ -236,7 +234,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../model/ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../model/comps.html">Push items: comps.xml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../model/channeldumps.html">Push items: channel dump</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../schema/staged.html">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../schema/errata.html">Schema: errata</a></li>
 </ul>
@@ -287,7 +284,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

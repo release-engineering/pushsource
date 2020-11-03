@@ -6,8 +6,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Source: staged &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -44,7 +44,6 @@ can be provided in a YAML or JSON file.</p>
 <li><p>RPMs</p></li>
 <li><p>Advisories</p></li>
 <li><p>Generic files</p></li>
-<li><p>Channel dump ISOs (for RHN Classic)</p></li>
 <li><p>Amazon Machine Images (AMIs)</p></li>
 <li><p>comps.xml files (yum repo metadata)</p></li>
 <li><p>modulemd YAML streams (yum repo metadata)</p></li>
@@ -71,7 +70,6 @@ Each staging directory must use the <a class="reference internal" href="#staging
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">COMPS</span><span class="o">/*.</span><span class="n">xml</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">ERRATA</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">FILES</span><span class="o">/*</span>
-<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">CHANNEL_DUMPS</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">PRODUCTID</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">MODULEMD</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/*.</span><span class="n">rpm</span>
@@ -150,13 +148,6 @@ installers.</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
 <p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">ISOS</span></code>.</p>
 <p>Will yield instances of <a class="reference internal" href="../model/files.html#pushsource.FilePushItem" title="pushsource.FilePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilePushItem</span></code></a>.</p>
-</div>
-<div class="section" id="root-destination-channel-dumps">
-<h3>root/destination/CHANNEL_DUMPS/*<a class="headerlink" href="#root-destination-channel-dumps" title="Permalink to this headline">¶</a></h3>
-<p>Each file in <code class="docutils literal notranslate"><span class="pre">CHANNEL_DUMPS</span></code> should be a channel dump ISO disc image,
-for use with Satellite 5 / RHN Classic.</p>
-<p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
-<p>Will yield instances of <a class="reference internal" href="../model/channeldumps.html#pushsource.ChannelDumpPushItem" title="pushsource.ChannelDumpPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelDumpPushItem</span></code></a>.</p>
 </div>
 <div class="section" id="root-destination-productid">
 <h3>root/destination/PRODUCTID/*<a class="headerlink" href="#root-destination-productid" title="Permalink to this headline">¶</a></h3>
@@ -253,7 +244,6 @@ made during each step.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../model/channeldumps.html">Push items: channel dump</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/errata.html">Schema: errata</a></li>
 </ul>
@@ -304,7 +294,7 @@ made during each step.</p></li>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,0 +1,15 @@
+PyYAML
+attrs
+black
+coveralls
+frozenlist2
+kobo
+koji>=1.18
+mock
+more-executors
+pre-commit
+pushcollector
+pytest
+python-dateutil
+rpm-py-installer
+six

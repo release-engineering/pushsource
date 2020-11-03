@@ -1,15 +1,14 @@
 import logging
 import json
 import yaml
-import jsonschema
 
 from .staged_base import StagedBaseMixin, handles_type
 from ... import compat_attr as attr
 from ...model import ErratumPushItem
-from ...schema import get_schema
+from ...validator import Validator
 
 LOG = logging.getLogger("pushsource")
-ERRATA_SCHEMA = get_schema("errata")
+VALIDATOR = Validator("errata", ["filename", "id"])
 
 
 class StagedErrataMixin(StagedBaseMixin):
@@ -26,7 +25,7 @@ class StagedErrataMixin(StagedBaseMixin):
         # itself encodes the destinations.
         raw.pop("cdn_repo", None)
 
-        jsonschema.validate(raw, ERRATA_SCHEMA)
+        VALIDATOR.validate(raw, entry.path)
 
         item = ErratumPushItem._from_data(raw)
         return attr.evolve(

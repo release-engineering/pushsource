@@ -8,7 +8,6 @@ from .erratum import (
 )
 from .rpm import RpmPushItem
 from .file import FilePushItem
-from .channel_dump import ChannelDumpPushItem
 from .modulemd import ModuleMdPushItem
 from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem

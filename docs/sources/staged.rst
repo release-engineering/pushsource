@@ -11,7 +11,6 @@ Supported content types:
 * RPMs
 * Advisories
 * Generic files
-* Channel dump ISOs (for RHN Classic)
 * Amazon Machine Images (AMIs)
 * comps.xml files (yum repo metadata)
 * modulemd YAML streams (yum repo metadata)
@@ -49,7 +48,6 @@ Here is a brief overview of the structure of a staging directory:
   root/destination/COMPS/*.xml
   root/destination/ERRATA/*
   root/destination/FILES/*
-  root/destination/CHANNEL_DUMPS/*
   root/destination/PRODUCTID/*
   root/destination/MODULEMD/*
   root/destination/RPMS/*.rpm
@@ -149,16 +147,6 @@ Files in this directory must have metadata included in ``staged.yaml``.
 For historical reasons, this directory may also be named ``ISOS``.
 
 Will yield instances of :class:`~pushsource.FilePushItem`.
-
-root/destination/CHANNEL_DUMPS/\*
-.................................
-
-Each file in ``CHANNEL_DUMPS`` should be a channel dump ISO disc image,
-for use with Satellite 5 / RHN Classic.
-
-Files in this directory must have metadata included in ``staged.yaml``.
-
-Will yield instances of :class:`~pushsource.ChannelDumpPushItem`.
 
 root/destination/PRODUCTID/\*
 .............................

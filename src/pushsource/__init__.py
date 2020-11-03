@@ -2,7 +2,6 @@ from pushsource._impl import Source, SourceUrlError
 from pushsource._impl.model import (
     PushItem,
     FilePushItem,
-    ChannelDumpPushItem,
     CompsXmlPushItem,
     ModuleMdPushItem,
     ProductIdPushItem,

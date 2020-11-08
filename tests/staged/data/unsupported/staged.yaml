@@ -1,0 +1,12 @@
+header:
+    version: "0.2"
+
+payload:
+    files:
+
+    # metadata for unsupported file type should still be able to validate
+    # regardless of the used fields
+    - filename: some-image
+      relative_path: dest2/DOCKER/dimg1
+      attributes:
+        some: crazy-attribute

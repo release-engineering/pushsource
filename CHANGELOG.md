@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Changed
+
+- References to unsupported `DOCKER`, `CHANNEL_DUMPS` content types in staging
+  metadata files will no longer cause a validation error.
 
 ## [2.0.0] - 2020-11-04
 

@@ -81,7 +81,13 @@ definitions:
             href:
                 type: string
             id:
-                $ref: &quot;#/definitions/optional_string&quot;
+                # It is preferred to use strings for this field, however
+                # some very old data might use integers (e.g. bugzilla bug ID).
+                # These will be converted to strings on load.
+                type:
+                - integer
+                - string
+                - &quot;null&quot;
             title:
                 $ref: &quot;#/definitions/optional_string&quot;
             type:

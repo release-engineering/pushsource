@@ -137,7 +137,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
     # pkglist should have just one collection
     assert errata_item.pkglist == [
         ErratumPackageCollection(
-            name="RHSA-2020:0509",
+            name="",
             packages=[
                 ErratumPackage(
                     arch="ppc64le",

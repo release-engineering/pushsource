@@ -54,8 +54,7 @@ cdn_metadata:
   id: RHSA-2020:0509
   issued: 2020-02-13 19:00:11 UTC
   pkglist:
-  - name: RHSA-2020:0509
-    packages:
+  - packages:
     - arch: ppc64le
       epoch: '0'
       filename: sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm
@@ -140,7 +139,6 @@ cdn_metadata:
       - sha256
       - 43e318fa49e4df685ea0d5f0925a00a336236b2e20f27f9365c39a48102c2cf6
       version: 1.8.25p1
-    short: ''
   pulp_user_metadata:
     content_types:
     - rpm

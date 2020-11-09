@@ -129,7 +129,7 @@ class ErratumPackageCollection(object):
     advisories typically contain one collection per module.
     """
 
-    name = attr.ib(type=str, validator=instance_of_str)
+    name = attr.ib(type=str, default="", validator=instance_of_str)
     """A name for this collection. The collection name has no specific meaning,
     but must be unique within an advisory.
     """
@@ -186,8 +186,8 @@ class ErratumPackageCollection(object):
             )
 
         return cls(
-            name=data["name"],
-            short=data["short"],
+            name=data.get("name") or "",
+            short=data.get("short") or "",
             packages=packages,
             module=ErratumModule._from_data(data.get("module")),
         )

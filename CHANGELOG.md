@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Changed
+
+- The `id` field within erratum reference objects may now be provided as an integer
+  (it will be converted to a string).
 
 ## [2.0.0] - 2020-11-04
 

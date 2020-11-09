@@ -41,7 +41,7 @@ cdn_metadata:
       of Marvell WiFi driver'
     type: bugzilla
   - href: https://bugzilla.redhat.com/show_bug.cgi?id=1771909
-    id: '1771909'
+    id: 1771909
     title: 'CVE-2019-17133 kernel: buffer overflow in cfg80211_mgd_wext_giwessid in
       net/wireless/wext-sme.c'
     type: bugzilla
@@ -55,7 +55,7 @@ cdn_metadata:
       and core dumping in CVE-2019-11599'
     type: bugzilla
   - href: https://bugzilla.redhat.com/show_bug.cgi?id=1774870
-    id: '1774870'
+    id: 1774870
     title: 'CVE-2019-14895 kernel: heap-based buffer overflow in mwifiex_process_country_ie()
       function in drivers/net/wireless/marvell/mwifiex/sta_ioctl.c'
     type: bugzilla

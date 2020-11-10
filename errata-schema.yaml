@@ -74,8 +74,6 @@ definitions:
                 items:
                     $ref: "#/definitions/pkg"
                 uniqueItems: true
-        required:
-        - name
 
     pkg:
         type: object

@@ -39,7 +39,13 @@ definitions:
             href:
                 type: string
             id:
-                $ref: "#/definitions/optional_string"
+                # It is preferred to use strings for this field, however
+                # some very old data might use integers (e.g. bugzilla bug ID).
+                # These will be converted to strings on load.
+                type:
+                - integer
+                - string
+                - "null"
             title:
                 $ref: "#/definitions/optional_string"
             type:
@@ -68,8 +74,6 @@ definitions:
                 items:
                     $ref: "#/definitions/pkg"
                 uniqueItems: true
-        required:
-        - name
 
     pkg:
         type: object

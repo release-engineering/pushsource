@@ -121,7 +121,9 @@ definitions:
     file_list:
         type: array
         items:
-            $ref: "#/definitions/file"
+            anyOf:
+            - $ref: "#/definitions/file"
+            - $ref: "#/definitions/unsupported_file"
         uniqueItems: true
 
     file:
@@ -156,6 +158,18 @@ definitions:
                 $ref: "#/definitions/attributes_any"
 
         additionalProperties: false
+
+    # Metadata for legacy types of files which were previously supported
+    # and are no longer. This schema simply accepts entries for these
+    # files without validating any of the attributes other than the path.
+    unsupported_file:
+        type: object
+        properties:
+            relative_path:
+                type: string
+                pattern: "^[^/]+/(DOCKER|CHANNEL_DUMPS)/"
+        required:
+        - relative_path
 
     ami_release:
         # Release metadata for an AMI.

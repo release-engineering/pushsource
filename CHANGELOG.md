@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- References to unsupported `DOCKER`, `CHANNEL_DUMPS` content types in staging
+  metadata files will no longer cause a validation error.
 - The `id` field within erratum reference objects may now be provided as an integer
   (it will be converted to a string).
 - The `name` field within erratum pkglist objects is now optional, defaulting to

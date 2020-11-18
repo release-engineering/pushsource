@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- n/a
+
+## [2.2.0] - 2020-11-19
+
 ### Changed
 - On `ErratumPushItem`, the `from_` attribute is now available under the preferred
   name of `from`. Since this clashes with the python keyword of the same name, the
@@ -55,7 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/release-engineering/pushsource/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/release-engineering/pushsource/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/release-engineering/pushsource/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/release-engineering/pushsource/compare/v1.1.0...v1.2.0

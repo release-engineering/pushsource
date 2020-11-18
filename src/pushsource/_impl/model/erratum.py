@@ -12,6 +12,7 @@ from .conv import (
     optional,
     optional_str,
 )
+from .erratum_fixup import fixup_erratum_class
 
 
 @attr.s()
@@ -231,7 +232,12 @@ class ErratumPushItem(PushItem):
     associated with the advisory."""
 
     from_ = attr.ib(type=str, default=None, validator=optional_str)
-    """Contact email address for the owner of the advisory."""
+    """Contact email address for the owner of the advisory.
+
+    Note that the canonical name for this attribute is ``from``. As this clashes
+    with a Python keyword, in most contexts the attribute is also available as an
+    alias, ``from_``. Where possible, the canonical name ``from`` should be preferred.
+    """
 
     rights = attr.ib(type=str, default=None, validator=optional_str)
     """Copyright message."""
@@ -308,6 +314,7 @@ class ErratumPushItem(PushItem):
             "reboot_suggested",
             "rights",
             "title",
+            "from",
             "description",
             "version",
             "updated",
@@ -317,9 +324,6 @@ class ErratumPushItem(PushItem):
             "solution",
         ]:
             kwargs[field] = data[field]
-
-        # Workaround to avoid python keyword
-        kwargs["from_"] = data["from"]
 
         # If the metadata has a cdn_repo field, this sets the destinations for the
         # push item; used for text-only errata.
@@ -339,3 +343,7 @@ class ErratumPushItem(PushItem):
         )
 
         return cls(**kwargs)
+
+
+# Apply from vs from_ workarounds.
+fixup_erratum_class(ErratumPushItem)

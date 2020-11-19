@@ -38,7 +38,7 @@ def test_staged_simple_files():
             origin=staged_dir,
             build=None,
             signing_key=None,
-            description=None,
+            description="",
             version="1.2.3",
         ),
         FilePushItem(

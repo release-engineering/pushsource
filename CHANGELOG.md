@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Fixed
+
+- Fix too strict schema on staging metadata for FILES: "description" field is permitted
+  to be an empty string.
 
 ## [2.2.0] - 2020-11-19
 

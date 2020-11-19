@@ -46,6 +46,7 @@
     <span class="n">optional</span><span class="p">,</span>
     <span class="n">optional_str</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.erratum_fixup</span> <span class="kn">import</span> <span class="n">fixup_erratum_class</span>
 
 
 <div class="viewcode-block" id="ErratumReference"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumReference">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -265,7 +266,12 @@
 <span class="sd">    associated with the advisory.&quot;&quot;&quot;</span>
 
     <span class="n">from_</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Contact email address for the owner of the advisory.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Contact email address for the owner of the advisory.</span>
+
+<span class="sd">    Note that the canonical name for this attribute is ``from``. As this clashes</span>
+<span class="sd">    with a Python keyword, in most contexts the attribute is also available as an</span>
+<span class="sd">    alias, ``from_``. Where possible, the canonical name ``from`` should be preferred.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">rights</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Copyright message.&quot;&quot;&quot;</span>
@@ -342,6 +348,7 @@
             <span class="s2">&quot;reboot_suggested&quot;</span><span class="p">,</span>
             <span class="s2">&quot;rights&quot;</span><span class="p">,</span>
             <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;from&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">,</span>
             <span class="s2">&quot;version&quot;</span><span class="p">,</span>
             <span class="s2">&quot;updated&quot;</span><span class="p">,</span>
@@ -351,9 +358,6 @@
             <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
         <span class="p">]:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
-
-        <span class="c1"># Workaround to avoid python keyword</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;from_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">]</span>
 
         <span class="c1"># If the metadata has a cdn_repo field, this sets the destinations for the</span>
         <span class="c1"># push item; used for text-only errata.</span>
@@ -373,6 +377,10 @@
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="c1"># Apply from vs from_ workarounds.</span>
+<span class="n">fixup_erratum_class</span><span class="p">(</span><span class="n">ErratumPushItem</span><span class="p">)</span>
 </pre></div>
 
           </div>

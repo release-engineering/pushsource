@@ -112,7 +112,6 @@ definitions:
                 # Human-readable brief description of the file, e.g.
                 # appropriate for use in a file browsing UI
                 type: string
-                minLength: 1
 
         required:
         - description

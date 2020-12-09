@@ -112,6 +112,9 @@ class ErratumPackage(object):
     :meth:`filename` for the source RPM itself.
     """
 
+    reboot_suggested = attr.ib(type=bool, default=False, validator=instance_of(bool))
+    """True if rebooting host machine is recommended after installing this package."""
+
     md5sum = attr.ib(type=str, default=None, converter=md5str)
     """MD5 checksum of this RPM in hex string form, if available."""
 
@@ -180,6 +183,7 @@ class ErratumPackageCollection(object):
                     version=raw_pkg["version"],
                     release=raw_pkg["release"],
                     src=raw_pkg["src"],
+                    reboot_suggested=raw_pkg.get("reboot_suggested") or False,
                     md5sum=sums.get("md5"),
                     sha1sum=sums.get("sha1"),
                     sha256sum=sums.get("sha256"),
@@ -220,7 +224,14 @@ class ErratumPushItem(PushItem):
     """Number of times advisory has been revised and published (starting at '1')."""
 
     reboot_suggested = attr.ib(type=bool, default=False, validator=instance_of(bool))
-    """True if rebooting host machine is recommended after installing this advisory."""
+    """True if rebooting host machine is recommended after installing this advisory.
+
+    .. warning::
+        The intended usage of this field is unclear.
+
+        In practice, tools such as yum are instead consuming the ``reboot_suggested`` field
+        from :class:`ErratumPackage`.
+    """
 
     references = attr.ib(
         type=list, default=attr.Factory(frozenlist), converter=frozenlist

@@ -92,6 +92,9 @@ definitions:
                 type: string
             version:
                 type: string
+            # Note: this is also present at the top level of the erratum.
+            reboot_suggested:
+                type: boolean
             sum:
                 type: array
                 items:
@@ -119,6 +122,7 @@ properties:
         type: string
     pushcount:
         $ref: "#/definitions/intstr"
+    # Note: this is also present under each package (if there are any).
     reboot_suggested:
         type: boolean
     release:

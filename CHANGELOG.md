@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Fixed
+
+- Fix missing `reboot_suggested` field in erratum pkglist schema and model.
+  The field was formerly permitted in the top-level erratum schema only, which was
+  incorrect.
 
 ## [2.3.0] - 2020-11-23
 

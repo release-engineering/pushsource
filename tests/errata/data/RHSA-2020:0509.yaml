@@ -121,6 +121,7 @@ cdn_metadata:
       name: sudo-debugsource
       release: 4.el8_0.3
       src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+      reboot_suggested: true
       sum:
       - md5
       - d6da7e2e3d9efe050fef2e8d047682be

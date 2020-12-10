@@ -249,6 +249,7 @@ def test_staged_simple_errata():
                             version="1.8.25p1",
                             release="4.el8_0.3",
                             src="sudo-1.8.25p1-4.el8_0.3.src.rpm",
+                            reboot_suggested=True,
                             md5sum="d6da7e2e3d9efe050fef2e8d047682be",
                             sha1sum=None,
                             sha256sum="355cbb9dc348b17782cff57120391685d6a1f6884facc54fac4b7fb54abeffba",

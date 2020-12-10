@@ -86,6 +86,7 @@
           "epoch": "0",
           "arch": "ppc64le",
           "filename": "sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+          "reboot_suggested": false,
           "sum": [
             "md5",
             "e242826fb38f487502cdc1f1a06991d2",
@@ -116,6 +117,7 @@
           "epoch": "0",
           "arch": "ppc64le",
           "filename": "sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+          "reboot_suggested": true,
           "sum": [
             "md5",
             "d6da7e2e3d9efe050fef2e8d047682be",

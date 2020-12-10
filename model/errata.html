@@ -70,6 +70,12 @@ examples).</p>
 <dt id="pushsource.ErratumPushItem.reboot_suggested">
 <code class="sig-name descname">reboot_suggested</code><a class="headerlink" href="#pushsource.ErratumPushItem.reboot_suggested" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if rebooting host machine is recommended after installing this advisory.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The intended usage of this field is unclear.</p>
+<p>In practice, tools such as yum are instead consuming the <code class="docutils literal notranslate"><span class="pre">reboot_suggested</span></code> field
+from <a class="reference internal" href="#pushsource.ErratumPackage" title="pushsource.ErratumPackage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPackage</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -318,6 +324,12 @@ with, if any.</p>
 <code class="sig-name descname">src</code><a class="headerlink" href="#pushsource.ErratumPackage.src" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filename of the source RPM from which this RPM was built; equal to
 <a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a> for the source RPM itself.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pushsource.ErratumPackage.reboot_suggested">
+<code class="sig-name descname">reboot_suggested</code><a class="headerlink" href="#pushsource.ErratumPackage.reboot_suggested" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if rebooting host machine is recommended after installing this package.</p>
 </dd></dl>
 
 <dl class="py attribute">

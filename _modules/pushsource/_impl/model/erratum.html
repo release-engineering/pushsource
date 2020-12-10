@@ -146,6 +146,9 @@
 <span class="sd">    :meth:`filename` for the source RPM itself.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">reboot_suggested</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+    <span class="sd">&quot;&quot;&quot;True if rebooting host machine is recommended after installing this package.&quot;&quot;&quot;</span>
+
     <span class="n">md5sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">md5str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;MD5 checksum of this RPM in hex string form, if available.&quot;&quot;&quot;</span>
 
@@ -214,6 +217,7 @@
                     <span class="n">version</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
                     <span class="n">release</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
                     <span class="n">src</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
+                    <span class="n">reboot_suggested</span><span class="o">=</span><span class="n">raw_pkg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reboot_suggested&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="n">md5sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span>
                     <span class="n">sha1sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">),</span>
                     <span class="n">sha256sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
@@ -254,7 +258,14 @@
     <span class="sd">&quot;&quot;&quot;Number of times advisory has been revised and published (starting at &#39;1&#39;).&quot;&quot;&quot;</span>
 
     <span class="n">reboot_suggested</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
-    <span class="sd">&quot;&quot;&quot;True if rebooting host machine is recommended after installing this advisory.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;True if rebooting host machine is recommended after installing this advisory.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        The intended usage of this field is unclear.</span>
+
+<span class="sd">        In practice, tools such as yum are instead consuming the ``reboot_suggested`` field</span>
+<span class="sd">        from :class:`ErratumPackage`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">references</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>

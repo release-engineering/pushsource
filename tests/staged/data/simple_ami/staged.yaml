@@ -23,3 +23,7 @@ payload:
       type: access
       virtualization: hvm
       volume: gp2
+      billing_code:
+        name: FakeBcName
+        code: fake-bc-code
+

@@ -42,6 +42,17 @@ class AmiRelease(object):
 
 
 @attr.s()
+class AmiBillingCode(object):
+    """Billing code associated with an AMI."""
+
+    name = attr.ib(type=str, default=None, validator=instance_of_str)
+    """Billing code name, for example: Hourly2"""
+
+    code = attr.ib(type=str, default=None, validator=instance_of_str)
+    """Code of given billing code, for example: bp-1234abcd"""
+
+
+@attr.s()
 class AmiPushItem(PushItem):
     """A :class:`~pushsource.PushItem` representing an Amazon Machine Image (or "AMI").
 
@@ -83,3 +94,7 @@ class AmiPushItem(PushItem):
         type=bool, default=None, validator=optional(instance_of(bool))
     )
     """``True`` if the image supports Elastic Network Adapter (ENA)."""
+    billing_code = attr.ib(
+        type=AmiBillingCode, default=None, validator=instance_of(AmiBillingCode)
+    )
+    """Billing code (:class`AmiBillingCode`) associated with this image."""

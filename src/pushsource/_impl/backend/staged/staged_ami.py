@@ -1,7 +1,7 @@
 import os
 import logging
 
-from ...model import AmiRelease, AmiPushItem
+from ...model import AmiRelease, AmiPushItem, AmiBillingCode
 from .staged_base import StagedBaseMixin, handles_type
 
 LOG = logging.getLogger("pushsource")
@@ -33,6 +33,17 @@ class StagedAmiMixin(StagedBaseMixin):
 
         release = AmiRelease(**release_kwargs)
 
+        billing_code_md = attributes.get("billing_code")
+
+        billing_code_attrs = ["name", "code"]
+        billing_code_kwargs = {}
+
+        for key in billing_code_attrs:
+            if key in billing_code_md:
+                billing_code_kwargs[key] = billing_code_md[key]
+
+        billing_code = AmiBillingCode(**billing_code_kwargs)
+
         image_attrs = [
             "type",
             "region",
@@ -43,7 +54,7 @@ class StagedAmiMixin(StagedBaseMixin):
             "sriov_net_support",
             "ena_support",
         ]
-        image_kwargs = {"release": release}
+        image_kwargs = {"release": release, "billing_code": billing_code}
         for key in image_attrs:
             if key in attributes:
                 image_kwargs[key] = attributes[key]

@@ -1,6 +1,6 @@
 import os
 
-from pushsource import Source, AmiPushItem, AmiRelease
+from pushsource import Source, AmiPushItem, AmiRelease, AmiBillingCode
 
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
@@ -11,7 +11,6 @@ def test_staged_simple_ami():
     source = Source.get("staged:" + staged_dir)
 
     files = list(source)
-
     # It should load all the expected files with fields filled in by metadata
     assert files == [
         AmiPushItem(
@@ -43,5 +42,6 @@ def test_staged_simple_ami():
             description="A sample image for testing",
             sriov_net_support="simple",
             ena_support=True,
+            billing_code=AmiBillingCode(name="FakeBcName", code="fake-bc-code"),
         )
     ]

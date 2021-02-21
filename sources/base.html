@@ -12,7 +12,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Source: staged" href="staged.html" />
@@ -38,14 +37,14 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">Source</span></code> class is the base from which all pushsource backends derive.</p>
 <dl class="py class">
 <dt id="pushsource.Source">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">Source</code><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.Source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pushsource.</span></code><code class="sig-name descname"><span class="pre">Source</span></code><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source" title="Permalink to this definition">¶</a></dt>
 <dd><p>A source of push items.</p>
 <p>This base class defines the interface for all pushsource backends.
 Instances of a specific backend can be obtained using
 the <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.</p>
 <dl class="py method">
 <dt id="pushsource.Source.get">
-<em class="property">classmethod </em><code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_url</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.Source.get" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a push source from the given URL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -72,7 +71,7 @@ the backend.</p></li>
 
 <dl class="py method">
 <dt id="pushsource.Source.get_partial">
-<em class="property">classmethod </em><code class="sig-name descname">get_partial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_url</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get_partial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.Source.get_partial" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_partial</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get_partial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a push source constructor from the given URL and arguments.</p>
 <p>This method returns a constructor for a push source (rather than a push source
 instance directly) so that additional arguments may be provided later.</p>
@@ -104,7 +103,7 @@ and returns a <a class="reference internal" href="#pushsource.Source" title="pus
 
 <dl class="py method">
 <dt id="pushsource.Source.register_backend">
-<em class="property">classmethod </em><code class="sig-name descname">register_backend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">factory</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.register_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.Source.register_backend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">register_backend</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.register_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a new pushsource backend.</p>
 <p>This method allows registering additional backends beyond those
 shipped with the pushsource library. See <a class="reference internal" href="../userguide.html#implementing"><span class="std std-ref">Implementing a backend</span></a> for
@@ -132,7 +131,7 @@ the <a class="reference internal" href="#pushsource.Source" title="pushsource.So
 
 <dl class="py class">
 <dt id="pushsource.SourceUrlError">
-<em class="property">class </em><code class="sig-prename descclassname">pushsource.</code><code class="sig-name descname">SourceUrlError</code><a class="reference internal" href="../_modules/pushsource/_impl/source.html#SourceUrlError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushsource.SourceUrlError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pushsource.</span></code><code class="sig-name descname"><span class="pre">SourceUrlError</span></code><a class="reference internal" href="../_modules/pushsource/_impl/source.html#SourceUrlError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.SourceUrlError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Errors of this type are raised when an invalid URL is provided
 to <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> and related methods.</p>
 </dd></dl>
@@ -225,7 +224,7 @@ to <a class="reference internal" href="#pushsource.Source.get" title="pushsource
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

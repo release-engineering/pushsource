@@ -42,14 +42,14 @@ class AmiRelease(object):
 
 
 @attr.s()
-class AmiBillingCode(object):
-    """Billing code associated with an AMI."""
+class AmiBillingCodes(object):
+    """Billing codes associated with an AMI."""
 
     name = attr.ib(type=str, default=None, validator=instance_of_str)
-    """Billing code name, for example: Hourly2"""
+    """Billing codes name, for example: Hourly2, arbitrary string for making image name unique"""
 
-    code = attr.ib(type=str, default=None, validator=instance_of_str)
-    """Code of given billing code, for example: bp-1234abcd"""
+    codes = attr.ib(type=list, default=None, validator=optional(instance_of(list)))
+    """List of billing codes, for example: ['bp-1234abcd', 'bp-5678efgh']"""
 
 
 @attr.s()
@@ -94,7 +94,9 @@ class AmiPushItem(PushItem):
         type=bool, default=None, validator=optional(instance_of(bool))
     )
     """``True`` if the image supports Elastic Network Adapter (ENA)."""
-    billing_code = attr.ib(
-        type=AmiBillingCode, default=None, validator=instance_of(AmiBillingCode)
+    billing_codes = attr.ib(
+        type=AmiBillingCodes,
+        default=None,
+        validator=optional(instance_of(AmiBillingCodes)),
     )
-    """Billing code (:class`AmiBillingCode`) associated with this image."""
+    """Billing codes (:class`AmiBillingCodes`) associated with this image."""

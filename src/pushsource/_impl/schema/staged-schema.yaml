@@ -94,8 +94,8 @@ definitions:
                 - boolean
                 - "null"
 
-            billing_code:
-                $ref: "#/definitions/ami_billing_code"
+            billing_codes:
+                $ref: "#/definitions/ami_billing_codes"
 
 
         required:
@@ -216,18 +216,19 @@ definitions:
         - "null"
         minLength: 1
 
-    ami_billing_code:
-        # Billing code for an AMI
+    ami_billing_codes:
+        # Billing codes for an AMI
         type:
         - object
+        - "null"
         properties:
             name:
                 type: string
-            code:
-                type: string
+            codes:
+                type: array
         required:
         - name
-        - code
+        - codes
 
 ###############################################################################
 #  Main schema

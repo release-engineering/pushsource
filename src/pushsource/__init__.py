@@ -8,7 +8,7 @@ from pushsource._impl.model import (
     RpmPushItem,
     AmiPushItem,
     AmiRelease,
-    AmiBillingCode,
+    AmiBillingCodes,
     ErratumPushItem,
     ErratumReference,
     ErratumModule,

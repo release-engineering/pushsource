@@ -226,6 +226,8 @@ definitions:
                 type: string
             codes:
                 type: array
+                items:
+                    type: string
         required:
         - name
         - codes

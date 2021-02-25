@@ -1,5 +1,7 @@
 import datetime
 
+from frozenlist2 import frozenlist
+
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import datestr, instance_of_str, instance_of, optional_str, optional
@@ -46,10 +48,10 @@ class AmiBillingCodes(object):
     """Billing codes associated with an AMI."""
 
     name = attr.ib(type=str, default=None, validator=instance_of_str)
-    """Billing codes name, for example: Hourly2, arbitrary string for making image name unique"""
+    """Billing codes name, for example: Hourly2, arbitrary string for making image name unique."""
 
-    codes = attr.ib(type=list, default=None, validator=optional(instance_of(list)))
-    """List of billing codes, for example: ['bp-1234abcd', 'bp-5678efgh']"""
+    codes = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    """List of billing codes, for example: ['bp-1234abcd', 'bp-5678efgh']."""
 
 
 @attr.s()

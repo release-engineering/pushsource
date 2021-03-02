@@ -94,6 +94,10 @@ definitions:
                 - boolean
                 - "null"
 
+            billing_codes:
+                $ref: "#/definitions/ami_billing_codes"
+
+
         required:
         - release
         - region
@@ -211,6 +215,22 @@ definitions:
         - string
         - "null"
         minLength: 1
+
+    ami_billing_codes:
+        # Billing codes for an AMI
+        type:
+        - object
+        - "null"
+        properties:
+            name:
+                type: string
+            codes:
+                type: array
+                items:
+                    type: string
+        required:
+        - name
+        - codes
 
 ###############################################################################
 #  Main schema

@@ -81,10 +81,10 @@
     <span class="sd">&quot;&quot;&quot;Billing codes associated with an AMI.&quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Billing codes name, for example: Hourly2, arbitrary string for making image name unique.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Billing codes name, for example Hourly2, arbitrary string for making image name unique.&quot;&quot;&quot;</span>
 
     <span class="n">codes</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;List of billing codes, for example: [&#39;bp-1234abcd&#39;, &#39;bp-5678efgh&#39;].&quot;&quot;&quot;</span></div>
+    <span class="sd">&quot;&quot;&quot;List of billing codes, for example [&#39;bp-1234abcd&#39;, &#39;bp-5678efgh&#39;].&quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="AmiPushItem"><a class="viewcode-back" href="../../../../model/ami.html#pushsource.AmiPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>

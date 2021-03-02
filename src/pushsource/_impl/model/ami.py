@@ -1,5 +1,7 @@
 import datetime
 
+from frozenlist2 import frozenlist
+
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import datestr, instance_of_str, instance_of, optional_str, optional
@@ -39,6 +41,17 @@ class AmiRelease(object):
 
     type = attr.ib(type=str, default=None, validator=optional_str)
     """Release type, typically "ga" or "beta"."""
+
+
+@attr.s()
+class AmiBillingCodes(object):
+    """Billing codes associated with an AMI."""
+
+    name = attr.ib(type=str, default=None, validator=instance_of_str)
+    """Billing codes name, for example: Hourly2, arbitrary string for making image name unique."""
+
+    codes = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    """List of billing codes, for example: ['bp-1234abcd', 'bp-5678efgh']."""
 
 
 @attr.s()
@@ -83,3 +96,9 @@ class AmiPushItem(PushItem):
         type=bool, default=None, validator=optional(instance_of(bool))
     )
     """``True`` if the image supports Elastic Network Adapter (ENA)."""
+    billing_codes = attr.ib(
+        type=AmiBillingCodes,
+        default=None,
+        validator=optional(instance_of(AmiBillingCodes)),
+    )
+    """Billing codes (:class`AmiBillingCodes`) associated with this image."""

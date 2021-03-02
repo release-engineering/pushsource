@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2021-03-02
+
 ### Added
 
 - Added optional field `billing_codes` to the AMI staged push item schema and model.
@@ -76,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/release-engineering/pushsource/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/release-engineering/pushsource/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/release-engineering/pushsource/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/release-engineering/pushsource/compare/v2.1.0...v2.2.0

@@ -101,4 +101,4 @@ class AmiPushItem(PushItem):
         default=None,
         validator=optional(instance_of(AmiBillingCodes)),
     )
-    """Billing codes (:class`AmiBillingCodes`) associated with this image."""
+    """Billing codes (:class:`AmiBillingCodes`) associated with this image."""

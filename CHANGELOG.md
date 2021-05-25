@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix keyword arguments leaking between subsequent calls to a source prepared using
+  `Source.get_partial`.
+
 ## [2.5.0] - 2021-03-02
 
 ### Added

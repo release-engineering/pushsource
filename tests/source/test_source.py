@@ -48,6 +48,35 @@ def test_args_from_url():
     )
 
 
+def test_args_via_partial():
+    """Arguments are passed into source via get_partial as expected."""
+
+    calls = []
+
+    def gather_args(*args, **kwargs):
+        calls.append((args, kwargs))
+        return []
+
+    Source.register_backend("gather", gather_args)
+
+    # Let's make a partial bound to 'a' & 'b' by default
+    gather = Source.get_partial("gather:a=1", b=2)
+
+    # Call it a few different ways:
+    gather()
+    gather(c=3)
+    gather(d=4)
+
+    # It should have been called with expected args:
+    # - every call had 'a' & 'b' since they were bound in get_partial
+    # - 'b' and 'c' only appear when explicitly passed
+    # - also note 'a' is a string since it came via URL
+    assert len(calls) == 3
+    assert calls[0] == ((), {"a": "1", "b": 2})
+    assert calls[1] == ((), {"a": "1", "b": 2, "c": 3})
+    assert calls[2] == ((), {"a": "1", "b": 2, "d": 4})
+
+
 def test_bad_url_no_scheme():
     with raises(SourceUrlError) as ex_info:
         Source.get("no-scheme")

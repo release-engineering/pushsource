@@ -156,8 +156,9 @@ class Source(object):
 
         @functools.wraps(klass)
         def partial_source(*inner_args, **inner_kwargs):
-            url_kwargs.update(inner_kwargs)
-            return klass(*inner_args, **url_kwargs)
+            kwargs = url_kwargs.copy()
+            kwargs.update(inner_kwargs)
+            return klass(*inner_args, **kwargs)
 
         return partial_source
 

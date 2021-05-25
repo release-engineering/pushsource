@@ -248,4 +248,4 @@ class ErrataSource(Source):
                 yield pushitem
 
 
-Source.register_backend("errata", ErrataSource)
+Source._register_backend_builtin("errata", ErrataSource)

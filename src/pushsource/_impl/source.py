@@ -34,6 +34,7 @@ class Source(object):
     """
 
     _BACKENDS = {}
+    _BACKENDS_BUILTIN = {}
 
     def __iter__(self):
         """Iterate over the push items contained within this source.
@@ -191,3 +192,24 @@ class Source(object):
             raise TypeError("expected callable, got: %s" % repr(factory))
 
         cls._BACKENDS[name] = factory
+
+    @classmethod
+    def _register_backend_builtin(cls, name, factory):
+        # Private equivalent of register_backend which also flags the
+        # backend as built-in, i.e. it will be restored on a call to reset.
+        cls.register_backend(name, factory)
+        cls._BACKENDS_BUILTIN[name] = factory
+
+    @classmethod
+    def reset(cls):
+        """Reset the library to the default configuration.
+
+        This method will undo the effect of any prior calls to
+        :meth:`~pushsource.Source.register_backend`, restoring only the
+        default backends provided by the pushsource library.
+
+        This may be used from within tests to ensure a known state.
+
+        .. versionadded:: 2.6.0
+        """
+        cls._BACKENDS = cls._BACKENDS_BUILTIN.copy()

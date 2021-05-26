@@ -174,7 +174,10 @@
     <span class="n">packages</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
     <span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;List of packages (:class:`ErratumPackage`) within this collection.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;List of packages within this collection.</span>
+
+<span class="sd">    :type: list[ErratumPackage]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">short</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;An alternative name for this collection. In practice, this field</span>
@@ -269,11 +272,16 @@
     <span class="n">references</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
     <span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A list of references (:class:`ErratumReference`) associated with the advisory.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A list of references associated with the advisory.</span>
+
+<span class="sd">    :type: list[ErratumReference]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">pkglist</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A list of package collections (:class:`ErratumPackageCollection`)</span>
-<span class="sd">    associated with the advisory.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A list of package collections associated with the advisory.</span>
+
+<span class="sd">    :type: list[ErratumPackageCollection]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">from_</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Contact email address for the owner of the advisory.</span>
@@ -281,6 +289,8 @@
 <span class="sd">    Note that the canonical name for this attribute is ``from``. As this clashes</span>
 <span class="sd">    with a Python keyword, in most contexts the attribute is also available as an</span>
 <span class="sd">    alias, ``from_``. Where possible, the canonical name ``from`` should be preferred.</span>
+
+<span class="sd">    :type: str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">rights</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
@@ -327,6 +337,8 @@
 
 <span class="sd">    For example, &quot;docker&quot; may be found in this list if the advisory deals</span>
 <span class="sd">    with container images.</span>
+
+<span class="sd">    :type: list[str]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

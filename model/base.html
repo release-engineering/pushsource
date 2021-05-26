@@ -58,6 +58,11 @@ to end-users.</p>
 optionally including leading path components.</p>
 <p>Container image manifests may provide their digest as the name.</p>
 <p>In all cases, a non-empty name must be provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -68,6 +73,11 @@ optionally including leading path components.</p>
 a state of <code class="docutils literal notranslate"><span class="pre">PENDING</span></code>, with the caller expected to later evolve the state.</p>
 <p>In rare cases, push sources may produce push items with other states, such
 as <code class="docutils literal notranslate"><span class="pre">INVALIDFILE</span></code> to indicate that the source located invalid content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -76,6 +86,11 @@ as <code class="docutils literal notranslate"><span class="pre">INVALIDFILE</spa
 <dd><p>The source of this push item.</p>
 <p>If the push item is a file, this will be the full path to the file.
 If the push item does not represent a file, this will generally be omitted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -88,6 +103,11 @@ If the push item does not represent a file, this will generally be omitted.</p>
 <li><p>a path to a directory (for items pushed using rsync)</p></li>
 <li><p>a Pulp repository name (for items pushed using Pulp)</p></li>
 </ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -98,6 +118,11 @@ If the push item does not represent a file, this will generally be omitted.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -108,6 +133,11 @@ If the push item does not represent a file, this will generally be omitted.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -117,12 +147,22 @@ If the push item does not represent a file, this will generally be omitted.</p>
 <p>The “origin” field is expected to record some info on how this push item
 was discovered. The exact semantics depend on the specific source backend
 in use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.PushItem.build">
 <span class="sig-name descname"><span class="pre">build</span></span><a class="headerlink" href="#pushsource.PushItem.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>NVR for the koji build from which this push item was extracted, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -132,6 +172,11 @@ in use.</p>
 signing key used.</p>
 <p>Generally a short key ID such as “F21541EB” is used, though the library
 doesn’t enforce this.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

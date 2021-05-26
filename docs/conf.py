@@ -17,6 +17,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
+# bundled extensions
+sys.path.append(os.path.abspath("ext"))
+
 
 # -- Project information -----------------------------------------------------
 
@@ -45,6 +48,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
     "sphinx.ext.viewcode",
+    # own extensions in 'ext' dir
+    "attr_types",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

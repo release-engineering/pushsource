@@ -58,6 +58,8 @@ class PushItem(object):
 
     * a path to a directory (for items pushed using rsync)
     * a Pulp repository name (for items pushed using Pulp)
+
+    :type: list[str]
     """
 
     md5sum = attr.ib(type=str, default=None, converter=md5str)

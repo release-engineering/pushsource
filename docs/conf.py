@@ -131,7 +131,7 @@ html_sidebars = {
 
 
 # -- Extension configuration -------------------------------------------------
-autoclass_content = "both"
+autoclass_content = "class"
 autodoc_member_order = "bysource"
 autodoc_inherit_docstrings = False
 intersphinx_mapping = {

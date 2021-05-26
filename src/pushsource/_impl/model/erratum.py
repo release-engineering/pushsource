@@ -141,7 +141,10 @@ class ErratumPackageCollection(object):
     packages = attr.ib(
         type=list, default=attr.Factory(frozenlist), converter=frozenlist
     )
-    """List of packages (:class:`ErratumPackage`) within this collection."""
+    """List of packages within this collection.
+
+    :type: list[ErratumPackage]
+    """
 
     short = attr.ib(type=str, default="", validator=instance_of_str)
     """An alternative name for this collection. In practice, this field
@@ -236,11 +239,16 @@ class ErratumPushItem(PushItem):
     references = attr.ib(
         type=list, default=attr.Factory(frozenlist), converter=frozenlist
     )
-    """A list of references (:class:`ErratumReference`) associated with the advisory."""
+    """A list of references associated with the advisory.
+
+    :type: list[ErratumReference]
+    """
 
     pkglist = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
-    """A list of package collections (:class:`ErratumPackageCollection`)
-    associated with the advisory."""
+    """A list of package collections associated with the advisory.
+
+    :type: list[ErratumPackageCollection]
+    """
 
     from_ = attr.ib(type=str, default=None, validator=optional_str)
     """Contact email address for the owner of the advisory.
@@ -248,6 +256,8 @@ class ErratumPushItem(PushItem):
     Note that the canonical name for this attribute is ``from``. As this clashes
     with a Python keyword, in most contexts the attribute is also available as an
     alias, ``from_``. Where possible, the canonical name ``from`` should be preferred.
+
+    :type: str
     """
 
     rights = attr.ib(type=str, default=None, validator=optional_str)
@@ -294,6 +304,8 @@ class ErratumPushItem(PushItem):
 
     For example, "docker" may be found in this list if the advisory deals
     with container images.
+
+    :type: list[str]
     """
 
     def __str__(self):

@@ -51,7 +51,10 @@ class AmiBillingCodes(object):
     """Billing codes name, for example Hourly2, arbitrary string for making image name unique."""
 
     codes = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
-    """List of billing codes, for example ['bp-1234abcd', 'bp-5678efgh']."""
+    """List of billing codes, for example ['bp-1234abcd', 'bp-5678efgh'].
+
+    :type: list[str]
+    """
 
 
 @attr.s()
@@ -69,7 +72,7 @@ class AmiPushItem(PushItem):
     release = attr.ib(
         type=AmiRelease, default=None, validator=optional(instance_of(AmiRelease))
     )
-    """Release metadata (:class:`AmiRelease`) associated with this image."""
+    """Release metadata associated with this image."""
 
     type = attr.ib(type=str, default=None, validator=optional_str)
     """Billing type associated with the image, e.g. "hourly" or "access"."""
@@ -101,4 +104,4 @@ class AmiPushItem(PushItem):
         default=None,
         validator=optional(instance_of(AmiBillingCodes)),
     )
-    """Billing codes (:class:`AmiBillingCodes`) associated with this image."""
+    """Billing codes associated with this image."""

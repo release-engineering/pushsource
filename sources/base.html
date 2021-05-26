@@ -135,6 +135,19 @@ the <a class="reference internal" href="#pushsource.Source" title="pushsource.So
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.reset">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the library to the default configuration.</p>
+<p>This method will undo the effect of any prior calls to
+<a class="reference internal" href="#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a>, restoring only the
+default backends provided by the pushsource library.</p>
+<p>This may be used from within tests to ensure a known state.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.0.</span></p>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

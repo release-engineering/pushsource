@@ -84,3 +84,4 @@ Python API reference
 
 .. autoclass:: pushsource.KojiSource
    :members:
+   :special-members: __init__

@@ -191,3 +191,4 @@ Python API reference
 
 .. autoclass:: pushsource.StagedSource
    :members:
+   :special-members: __init__

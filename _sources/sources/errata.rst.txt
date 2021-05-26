@@ -66,3 +66,4 @@ Python API reference
 
 .. autoclass:: pushsource.ErrataSource
    :members:
+   :special-members: __init__

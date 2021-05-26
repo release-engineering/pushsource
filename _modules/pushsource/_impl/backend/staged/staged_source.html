@@ -83,7 +83,7 @@
     <span class="c1"># types; separate files are expected to register themselves here.</span>
     <span class="n">_FILE_TYPES</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">):</span>
+<div class="viewcode-block" id="StagedSource.__init__"><a class="viewcode-back" href="../../../../../sources/staged.html#pushsource.StagedSource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
@@ -110,7 +110,7 @@
         <span class="c1"># NFS already does a lot of its own retries.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_timeout</span><span class="p">(</span>
             <span class="n">timeout</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Possible improvement would be to handle the separate dirs concurrently.</span>

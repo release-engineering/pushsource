@@ -44,6 +44,13 @@
 Instances of a specific backend can be obtained using
 the <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over the push items contained within this source.</p>
+<p>Yields a series of <a class="reference internal" href="../model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> instances.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.get">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a push source from the given URL.</p>

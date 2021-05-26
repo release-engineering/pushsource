@@ -129,7 +129,7 @@
 
     <span class="n">_BATCH_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KOJI_BATCH_SIZE&quot;</span><span class="p">,</span> <span class="s2">&quot;100&quot;</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="KojiSource.__init__"><a class="viewcode-back" href="../../../../sources/koji.html#pushsource.KojiSource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">url</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -202,7 +202,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">executor</span> <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_koji_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

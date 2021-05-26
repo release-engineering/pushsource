@@ -386,4 +386,4 @@ class KojiSource(Source):
                 yield pushitem
 
 
-Source.register_backend("koji", KojiSource)
+Source._register_backend_builtin("koji", KojiSource)

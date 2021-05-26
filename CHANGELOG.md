@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `Source.reset` to restore default state of library, intended
+  for testing.
+
 ### Fixed
 
 - Fix keyword arguments leaking between subsequent calls to a source prepared using

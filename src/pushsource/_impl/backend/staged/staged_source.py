@@ -162,4 +162,4 @@ class StagedSource(
                 yield pushitem
 
 
-Source.register_backend("staged", StagedSource)
+Source._register_backend_builtin("staged", StagedSource)

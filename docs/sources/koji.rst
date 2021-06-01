@@ -54,6 +54,12 @@ text files as archives (shown as "Module Archives" in the Koji UI).
 
 ``koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102``
 
+If you want to process only a subset of the modules on the build
+(i.e. select only certain arches), you may use ``module_filter_filename`` to select
+the desired modulemd files, as in example:
+
+``koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&module_filter_filename=modulemd.x86_64.txt,modulemd.s390x.txt``
+
 
 Setting the destination for push items
 ......................................

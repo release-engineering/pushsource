@@ -152,16 +152,13 @@ class ErrataSource(Source):
         modules = build_info.get("modules") or {}
 
         # Get a koji source which will yield all modules from the build
-        koji_source = self._koji_source(module_build=[build_nvr])
+        koji_source = self._koji_source(
+            module_build=[build_nvr], module_filter_filename=list(modules.keys())
+        )
 
         out = []
 
         for push_item in koji_source:
-            # The koji source yielded *all* modulemds on the build.
-            # We filter to only those requested by Errata Tool.
-            if push_item.name not in modules:
-                continue
-
             dest = modules[push_item.name]
 
             # Fill in more push item details based on the info provided by ET.

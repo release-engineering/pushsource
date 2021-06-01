@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `module_filter_filename` parameter to koji source, to select only a subset
+  of modulemd files from a build (e.g. limit to certain arches).
+
 ## [2.6.0] - 2021-05-27
 
 ### Added

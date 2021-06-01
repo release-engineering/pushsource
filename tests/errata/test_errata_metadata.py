@@ -150,3 +150,28 @@ def test_errata_typical_metadata(fake_errata_tool):
             ),
         ],
     )
+
+
+def test_errata_url_with_path(fake_errata_tool):
+    """Test fetching an advisory when the given ET URL has a path component."""
+
+    source = Source.get(
+        "errata:https://errata.example.com/foo/bar?errata=RHBA-2020:0518"
+    )
+
+    # It should not have tried to access ET yet (lazy fetching)
+    assert not fake_errata_tool.last_url
+
+    # Load all items
+    items = list(source)
+
+    # It should have queried the expected XML-RPC endpoint, which was
+    # appended to the URL retaining our path component.
+    # Note that our https was replaced with http, this is expected!
+    assert (
+        fake_errata_tool.last_url
+        == "http://errata.example.com/foo/bar/errata/errata_service"
+    )
+
+    # It should have got some data
+    assert items

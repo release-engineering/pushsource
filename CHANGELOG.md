@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix usage of `errata` source when the an Errata Tool URL includes a path
+  component.
+
 ## [2.6.0] - 2021-05-27
 
 ### Added

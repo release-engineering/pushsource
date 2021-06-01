@@ -106,6 +106,7 @@ def int2str(value):
     return value
 
 
+in_ = attr.validators.in_
 instance_of = attr.validators.instance_of
 instance_of_str = instance_of(six.string_types)
 optional = attr.validators.optional

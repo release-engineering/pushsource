@@ -3,6 +3,7 @@ from frozenlist2 import frozenlist
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import (
+    in_,
     int2str,
     md5str,
     sha1str,
@@ -201,6 +202,15 @@ class ErratumPackageCollection(object):
         )
 
 
+def errata_type_converter(value):
+    # For 'type' field, ancient versions of Errata Tool produced values
+    # like RHBA, RHEA, RHSA, so these can be found in the wild; but all
+    # other sources (including our own model) prefer strings like "bugfix".
+    # We'll convert up from legacy values automatically.
+    typemap = {"RHBA": "bugfix", "RHEA": "enhancement", "RHSA": "security"}
+    return typemap.get(value, value)
+
+
 @attr.s()
 class ErratumPushItem(PushItem):
     """A :class:`~pushsource.PushItem` representing a single erratum (also known as "advisory").
@@ -210,7 +220,12 @@ class ErratumPushItem(PushItem):
     examples).
     """
 
-    type = attr.ib(type=str, default="bugfix", validator=instance_of_str)
+    type = attr.ib(
+        type=str,
+        default="bugfix",
+        validator=in_(["bugfix", "security", "enhancement"]),
+        converter=errata_type_converter,
+    )
     """'bugfix', 'security' or 'enhancement'."""
 
     release = attr.ib(

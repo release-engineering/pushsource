@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix usage of `errata` source when the an Errata Tool URL includes a path
   component.
 
+### Changed
+- On `ErratumPushItem`, the `type` attribute will now be automatically converted
+  from legacy values found in the wild such as "RHBA", "RHSA". Values are
+  now also validated.
+
 ## [2.6.0] - 2021-05-27
 
 ### Added

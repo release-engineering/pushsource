@@ -1,17 +1,6 @@
-from pytest import raises, fixture
-from mock import patch
-
-from .fake_errata_tool import FakeErrataToolController
+from pytest import raises
 
 from pushsource import Source, ErratumPushItem, ErratumReference, RpmPushItem
-
-
-@fixture
-def fake_errata_tool():
-    controller = FakeErrataToolController()
-    with patch("pushsource._impl.backend.errata_source.ServerProxy") as mock_proxy:
-        mock_proxy.side_effect = controller.proxy
-        yield controller
 
 
 def test_errata_files_needs_koji_url(fake_errata_tool):

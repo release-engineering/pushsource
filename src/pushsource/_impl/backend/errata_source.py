@@ -86,7 +86,7 @@ class ErrataSource(Source):
         # scheme we know is actually needed.
         parsed = parse.urlparse(self._url)
         base = "http://" + parsed.netloc
-        return os.path.join(base, parsed.path, "errata/errata_service")
+        return os.path.join(base + parsed.path, "errata/errata_service")
 
     def _koji_source(self, **kwargs):
         if not self._koji_source_url:

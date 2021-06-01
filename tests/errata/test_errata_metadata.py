@@ -1,17 +1,4 @@
-from pytest import raises, fixture
-from mock import patch
-
-from .fake_errata_tool import FakeErrataToolController
-
 from pushsource import Source, ErratumPushItem, ErratumReference
-
-
-@fixture
-def fake_errata_tool():
-    controller = FakeErrataToolController()
-    with patch("pushsource._impl.backend.errata_source.ServerProxy") as mock_proxy:
-        mock_proxy.side_effect = controller.proxy
-        yield controller
 
 
 def test_errata_typical_metadata(fake_errata_tool):

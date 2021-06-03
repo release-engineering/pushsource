@@ -36,6 +36,7 @@
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">in_</span><span class="p">,</span>
     <span class="n">int2str</span><span class="p">,</span>
     <span class="n">md5str</span><span class="p">,</span>
     <span class="n">sha1str</span><span class="p">,</span>
@@ -234,6 +235,15 @@
         <span class="p">)</span></div>
 
 
+<span class="k">def</span> <span class="nf">errata_type_converter</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="c1"># For &#39;type&#39; field, ancient versions of Errata Tool produced values</span>
+    <span class="c1"># like RHBA, RHEA, RHSA, so these can be found in the wild; but all</span>
+    <span class="c1"># other sources (including our own model) prefer strings like &quot;bugfix&quot;.</span>
+    <span class="c1"># We&#39;ll convert up from legacy values automatically.</span>
+    <span class="n">typemap</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RHBA&quot;</span><span class="p">:</span> <span class="s2">&quot;bugfix&quot;</span><span class="p">,</span> <span class="s2">&quot;RHEA&quot;</span><span class="p">:</span> <span class="s2">&quot;enhancement&quot;</span><span class="p">,</span> <span class="s2">&quot;RHSA&quot;</span><span class="p">:</span> <span class="s2">&quot;security&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">typemap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="ErratumPushItem"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a single erratum (also known as &quot;advisory&quot;).</span>
@@ -243,7 +253,12 @@
 <span class="sd">    examples).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;bugfix&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;bugfix&quot;</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">in_</span><span class="p">([</span><span class="s2">&quot;bugfix&quot;</span><span class="p">,</span> <span class="s2">&quot;security&quot;</span><span class="p">,</span> <span class="s2">&quot;enhancement&quot;</span><span class="p">]),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">errata_type_converter</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;&#39;bugfix&#39;, &#39;security&#39; or &#39;enhancement&#39;.&quot;&quot;&quot;</span>
 
     <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>

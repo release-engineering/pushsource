@@ -102,6 +102,7 @@ class KojiSource(Source):
         dest=None,
         rpm=None,
         module_build=None,
+        module_filter_filename=None,
         signing_key=None,
         basedir=None,
         threads=4,
@@ -125,8 +126,21 @@ class KojiSource(Source):
 
             module_build (list[str, int])
                 Build identifier(s). Can be koji IDs (integers) or build NVRs.
-                The source will yield all modulemd files belonging to these
-                build(s).
+                The source will yield modulemd files belonging to these
+                build(s), filtered by ``module_filter_filename`` (if given).
+
+            module_filter_filename (list[str])
+                Filename(s) of modulemd archives to include in output.
+
+                When ``module_build`` is given, modulemd files are located as
+                koji archives with names of the form ``modulemd.<arch>.txt``.
+                By default, all of these archives will be processed.
+
+                Providing a non-empty list for ``module_filter_filename`` will
+                instead only process modulemd files with those filenames. This
+                can be used to select only certain arches.
+
+                Has no effect if ``module_build`` is not provided.
 
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
@@ -161,6 +175,13 @@ class KojiSource(Source):
         self._url = url
         self._rpm = [try_int(x) for x in list_argument(rpm)]
         self._module_build = [try_int(x) for x in list_argument(module_build)]
+        self._module_filter_filename = (
+            # retain None values so we can differentiate between
+            # "caller asked for empty filter" vs "caller did not ask for any filter"
+            list_argument(module_filter_filename)
+            if module_filter_filename is not None
+            else None
+        )
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout
@@ -244,6 +265,15 @@ class KojiSource(Source):
             )
         ]
 
+    def _module_filtered(self, file_path):
+        ok_names = self._module_filter_filename
+        filename = os.path.basename(file_path)
+        if ok_names is not None and filename not in ok_names:
+            LOG.debug("Skipping module %s due to module_filter_filename", file_path)
+            return True
+
+        return False
+
     def _push_items_from_module_build(self, nvr, meta):
         LOG.debug("Looking for modulemd on %s, %s", nvr, meta)
 
@@ -261,6 +291,10 @@ class KojiSource(Source):
             file_path = os.path.join(
                 self._pathinfo.typedir(meta, "module"), module["filename"]
             )
+
+            if self._module_filtered(file_path):
+                continue
+
             # Possible TODO: koji also provides a checksum, which could be filled
             # in here. However, it seems to be only MD5?
             out.append(

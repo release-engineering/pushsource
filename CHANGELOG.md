@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix usage of `errata` source when the an Errata Tool URL includes a path
   component.
 
+### Added
+
+- Added `module_filter_filename` parameter to koji source, to select only a subset
+  of modulemd files from a build (e.g. limit to certain arches).
+
 ### Changed
 - On `ErratumPushItem`, the `type` attribute will now be automatically converted
   from legacy values found in the wild such as "RHBA", "RHSA". Values are

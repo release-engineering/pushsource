@@ -1,0 +1,139 @@
+---
+document: modulemd
+version: 2
+data:
+  name: tomcat
+  stream: "master"
+  version: 3220200215013612
+  context: 4c391d95
+  arch: x86_64
+  summary: Apache Servlet/JSP Engine, RI for Servlet 4.0/JSP 2.3 API
+  description: >-
+    Tomcat is the servlet container that is used in the official Reference Implementation
+    for the Java Servlet and JavaServer Pages technologies. The Java Servlet and JavaServer
+    Pages specifications are developed by Sun under the Java Community Process.
+  license:
+    module:
+    - MIT
+    content:
+    - ASL 2.0
+    - EPL-2.0
+  xmd: {}
+  dependencies:
+  - buildrequires:
+      platform: [f32]
+    requires:
+      javapackages-tools: []
+      platform: [f32]
+  profiles:
+    default:
+      description: A minimal tomcat installation.
+      rpms:
+      - tomcat
+      - tomcat-el-3.0-api
+      - tomcat-jsp-2.3-api
+      - tomcat-lib
+      - tomcat-servlet-4.0-api
+  api:
+    rpms:
+    - tomcat
+    - tomcat-el-3.0-api
+    - tomcat-jsp-2.3-api
+    - tomcat-lib
+    - tomcat-servlet-4.0-api
+  components:
+    rpms:
+      ecj:
+        rationale: Required for building JSPs at Runtime.
+        ref: master
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+      tomcat:
+        rationale: Provides core server functionality.
+        ref: master
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - ecj-1:4.14-3.module_f32+8023+0534a12a.noarch
+    - ecj-1:4.14-3.module_f32+8023+0534a12a.src
+    - tomcat-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-1:9.0.30-2.module_f32+8023+0534a12a.src
+    - tomcat-admin-webapps-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-docs-webapp-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-el-3.0-api-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-jsp-2.3-api-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-jsvc-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-lib-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-servlet-4.0-api-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+    - tomcat-webapps-1:9.0.30-2.module_f32+8023+0534a12a.noarch
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+  module: varnish
+  profiles:
+    6: [common]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: varnish
+  stream: "6.0"
+  version: 3220200215073318
+  context: 43bbeeef
+  arch: x86_64
+  summary: Varnish HTTP cache
+  description: >-
+    Varnish Cache web application accelerator
+  license:
+    module:
+    - MIT
+    content:
+    - BSD
+  xmd: {}
+  dependencies:
+  - buildrequires:
+      platform: [f32]
+    requires:
+      platform: [f32]
+  references:
+    documentation: http://varnish-cache.org/docs/
+    tracker: https://github.com/varnishcache/varnish-cache/issues
+  profiles:
+    default:
+      rpms:
+      - varnish
+      - varnish-modules
+  api:
+    rpms:
+    - varnish
+    - varnish-modules
+  buildopts:
+    rpms:
+      macros: >
+        %_without_python2 1
+
+        %_with_python3 1
+  components:
+    rpms:
+      varnish:
+        rationale: Module API.
+        ref: stream-6.0
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+      varnish-modules:
+        rationale: Extension modules.
+        ref: stream-6.0
+        buildorder: 1
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - varnish-0:6.0.6-1.module_f32+7891+54364fee.src
+    - varnish-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-devel-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-docs-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-modules-0:0.15.0-9.module_f32+7891+54364fee.src
+    - varnish-modules-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+    - varnish-modules-debuginfo-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+    - varnish-modules-debugsource-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+...

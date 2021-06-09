@@ -1,0 +1,63 @@
+---
+document: modulemd
+version: 2
+data:
+  name: varnish
+  stream: "6.0"
+  version: 3220200215073318
+  context: 43bbeeef
+  arch: x86_64
+  summary: Varnish HTTP cache
+  description: >-
+    Varnish Cache web application accelerator
+  license:
+    module:
+    - MIT
+    content:
+    - BSD
+  xmd: {}
+  dependencies:
+  - buildrequires:
+      platform: [f32]
+    requires:
+      platform: [f32]
+  references:
+    documentation: http://varnish-cache.org/docs/
+    tracker: https://github.com/varnishcache/varnish-cache/issues
+  profiles:
+    default:
+      rpms:
+      - varnish
+      - varnish-modules
+  api:
+    rpms:
+    - varnish
+    - varnish-modules
+  buildopts:
+    rpms:
+      macros: >
+        %_without_python2 1
+
+        %_with_python3 1
+  components:
+    rpms:
+      varnish:
+        rationale: Module API.
+        ref: stream-6.0
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+      varnish-modules:
+        rationale: Extension modules.
+        ref: stream-6.0
+        buildorder: 1
+        arches: [aarch64, armv7hl, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - varnish-0:6.0.6-1.module_f32+7891+54364fee.src
+    - varnish-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-devel-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-docs-0:6.0.6-1.module_f32+7891+54364fee.x86_64
+    - varnish-modules-0:0.15.0-9.module_f32+7891+54364fee.src
+    - varnish-modules-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+    - varnish-modules-debuginfo-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+    - varnish-modules-debugsource-0:0.15.0-9.module_f32+7891+54364fee.x86_64
+...

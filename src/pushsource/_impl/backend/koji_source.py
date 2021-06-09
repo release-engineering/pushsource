@@ -14,6 +14,7 @@ from more_executors.futures import f_map
 from ..source import Source
 from ..model import RpmPushItem, ModuleMdPushItem
 from ..helpers import list_argument, try_int
+from .modulemd import Module
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
@@ -274,6 +275,45 @@ class KojiSource(Source):
 
         return False
 
+    def _get_module_name(self, nvr, file_path):
+        # Return the best value for "name" we can calculate for a given modulemd
+        # push item. In practice this means setting the push item name to NSVCA,
+        # if the modulemd file exists and can be parsed as a single module.
+        # NSVCA is a more meaningful name for the item than modulemd.<arch>.txt,
+        # which will be the same for all modules of the same arch.
+        #
+        # Why only "if the modulemd file exists"? Well, it's only going to exist
+        # if the caller has mounted the NFS volume associated with koji. This will
+        # be true in production, and we could give a fatal error when this is not
+        # the case, but it seems like a very harsh requirement. e.g. most of the
+        # docs for this library are using fedora koji as an example, but nobody
+        # running outside of fedora infra will be able to mount that volume,
+        # meaning attempting to use the examples will immediately hit a brick wall.
+        #
+        # So, this is a compromise. If the file exists, it has to be valid, and we
+        # use it; this gives the best behavior in production. If the file doesn't
+        # exist, that's OK, and that's a compromise to avoid making the dev and test
+        # requirements too onerous.
+        basename = os.path.basename(file_path)
+
+        if basename == "modulemd.src.txt":
+            # These are modulemd packager files and not the built files with NSVCA,
+            # do not attempt to parse
+            return basename
+
+        if not os.path.exists(file_path):
+            # Don't have the file, don't attempt to parse
+            return basename
+
+        try:
+            return Module.from_file(file_path).nsvca
+        except:
+            # If we fail, make it clear what we were attempting to do before raising
+            LOG.exception(
+                "In koji build %s, cannot load module metadata from %s", nvr, file_path
+            )
+            raise
+
     def _push_items_from_module_build(self, nvr, meta):
         LOG.debug("Looking for modulemd on %s, %s", nvr, meta)
 
@@ -295,14 +335,11 @@ class KojiSource(Source):
             if self._module_filtered(file_path):
                 continue
 
-            # Possible TODO: koji also provides a checksum, which could be filled
-            # in here. However, it seems to be only MD5?
+            name = self._get_module_name(nvr, file_path)
+
             out.append(
                 ModuleMdPushItem(
-                    name=module["filename"],
-                    src=file_path,
-                    dest=self._dest,
-                    build=meta["nvr"],
+                    name=name, src=file_path, dest=self._dest, build=meta["nvr"]
                 )
             )
         return out

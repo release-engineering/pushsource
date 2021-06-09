@@ -1,4 +1,5 @@
 advisory_id: RHEA-2020:0346
+
 cdn_file_list:
   postgresql-12-8010120191120141335.e4e244f9:
     checksums:
@@ -523,6 +524,7 @@ cdn_file_list:
       postgresql-upgrade-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm:
       - rhel-8-for-x86_64-appstream-debug-rpms__8
     sig_key: fd431d51
+
 cdn_metadata:
   description: 'This enhancement update adds the postgresql:12 module stream to Red
     Hat Enterprise Linux 8. (BZ#1721822)
@@ -2235,3 +2237,16 @@ cdn_metadata:
   type: enhancement
   updated: 2020-02-04 11:39:30 UTC
   version: '4'
+
+ftp_paths:
+  postgresql-12-8010120191120141335.e4e244f9:
+    sig_key: fd431d51
+    rpms:
+      pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+      postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+      postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+    modules:
+    - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/modules/

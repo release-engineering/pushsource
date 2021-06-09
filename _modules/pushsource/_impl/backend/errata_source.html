@@ -185,16 +185,13 @@
         <span class="n">modules</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
 
         <span class="c1"># Get a koji source which will yield all modules from the build</span>
-        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">])</span>
+        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
+            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
-            <span class="c1"># The koji source yielded *all* modulemds on the build.</span>
-            <span class="c1"># We filter to only those requested by Errata Tool.</span>
-            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
-                <span class="k">continue</span>
-
             <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="p">[</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
             <span class="c1"># Fill in more push item details based on the info provided by ET.</span>

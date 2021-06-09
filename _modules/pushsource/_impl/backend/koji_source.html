@@ -135,6 +135,7 @@
         <span class="n">dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rpm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">module_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">module_filter_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">basedir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -158,8 +159,21 @@
 
 <span class="sd">            module_build (list[str, int])</span>
 <span class="sd">                Build identifier(s). Can be koji IDs (integers) or build NVRs.</span>
-<span class="sd">                The source will yield all modulemd files belonging to these</span>
-<span class="sd">                build(s).</span>
+<span class="sd">                The source will yield modulemd files belonging to these</span>
+<span class="sd">                build(s), filtered by ``module_filter_filename`` (if given).</span>
+
+<span class="sd">            module_filter_filename (list[str])</span>
+<span class="sd">                Filename(s) of modulemd archives to include in output.</span>
+
+<span class="sd">                When ``module_build`` is given, modulemd files are located as</span>
+<span class="sd">                koji archives with names of the form ``modulemd.&lt;arch&gt;.txt``.</span>
+<span class="sd">                By default, all of these archives will be processed.</span>
+
+<span class="sd">                Providing a non-empty list for ``module_filter_filename`` will</span>
+<span class="sd">                instead only process modulemd files with those filenames. This</span>
+<span class="sd">                can be used to select only certain arches.</span>
+
+<span class="sd">                Has no effect if ``module_build`` is not provided.</span>
 
 <span class="sd">            signing_key (list[str])</span>
 <span class="sd">                GPG signing key ID(s). If provided, content must be signed</span>
@@ -194,6 +208,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="c1"># retain None values so we can differentiate between</span>
+            <span class="c1"># &quot;caller asked for empty filter&quot; vs &quot;caller did not ask for any filter&quot;</span>
+            <span class="n">list_argument</span><span class="p">(</span><span class="n">module_filter_filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">module_filter_filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
@@ -277,6 +298,15 @@
             <span class="p">)</span>
         <span class="p">]</span>
 
+    <span class="k">def</span> <span class="nf">_module_filtered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="n">ok_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ok_names</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Skipping module </span><span class="si">%s</span><span class="s2"> due to module_filter_filename&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
     <span class="k">def</span> <span class="nf">_push_items_from_module_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for modulemd on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
@@ -294,6 +324,10 @@
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">),</span> <span class="n">module</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span>
             <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_filtered</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                <span class="k">continue</span>
+
             <span class="c1"># Possible TODO: koji also provides a checksum, which could be filled</span>
             <span class="c1"># in here. However, it seems to be only MD5?</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>

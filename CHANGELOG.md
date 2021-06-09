@@ -20,9 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of modulemd files from a build (e.g. limit to certain arches).
 
 ### Changed
+
 - On `ErratumPushItem`, the `type` attribute will now be automatically converted
   from legacy values found in the wild such as "RHBA", "RHSA". Values are
   now also validated.
+- `ModuleMdPushItem.name` now uses the NSVCA of a module rather than the filename of
+  a loaded modulemd file, when this metadata is available.
 
 ## [2.6.0] - 2021-05-27
 

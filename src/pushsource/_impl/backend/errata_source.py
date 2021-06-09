@@ -149,7 +149,7 @@ class ErrataSource(Source):
         return out
 
     def _module_push_items_from_build(self, erratum, build_nvr, build_info):
-        modules = build_info.get("modules") or {}
+        modules = (build_info.get("modules") or {}).copy()
 
         # Get a koji source which will yield all modules from the build
         koji_source = self._koji_source(
@@ -159,12 +159,22 @@ class ErrataSource(Source):
         out = []
 
         for push_item in koji_source:
-            dest = modules[push_item.name]
+            # ET uses filenames to identify the modules here, we must do the same.
+            basename = os.path.basename(push_item.src)
+            dest = modules.pop(basename)
 
             # Fill in more push item details based on the info provided by ET.
             push_item = attr.evolve(push_item, dest=dest, origin=erratum.name)
 
             out.append(push_item)
+
+        # Were there any requested modules we couldn't find?
+        missing_modules = ", ".join(sorted(modules.keys()))
+        if missing_modules:
+            msg = "koji build {nvr} does not contain {missing} (requested by advisory {erratum})".format(
+                nvr=build_nvr, missing=missing_modules, erratum=erratum.name
+            )
+            raise ValueError(msg)
 
         return out
 

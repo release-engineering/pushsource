@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix usage of `errata` source when the an Errata Tool URL includes a path
   component.
+- When Errata Tool requests push of a module which cannot be found in koji, this
+  is now raised as an error rather than ignored.
 
 ### Added
 

@@ -47,6 +47,7 @@
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdPushItem</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
+<span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
@@ -307,6 +308,45 @@
 
         <span class="k">return</span> <span class="kc">False</span>
 
+    <span class="k">def</span> <span class="nf">_get_module_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="c1"># Return the best value for &quot;name&quot; we can calculate for a given modulemd</span>
+        <span class="c1"># push item. In practice this means setting the push item name to NSVCA,</span>
+        <span class="c1"># if the modulemd file exists and can be parsed as a single module.</span>
+        <span class="c1"># NSVCA is a more meaningful name for the item than modulemd.&lt;arch&gt;.txt,</span>
+        <span class="c1"># which will be the same for all modules of the same arch.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Why only &quot;if the modulemd file exists&quot;? Well, it&#39;s only going to exist</span>
+        <span class="c1"># if the caller has mounted the NFS volume associated with koji. This will</span>
+        <span class="c1"># be true in production, and we could give a fatal error when this is not</span>
+        <span class="c1"># the case, but it seems like a very harsh requirement. e.g. most of the</span>
+        <span class="c1"># docs for this library are using fedora koji as an example, but nobody</span>
+        <span class="c1"># running outside of fedora infra will be able to mount that volume,</span>
+        <span class="c1"># meaning attempting to use the examples will immediately hit a brick wall.</span>
+        <span class="c1">#</span>
+        <span class="c1"># So, this is a compromise. If the file exists, it has to be valid, and we</span>
+        <span class="c1"># use it; this gives the best behavior in production. If the file doesn&#39;t</span>
+        <span class="c1"># exist, that&#39;s OK, and that&#39;s a compromise to avoid making the dev and test</span>
+        <span class="c1"># requirements too onerous.</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">basename</span> <span class="o">==</span> <span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">:</span>
+            <span class="c1"># These are modulemd packager files and not the built files with NSVCA,</span>
+            <span class="c1"># do not attempt to parse</span>
+            <span class="k">return</span> <span class="n">basename</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="c1"># Don&#39;t have the file, don&#39;t attempt to parse</span>
+            <span class="k">return</span> <span class="n">basename</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">nsvca</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># If we fail, make it clear what we were attempting to do before raising</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                <span class="s2">&quot;In koji build </span><span class="si">%s</span><span class="s2">, cannot load module metadata from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span>
+            <span class="p">)</span>
+            <span class="k">raise</span>
+
     <span class="k">def</span> <span class="nf">_push_items_from_module_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for modulemd on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
@@ -328,14 +368,11 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_filtered</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
                 <span class="k">continue</span>
 
-            <span class="c1"># Possible TODO: koji also provides a checksum, which could be filled</span>
-            <span class="c1"># in here. However, it seems to be only MD5?</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_module_name</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">ModuleMdPushItem</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">module</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
-                    <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span>
-                    <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
-                    <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>

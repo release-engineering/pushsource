@@ -42,10 +42,13 @@ class FakeErrataToolProxy(object):
         out = self._ctrl._data[advisory_id]
         if out is None:
             raise Fault(100, "No such advisory: %s" % advisory_id)
-        return out[key]
+        return out.get(key, {})
 
     def get_advisory_cdn_file_list(self, advisory_id):
         return self._get_data(advisory_id, "cdn_file_list")
 
     def get_advisory_cdn_metadata(self, advisory_id):
         return self._get_data(advisory_id, "cdn_metadata")
+
+    def get_ftp_paths(self, advisory_id):
+        return self._get_data(advisory_id, "ftp_paths")

@@ -1,18 +1,17 @@
 import os
-import threading
 import logging
 from concurrent import futures
 
 import six
 from six.moves.urllib import parse
-from six.moves.xmlrpc_client import ServerProxy
 from more_executors import Executors
-from more_executors.futures import f_map, f_zip
 
-from .. import compat_attr as attr
-from ..source import Source
-from ..model import ErratumPushItem
-from ..helpers import list_argument
+from .errata_client import ErrataClient
+
+from ... import compat_attr as attr
+from ...source import Source
+from ...model import ErratumPushItem
+from ...helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
 
@@ -20,15 +19,7 @@ LOG = logging.getLogger("pushsource")
 class ErrataSource(Source):
     """Uses an advisory from Errata Tool as the source of push items."""
 
-    def __init__(
-        self,
-        url,
-        errata,
-        target="cdn",
-        koji_source=None,
-        threads=4,
-        timeout=60 * 60 * 4,
-    ):
+    def __init__(self, url, errata, koji_source=None, threads=4, timeout=60 * 60 * 4):
         """Create a new source.
 
         Parameters:
@@ -40,13 +31,6 @@ class ErrataSource(Source):
                 Advisory ID(s) to be used as push item source.
                 If a single string is given, multiple IDs may be
                 comma-separated.
-
-            target (str)
-                The target type used when querying Errata Tool.
-                The target type may influence the content produced,
-                depending on the Errata Tool settings.
-
-                Valid values include at least: "cdn", "rhn", "ftp".
 
             koji_source (str)
                 URL of a koji source associated with this Errata Tool
@@ -62,16 +46,18 @@ class ErrataSource(Source):
         """
         self._url = url
         self._errata = list_argument(errata)
-        self._executor = Executors.thread_pool(max_workers=threads).with_retry()
+        self._client = ErrataClient(threads=threads, url=self._errata_service_url)
+
+        # This executor doesn't use retry because koji & ET executors already do that.
+        self._executor = Executors.thread_pool(max_workers=threads)
+
         # We set aside a separate thread pool for koji so that there are separate
         # queues for ET and koji calls, yet we avoid creating a new thread pool for
         # each koji source.
         self._koji_executor = Executors.thread_pool(max_workers=threads).with_retry()
         self._koji_cache = {}
         self._koji_source_url = koji_source
-        self._target = target
         self._timeout = timeout
-        self._tls = threading.local()
 
     @property
     def _errata_service_url(self):
@@ -99,48 +85,32 @@ class ErrataSource(Source):
         )
 
     @property
-    def _errata_service(self):
-        # XML-RPC client connected to errata_service.
-        # Each thread uses a separate client.
-        if not hasattr(self._tls, "errata_service"):
-            url = self._errata_service_url
-            LOG.debug("Creating XML-RPC client for Errata Tool: %s", url)
-            self._tls.errata_service = ServerProxy(url)
-        return self._tls.errata_service
-
-    @property
     def _advisory_ids(self):
         # TODO: other cases (comma-separated; plain string)
         return self._errata
 
-    def _get_advisory_metadata(self, advisory_id):
-        # TODO: use CDN API even for RHN?
-        return self._errata_service.get_advisory_cdn_metadata(advisory_id)
+    def _push_items_from_raw(self, raw):
+        erratum = ErratumPushItem._from_data(raw.advisory_cdn_metadata)
 
-    def _get_advisory_file_list(self, advisory_id):
-        # TODO: look at the target hint
-        return self._errata_service.get_advisory_cdn_file_list(advisory_id)
+        rpms = self._push_items_from_rpms(erratum, raw.advisory_cdn_file_list)
 
-    def _push_items_from_raw(self, metadata_and_file_list):
-        (metadata, file_list) = metadata_and_file_list
-
-        erratum = ErratumPushItem._from_data(metadata)
-        files = self._push_items_from_files(erratum, file_list)
-
-        # The erratum should go to all the same destinations as the files.
+        # The erratum should go to all the same destinations as the rpms,
+        # before FTP paths are added.
         erratum_dest = set(erratum.dest or [])
-        for file in files:
-            for dest in file.dest:
+        for rpm in rpms:
+            for dest in rpm.dest:
                 erratum_dest.add(dest)
-
         erratum = attr.evolve(erratum, dest=sorted(erratum_dest))
 
-        return [erratum] + files
+        # Enrich RPM push items with their FTP paths if any.
+        rpms = self._add_ftp_paths(rpms, raw.ftp_paths)
 
-    def _push_items_from_files(self, erratum, file_list):
+        return [erratum] + rpms
+
+    def _push_items_from_rpms(self, erratum, rpm_list):
         out = []
 
-        for build_nvr, build_info in six.iteritems(file_list):
+        for build_nvr, build_info in six.iteritems(rpm_list):
             out.extend(self._rpm_push_items_from_build(erratum, build_info))
             out.extend(
                 self._module_push_items_from_build(erratum, build_nvr, build_info)
@@ -217,40 +187,52 @@ class ErrataSource(Source):
 
         return out
 
-    def __iter__(self):
-        # Get file list of all advisories first.
+    def _add_ftp_paths(self, rpm_items, ftp_paths):
+        # ftp_paths structure is like this:
         #
-        # We get the file list first because it contains koji build NVRs,
-        # so by getting these first we can issue koji build queries and advisory
-        # metadata queries concurrently.
-        file_list_fs = [
-            self._executor.submit(self._get_advisory_file_list, advisory_id)
-            for advisory_id in self._advisory_ids
-        ]
+        # {
+        #     "xorg-x11-server-1.20.4-16.el7_9": {
+        #         "rpms": {
+        #             "xorg-x11-server-1.20.4-16.el7_9.src.rpm": [
+        #                 "/ftp/pub/redhat/linux/enterprise/7Client/en/os/SRPMS/",
+        #                 "/ftp/pub/redhat/linux/enterprise/7ComputeNode/en/os/SRPMS/",
+        #                 "/ftp/pub/redhat/linux/enterprise/7Server/en/os/SRPMS/",
+        #                 "/ftp/pub/redhat/linux/enterprise/7Workstation/en/os/SRPMS/",
+        #             ]
+        #         },
+        #         "sig_key": "fd431d51",
+        #     }
+        # }
+        #
+        # We only care about the rpm => ftp path mapping, which should be added onto
+        # our existing rpm push items if any exist.
+        #
+        rpm_to_paths = {}
+        for rpm_map in ftp_paths.values():
+            for (rpm_name, paths) in (rpm_map.get("rpms") or {}).items():
+                rpm_to_paths[rpm_name] = paths
 
-        # Then get metadata.
-        metadata_fs = [
-            self._executor.submit(self._get_advisory_metadata, advisory_id)
-            for advisory_id in self._advisory_ids
-        ]
+        out = []
+        for item in rpm_items:
+            paths = rpm_to_paths.get(item.name) or []
+            item = attr.evolve(item, dest=item.dest + paths)
+            out.append(item)
 
-        # Zip up the metadata and file list for each advisory, since both are
-        # needed together in order to make push items.
-        advisory_fs = [
-            f_zip(metadata_f, file_list_f)
-            for (metadata_f, file_list_f) in zip(metadata_fs, file_list_fs)
-        ]
+        return out
+
+    def __iter__(self):
+        # Get raw ET responses for all errata.
+        raw_fs = [self._client.get_raw_f(id) for id in self._advisory_ids]
 
         # Convert them to lists of push items
-        advisory_push_items_fs = [
-            f_map(f, self._push_items_from_raw) for f in advisory_fs
-        ]
+        push_items_fs = []
+        for f in futures.as_completed(raw_fs, timeout=self._timeout):
+            push_items_fs.append(
+                self._executor.submit(self._push_items_from_raw, f.result())
+            )
 
-        completed_fs = futures.as_completed(
-            advisory_push_items_fs, timeout=self._timeout
-        )
+        completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
         for f in completed_fs:
-            # If an exception occurred, this is where it will be raised.
             for pushitem in f.result():
                 yield pushitem
 

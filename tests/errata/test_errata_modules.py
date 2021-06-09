@@ -199,6 +199,44 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
     found_rpm_names = [item.name for item in rpm_items]
     assert sorted(found_rpm_names) == sorted(rpm_filenames)
 
+    # FTP paths should also be reflected in RPM dests; we'll just check
+    # src RPMs since those are the only ones with FTP paths
+    src_rpms = sorted(
+        [(i.name, sorted(i.dest)) for i in rpm_items if i.name.endswith(".src.rpm")]
+    )
+    assert src_rpms == [
+        (
+            "pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm",
+            [
+                "/ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/",
+                "rhel-8-for-aarch64-appstream-source-rpms__8",
+                "rhel-8-for-ppc64le-appstream-source-rpms__8",
+                "rhel-8-for-s390x-appstream-source-rpms__8",
+                "rhel-8-for-x86_64-appstream-source-rpms__8",
+            ],
+        ),
+        (
+            "postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm",
+            [
+                "/ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/",
+                "rhel-8-for-aarch64-appstream-source-rpms__8",
+                "rhel-8-for-ppc64le-appstream-source-rpms__8",
+                "rhel-8-for-s390x-appstream-source-rpms__8",
+                "rhel-8-for-x86_64-appstream-source-rpms__8",
+            ],
+        ),
+        (
+            "postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm",
+            [
+                "/ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/",
+                "rhel-8-for-aarch64-appstream-source-rpms__8",
+                "rhel-8-for-ppc64le-appstream-source-rpms__8",
+                "rhel-8-for-s390x-appstream-source-rpms__8",
+                "rhel-8-for-x86_64-appstream-source-rpms__8",
+            ],
+        ),
+    ]
+
     # It should have found the modulemd files
     assert sorted(modulemd_items, key=lambda item: item.src) == [
         ModuleMdPushItem(

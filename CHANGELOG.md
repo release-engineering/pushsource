@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   now also validated.
 - `ModuleMdPushItem.name` now uses the NSVCA of a module rather than the filename of
   a loaded modulemd file, when this metadata is available.
+- `errata` source now includes FTP paths in the `dest` field of generated push items,
+  where applicable.
 
 ## [2.6.0] - 2021-05-27
 

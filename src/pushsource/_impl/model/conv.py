@@ -92,6 +92,15 @@ sha1str = partial(hexstr, 40)
 sha256str = partial(hexstr, 64)
 
 
+def archstr(value):
+    """Convert a handful of arch aliases into canonical form for consistent comparisons."""
+    if value == "amd64":
+        return "x86_64"
+    if value == "SRPM":
+        return "src"
+    return value
+
+
 def upper_if_str(value):
     if isinstance(value, six.string_types):
         return value.upper()

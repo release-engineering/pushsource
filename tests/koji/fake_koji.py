@@ -20,18 +20,29 @@ class FakeKojiController(object):
         self.last_url = url
         return FakeKojiSession(self)
 
-    def insert_rpms(self, filenames, koji_dir=None, signing_key=None, build_nvr=None):
+    def ensure_build(self, build_nvr):
+        if build_nvr in self.build_data:
+            return self.build_data[build_nvr]
+
+        # Have to make a new build
         build_id = self.next_build_id
         self.next_build_id += 1
 
         build_data = {"id": build_id}
+        build_data["nvr"] = build_nvr
+        r, v, n = build_nvr[-1::-1].split("-", 2)
+        build_data["name"] = n[-1::-1]
+        build_data["version"] = v[-1::-1]
+        build_data["release"] = r[-1::-1]
 
-        if build_nvr:
-            build_data["nvr"] = build_nvr
-            r, v, n = build_nvr[-1::-1].split("-", 2)
-            build_data["name"] = n[-1::-1]
-            build_data["version"] = v[-1::-1]
-            build_data["release"] = r[-1::-1]
+        self.build_data[build_id] = build_data
+        self.build_data[build_data["nvr"]] = build_data
+
+        return build_data
+
+    def insert_rpms(self, filenames, koji_dir=None, signing_key=None, build_nvr=None):
+
+        stored_rpms = []
 
         for filename in filenames:
             data = {}
@@ -45,19 +56,22 @@ class FakeKojiController(object):
             data["name"] = n[-1::-1]
             data["version"] = v[-1::-1]
             data["release"] = r[-1::-1]
-            data["build_id"] = build_id
+            stored_rpms.append(data)
 
             if not build_nvr and data["arch"] == "src":
-                build_data["name"] = data["name"]
-                build_data["version"] = data["version"]
-                build_data["release"] = data["release"]
-                build_data["nvr"] = "%s-%s-%s" % (
+                build_nvr = "%s-%s-%s" % (
                     data["name"],
                     data["version"],
                     data["release"],
                 )
 
             self.rpm_data[filename] = data
+
+        # If build_nvr wasn't passed to us already, it should be set by now.
+        # Ensure build exists and reference it from all the new RPMs.
+        build_data = self.ensure_build(build_nvr)
+        for rpm in stored_rpms:
+            rpm["build_id"] = build_data["id"]
 
         if koji_dir and signing_key:
             # Make signed RPMs exist
@@ -78,11 +92,8 @@ class FakeKojiController(object):
                     os.makedirs(signed_dir)
                 open(signed_rpm_path, "w")
 
-        self.build_data[build_id] = build_data
-        self.build_data[build_data["nvr"]] = build_data
-
     def insert_archives(self, archives, build_nvr):
-        build = self.build_data[build_nvr]
+        build = self.ensure_build(build_nvr)
         self.archive_data[build["id"]] = archives
         self.archive_data[build["nvr"]] = archives
 

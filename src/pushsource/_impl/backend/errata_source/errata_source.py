@@ -111,7 +111,7 @@ class ErrataSource(Source):
         out = []
 
         for build_nvr, build_info in six.iteritems(rpm_list):
-            out.extend(self._rpm_push_items_from_build(erratum, build_info))
+            out.extend(self._rpm_push_items_from_build(erratum, build_nvr, build_info))
             out.extend(
                 self._module_push_items_from_build(erratum, build_nvr, build_info)
             )
@@ -148,7 +148,7 @@ class ErrataSource(Source):
 
         return out
 
-    def _rpm_push_items_from_build(self, erratum, build_info):
+    def _rpm_push_items_from_build(self, erratum, build_nvr, build_info):
         rpms = build_info.get("rpms") or {}
         signing_key = build_info.get("sig_key") or None
         sha256sums = (build_info.get("checksums") or {}).get("sha256") or {}
@@ -169,10 +169,23 @@ class ErrataSource(Source):
 
             # Note, we can't sanity check here that the push item's build
             # equals ET's NVR, because it's not always the case.
+            #
             # Example:
             #  RPM: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm
             #  belongs to build: 1015162 (pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09)
             #  but ET refers instead to module build: postgresql-12-8010120191120141335.e4e244f9.
+            #
+            # We also make use of this to fill in the module_build attribute on items when
+            # available.
+            #
+            # (This is not ideal because we don't really "know" that a non-matching NVR here is
+            # the module build NVR, we are relying on the ET implementation detail that this is
+            # the only reason they should not match; though legacy code already depended on this
+            # for years, so maybe it's fine. We also have the heuristic of scanning for 'module'
+            # in the NVR to make exceptions less likely.)
+            module_build = None
+            if push_item.build != build_nvr and ".module" in push_item.build:
+                module_build = build_nvr
 
             # Fill in more push item details based on the info provided by ET.
             push_item = attr.evolve(
@@ -181,6 +194,7 @@ class ErrataSource(Source):
                 md5sum=md5sums.get(push_item.name),
                 dest=rpms.get(push_item.name),
                 origin=erratum.name,
+                module_build=module_build,
             )
 
             out.append(push_item)

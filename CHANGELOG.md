@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Added
+
+- Added `module_build` attribute to RPM push items.
 
 ## [2.7.0] - 2021-06-10
 

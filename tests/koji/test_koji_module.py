@@ -5,7 +5,7 @@ import textwrap
 from pytest import raises, fixture
 from mock import patch
 
-from pushsource import Source, ModuleMdPushItem
+from pushsource import Source, ModuleMdPushItem, ModuleMdSourcePushItem
 
 from .fake_koji import FakeKojiController
 
@@ -57,7 +57,7 @@ def test_koji_modules(fake_koji, koji_dir):
         signing_key=None,
     )
 
-    assert items[1] == ModuleMdPushItem(
+    assert items[1] == ModuleMdSourcePushItem(
         # For this module, no attempt was made to parse it since it's a modulemd
         # source file rather than a built module.
         name="modulemd.src.txt",

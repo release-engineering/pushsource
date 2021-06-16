@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `module_build` attribute to RPM push items.
+- Added `rpm_filter_arch` parameter to errata source, to select a subset of RPMs
+  by architecture.
 
 ## [2.7.0] - 2021-06-10
 

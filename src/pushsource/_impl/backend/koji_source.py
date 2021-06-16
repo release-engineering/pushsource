@@ -176,12 +176,8 @@ class KojiSource(Source):
         self._url = url
         self._rpm = [try_int(x) for x in list_argument(rpm)]
         self._module_build = [try_int(x) for x in list_argument(module_build)]
-        self._module_filter_filename = (
-            # retain None values so we can differentiate between
-            # "caller asked for empty filter" vs "caller did not ask for any filter"
-            list_argument(module_filter_filename)
-            if module_filter_filename is not None
-            else None
+        self._module_filter_filename = list_argument(
+            module_filter_filename, retain_none=True
         )
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)

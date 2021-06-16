@@ -10,7 +10,7 @@ from .errata_client import ErrataClient
 
 from ... import compat_attr as attr
 from ...source import Source
-from ...model import ErratumPushItem
+from ...model import ErratumPushItem, conv
 from ...helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
@@ -19,7 +19,15 @@ LOG = logging.getLogger("pushsource")
 class ErrataSource(Source):
     """Uses an advisory from Errata Tool as the source of push items."""
 
-    def __init__(self, url, errata, koji_source=None, threads=4, timeout=60 * 60 * 4):
+    def __init__(
+        self,
+        url,
+        errata,
+        koji_source=None,
+        rpm_filter_arch=None,
+        threads=4,
+        timeout=60 * 60 * 4,
+    ):
         """Create a new source.
 
         Parameters:
@@ -36,6 +44,10 @@ class ErrataSource(Source):
                 URL of a koji source associated with this Errata Tool
                 instance.
 
+            rpm_filter_arch (str, list[str])
+                If provided, only RPMs for these given arch(es) will be produced;
+                e.g. "x86_64", "src" and "noarch".
+
             threads (int)
                 Number of threads used for concurrent queries to Errata Tool
                 and koji.
@@ -47,6 +59,8 @@ class ErrataSource(Source):
         self._url = url
         self._errata = list_argument(errata)
         self._client = ErrataClient(threads=threads, url=self._errata_service_url)
+
+        self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
 
         # This executor doesn't use retry because koji & ET executors already do that.
         self._executor = Executors.thread_pool(max_workers=threads)
@@ -148,14 +162,37 @@ class ErrataSource(Source):
 
         return out
 
+    def _filter_rpms_by_arch(self, erratum, rpm_filenames):
+        if self._rpm_filter_arch is None:
+            return rpm_filenames
+
+        out = []
+        ok_arches = [conv.archstr(arch) for arch in self._rpm_filter_arch]
+
+        for filename in rpm_filenames:
+            components = filename.split(".")
+            if len(components) >= 3 and components[-1] == "rpm":
+                arch = components[-2]
+                if conv.archstr(arch) in ok_arches:
+                    out.append(filename)
+                    continue
+
+            LOG.debug(
+                "Erratum %s: RPM removed by arch filter: %s", erratum.name, filename
+            )
+
+        return out
+
     def _rpm_push_items_from_build(self, erratum, build_nvr, build_info):
         rpms = build_info.get("rpms") or {}
         signing_key = build_info.get("sig_key") or None
         sha256sums = (build_info.get("checksums") or {}).get("sha256") or {}
         md5sums = (build_info.get("checksums") or {}).get("md5") or {}
 
+        rpm_filenames = self._filter_rpms_by_arch(erratum, list(rpms.keys()))
+
         # Get a koji source which will yield all desired push items from this build.
-        koji_source = self._koji_source(rpm=list(rpms.keys()), signing_key=signing_key)
+        koji_source = self._koji_source(rpm=rpm_filenames, signing_key=signing_key)
 
         out = []
 

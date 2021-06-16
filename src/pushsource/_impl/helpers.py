@@ -1,10 +1,12 @@
 import six
 
 
-def list_argument(value):
+def list_argument(value, retain_none=False):
     """Convert an argument into a list:
 
     - if the value is already a list, it's returned verbatim
+    - if the value is None and retain_none is False, an empty list is returned
+    - if the value is None and retain_none is True, None is returned
     - if the value is a string, it's split on ","
     - otherwise, the value is wrapped in a list
 
@@ -18,8 +20,12 @@ def list_argument(value):
     Returns:
         list
             ``value`` converted to or wrapped into a list.
+        None
+            if input was None and retain_none is True.
     """
     if isinstance(value, list):
+        return value
+    if value is None and retain_none:
         return value
     if not value:
         return []

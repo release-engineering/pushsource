@@ -43,7 +43,7 @@
 
 <span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span>
+<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span><span class="p">,</span> <span class="n">conv</span>
 <span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
@@ -52,7 +52,15 @@
 <div class="viewcode-block" id="ErrataSource"><a class="viewcode-back" href="../../../../../sources/errata.html#pushsource.ErrataSource">[docs]</a><span class="k">class</span> <span class="nc">ErrataSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Uses an advisory from Errata Tool as the source of push items.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ErrataSource.__init__"><a class="viewcode-back" href="../../../../../sources/errata.html#pushsource.ErrataSource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">errata</span><span class="p">,</span> <span class="n">koji_source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrataSource.__init__"><a class="viewcode-back" href="../../../../../sources/errata.html#pushsource.ErrataSource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">errata</span><span class="p">,</span>
+        <span class="n">koji_source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rpm_filter_arch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
@@ -69,6 +77,10 @@
 <span class="sd">                URL of a koji source associated with this Errata Tool</span>
 <span class="sd">                instance.</span>
 
+<span class="sd">            rpm_filter_arch (str, list[str])</span>
+<span class="sd">                If provided, only RPMs for these given arch(es) will be produced;</span>
+<span class="sd">                e.g. &quot;x86_64&quot;, &quot;src&quot; and &quot;noarch&quot;.</span>
+
 <span class="sd">            threads (int)</span>
 <span class="sd">                Number of threads used for concurrent queries to Errata Tool</span>
 <span class="sd">                and koji.</span>
@@ -80,6 +92,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">errata</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ErrataClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm_filter_arch</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># This executor doesn&#39;t use retry because koji &amp; ET executors already do that.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
@@ -144,7 +158,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">rpm_list</span><span class="p">):</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rpm_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_info</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rpm_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">))</span>
             <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_module_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">)</span>
             <span class="p">)</span>
@@ -181,14 +195,37 @@
 
         <span class="k">return</span> <span class="n">out</span>
 
-    <span class="k">def</span> <span class="nf">_rpm_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_filter_rpms_by_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_filenames</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rpm_filenames</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ok_arches</span> <span class="o">=</span> <span class="p">[</span><span class="n">conv</span><span class="o">.</span><span class="n">archstr</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">rpm_filenames</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rpm&quot;</span><span class="p">:</span>
+                <span class="n">arch</span> <span class="o">=</span> <span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">conv</span><span class="o">.</span><span class="n">archstr</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ok_arches</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: RPM removed by arch filter: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_rpm_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
         <span class="n">rpms</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="n">signing_key</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">sha256sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="n">md5sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
 
+        <span class="n">rpm_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_rpms_by_arch</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
         <span class="c1"># Get a koji source which will yield all desired push items from this build.</span>
-        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
+        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="n">rpm_filenames</span><span class="p">,</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -202,10 +239,23 @@
 
             <span class="c1"># Note, we can&#39;t sanity check here that the push item&#39;s build</span>
             <span class="c1"># equals ET&#39;s NVR, because it&#39;s not always the case.</span>
+            <span class="c1">#</span>
             <span class="c1"># Example:</span>
             <span class="c1">#  RPM: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm</span>
             <span class="c1">#  belongs to build: 1015162 (pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09)</span>
             <span class="c1">#  but ET refers instead to module build: postgresql-12-8010120191120141335.e4e244f9.</span>
+            <span class="c1">#</span>
+            <span class="c1"># We also make use of this to fill in the module_build attribute on items when</span>
+            <span class="c1"># available.</span>
+            <span class="c1">#</span>
+            <span class="c1"># (This is not ideal because we don&#39;t really &quot;know&quot; that a non-matching NVR here is</span>
+            <span class="c1"># the module build NVR, we are relying on the ET implementation detail that this is</span>
+            <span class="c1"># the only reason they should not match; though legacy code already depended on this</span>
+            <span class="c1"># for years, so maybe it&#39;s fine. We also have the heuristic of scanning for &#39;module&#39;</span>
+            <span class="c1"># in the NVR to make exceptions less likely.)</span>
+            <span class="n">module_build</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span> <span class="o">!=</span> <span class="n">build_nvr</span> <span class="ow">and</span> <span class="s2">&quot;.module&quot;</span> <span class="ow">in</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span><span class="p">:</span>
+                <span class="n">module_build</span> <span class="o">=</span> <span class="n">build_nvr</span>
 
             <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
             <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
@@ -214,6 +264,7 @@
                 <span class="n">md5sum</span><span class="o">=</span><span class="n">md5sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                 <span class="n">dest</span><span class="o">=</span><span class="n">rpms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                 <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">module_build</span><span class="o">=</span><span class="n">module_build</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>

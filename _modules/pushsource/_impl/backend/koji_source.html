@@ -45,7 +45,7 @@
 <span class="kn">from</span> <span class="nn">more_executors.futures</span> <span class="kn">import</span> <span class="n">f_map</span>
 
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdPushItem</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdPushItem</span><span class="p">,</span> <span class="n">ModuleMdSourcePushItem</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
 <span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
 
@@ -209,12 +209,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="c1"># retain None values so we can differentiate between</span>
-            <span class="c1"># &quot;caller asked for empty filter&quot; vs &quot;caller did not ask for any filter&quot;</span>
-            <span class="n">list_argument</span><span class="p">(</span><span class="n">module_filter_filename</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">module_filter_filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span>
+            <span class="n">module_filter_filename</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
@@ -370,10 +366,12 @@
 
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_module_name</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
 
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">ModuleMdPushItem</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">:</span>
+                <span class="n">klass</span> <span class="o">=</span> <span class="n">ModuleMdSourcePushItem</span>
+
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">ModuleMdPushItem</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">])</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 

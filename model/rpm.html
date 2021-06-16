@@ -39,6 +39,32 @@
 <dt class="sig sig-object py" id="pushsource.RpmPushItem">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">RpmPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/rpm.html#RpmPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.RpmPushItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a single RPM.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.RpmPushItem.module_build">
+<span class="sig-name descname"><span class="pre">module_build</span></span><a class="headerlink" href="#pushsource.RpmPushItem.module_build" title="Permalink to this definition">¶</a></dt>
+<dd><p>NVR for the koji module build through which this push item was located, if any.</p>
+<p>For a modular RPM push item, there may be two koji builds in play:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">module_build</span></code> (this attribute):</dt><dd><p>NVR of a build which produced modulemd YAML files referencing this RPM
+(but the build itself does not contain RPMs).</p>
+<p>Example: <a class="reference external" href="https://koji.fedoraproject.org/koji/buildinfo?buildID=1767200">ghc-8.4-820200708061905.9edba152</a>
+is a valid <cite>module_build</cite> for <code class="docutils literal notranslate"><span class="pre">ghc-8.4.4-74.module_el8+12161+cf1bd7f2.x86_64.rpm</span></code>.</p>
+</dd>
+<dt><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a>:</dt><dd><p>NVR of the build containing the RPM.</p>
+<p>Example: <a class="reference external" href="https://koji.fedoraproject.org/koji/buildinfo?buildID=1767130">ghc-8.4.4-74.module_el8+12161+cf1bd7f2</a>
+is a valid build for <code class="docutils literal notranslate"><span class="pre">ghc-8.4.4-74.module_el8+12161+cf1bd7f2.x86_64.rpm</span></code>.</p>
+</dd>
+</dl>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">module_build</span></code> itself isn’t a property of the RPM but rather should
+be considered contextual information on how any given RPM was located. The same RPM
+may have different values of <code class="docutils literal notranslate"><span class="pre">module_build</span></code> when loaded from different contexts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

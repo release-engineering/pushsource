@@ -8,7 +8,7 @@ from .erratum import (
 )
 from .rpm import RpmPushItem
 from .file import FilePushItem
-from .modulemd import ModuleMdPushItem
+from .modulemd import ModuleMdPushItem, ModuleMdSourcePushItem
 from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem
 from .ami import AmiPushItem, AmiRelease, AmiBillingCodes

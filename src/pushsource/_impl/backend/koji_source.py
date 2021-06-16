@@ -12,7 +12,7 @@ from more_executors import Executors
 from more_executors.futures import f_map
 
 from ..source import Source
-from ..model import RpmPushItem, ModuleMdPushItem
+from ..model import RpmPushItem, ModuleMdPushItem, ModuleMdSourcePushItem
 from ..helpers import list_argument, try_int
 from .modulemd import Module
 
@@ -333,10 +333,12 @@ class KojiSource(Source):
 
             name = self._get_module_name(nvr, file_path)
 
+            klass = ModuleMdPushItem
+            if os.path.basename(file_path) == "modulemd.src.txt":
+                klass = ModuleMdSourcePushItem
+
             out.append(
-                ModuleMdPushItem(
-                    name=name, src=file_path, dest=self._dest, build=meta["nvr"]
-                )
+                klass(name=name, src=file_path, dest=self._dest, build=meta["nvr"])
             )
         return out
 

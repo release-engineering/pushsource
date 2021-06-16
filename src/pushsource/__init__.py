@@ -4,6 +4,7 @@ from pushsource._impl.model import (
     FilePushItem,
     CompsXmlPushItem,
     ModuleMdPushItem,
+    ModuleMdSourcePushItem,
     ProductIdPushItem,
     RpmPushItem,
     AmiPushItem,

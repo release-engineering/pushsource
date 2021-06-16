@@ -153,7 +153,7 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
         rpm_filenames,
         koji_dir=koji_dir,
         signing_key="fd431d51",
-        build_nvr="postgresql-12-8010120191120141335.e4e244f9",
+        build_nvr="postgresql-12.1-2.module+el8.1.1+4794+c82b6e09",
     )
 
     # Insert archives referenced by build
@@ -198,6 +198,21 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
     # It should have found all the RPMs
     found_rpm_names = [item.name for item in rpm_items]
     assert sorted(found_rpm_names) == sorted(rpm_filenames)
+
+    # The RPMs should maintain their own build and module build correctly
+    found_rpm_module_build = set(
+        [(item.build, item.module_build) for item in rpm_items]
+    )
+    assert found_rpm_module_build == set(
+        [
+            (
+                # The build containing the RPM
+                "postgresql-12.1-2.module+el8.1.1+4794+c82b6e09",
+                # The build containing the modulemds (as passed by ET)
+                "postgresql-12-8010120191120141335.e4e244f9",
+            )
+        ]
+    )
 
     # FTP paths should also be reflected in RPM dests; we'll just check
     # src RPMs since those are the only ones with FTP paths

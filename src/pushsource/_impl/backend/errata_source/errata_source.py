@@ -10,7 +10,7 @@ from .errata_client import ErrataClient
 
 from ... import compat_attr as attr
 from ...source import Source
-from ...model import ErratumPushItem, conv
+from ...model import ErratumPushItem, RpmPushItem, ModuleMdSourcePushItem, conv
 from ...helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
@@ -106,20 +106,20 @@ class ErrataSource(Source):
     def _push_items_from_raw(self, raw):
         erratum = ErratumPushItem._from_data(raw.advisory_cdn_metadata)
 
-        rpms = self._push_items_from_rpms(erratum, raw.advisory_cdn_file_list)
+        items = self._push_items_from_rpms(erratum, raw.advisory_cdn_file_list)
 
         # The erratum should go to all the same destinations as the rpms,
         # before FTP paths are added.
         erratum_dest = set(erratum.dest or [])
-        for rpm in rpms:
-            for dest in rpm.dest:
+        for item in items:
+            for dest in item.dest:
                 erratum_dest.add(dest)
         erratum = attr.evolve(erratum, dest=sorted(erratum_dest))
 
-        # Enrich RPM push items with their FTP paths if any.
-        rpms = self._add_ftp_paths(rpms, raw.ftp_paths)
+        # Adjust push item destinations according to FTP paths from ET, if any.
+        items = self._add_ftp_paths(items, erratum, raw.ftp_paths)
 
-        return [erratum] + rpms
+        return [erratum] + items
 
     def _push_items_from_rpms(self, erratum, rpm_list):
         out = []
@@ -135,9 +135,15 @@ class ErrataSource(Source):
     def _module_push_items_from_build(self, erratum, build_nvr, build_info):
         modules = (build_info.get("modules") or {}).copy()
 
+        module_filenames = list(modules.keys())
+
+        # We always request the modulemd.src.txt because we might need it later
+        # depending on the ftp_paths response.
+        module_filenames.append("modulemd.src.txt")
+
         # Get a koji source which will yield all modules from the build
         koji_source = self._koji_source(
-            module_build=[build_nvr], module_filter_filename=list(modules.keys())
+            module_build=[build_nvr], module_filter_filename=module_filenames
         )
 
         out = []
@@ -145,7 +151,7 @@ class ErrataSource(Source):
         for push_item in koji_source:
             # ET uses filenames to identify the modules here, we must do the same.
             basename = os.path.basename(push_item.src)
-            dest = modules.pop(basename)
+            dest = modules.pop(basename, [])
 
             # Fill in more push item details based on the info provided by ET.
             push_item = attr.evolve(push_item, dest=dest, origin=erratum.name)
@@ -238,7 +244,7 @@ class ErrataSource(Source):
 
         return out
 
-    def _add_ftp_paths(self, rpm_items, ftp_paths):
+    def _add_ftp_paths(self, items, erratum, ftp_paths):
         # ftp_paths structure is like this:
         #
         # {
@@ -251,23 +257,67 @@ class ErrataSource(Source):
         #                 "/ftp/pub/redhat/linux/enterprise/7Workstation/en/os/SRPMS/",
         #             ]
         #         },
+        #         "modules": [
+        #            "/ftp/pub/redhat/linux/enterprise/AppStream-8.0.0.Z/en/os/modules/"
+        #         ],
         #         "sig_key": "fd431d51",
         #     }
         # }
         #
-        # We only care about the rpm => ftp path mapping, which should be added onto
-        # our existing rpm push items if any exist.
+        # We use the (rpm, module) => ftp path mappings, which should be added onto
+        # our existing push items if they match.
         #
         rpm_to_paths = {}
-        for rpm_map in ftp_paths.values():
-            for (rpm_name, paths) in (rpm_map.get("rpms") or {}).items():
+        build_to_module_paths = {}
+        builds_need_modules = set()
+        builds_have_modules = set()
+        for build_nvr, build_map in ftp_paths.items():
+            for (rpm_name, paths) in (build_map.get("rpms") or {}).items():
                 rpm_to_paths[rpm_name] = paths
 
+            modules = build_map.get("modules") or []
+            build_to_module_paths[build_nvr] = modules
+            if modules:
+                builds_need_modules.add(build_nvr)
+
         out = []
-        for item in rpm_items:
-            paths = rpm_to_paths.get(item.name) or []
-            item = attr.evolve(item, dest=item.dest + paths)
-            out.append(item)
+        for item in items:
+            if isinstance(item, RpmPushItem):
+                # RPMs have dest updated with FTP paths.
+                paths = rpm_to_paths.get(item.name) or []
+                item = attr.evolve(item, dest=item.dest + paths)
+                out.append(item)
+            elif isinstance(item, ModuleMdSourcePushItem):
+                # modulemd sources have dest updated with FTP paths and will
+                # also be filtered out if there are no matches at all (because
+                # modulemd sources aren't delivered in any other manner)
+                paths = build_to_module_paths.get(item.build)
+                if paths:
+                    builds_have_modules.add(item.build)
+                    item = attr.evolve(item, dest=item.dest + paths)
+                if item.dest:
+                    out.append(item)
+                else:
+                    # modulemd sources are filtered out altogether if ET did
+                    # not provide any destinations.
+                    LOG.debug(
+                        "Erratum %s: modulemd source skipped due to no destinations: %s",
+                        erratum.name,
+                        item.src,
+                    )
+            else:
+                # Other types of items are unaffected by ftp_paths.
+                out.append(item)
+
+        # If ET requests that modules should be pushed for any builds and we're
+        # missing a modulemd.src.txt for those, it's a fatal error.
+        builds_missing_modules = sorted(builds_need_modules - builds_have_modules)
+        if builds_missing_modules:
+            msg = "Erratum %s: missing modulemd sources on koji build(s): %s" % (
+                erratum.name,
+                ", ".join(builds_missing_modules),
+            )
+            raise ValueError(msg)
 
         return out
 

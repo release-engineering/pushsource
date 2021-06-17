@@ -1,0 +1,264 @@
+# Content in this advisory includes:
+# - multi-arch container images
+# - operator manifests
+advisory_id: RHBA-2020:2807
+cdn_docker_file_list:
+  cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-cluster-logging-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-cluster-logging-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-cluster-nfd-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-cluster-nfd-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-elasticsearch-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-elasticsearch-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-local-storage-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-local-storage-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-ansible-service-broker-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - latest
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-ansible-service-broker-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - latest
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-template-service-broker-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-template-service-broker-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-metering-ansible-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-metering-ansible-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-ptp-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-ptp-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+  sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1:
+    docker:
+      target:
+        external_repos:
+          openshift4/ose-sriov-network-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+        repos:
+          redhat-openshift4-ose-sriov-network-rhel7-operator-metadata:
+            container_full_sig_key: 199e2f91fd431d51
+            container_sig_key: fd431d51
+            tags:
+            - v4.3
+            - v4.3.28.202006290519.p0.prod
+            - v4.3.28.202006290519.p0.prod-1
+cdn_file_list: {}
+cdn_metadata:
+  cdn_repo:
+  - rhel-7-for-power-le-ose-4_DOT_3-rpms__ppc64le
+  - rhel-7-for-system-z-ose-4_DOT_3-rpms__s390x
+  - rhel-7-server-ose-4_DOT_3-rpms__x86_64
+  - rhocp-4_DOT_3-for-rhel-8-ppc64le-rpms
+  - rhocp-4_DOT_3-for-rhel-8-s390x-rpms
+  - rhocp-4_DOT_3-for-rhel-8-x86_64-rpms
+  description: 'Red Hat OpenShift Container Platform is Red Hat''s cloud computing
+
+    Kubernetes application platform solution designed for on-premise or private
+
+    cloud deployments.
+
+
+    This advisory will be used to release the corresponding operator manifests
+
+    via new operator metadata containers.
+
+
+    All OpenShift Container Platform 4.3 users are advised to upgrade to these
+
+    updated packages and images when they are available in the appropriate
+
+    release channel. To check for available updates, use the OpenShift Console
+
+    or the CLI oc command. Instructions for upgrading a cluster are available
+
+    at
+
+    https://docs.openshift.com/container-platform/4.3/updating/updating-cluster-between-minor.html#understanding-upgrade-channels_updating-cluster-between-minor.'
+  from: release-engineering@redhat.com
+  id: RHBA-2020:2807
+  issued: 2020-07-08 22:16:09 UTC
+  pkglist:
+  - name: RHBA-2020:2807
+    packages: []
+    short: ''
+  pulp_user_metadata:
+    content_types:
+    - docker
+  pushcount: '3'
+  reboot_suggested: false
+  references:
+  - href: https://access.redhat.com/errata/RHBA-2020:2807
+    id: RHBA-2020:2807
+    title: RHBA-2020:2807
+    type: self
+  - href: https://bugzilla.redhat.com/show_bug.cgi?id=1850434
+    id: '1850434'
+    title: Placeholder bug for OCP 4.3.z metadata release
+    type: bugzilla
+  release: '0'
+  rights: Copyright 2020 Red Hat Inc
+  severity: None
+  solution: 'For OpenShift Container Platform 4.3 see the following documentation,
+    which
+
+    will be updated shortly for release 4.3.28, for important instructions on
+
+    how to upgrade your cluster and fully apply this asynchronous errata
+
+    update:
+
+
+    https://docs.openshift.com/container-platform/4.3/release_notes/ocp-4-3-release-notes.html
+
+
+    Details on how to access this content are available at
+
+    https://docs.openshift.com/container-platform/4.3/updating/updating-cluster-cli.html.'
+  status: final
+  summary: 'Red Hat OpenShift Container Platform release 4.3.28 is now available with
+
+    updates to packages and images that fix several bugs.
+
+
+    This advisory will be used to release the corresponding operator manifests
+
+    via new operator metadata containers.'
+  title: OpenShift Container Platform 4.3.28 OLM Operators metadata update
+  type: bugfix
+  updated: 2020-07-08 22:16:09 UTC
+  version: '3'
+ftp_paths: {}

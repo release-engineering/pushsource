@@ -16,6 +16,7 @@ class ErrataRaw(object):
     # Helper to collect raw responses of all ET APIs for a single advisory
     advisory_cdn_metadata = attr.ib(type=dict)
     advisory_cdn_file_list = attr.ib(type=dict)
+    advisory_cdn_docker_file_list = attr.ib(type=dict)
     ftp_paths = attr.ib(type=dict)
 
 
@@ -30,6 +31,9 @@ class ErrataClient(object):
         )
         self._get_advisory_cdn_file_list = partial(
             self._call_et, "get_advisory_cdn_file_list"
+        )
+        self._get_advisory_cdn_docker_file_list = partial(
+            self._call_et, "get_advisory_cdn_docker_file_list"
         )
         self._get_ftp_paths = partial(self._call_et, "get_ftp_paths")
 
@@ -47,6 +51,7 @@ class ErrataClient(object):
         all_responses = f_zip(
             self._executor.submit(self._get_advisory_cdn_metadata, advisory_id),
             self._executor.submit(self._get_advisory_cdn_file_list, advisory_id),
+            self._executor.submit(self._get_advisory_cdn_docker_file_list, advisory_id),
             self._executor.submit(self._get_ftp_paths, advisory_id),
         )
         return f_map(all_responses, lambda tup: ErrataRaw(*tup))

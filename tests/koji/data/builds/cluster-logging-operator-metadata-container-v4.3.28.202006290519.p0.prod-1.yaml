@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
+  id: 4038509
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038510
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
+  id: 4038511
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
+  id: 4038512
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz
+  id: 4038513
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-56520-20200707074906
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-56520-20200707074906
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248993
+name: cluster-logging-operator-metadata-container
+nvr: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

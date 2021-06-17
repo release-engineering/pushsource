@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
+  id: 4038514
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038515
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
+  id: 4038516
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
+  id: 4038517
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz
+  id: 4038518
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-57368-20200707075038
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-57368-20200707075038
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248994
+name: elasticsearch-operator-metadata-container
+nvr: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

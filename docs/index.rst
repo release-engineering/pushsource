@@ -17,6 +17,7 @@ A library for accessing push items from various sources.
    model/rpm
    model/modulemd
    model/errata
+   model/containers
    model/ami
    model/productid
    model/comps

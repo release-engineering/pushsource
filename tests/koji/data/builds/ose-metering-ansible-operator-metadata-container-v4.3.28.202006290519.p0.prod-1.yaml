@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:176277a797bafa67823741efa319c2844758b2d5a4cb796b75a8b67580b54d56.aarch64.tar.gz
+  id: 4038500
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038501
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:b248b0d65ac239f8cacbe71d892ea7d829db0171abb922f1caf6e888fb8c1bcc.x86_64.tar.gz
+  id: 4038502
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:1dd3df4e8e532526b10155839caddef35cc731e586de169c60af9d72234e6640.s390x.tar.gz
+  id: 4038503
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:e437e702740efe93906c9b2e9e2a6e53863ccaa2aa49dfc6fa4a9047d37f0d2b.ppc64le.tar.gz
+  id: 4038504
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata@sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-80281-20200707073911
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata@sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-80281-20200707073911
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248981
+name: ose-metering-ansible-operator-metadata-container
+nvr: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

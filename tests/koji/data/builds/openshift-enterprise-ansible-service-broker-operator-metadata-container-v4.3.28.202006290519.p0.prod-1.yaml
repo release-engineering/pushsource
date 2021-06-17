@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
+  id: 4038574
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038575
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
+  id: 4038576
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
+  id: 4038577
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz
+  id: 4038578
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-52606-20200707080252
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-52606-20200707080252
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1249006
+name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+nvr: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

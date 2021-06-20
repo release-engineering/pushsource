@@ -1,0 +1,49 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_files"
+
+# Push items generated from above.
+items:
+- FilePushItem:
+    build: null
+    description: null
+    dest:
+    - dest1
+    md5sum: null
+    name: test.txt
+    origin: {{ src_dir }}/tests/staged/data/simple_files
+    sha256sum: d8301c5f72f16455dbc300f3d1bef8972424255caad103cc6c7ba7dc92d90ca8
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_files/dest1/ISOS/test.txt
+    state: PENDING
+    version: null
+- FilePushItem:
+    build: null
+    description: ''
+    dest:
+    - dest2
+    md5sum: null
+    name: some-file.txt
+    origin: {{ src_dir }}/tests/staged/data/simple_files
+    sha256sum: 315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_files/dest2/FILES/some-file
+    state: PENDING
+    version: 1.2.3
+- FilePushItem:
+    build: null
+    description: My wonderful ISO
+    dest:
+    - dest2
+    md5sum: null
+    name: some-iso
+    origin: {{ src_dir }}/tests/staged/data/simple_files
+    sha256sum: db68c8a70f8383de71c107dca5fcfe53b1132186d1a6681d9ee3f4eea724fabb
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_files/dest2/ISOS/some-iso
+    state: PENDING
+    version: null

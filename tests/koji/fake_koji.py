@@ -1,4 +1,5 @@
 import os
+import glob
 
 import yaml
 
@@ -38,6 +39,11 @@ class FakeKojiController(object):
         self.archive_data[build["nvr"]] = archives
 
         return build
+
+    def load_all_builds(self):
+        for filename in glob.glob(BUILDS_DIR + "/*.yaml"):
+            nvr = os.path.splitext(os.path.basename(filename))[0]
+            self.load_build(nvr)
 
     def ensure_build(self, build_nvr):
         if build_nvr in self.build_data:

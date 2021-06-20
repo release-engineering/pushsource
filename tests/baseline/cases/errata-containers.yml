@@ -1,0 +1,650 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "erratatest:errata=RHBA-2020:2807"
+
+# Push items generated from above.
+items:
+- ContainerImagePushItem:
+    build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:bc6da6c39d2778a070d09c619927d0fc3890b71080b00c89412e2b55859a040a.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:bc6da6c39d2778a070d09c619927d0fc3890b71080b00c89412e2b55859a040a.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:d9ca1606333cc9badec48c4fe4895ae19b5ea5b29bb9601e17c7fb79cdd7ea19.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:d9ca1606333cc9badec48c4fe4895ae19b5ea5b29bb9601e17c7fb79cdd7ea19.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e395580a86026948eeed45d1ac406a5b3ce355aa0f48de23877ddfb61ca2cf62.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e395580a86026948eeed45d1ac406a5b3ce355aa0f48de23877ddfb61ca2cf62.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:f49167b645594fec8171bcffa2ba4c652d2fc6a8a39c8d04c8ac9891833429f6.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:f49167b645594fec8171bcffa2ba4c652d2fc6a8a39c8d04c8ac9891833429f6.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:39fa57800aaa583cce939c5d1f6b8b9cc47fd903b1f2e8776d5b1d7cbf9dee4b.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:39fa57800aaa583cce939c5d1f6b8b9cc47fd903b1f2e8776d5b1d7cbf9dee4b.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:8aff8f23622971d84fea7892062731af8c8611b887cbad8a3ef488055fa4ed04.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:8aff8f23622971d84fea7892062731af8c8611b887cbad8a3ef488055fa4ed04.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:9661ac2d9c97b5cffdf6bc41f1bc98020890a63918416d32e3fdead286229342.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:9661ac2d9c97b5cffdf6bc41f1bc98020890a63918416d32e3fdead286229342.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:f40245eeba63f6f1cd0b1b59a683a6ca6a5051194f55386e26e5fdd234433bb4.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:f40245eeba63f6f1cd0b1b59a683a6ca6a5051194f55386e26e5fdd234433bb4.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:176277a797bafa67823741efa319c2844758b2d5a4cb796b75a8b67580b54d56.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:176277a797bafa67823741efa319c2844758b2d5a4cb796b75a8b67580b54d56.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:1dd3df4e8e532526b10155839caddef35cc731e586de169c60af9d72234e6640.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:1dd3df4e8e532526b10155839caddef35cc731e586de169c60af9d72234e6640.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:b248b0d65ac239f8cacbe71d892ea7d829db0171abb922f1caf6e888fb8c1bcc.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:b248b0d65ac239f8cacbe71d892ea7d829db0171abb922f1caf6e888fb8c1bcc.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:e437e702740efe93906c9b2e9e2a6e53863ccaa2aa49dfc6fa4a9047d37f0d2b.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:e437e702740efe93906c9b2e9e2a6e53863ccaa2aa49dfc6fa4a9047d37f0d2b.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ptp-operator-metadata:v4.3
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ptp-operator-metadata:v4.3
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ptp-operator-metadata:v4.3
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-ptp-operator-metadata:v4.3
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:05db9dc3ed76f6cf993f0dd35aa51892a38ba51afdf8ed564a236d53d8375a47.x86_64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/sriov-network-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:05db9dc3ed76f6cf993f0dd35aa51892a38ba51afdf8ed564a236d53d8375a47.x86_64.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:115387bd7efba2bdb7ee9f0d4fff88f03c1579859c6230cc67bb5c0b31263ba8.ppc64le.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/sriov-network-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:115387bd7efba2bdb7ee9f0d4fff88f03c1579859c6230cc67bb5c0b31263ba8.ppc64le.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:bbb14d32c62f4303e16256fd8d3f5123e789da1b2aee81e82b316908fcf9e28b.s390x.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/sriov-network-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:bbb14d32c62f4303e16256fd8d3f5123e789da1b2aee81e82b316908fcf9e28b.s390x.tar.gz
+    state: PENDING
+- ContainerImagePushItem:
+    build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest:
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
+    - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod-1
+    md5sum: null
+    name: docker-image-sha256:be2056f3f63c8391fe60f5a6043c4d1a718bf52fb49fba39c18628b930661baf.aarch64.tar.gz
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/sriov-network-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/images/docker-image-sha256:be2056f3f63c8391fe60f5a6043c4d1a718bf52fb49fba39c18628b930661baf.aarch64.tar.gz
+    state: PENDING
+- ErratumPushItem:
+    build: null
+    content_types:
+    - docker
+    description: 'Red Hat OpenShift Container Platform is Red Hat''s cloud computing
+
+      Kubernetes application platform solution designed for on-premise or private
+
+      cloud deployments.
+
+
+      This advisory will be used to release the corresponding operator manifests
+
+      via new operator metadata containers.
+
+
+      All OpenShift Container Platform 4.3 users are advised to upgrade to these
+
+      updated packages and images when they are available in the appropriate
+
+      release channel. To check for available updates, use the OpenShift Console
+
+      or the CLI oc command. Instructions for upgrading a cluster are available
+
+      at
+
+      https://docs.openshift.com/container-platform/4.3/updating/updating-cluster-between-minor.html#understanding-upgrade-channels_updating-cluster-between-minor.'
+    dest:
+    - rhel-7-for-power-le-ose-4_DOT_3-rpms__ppc64le
+    - rhel-7-for-system-z-ose-4_DOT_3-rpms__s390x
+    - rhel-7-server-ose-4_DOT_3-rpms__x86_64
+    - rhocp-4_DOT_3-for-rhel-8-ppc64le-rpms
+    - rhocp-4_DOT_3-for-rhel-8-s390x-rpms
+    - rhocp-4_DOT_3-for-rhel-8-x86_64-rpms
+    from: release-engineering@redhat.com
+    issued: 2020-07-08 22:16:09 UTC
+    md5sum: null
+    name: RHBA-2020:2807
+    origin: null
+    pkglist: []
+    pushcount: '3'
+    reboot_suggested: false
+    references:
+    - href: https://access.redhat.com/errata/RHBA-2020:2807
+      id: RHBA-2020:2807
+      title: RHBA-2020:2807
+      type: self
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1850434
+      id: '1850434'
+      title: Placeholder bug for OCP 4.3.z metadata release
+      type: bugzilla
+    release: '0'
+    rights: Copyright 2020 Red Hat Inc
+    severity: None
+    sha256sum: null
+    signing_key: null
+    solution: 'For OpenShift Container Platform 4.3 see the following documentation,
+      which
+
+      will be updated shortly for release 4.3.28, for important instructions on
+
+      how to upgrade your cluster and fully apply this asynchronous errata
+
+      update:
+
+
+      https://docs.openshift.com/container-platform/4.3/release_notes/ocp-4-3-release-notes.html
+
+
+      Details on how to access this content are available at
+
+      https://docs.openshift.com/container-platform/4.3/updating/updating-cluster-cli.html.'
+    src: null
+    state: PENDING
+    status: final
+    summary: 'Red Hat OpenShift Container Platform release 4.3.28 is now available
+      with
+
+      updates to packages and images that fix several bugs.
+
+
+      This advisory will be used to release the corresponding operator manifests
+
+      via new operator metadata containers.'
+    title: OpenShift Container Platform 4.3.28 OLM Operators metadata update
+    type: bugfix
+    updated: 2020-07-08 22:16:09 UTC
+    version: '3'
+- OperatorManifestPushItem:
+    build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING
+- OperatorManifestPushItem:
+    build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    dest: []
+    md5sum: null
+    name: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
+    origin: RHBA-2020:2807
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
+    state: PENDING

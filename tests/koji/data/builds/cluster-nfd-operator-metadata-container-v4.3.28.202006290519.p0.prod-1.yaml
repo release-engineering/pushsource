@@ -36,6 +36,12 @@ archives:
   id: 4038529
   type_name: tar
 extra:
+
+  ###### Test data manually edited here: ########################
+  # Make manifests available using legacy scheme (not typeinfo)
+  operator_manifests_archive: operator_manifests.zip
+  ###############################################################
+
   image:
     autorebuild: false
     help: null
@@ -85,8 +91,6 @@ extra:
       parent_image_builds: {}
       parent_images:
       - scratch
-    operator-manifests:
-      archive: operator_manifests.zip
 id: 1248998
 name: cluster-nfd-operator-metadata-container
 nvr: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1

@@ -1,0 +1,21 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_comps"
+
+# Push items generated from above.
+items:
+- CompsXmlPushItem:
+    build: null
+    dest:
+    - dest1
+    md5sum: null
+    name: rawhide-everything.xml
+    origin: {{ src_dir }}/tests/staged/data/simple_comps
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_comps/dest1/COMPS/rawhide-everything.xml
+    state: PENDING

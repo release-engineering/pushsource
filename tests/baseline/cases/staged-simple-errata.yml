@@ -1,0 +1,272 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_errata"
+
+# Push items generated from above.
+items:
+- ErratumPushItem:
+    build: null
+    content_types:
+    - docker
+    description: 'The devtools/rust-toolset-rhel7 container image has been updated
+      for Red Hat Developer Tools to address the following security advisory: RHSA-2020:0374
+      (see References)
+
+
+      Users of devtools/rust-toolset-rhel7 container images are advised to upgrade
+      to these updated images, which contain backported patches to correct these security
+      issues, fix these bugs and add these enhancements. Users of these images are
+      also encouraged to rebuild all container images that depend on these images.
+
+
+      You can find images updated by this advisory in Red Hat Container Catalog (see
+      References).'
+    dest:
+    - dest1
+    from: release-engineering@redhat.com
+    issued: 2020-02-17 09:14:49 UTC
+    md5sum: null
+    name: RHBA-2020:0518
+    origin: {{ src_dir }}/tests/staged/data/simple_errata
+    pkglist: []
+    pushcount: '1'
+    reboot_suggested: false
+    references:
+    - href: https://access.redhat.com/errata/RHBA-2020:0518
+      id: RHBA-2020:0518
+      title: RHBA-2020:0518
+      type: self
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1744149
+      id: '1744149'
+      title: 'CVE-2019-14816 kernel: heap overflow in mwifiex_update_vs_ie() function
+        of Marvell WiFi driver'
+      type: bugzilla
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1771909
+      id: '1771909'
+      title: 'CVE-2019-17133 kernel: buffer overflow in cfg80211_mgd_wext_giwessid
+        in net/wireless/wext-sme.c'
+      type: bugzilla
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1773519
+      id: '1773519'
+      title: 'CVE-2019-14901 kernel: heap overflow in marvell/mwifiex/tdls.c'
+      type: bugzilla
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1774671
+      id: '1774671'
+      title: 'CVE-2019-14898 kernel: incomplete fix  for race condition between mmget_not_zero()/get_task_mm()
+        and core dumping in CVE-2019-11599'
+      type: bugzilla
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1774870
+      id: '1774870'
+      title: 'CVE-2019-14895 kernel: heap-based buffer overflow in mwifiex_process_country_ie()
+        function in drivers/net/wireless/marvell/mwifiex/sta_ioctl.c'
+      type: bugzilla
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-13734.html
+      id: CVE-2019-13734
+      title: CVE-2019-13734
+      type: cve
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-14816.html
+      id: CVE-2019-14816
+      title: CVE-2019-14816
+      type: cve
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-14895.html
+      id: CVE-2019-14895
+      title: CVE-2019-14895
+      type: cve
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-14898.html
+      id: CVE-2019-14898
+      title: CVE-2019-14898
+      type: cve
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-14901.html
+      id: CVE-2019-14901
+      title: CVE-2019-14901
+      type: cve
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-17133.html
+      id: CVE-2019-17133
+      title: CVE-2019-17133
+      type: cve
+    - href: https://access.redhat.com/errata/RHSA-2020:0374
+      id: ref_0
+      title: other_reference_0
+      type: other
+    - href: https://access.redhat.com/containers/?tab=images#/registry.access.redhat.com/devtools/rust-toolset-rhel7
+      id: ref_1
+      title: other_reference_1
+      type: other
+    release: '0'
+    rights: Copyright 2020 Red Hat Inc
+    severity: None
+    sha256sum: null
+    signing_key: null
+    solution: 'The Red Hat Developer Tools container image provided by this update
+      can be downloaded from the Red Hat Container Registry at registry.access.redhat.com.
+      Installation instructions for your platform are available at Red Hat Container
+      Catalog (see References).
+
+
+      Dockerfiles and scripts should be amended either to refer to this new image
+      specifically, or to the latest image generally.'
+    src: {{ src_dir }}/tests/staged/data/simple_errata/dest1/ERRATA/advisory1.yaml
+    state: PENDING
+    status: final
+    summary: Updated devtools/rust-toolset-rhel7 container image is now available
+      for Red Hat Developer Tools.
+    title: updated devtools/rust-toolset-rhel7 container image
+    type: bugfix
+    updated: 2020-02-17 09:14:49 UTC
+    version: '1'
+- ErratumPushItem:
+    build: null
+    content_types:
+    - rpm
+    description: 'The sudo packages contain the sudo utility which allows system administrators
+      to provide certain users with the permission to execute privileged commands,
+      which are used for system management purposes, without having to log in as root.
+
+
+      Security Fix(es):
+
+
+      * sudo: Stack based buffer overflow when pwfeedback is enabled (CVE-2019-18634)
+
+
+      For more details about the security issue(s), including the impact, a CVSS score,
+      acknowledgments, and other related information, refer to the CVE page(s) listed
+      in the References section.'
+    dest:
+    - dest1
+    from: release-engineering@redhat.com
+    issued: 2020-02-13 19:00:11 UTC
+    md5sum: null
+    name: RHSA-2020:0509
+    origin: {{ src_dir }}/tests/staged/data/simple_errata
+    pkglist:
+    - module: null
+      name: RHSA-2020:0509
+      packages:
+      - arch: ppc64le
+        epoch: '0'
+        filename: sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm
+        md5sum: 0d56f302617696d3511e71e1669e62c0
+        name: sudo
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 31c4f73af90c6d267cc5281c59e4a93ae3557b2253d9a8e3fef55f3cafca6e54
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: SRPMS
+        epoch: '0'
+        filename: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        md5sum: f94ab3724b498e3faeab643fe2a67c9c
+        name: sudo
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 10d7724302a60d0d2ca890fc7834b8143df55ba1ce0176469ea634ac4ab7aa28
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: x86_64
+        epoch: '0'
+        filename: sudo-1.8.25p1-4.el8_0.3.x86_64.rpm
+        md5sum: 25e9470c4fe96034fe1d7525c04b5d8e
+        name: sudo
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 593f872c1869f7beb963c8df2945fc691a1d999945c8c45c6bc7e02731fa016f
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: ppc64le
+        epoch: '0'
+        filename: sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm
+        md5sum: e242826fb38f487502cdc1f1a06991d2
+        name: sudo-debuginfo
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: x86_64
+        epoch: '0'
+        filename: sudo-debuginfo-1.8.25p1-4.el8_0.3.x86_64.rpm
+        md5sum: 91126f02975c06015880d6ea99cb2760
+        name: sudo-debuginfo
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 1b7d3a7613236ffea7c4553eb9dea69fc19557005ac3a059d7e83efc08c5b754
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: ppc64le
+        epoch: '0'
+        filename: sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm
+        md5sum: d6da7e2e3d9efe050fef2e8d047682be
+        name: sudo-debugsource
+        reboot_suggested: true
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 355cbb9dc348b17782cff57120391685d6a1f6884facc54fac4b7fb54abeffba
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      - arch: x86_64
+        epoch: '0'
+        filename: sudo-debugsource-1.8.25p1-4.el8_0.3.x86_64.rpm
+        md5sum: 6b0967941c0caf626c073dc7da0272b6
+        name: sudo-debugsource
+        reboot_suggested: false
+        release: 4.el8_0.3
+        sha1sum: null
+        sha256sum: 43e318fa49e4df685ea0d5f0925a00a336236b2e20f27f9365c39a48102c2cf6
+        src: sudo-1.8.25p1-4.el8_0.3.src.rpm
+        version: 1.8.25p1
+      short: ''
+    pushcount: '3'
+    reboot_suggested: false
+    references:
+    - href: https://access.redhat.com/errata/RHSA-2020:0509
+      id: null
+      title: null
+      type: self
+    - href: https://bugzilla.redhat.com/show_bug.cgi?id=1796944
+      id: '1796944'
+      title: 'CVE-2019-18634 sudo: Stack based buffer overflow when pwfeedback is
+        enabled'
+      type: bugzilla
+    - href: https://www.redhat.com/security/data/cve/CVE-2019-18634.html
+      id: CVE-2019-18634
+      title: CVE-2019-18634
+      type: cve
+    - href: https://access.redhat.com/security/updates/classification/#important
+      id: classification
+      title: important
+      type: other
+    release: '0'
+    rights: Copyright 2020 Red Hat Inc
+    severity: Important
+    sha256sum: null
+    signing_key: null
+    solution: 'For details on how to apply this update, which includes the changes
+      described in this advisory, refer to:
+
+
+      https://access.redhat.com/articles/11258'
+    src: {{ src_dir }}/tests/staged/data/simple_errata/dest1/ERRATA/advisory2.json
+    state: PENDING
+    status: final
+    summary: 'An update for sudo is now available for Red Hat Enterprise Linux 8.0
+      Update Services for SAP Solutions.
+
+
+      Red Hat Product Security has rated this update as having a security impact of
+      Important. A Common Vulnerability Scoring System (CVSS) base score, which gives
+      a detailed severity rating, is available for each vulnerability from the CVE
+      link(s) in the References section.'
+    title: 'Important: sudo security update'
+    type: security
+    updated: 2020-02-13 19:00:11 UTC
+    version: '3'

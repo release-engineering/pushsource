@@ -85,8 +85,10 @@ extra:
       parent_image_builds: {}
       parent_images:
       - scratch
-    operator-manifests:
-      archive: operator_manifests.zip
+
+    ####### Test data manually edited:
+    # The real build has an operator-manifests but it was deleted here.
+
 id: 1248969
 name: sriov-network-operator-metadata-container
 nvr: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1

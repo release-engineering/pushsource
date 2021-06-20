@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+dir=$(dirname $0)
+
+casename=$1
+url=$2
+
+echo "url: '$url'" > $dir/cases/$casename.yml
+echo 'items: []' >> $dir/cases/$casename.yml
+
+
+
+env PUSHSOURCE_UPDATE_BASELINE=1 py.test \
+  "$dir/test_baseline.py::test_source_against_baseline[$casename]"
+
+echo "Please review: $dir/cases/$casename.yml"

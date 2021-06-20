@@ -1,0 +1,44 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_ami_with_bc"
+
+# Push items generated from above.
+items:
+- AmiPushItem:
+    billing_codes:
+      codes:
+      - bp-1234
+      - bp-abcd
+      name: FakeBcName
+    build: null
+    description: A sample image for testing
+    dest:
+    - dest1
+    ena_support: true
+    md5sum: null
+    name: fake-image.raw
+    origin: {{ src_dir }}/tests/staged/data/simple_ami_with_bc
+    region: cn-north-1
+    release:
+      arch: x86_64
+      base_product: null
+      base_version: null
+      date: 2020-05-11
+      product: Fake-Product
+      respin: 1
+      type: ga
+      variant: Fake-Variant
+      version: Fake-Version
+    root_device: /dev/sda1
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_ami_with_bc/dest1/AWS_IMAGES/fake-image.raw
+    sriov_net_support: simple
+    state: PENDING
+    type: access
+    virtualization: hvm
+    volume: gp2

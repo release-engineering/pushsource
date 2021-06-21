@@ -4,6 +4,35 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: arm64
+            build-date: '2020-07-07T08:04:51.951124'
+            com.redhat.build-host: arm64-osbs-12.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: openshift-enterprise-ansible-service-broker-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            distribution-scope: public
+            io.openshift.build.commit.id: dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.commit.url: https://github.com/openshift/ansible-service-broker/commit/dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.source-location: https://github.com/openshift/ansible-service-broker
+            io.openshift.maintainer.product: OpenShift Container Platform
+            name: openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 1785aefc1c5f30ef0051420f80d68218d01aaaa1
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:34d3a33bd01cffac254244db11d1112c675415779ca147be90ae7a3714f04139
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:rhaos-4.3-rhel-7-candidate-46533-20200707080442-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:34d3a33bd01cffac254244db11d1112c675415779ca147be90ae7a3714f04139
+      tags:
+      - rhaos-4.3-rhel-7-candidate-46533-20200707080442-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
@@ -16,6 +45,35 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: x86_64
+            build-date: '2020-07-07T08:04:47.567154'
+            com.redhat.build-host: cpt-1005.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: openshift-enterprise-ansible-service-broker-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            distribution-scope: public
+            io.openshift.build.commit.id: dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.commit.url: https://github.com/openshift/ansible-service-broker/commit/dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.source-location: https://github.com/openshift/ansible-service-broker
+            io.openshift.maintainer.product: OpenShift Container Platform
+            name: openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 1785aefc1c5f30ef0051420f80d68218d01aaaa1
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:9604788cd8993127146e7778e0105b32c3f8484c2329c2d616d02fa3c6ed60ca
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:rhaos-4.3-rhel-7-candidate-12704-20200707080441-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:9604788cd8993127146e7778e0105b32c3f8484c2329c2d616d02fa3c6ed60ca
+      tags:
+      - rhaos-4.3-rhel-7-candidate-12704-20200707080441-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
@@ -23,6 +81,35 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: s390x
+            build-date: '2020-07-07T08:04:49.844782'
+            com.redhat.build-host: s390-c1-vm-04.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: openshift-enterprise-ansible-service-broker-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            distribution-scope: public
+            io.openshift.build.commit.id: dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.commit.url: https://github.com/openshift/ansible-service-broker/commit/dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.source-location: https://github.com/openshift/ansible-service-broker
+            io.openshift.maintainer.product: OpenShift Container Platform
+            name: openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 1785aefc1c5f30ef0051420f80d68218d01aaaa1
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:51d4206bb0f11900ca85b85401b6189713e4d98ebdf3f80ed803ecf455c88b50
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:rhaos-4.3-rhel-7-candidate-48676-20200707080442-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:51d4206bb0f11900ca85b85401b6189713e4d98ebdf3f80ed803ecf455c88b50
+      tags:
+      - rhaos-4.3-rhel-7-candidate-48676-20200707080442-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
@@ -30,6 +117,35 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: ppc64le
+            build-date: '2020-07-07T08:04:51.445354'
+            com.redhat.build-host: ppc64le-c1-vm-02.prod.osbs.eng.rdu2.redhat.com
+            com.redhat.component: openshift-enterprise-ansible-service-broker-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            distribution-scope: public
+            io.openshift.build.commit.id: dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.commit.url: https://github.com/openshift/ansible-service-broker/commit/dd617fb0a0511f9046db4cd290999a87170720c6
+            io.openshift.build.source-location: https://github.com/openshift/ansible-service-broker
+            io.openshift.maintainer.product: OpenShift Container Platform
+            name: openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-openshift-enterprise-ansible-service-broker-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 1785aefc1c5f30ef0051420f80d68218d01aaaa1
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:5dfb14191bfcd20d3e9d78bc66ebc58f0f6855da681aaf82fc52d4d77d9f0c7b
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata:rhaos-4.3-rhel-7-candidate-13114-20200707080444-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata@sha256:5dfb14191bfcd20d3e9d78bc66ebc58f0f6855da681aaf82fc52d4d77d9f0c7b
+      tags:
+      - rhaos-4.3-rhel-7-candidate-13114-20200707080444-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz

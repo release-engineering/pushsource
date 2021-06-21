@@ -7,7 +7,12 @@
 #
 #   tests/koji/data/dump https://koji.example.com/hub/ my-build-nvr
 #
+# Or, to redump *all* builds (useful if format changes):
+#
+#   tests/koji/data/dump https://koji.example.com/hub/ all
+#
 import os
+import glob
 import koji
 import sys
 import yaml
@@ -42,13 +47,19 @@ def sanitized_build(build):
 def sanitized_archive_extra(extra):
     out = {}
 
-    if not extra.get("docker"):
-        return out
-
     if "image" in extra:
         out["image"] = extra["image"]
 
-    # Will likely need 'docker' here soon
+    if "docker" in extra:
+        out["docker"] = {}
+        out["docker"]["repositories"] = extra["docker"]["repositories"]
+        out["docker"]["tags"] = extra["docker"]["tags"]
+        out["docker"]["digests"] = extra["docker"]["digests"]
+        out["docker"]["config"] = {}
+        out["docker"]["config"]["config"] = {}
+        out["docker"]["config"]["config"]["Labels"] = extra["docker"]["config"][
+            "config"
+        ]["Labels"]
 
     return out
 
@@ -72,17 +83,16 @@ def sanitized_archives(archives):
     return out
 
 
-def run(server_url, nvr):
-    server = koji.ClientSession(server_url)
+def dump_build(session, nvr):
 
-    build = server.getBuild(nvr)
+    build = session.getBuild(nvr)
 
     # In case user passed an ID
     nvr = build["nvr"]
 
     build = sanitized_build(build)
 
-    archives = server.listArchives(build["id"])
+    archives = session.listArchives(build["id"])
     archives = sanitized_archives(archives)
     build["archives"] = archives
 
@@ -93,6 +103,27 @@ def run(server_url, nvr):
         fh.write("#\n")
         yaml.dump(build, fh)
     print("Wrote to", data_file)
+
+
+def get_all_nvrs():
+    out = []
+    for build_file in glob.glob(BUILDS_DIR + "/*.yaml"):
+        with open(build_file, "rt") as f:
+            data = yaml.load(f, Loader=yaml.SafeLoader)
+            out.append(data["nvr"])
+    return out
+
+
+def run(server_url, nvr):
+    server = koji.ClientSession(server_url)
+
+    if nvr == "all":
+        nvrs = get_all_nvrs()
+    else:
+        nvrs = [nvr]
+
+    for nvr in nvrs:
+        dump_build(server, nvr)
 
 
 if __name__ == "__main__":

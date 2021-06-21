@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
+  id: 4038472
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038473
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
+  id: 4038474
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
+  id: 4038475
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz
+  id: 4038476
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-33656-20200707072400
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-33656-20200707072400
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248963
+name: local-storage-operator-metadata-container
+nvr: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

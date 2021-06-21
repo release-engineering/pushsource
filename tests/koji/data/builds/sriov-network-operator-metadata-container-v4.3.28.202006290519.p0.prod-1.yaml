@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:be2056f3f63c8391fe60f5a6043c4d1a718bf52fb49fba39c18628b930661baf.aarch64.tar.gz
+  id: 4038495
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038496
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:05db9dc3ed76f6cf993f0dd35aa51892a38ba51afdf8ed564a236d53d8375a47.x86_64.tar.gz
+  id: 4038497
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:bbb14d32c62f4303e16256fd8d3f5123e789da1b2aee81e82b316908fcf9e28b.s390x.tar.gz
+  id: 4038498
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:115387bd7efba2bdb7ee9f0d4fff88f03c1579859c6230cc67bb5c0b31263ba8.ppc64le.tar.gz
+  id: 4038499
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-88311-20200707073051
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-88311-20200707073051
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248969
+name: sriov-network-operator-metadata-container
+nvr: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

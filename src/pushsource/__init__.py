@@ -7,6 +7,8 @@ from pushsource._impl.model import (
     ModuleMdSourcePushItem,
     ProductIdPushItem,
     RpmPushItem,
+    ContainerImagePushItem,
+    OperatorManifestPushItem,
     AmiPushItem,
     AmiRelease,
     AmiBillingCodes,

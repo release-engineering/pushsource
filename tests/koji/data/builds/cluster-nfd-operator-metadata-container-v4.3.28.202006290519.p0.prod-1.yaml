@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:f49167b645594fec8171bcffa2ba4c652d2fc6a8a39c8d04c8ac9891833429f6.aarch64.tar.gz
+  id: 4038525
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038526
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:bc6da6c39d2778a070d09c619927d0fc3890b71080b00c89412e2b55859a040a.x86_64.tar.gz
+  id: 4038527
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:e395580a86026948eeed45d1ac406a5b3ce355aa0f48de23877ddfb61ca2cf62.s390x.tar.gz
+  id: 4038528
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:d9ca1606333cc9badec48c4fe4895ae19b5ea5b29bb9601e17c7fb79cdd7ea19.ppc64le.tar.gz
+  id: 4038529
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-nfd-operator-metadata@sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-nfd-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-65305-20200707075731
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-nfd-operator-metadata@sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-nfd-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-65305-20200707075731
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248998
+name: cluster-nfd-operator-metadata-container
+nvr: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

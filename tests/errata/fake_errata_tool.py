@@ -50,5 +50,8 @@ class FakeErrataToolProxy(object):
     def get_advisory_cdn_metadata(self, advisory_id):
         return self._get_data(advisory_id, "cdn_metadata")
 
+    def get_advisory_cdn_docker_file_list(self, advisory_id):
+        return self._get_data(advisory_id, "cdn_docker_file_list")
+
     def get_ftp_paths(self, advisory_id):
         return self._get_data(advisory_id, "ftp_paths")

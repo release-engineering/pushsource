@@ -12,12 +12,20 @@ from more_executors import Executors
 from more_executors.futures import f_map
 
 from ..source import Source
-from ..model import RpmPushItem, ModuleMdPushItem, ModuleMdSourcePushItem
+from ..model import (
+    RpmPushItem,
+    ModuleMdPushItem,
+    ModuleMdSourcePushItem,
+    OperatorManifestPushItem,
+    ContainerImagePushItem,
+)
 from ..helpers import list_argument, try_int
 from .modulemd import Module
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
+
+MIME_TYPE_MANIFEST_LIST = "application/vnd.docker.distribution.manifest.list.v2+json"
 
 
 class ListArchivesCommand(object):
@@ -104,6 +112,7 @@ class KojiSource(Source):
         rpm=None,
         module_build=None,
         module_filter_filename=None,
+        container_build=None,
         signing_key=None,
         basedir=None,
         threads=4,
@@ -143,6 +152,12 @@ class KojiSource(Source):
 
                 Has no effect if ``module_build`` is not provided.
 
+            container_build (list[str, int])
+                Build identifier(s). Can be koji IDs (integers) or build NVRs.
+                The source will yield all container images produced by these
+                build(s), along with associated artifacts such as operator manifest
+                bundles.
+
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
                 using one of the provided keys. Include ``None`` if unsigned
@@ -179,6 +194,7 @@ class KojiSource(Source):
         self._module_filter_filename = list_argument(
             module_filter_filename, retain_none=True
         )
+        self._container_build = [try_int(x) for x in list_argument(container_build)]
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout
@@ -342,6 +358,107 @@ class KojiSource(Source):
             )
         return out
 
+    def _push_items_from_container_build(self, nvr, meta):
+        LOG.debug("Looking for container images on %s, %s", nvr, meta)
+
+        if not meta:
+            message = "Container image build not found in koji: %s" % nvr
+            LOG.error(message)
+            raise ValueError(message)
+
+        # The metadata we are interested in is documented here:
+        # https://github.com/containerbuildsystem/atomic-reactor/blob/061d92e63cf27ae030e8ceed388ec34f51afb17b/docs/koji.md#type-specific-metadata
+        extra = meta.get("extra") or {}
+        typeinfo = extra.get("typeinfo") or {}
+        # Per above doc, it is preferred to use the metadata under 'typeinfo' if present
+        image = typeinfo.get("image") or extra.get("image")
+
+        if not image:
+            message = "Build %s not recognized as a container image build" % nvr
+            LOG.error(message)
+            raise ValueError(message)
+
+        build_id = meta["id"]
+
+        archives = self._get_archives(build_id)
+
+        image_archives = [
+            elem
+            for elem in archives
+            if elem.get("btype") == "image" and elem.get("type_name") == "tar"
+        ]
+
+        media_types = image.get("media_types") or []
+        if MIME_TYPE_MANIFEST_LIST in media_types:
+            # in manifest list case it is OK to have multiple archives (different arches).
+            pass
+        elif len(image_archives) != 1:
+            # If we don't have a manifest list, we expect to have an image for one arch.
+            # If there's not exactly one, it's unclear what's going on and we'd better halt.
+            message = (
+                "Could not find (exactly) one container image archive on koji build %s"
+                % nvr
+            )
+            LOG.error(message)
+            raise ValueError(message)
+
+        out = []
+
+        for archive in image_archives:
+            path = self._pathinfo.typedir(meta, archive["btype"])
+            item_src = os.path.join(path, archive["filename"])
+
+            out.append(
+                ContainerImagePushItem(
+                    # TODO: name might be changed once we start parsing
+                    # the metadata from atomic-reactor.
+                    name=archive["filename"],
+                    dest=self._dest,
+                    src=item_src,
+                    build=nvr,
+                )
+            )
+
+        # If this build had any operator-manifests archive, add that too.
+        operator = self._get_operator_item(nvr, meta, archives)
+        if operator:
+            out.append(operator)
+
+        return out
+
+    def _get_operator_item(self, nvr, meta, archives):
+        extra = meta.get("extra") or {}
+        typeinfo = extra.get("typeinfo") or {}
+        operator_manifests = typeinfo.get("operator-manifests") or {}
+        archive_name = operator_manifests.get("archive")
+
+        if not archive_name:
+            # Try legacy form
+            archive_name = extra.get("operator_manifests_archive")
+
+        if not archive_name:
+            # No operator manifests on this build
+            return
+
+        operator_archive = [a for a in archives if a["filename"] == archive_name]
+        if len(operator_archive) != 1:
+            message = (
+                "koji build %s metadata refers to missing operator-manifests "
+                'archive "%s"'
+            ) % (nvr, archive_name)
+            raise ValueError(message)
+
+        archive = operator_archive[0]
+        path = self._pathinfo.typedir(meta, archive["btype"])
+        item_src = os.path.join(path, archive["filename"])
+
+        return OperatorManifestPushItem(
+            name=os.path.join(nvr, archive_name),
+            dest=self._dest,
+            src=item_src,
+            build=nvr,
+        )
+
     def _rpm_futures(self):
         # Get info from each requested RPM.
         rpm_fs = [(self._executor.submit(self._get_rpm, rpm), rpm) for rpm in self._rpm]
@@ -362,6 +479,19 @@ class KojiSource(Source):
         return [
             f_map(f, partial(self._push_items_from_module_build, build))
             for f, build in module_build_fs
+        ]
+
+    def _container_futures(self):
+        # Get info from each requested container build.
+        build_fs = [
+            (self._executor.submit(self._get_build, build), build)
+            for build in self._container_build
+        ]
+
+        # Convert them to lists of push items
+        return [
+            f_map(f, partial(self._push_items_from_container_build, build))
+            for f, build in build_fs
         ]
 
     def _do_fetch(self, koji_queue, exceptions):
@@ -421,6 +551,10 @@ class KojiSource(Source):
         for build_id in self._module_build:
             koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
 
+        # We'll need to obtain all container image builds
+        for build_id in self._container_build:
+            koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
+
         # Put some threads to work on the queue.
         fetch_exceptions = []
         fetch_threads = [
@@ -446,7 +580,9 @@ class KojiSource(Source):
         # The queue must be empty now
         assert koji_queue.empty()
 
-        push_items_fs = self._modulemd_futures() + self._rpm_futures()
+        push_items_fs = (
+            self._modulemd_futures() + self._rpm_futures() + self._container_futures()
+        )
 
         completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
         for f in completed_fs:

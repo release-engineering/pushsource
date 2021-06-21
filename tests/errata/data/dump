@@ -15,6 +15,8 @@ def run(server_url, advisory_id):
         "advisory_id": advisory_id,
         "cdn_metadata": server.get_advisory_cdn_metadata(advisory_id),
         "cdn_file_list": server.get_advisory_cdn_file_list(advisory_id),
+        "cdn_docker_file_list": server.get_advisory_cdn_docker_file_list(advisory_id),
+        "ftp_paths": server.get_ftp_paths(advisory_id),
     }
 
     data_file = os.path.join(DATADIR, "%s.yaml" % advisory_id)

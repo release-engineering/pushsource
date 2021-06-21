@@ -1,0 +1,99 @@
+#!/usr/bin/python3
+#
+# A helper script to dump build and archive data from a koji server into a YAML file
+# from which it can be loaded by fake_koji fixture.
+#
+# Usage:
+#
+#   tests/koji/data/dump https://koji.example.com/hub/ my-build-nvr
+#
+import os
+import koji
+import sys
+import yaml
+
+BUILDS_DIR = os.path.join(os.path.dirname(__file__), "builds")
+
+# We have a few functions here to sanitize data before saving.
+# Instead of saving all the raw data, we opt-in to specific fields.
+# This helps keep the data cleaner and helps control which fields
+# we rely on.
+
+
+def sanitized_build(build):
+    out = {}
+
+    out["id"] = build["id"]
+    out["name"] = build["name"]
+    out["nvr"] = build["nvr"]
+    out["release"] = build["release"]
+    out["version"] = build["version"]
+    out["extra"] = {}
+
+    if (build.get("extra") or {}).get("image"):
+        out["extra"]["image"] = build["extra"]["image"]
+
+    if (build.get("extra") or {}).get("typeinfo"):
+        out["extra"]["typeinfo"] = build["extra"]["typeinfo"]
+
+    return out
+
+
+def sanitized_archive_extra(extra):
+    out = {}
+
+    if not extra.get("docker"):
+        return out
+
+    if "image" in extra:
+        out["image"] = extra["image"]
+
+    # Will likely need 'docker' here soon
+
+    return out
+
+
+def sanitized_archive(archive):
+    out = {}
+
+    out["id"] = archive["id"]
+    out["btype"] = archive["btype"]
+    out["type_name"] = archive["type_name"]
+    out["filename"] = archive["filename"]
+    out["extra"] = sanitized_archive_extra(archive.get("extra") or {})
+
+    return out
+
+
+def sanitized_archives(archives):
+    out = []
+    for archive in sorted(archives, key=lambda a: a["id"]):
+        out.append(sanitized_archive(archive))
+    return out
+
+
+def run(server_url, nvr):
+    server = koji.ClientSession(server_url)
+
+    build = server.getBuild(nvr)
+
+    # In case user passed an ID
+    nvr = build["nvr"]
+
+    build = sanitized_build(build)
+
+    archives = server.listArchives(build["id"])
+    archives = sanitized_archives(archives)
+    build["archives"] = archives
+
+    data_file = os.path.join(BUILDS_DIR, "%s.yaml" % nvr)
+    with open(data_file, "w") as fh:
+        fh.write("############### GENERATED TEST DATA ########################\n")
+        fh.write("# This file was created by tests/koji/data/dump script.\n")
+        fh.write("#\n")
+        yaml.dump(build, fh)
+    print("Wrote to", data_file)
+
+
+if __name__ == "__main__":
+    run(*sys.argv[1:])

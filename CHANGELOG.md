@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by architecture.
 - Added `ModuleMdSourcePushItem` class. Source modulemd documents are now represented
   by this class rather than `ModuleMdPushItem`.
+- Added minimal `ContainerImagePushItem` and `OperatorManifestPushItem` classes for
+  container images. These classes currently are of limited use as they do not yet
+  carry relevant metadata.
 
 ### Changed
 

@@ -1,0 +1,94 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    image:
+      arch: aarch64
+  filename: docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
+  id: 4038464
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 4038465
+  type_name: zip
+- btype: image
+  extra:
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
+  id: 4038466
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: s390x
+  filename: docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
+  id: 4038467
+  type_name: tar
+- btype: image
+  extra:
+    image:
+      arch: ppc64le
+  filename: docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz
+  id: 4038468
+  type_name: tar
+extra:
+  image:
+    autorebuild: false
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
+      floating_tags:
+      - latest
+      - v4.3.28.202006290519.p0.prod
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+      tags:
+      - v4.3.28.202006290519.p0.prod-1
+      unique_tags:
+      - rhaos-4.3-rhel-7-candidate-15503-20200707071931
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      autorebuild: false
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
+        floating_tags:
+        - latest
+        - v4.3.28.202006290519.p0.prod
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod-1
+        tags:
+        - v4.3.28.202006290519.p0.prod-1
+        unique_tags:
+        - rhaos-4.3-rhel-7-candidate-15503-20200707071931
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 1248956
+name: ose-ptp-operator-metadata-container
+nvr: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+release: '1'
+version: v4.3.28.202006290519.p0.prod

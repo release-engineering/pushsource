@@ -1,5 +1,9 @@
 import os
 
+import yaml
+
+BUILDS_DIR = os.path.join(os.path.dirname(__file__), "data", "builds")
+
 
 class FakeKojiController(object):
     def __init__(self):
@@ -19,6 +23,21 @@ class FakeKojiController(object):
     def session(self, url):
         self.last_url = url
         return FakeKojiSession(self)
+
+    def load_build(self, nvr):
+        build_file = os.path.join(BUILDS_DIR, nvr + ".yaml")
+
+        with open(build_file, "rt") as f:
+            build = yaml.load(f, Loader=yaml.BaseLoader)
+
+        archives = build.pop("archives", [])
+
+        self.build_data[build["id"]] = build
+        self.build_data[build["nvr"]] = build
+        self.archive_data[build["id"]] = archives
+        self.archive_data[build["nvr"]] = archives
+
+        return build
 
     def ensure_build(self, build_nvr):
         if build_nvr in self.build_data:
@@ -107,6 +126,14 @@ class FakeKojiController(object):
         else:
             return
         archives.pop(idx)
+
+    def remove_build(self, nvr):
+        build = self.build_data[nvr]
+
+        del self.archive_data[build["id"]]
+        del self.archive_data[build["nvr"]]
+        del self.build_data[build["id"]]
+        del self.build_data[build["nvr"]]
 
     def insert_modules(self, filenames, build_nvr):
         archives = [

@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `ModuleMdSourcePushItem` class. Source modulemd documents are now represented
   by this class rather than `ModuleMdPushItem`.
 
+### Changed
+
+- `errata` source now produces `ModuleMdSourcePushItem` where applicable, and respects
+  FTP paths from Errata Tool for these items.
+
 ## [2.7.0] - 2021-06-10
 
 ### Fixed

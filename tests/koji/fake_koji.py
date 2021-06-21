@@ -97,6 +97,17 @@ class FakeKojiController(object):
         self.archive_data[build["id"]] = archives
         self.archive_data[build["nvr"]] = archives
 
+    def remove_archive(self, filename, build_nvr):
+        archives = self.archive_data[build_nvr]
+        idx = 0
+        for archive in archives:
+            if archive["filename"] == filename:
+                break
+            idx += 1
+        else:
+            return
+        archives.pop(idx)
+
     def insert_modules(self, filenames, build_nvr):
         archives = [
             {"btype": "module", "filename": filename, "nvr": build_nvr}

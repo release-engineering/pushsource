@@ -9,7 +9,9 @@ mock
 more-executors
 pre-commit
 pushcollector
+pylint
 pytest
+pytest-cov
 python-dateutil
 rpm-py-installer
 six

@@ -42,6 +42,36 @@
 <p>Note that many fields on erratum objects which appear to be numeric
 are instead represented as strings (‘release’ and ‘pushcount’ being two
 examples).</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.content_types" title="pushsource.ErratumPushItem.content_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">content_types()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.description" title="pushsource.ErratumPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">from()</span></code></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.issued" title="pushsource.ErratumPushItem.issued"><code class="xref py py-meth docutils literal notranslate"><span class="pre">issued()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.pushcount" title="pushsource.ErratumPushItem.pushcount"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pushcount()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.reboot_suggested" title="pushsource.ErratumPushItem.reboot_suggested"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reboot_suggested()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.release" title="pushsource.ErratumPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.rights" title="pushsource.ErratumPushItem.rights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rights()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.severity" title="pushsource.ErratumPushItem.severity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">severity()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.solution" title="pushsource.ErratumPushItem.solution"><code class="xref py py-meth docutils literal notranslate"><span class="pre">solution()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.status" title="pushsource.ErratumPushItem.status"><code class="xref py py-meth docutils literal notranslate"><span class="pre">status()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.summary" title="pushsource.ErratumPushItem.summary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">summary()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.title" title="pushsource.ErratumPushItem.title"><code class="xref py py-meth docutils literal notranslate"><span class="pre">title()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.type" title="pushsource.ErratumPushItem.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.updated" title="pushsource.ErratumPushItem.updated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updated()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.version" title="pushsource.ErratumPushItem.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.type">
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.type" title="Permalink to this definition">¶</a></dt>
@@ -260,6 +290,13 @@ with container images.</p>
 <dt class="sig sig-object py" id="pushsource.ErratumReference">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumReference</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumReference" title="Permalink to this definition">¶</a></dt>
 <dd><p>A reference within a <a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a> list.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.href" title="pushsource.ErratumReference.href"><code class="xref py py-meth docutils literal notranslate"><span class="pre">href()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.id" title="pushsource.ErratumReference.id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">id()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.title" title="pushsource.ErratumReference.title"><code class="xref py py-meth docutils literal notranslate"><span class="pre">title()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.type" title="pushsource.ErratumReference.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
+</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumReference.href">
 <span class="sig-name descname"><span class="pre">href</span></span><a class="headerlink" href="#pushsource.ErratumReference.href" title="Permalink to this definition">¶</a></dt>
@@ -319,6 +356,13 @@ and includes at least:</p>
 <dd><p>A collection of packages found within an <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
 <p>A non-modular advisory typically contains only a single collection, while modular
 advisories typically contain one collection per module.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.module" title="pushsource.ErratumPackageCollection.module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">module()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.name" title="pushsource.ErratumPackageCollection.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.packages" title="pushsource.ErratumPackageCollection.packages"><code class="xref py py-meth docutils literal notranslate"><span class="pre">packages()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.short" title="pushsource.ErratumPackageCollection.short"><code class="xref py py-meth docutils literal notranslate"><span class="pre">short()</span></code></a></p></li>
+</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.name" title="Permalink to this definition">¶</a></dt>
@@ -372,6 +416,14 @@ with, if any.</p>
 <dt class="sig sig-object py" id="pushsource.ErratumModule">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumModule</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>A module entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.arch" title="pushsource.ErratumModule.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.context" title="pushsource.ErratumModule.context"><code class="xref py py-meth docutils literal notranslate"><span class="pre">context()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.name" title="pushsource.ErratumModule.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.stream" title="pushsource.ErratumModule.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.version" title="pushsource.ErratumModule.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumModule.name" title="Permalink to this definition">¶</a></dt>
@@ -433,6 +485,20 @@ with, if any.</p>
 <dt class="sig sig-object py" id="pushsource.ErratumPackage">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackage</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackage" title="Permalink to this definition">¶</a></dt>
 <dd><p>A package (RPM) entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.arch" title="pushsource.ErratumPackage.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.epoch" title="pushsource.ErratumPackage.epoch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">epoch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.md5sum" title="pushsource.ErratumPackage.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.name" title="pushsource.ErratumPackage.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.reboot_suggested" title="pushsource.ErratumPackage.reboot_suggested"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reboot_suggested()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.release" title="pushsource.ErratumPackage.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.sha1sum" title="pushsource.ErratumPackage.sha1sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha1sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.sha256sum" title="pushsource.ErratumPackage.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.src" title="pushsource.ErratumPackage.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.version" title="pushsource.ErratumPackage.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.arch">
 <span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.arch" title="Permalink to this definition">¶</a></dt>

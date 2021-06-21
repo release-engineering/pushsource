@@ -43,7 +43,7 @@
 
 <span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span><span class="p">,</span> <span class="n">conv</span>
+<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">ErratumPushItem</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdSourcePushItem</span><span class="p">,</span> <span class="n">conv</span>
 <span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="n">list_argument</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
@@ -139,20 +139,20 @@
     <span class="k">def</span> <span class="nf">_push_items_from_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw</span><span class="p">):</span>
         <span class="n">erratum</span> <span class="o">=</span> <span class="n">ErratumPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_metadata</span><span class="p">)</span>
 
-        <span class="n">rpms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpms</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_file_list</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpms</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_file_list</span><span class="p">)</span>
 
         <span class="c1"># The erratum should go to all the same destinations as the rpms,</span>
         <span class="c1"># before FTP paths are added.</span>
         <span class="n">erratum_dest</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">dest</span> <span class="ow">or</span> <span class="p">[])</span>
-        <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpms</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">rpm</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
                 <span class="n">erratum_dest</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
 
-        <span class="c1"># Enrich RPM push items with their FTP paths if any.</span>
-        <span class="n">rpms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_ftp_paths</span><span class="p">(</span><span class="n">rpms</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">ftp_paths</span><span class="p">)</span>
+        <span class="c1"># Adjust push item destinations according to FTP paths from ET, if any.</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_ftp_paths</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">ftp_paths</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">rpms</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">items</span>
 
     <span class="k">def</span> <span class="nf">_push_items_from_rpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
@@ -168,9 +168,15 @@
     <span class="k">def</span> <span class="nf">_module_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
         <span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
+        <span class="n">module_filenames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># We always request the modulemd.src.txt because we might need it later</span>
+        <span class="c1"># depending on the ftp_paths response.</span>
+        <span class="n">module_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">)</span>
+
         <span class="c1"># Get a koji source which will yield all modules from the build</span>
         <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
-            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="n">module_filenames</span>
         <span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
@@ -178,7 +184,7 @@
         <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
             <span class="c1"># ET uses filenames to identify the modules here, we must do the same.</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
-            <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="p">[])</span>
 
             <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
             <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">push_item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -271,7 +277,7 @@
 
         <span class="k">return</span> <span class="n">out</span>
 
-    <span class="k">def</span> <span class="nf">_add_ftp_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm_items</span><span class="p">,</span> <span class="n">ftp_paths</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_add_ftp_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">ftp_paths</span><span class="p">):</span>
         <span class="c1"># ftp_paths structure is like this:</span>
         <span class="c1">#</span>
         <span class="c1"># {</span>
@@ -284,23 +290,67 @@
         <span class="c1">#                 &quot;/ftp/pub/redhat/linux/enterprise/7Workstation/en/os/SRPMS/&quot;,</span>
         <span class="c1">#             ]</span>
         <span class="c1">#         },</span>
+        <span class="c1">#         &quot;modules&quot;: [</span>
+        <span class="c1">#            &quot;/ftp/pub/redhat/linux/enterprise/AppStream-8.0.0.Z/en/os/modules/&quot;</span>
+        <span class="c1">#         ],</span>
         <span class="c1">#         &quot;sig_key&quot;: &quot;fd431d51&quot;,</span>
         <span class="c1">#     }</span>
         <span class="c1"># }</span>
         <span class="c1">#</span>
-        <span class="c1"># We only care about the rpm =&gt; ftp path mapping, which should be added onto</span>
-        <span class="c1"># our existing rpm push items if any exist.</span>
+        <span class="c1"># We use the (rpm, module) =&gt; ftp path mappings, which should be added onto</span>
+        <span class="c1"># our existing push items if they match.</span>
         <span class="c1">#</span>
         <span class="n">rpm_to_paths</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">rpm_map</span> <span class="ow">in</span> <span class="n">ftp_paths</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">rpm_name</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">rpm_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">build_to_module_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">builds_need_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">builds_have_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_map</span> <span class="ow">in</span> <span class="n">ftp_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">rpm_name</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">rpm_to_paths</span><span class="p">[</span><span class="n">rpm_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span>
 
+            <span class="n">modules</span> <span class="o">=</span> <span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="n">build_to_module_paths</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">]</span> <span class="o">=</span> <span class="n">modules</span>
+            <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
+                <span class="n">builds_need_modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">build_nvr</span><span class="p">)</span>
+
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">rpm_items</span><span class="p">:</span>
-            <span class="n">paths</span> <span class="o">=</span> <span class="n">rpm_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">dest</span> <span class="o">+</span> <span class="n">paths</span><span class="p">)</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
+                <span class="c1"># RPMs have dest updated with FTP paths.</span>
+                <span class="n">paths</span> <span class="o">=</span> <span class="n">rpm_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">dest</span> <span class="o">+</span> <span class="n">paths</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ModuleMdSourcePushItem</span><span class="p">):</span>
+                <span class="c1"># modulemd sources have dest updated with FTP paths and will</span>
+                <span class="c1"># also be filtered out if there are no matches at all (because</span>
+                <span class="c1"># modulemd sources aren&#39;t delivered in any other manner)</span>
+                <span class="n">paths</span> <span class="o">=</span> <span class="n">build_to_module_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">paths</span><span class="p">:</span>
+                    <span class="n">builds_have_modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">dest</span> <span class="o">+</span> <span class="n">paths</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># modulemd sources are filtered out altogether if ET did</span>
+                    <span class="c1"># not provide any destinations.</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: modulemd source skipped due to no destinations: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Other types of items are unaffected by ftp_paths.</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="c1"># If ET requests that modules should be pushed for any builds and we&#39;re</span>
+        <span class="c1"># missing a modulemd.src.txt for those, it&#39;s a fatal error.</span>
+        <span class="n">builds_missing_modules</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">builds_need_modules</span> <span class="o">-</span> <span class="n">builds_have_modules</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">builds_missing_modules</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: missing modulemd sources on koji build(s): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_modules</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out</span>
 

@@ -45,12 +45,20 @@
 <span class="kn">from</span> <span class="nn">more_executors.futures</span> <span class="kn">import</span> <span class="n">f_map</span>
 
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
-<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">RpmPushItem</span><span class="p">,</span> <span class="n">ModuleMdPushItem</span><span class="p">,</span> <span class="n">ModuleMdSourcePushItem</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RpmPushItem</span><span class="p">,</span>
+    <span class="n">ModuleMdPushItem</span><span class="p">,</span>
+    <span class="n">ModuleMdSourcePushItem</span><span class="p">,</span>
+    <span class="n">OperatorManifestPushItem</span><span class="p">,</span>
+    <span class="n">ContainerImagePushItem</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
 <span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+<span class="n">MIME_TYPE_MANIFEST_LIST</span> <span class="o">=</span> <span class="s2">&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">ListArchivesCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -137,6 +145,7 @@
         <span class="n">rpm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">module_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">module_filter_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">container_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">basedir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -176,6 +185,12 @@
 
 <span class="sd">                Has no effect if ``module_build`` is not provided.</span>
 
+<span class="sd">            container_build (list[str, int])</span>
+<span class="sd">                Build identifier(s). Can be koji IDs (integers) or build NVRs.</span>
+<span class="sd">                The source will yield all container images produced by these</span>
+<span class="sd">                build(s), along with associated artifacts such as operator manifest</span>
+<span class="sd">                bundles.</span>
+
 <span class="sd">            signing_key (list[str])</span>
 <span class="sd">                GPG signing key ID(s). If provided, content must be signed</span>
 <span class="sd">                using one of the provided keys. Include ``None`` if unsigned</span>
@@ -212,6 +227,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span>
             <span class="n">module_filter_filename</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">container_build</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
@@ -375,6 +391,107 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
+    <span class="k">def</span> <span class="nf">_push_items_from_container_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for container images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Container image build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># The metadata we are interested in is documented here:</span>
+        <span class="c1"># https://github.com/containerbuildsystem/atomic-reactor/blob/061d92e63cf27ae030e8ceed388ec34f51afb17b/docs/koji.md#type-specific-metadata</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="c1"># Per above doc, it is preferred to use the metadata under &#39;typeinfo&#39; if present</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">image</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Build </span><span class="si">%s</span><span class="s2"> not recognized as a container image build&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+
+        <span class="n">image_archives</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">elem</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type_name&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;tar&quot;</span>
+        <span class="p">]</span>
+
+        <span class="n">media_types</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;media_types&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">MIME_TYPE_MANIFEST_LIST</span> <span class="ow">in</span> <span class="n">media_types</span><span class="p">:</span>
+            <span class="c1"># in manifest list case it is OK to have multiple archives (different arches).</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_archives</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># If we don&#39;t have a manifest list, we expect to have an image for one arch.</span>
+            <span class="c1"># If there&#39;s not exactly one, it&#39;s unclear what&#39;s going on and we&#39;d better halt.</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Could not find (exactly) one container image archive on koji build </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="n">nvr</span>
+            <span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">image_archives</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
+            <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ContainerImagePushItem</span><span class="p">(</span>
+                    <span class="c1"># TODO: name might be changed once we start parsing</span>
+                    <span class="c1"># the metadata from atomic-reactor.</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
+                    <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># If this build had any operator-manifests archive, add that too.</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_operator_item</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">operator</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">operator</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_get_operator_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="p">):</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">operator_manifests</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operator-manifests&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">archive_name</span> <span class="o">=</span> <span class="n">operator_manifests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;archive&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">archive_name</span><span class="p">:</span>
+            <span class="c1"># Try legacy form</span>
+            <span class="n">archive_name</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operator_manifests_archive&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">archive_name</span><span class="p">:</span>
+            <span class="c1"># No operator manifests on this build</span>
+            <span class="k">return</span>
+
+        <span class="n">operator_archive</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">archive_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">operator_archive</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;koji build </span><span class="si">%s</span><span class="s2"> metadata refers to missing operator-manifests &quot;</span>
+                <span class="s1">&#39;archive &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span>
+            <span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">archive_name</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">archive</span> <span class="o">=</span> <span class="n">operator_archive</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
+        <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">OperatorManifestPushItem</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">archive_name</span><span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
+            <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
+            <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_rpm_futures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get info from each requested RPM.</span>
         <span class="n">rpm_fs</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_rpm</span><span class="p">,</span> <span class="n">rpm</span><span class="p">),</span> <span class="n">rpm</span><span class="p">)</span> <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span><span class="p">]</span>
@@ -395,6 +512,19 @@
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_module_build</span><span class="p">,</span> <span class="n">build</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">module_build_fs</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_container_futures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get info from each requested container build.</span>
+        <span class="n">build_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_build</span><span class="p">,</span> <span class="n">build</span><span class="p">),</span> <span class="n">build</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_container_build</span><span class="p">,</span> <span class="n">build</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">build_fs</span>
         <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_do_fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">):</span>
@@ -454,6 +584,10 @@
         <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
+        <span class="c1"># We&#39;ll need to obtain all container image builds</span>
+        <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span><span class="p">:</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
         <span class="c1"># Put some threads to work on the queue.</span>
         <span class="n">fetch_exceptions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fetch_threads</span> <span class="o">=</span> <span class="p">[</span>
@@ -479,7 +613,9 @@
         <span class="c1"># The queue must be empty now</span>
         <span class="k">assert</span> <span class="n">koji_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 
-        <span class="n">push_items_fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modulemd_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_futures</span><span class="p">()</span>
+        <span class="n">push_items_fs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modulemd_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_futures</span><span class="p">()</span>
+        <span class="p">)</span>
 
         <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">completed_fs</span><span class="p">:</span>
@@ -523,6 +659,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/containers.html">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>

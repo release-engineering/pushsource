@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Push items: comps.xml &#8212; pushsource  documentation</title>
+    <title>Push items: containers &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Schema: staged" href="../schema/staged.html" />
-    <link rel="prev" title="Push items: productid" href="productid.html" />
+    <link rel="next" title="Push items: AMI" href="ami.html" />
+    <link rel="prev" title="Push items: errata" href="errata.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -33,16 +33,36 @@
 
           <div class="body" role="main">
             
-  <section id="push-items-comps-xml">
-<h1>Push items: comps.xml<a class="headerlink" href="#push-items-comps-xml" title="Permalink to this headline">¶</a></h1>
+  <section id="push-items-containers">
+<h1>Push items: containers<a class="headerlink" href="#push-items-containers" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="pushsource.CompsXmlPushItem">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">CompsXmlPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/comps.html#CompsXmlPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.CompsXmlPushItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a comps XML file.</p>
-<p>For push items of this type, the <a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a>
-attribute refers to a file containing a comps XML file (package
-group definitions) in the format used by yum &amp; dnf.</p>
-<p>This library does not verify that the referenced file is valid.</p>
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImagePushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePushItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a container image.</p>
+<p>This item represents any kind of image which can be pulled
+from a container image registry (i.e. an object identified by a
+<code class="docutils literal notranslate"><span class="pre">NAME[:TAG|&#64;DIGEST]</span></code> string).</p>
+<p>In the case of a multi-arch image, one ContainerImagePushItem represents
+an image for a single architecture only.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.OperatorManifestPushItem">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">OperatorManifestPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#OperatorManifestPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.OperatorManifestPushItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing an operator manifests archive
+(typically named <code class="docutils literal notranslate"><span class="pre">operator_manifests.zip</span></code>).</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
@@ -92,10 +112,10 @@ group definitions) in the format used by yum &amp; dnf.</p>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Push items: errata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="containers.html">Push items: containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comps.html">Push items: comps.xml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/errata.html">Schema: errata</a></li>
 </ul>
@@ -115,8 +135,8 @@ group definitions) in the format used by yum &amp; dnf.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="productid.html" title="previous chapter">Push items: productid</a></li>
-      <li>Next: <a href="../schema/staged.html" title="next chapter">Schema: staged</a></li>
+      <li>Previous: <a href="errata.html" title="previous chapter">Push items: errata</a></li>
+      <li>Next: <a href="ami.html" title="next chapter">Push items: AMI</a></li>
   </ul></li>
 </ul>
 </div>
@@ -150,7 +170,7 @@ group definitions) in the format used by yum &amp; dnf.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/model/comps.rst.txt"
+      <a href="../_sources/model/containers.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

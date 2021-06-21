@@ -4,6 +4,43 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: arm64
+            build-date: '2020-07-07T07:52:34.965108'
+            com.redhat.build-host: arm64-osbs-14.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: elasticsearch-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manages an Elasticsearch cluster
+              on a kubernetes based platform
+            distribution-scope: public
+            io.k8s.description: This is the component that manages an Elasticsearch
+              cluster on a kubernetes based platform
+            io.k8s.display-name: OpenShift elasticsearch-operator
+            io.openshift.build.commit.id: 5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.commit.url: https://github.com/openshift/elasticsearch-operator/commit/5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.source-location: https://github.com/openshift/elasticsearch-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging,elasticsearch
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-elasticsearch-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-elasticsearch-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: c97d0d822e7518844733a557a3871dc7ba6e9e56
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:ec9a928f3a413a311ebbce5b718e42af2880cac31887be824cb7f37c224c69d0
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:rhaos-4.3-rhel-7-candidate-50417-20200707075226-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:ec9a928f3a413a311ebbce5b718e42af2880cac31887be824cb7f37c224c69d0
+      tags:
+      - rhaos-4.3-rhel-7-candidate-50417-20200707075226-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
@@ -16,6 +53,43 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: x86_64
+            build-date: '2020-07-07T07:52:32.204087'
+            com.redhat.build-host: cpt-1005.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: elasticsearch-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manages an Elasticsearch cluster
+              on a kubernetes based platform
+            distribution-scope: public
+            io.k8s.description: This is the component that manages an Elasticsearch
+              cluster on a kubernetes based platform
+            io.k8s.display-name: OpenShift elasticsearch-operator
+            io.openshift.build.commit.id: 5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.commit.url: https://github.com/openshift/elasticsearch-operator/commit/5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.source-location: https://github.com/openshift/elasticsearch-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging,elasticsearch
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-elasticsearch-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-elasticsearch-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: c97d0d822e7518844733a557a3871dc7ba6e9e56
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:f205a649e55b8757792a4d96ca5cfdadf6d717a11916fb47abb6fae623ff9e10
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:rhaos-4.3-rhel-7-candidate-39763-20200707075226-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:f205a649e55b8757792a4d96ca5cfdadf6d717a11916fb47abb6fae623ff9e10
+      tags:
+      - rhaos-4.3-rhel-7-candidate-39763-20200707075226-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
@@ -23,6 +97,43 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: s390x
+            build-date: '2020-07-07T07:52:32.294701'
+            com.redhat.build-host: s390-c1-vm-02.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: elasticsearch-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manages an Elasticsearch cluster
+              on a kubernetes based platform
+            distribution-scope: public
+            io.k8s.description: This is the component that manages an Elasticsearch
+              cluster on a kubernetes based platform
+            io.k8s.display-name: OpenShift elasticsearch-operator
+            io.openshift.build.commit.id: 5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.commit.url: https://github.com/openshift/elasticsearch-operator/commit/5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.source-location: https://github.com/openshift/elasticsearch-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging,elasticsearch
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-elasticsearch-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-elasticsearch-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: c97d0d822e7518844733a557a3871dc7ba6e9e56
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:d6d01ef696e32c0a6a177c6098550e3583208841462489669006700e33da1fe7
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:rhaos-4.3-rhel-7-candidate-10148-20200707075227-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:d6d01ef696e32c0a6a177c6098550e3583208841462489669006700e33da1fe7
+      tags:
+      - rhaos-4.3-rhel-7-candidate-10148-20200707075227-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
@@ -30,6 +141,43 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: ppc64le
+            build-date: '2020-07-07T07:52:35.177144'
+            com.redhat.build-host: ppc64le-c1-vm-05.prod.osbs.eng.rdu2.redhat.com
+            com.redhat.component: elasticsearch-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manages an Elasticsearch cluster
+              on a kubernetes based platform
+            distribution-scope: public
+            io.k8s.description: This is the component that manages an Elasticsearch
+              cluster on a kubernetes based platform
+            io.k8s.display-name: OpenShift elasticsearch-operator
+            io.openshift.build.commit.id: 5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.commit.url: https://github.com/openshift/elasticsearch-operator/commit/5b19ebc2a52a06b03fbe00b2fa6da8182295fcdd
+            io.openshift.build.source-location: https://github.com/openshift/elasticsearch-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging,elasticsearch
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-elasticsearch-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-elasticsearch-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: c97d0d822e7518844733a557a3871dc7ba6e9e56
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:8f9bc568515b7ae3d8ca4e9e5db9e8001070d77f45e41af78f7ec4fc29545c60
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata:rhaos-4.3-rhel-7-candidate-80524-20200707075228-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-elasticsearch-operator-metadata@sha256:8f9bc568515b7ae3d8ca4e9e5db9e8001070d77f45e41af78f7ec4fc29545c60
+      tags:
+      - rhaos-4.3-rhel-7-candidate-80524-20200707075228-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz

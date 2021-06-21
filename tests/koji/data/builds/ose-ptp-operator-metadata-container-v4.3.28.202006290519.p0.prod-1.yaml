@@ -4,6 +4,42 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: arm64
+            build-date: '2020-07-07T07:22:28.689715'
+            com.redhat.build-host: arm64-osbs-13.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: ose-ptp-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component that manages cluster PTP configuration.
+            distribution-scope: public
+            io.k8s.description: This is a component that manages cluster PTP configuration.
+            io.k8s.display-name: OpenShift ptp-operator
+            io.openshift.build.commit.id: 32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.commit.url: https://github.com/openshift/ptp-operator/commit/32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.source-location: https://github.com/openshift/ptp-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: ptp
+            io.openshift.tags: openshift,ptp
+            maintainer: Multus Team <multus-dev@redhat.com>
+            name: openshift/ose-ptp-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-ptp-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: b63ce47fbd3a5ec7851ad72015cf54d34033c117
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:a32a8dd76ccfe71632eb7bd30859512e9b517d5771f9e697f9e0c5d509cb4956
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:rhaos-4.3-rhel-7-candidate-76837-20200707072220-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:a32a8dd76ccfe71632eb7bd30859512e9b517d5771f9e697f9e0c5d509cb4956
+      tags:
+      - rhaos-4.3-rhel-7-candidate-76837-20200707072220-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
@@ -16,6 +52,42 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: x86_64
+            build-date: '2020-07-07T07:22:26.228066'
+            com.redhat.build-host: cpt-1008.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: ose-ptp-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component that manages cluster PTP configuration.
+            distribution-scope: public
+            io.k8s.description: This is a component that manages cluster PTP configuration.
+            io.k8s.display-name: OpenShift ptp-operator
+            io.openshift.build.commit.id: 32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.commit.url: https://github.com/openshift/ptp-operator/commit/32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.source-location: https://github.com/openshift/ptp-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: ptp
+            io.openshift.tags: openshift,ptp
+            maintainer: Multus Team <multus-dev@redhat.com>
+            name: openshift/ose-ptp-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-ptp-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: b63ce47fbd3a5ec7851ad72015cf54d34033c117
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:a5d2edb02c21c769ed90593520511f954d9de63680e338bc457fc2289b9725a3
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:rhaos-4.3-rhel-7-candidate-11742-20200707072220-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:a5d2edb02c21c769ed90593520511f954d9de63680e338bc457fc2289b9725a3
+      tags:
+      - rhaos-4.3-rhel-7-candidate-11742-20200707072220-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
@@ -23,6 +95,42 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: s390x
+            build-date: '2020-07-07T07:22:27.167128'
+            com.redhat.build-host: s390-c2-vm-04.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: ose-ptp-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component that manages cluster PTP configuration.
+            distribution-scope: public
+            io.k8s.description: This is a component that manages cluster PTP configuration.
+            io.k8s.display-name: OpenShift ptp-operator
+            io.openshift.build.commit.id: 32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.commit.url: https://github.com/openshift/ptp-operator/commit/32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.source-location: https://github.com/openshift/ptp-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: ptp
+            io.openshift.tags: openshift,ptp
+            maintainer: Multus Team <multus-dev@redhat.com>
+            name: openshift/ose-ptp-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-ptp-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: b63ce47fbd3a5ec7851ad72015cf54d34033c117
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:f644b80c1a21401eb1fa79b6e2732db05818562850c6d9acb41413d4b1524847
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:rhaos-4.3-rhel-7-candidate-55835-20200707072221-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:f644b80c1a21401eb1fa79b6e2732db05818562850c6d9acb41413d4b1524847
+      tags:
+      - rhaos-4.3-rhel-7-candidate-55835-20200707072221-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
@@ -30,6 +138,42 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: ppc64le
+            build-date: '2020-07-07T07:22:29.434859'
+            com.redhat.build-host: ppc64le-c2-vm-02.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: ose-ptp-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component that manages cluster PTP configuration.
+            distribution-scope: public
+            io.k8s.description: This is a component that manages cluster PTP configuration.
+            io.k8s.display-name: OpenShift ptp-operator
+            io.openshift.build.commit.id: 32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.commit.url: https://github.com/openshift/ptp-operator/commit/32ac1984132a3da2b7015a06a8fe7ebac13c57e8
+            io.openshift.build.source-location: https://github.com/openshift/ptp-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: ptp
+            io.openshift.tags: openshift,ptp
+            maintainer: Multus Team <multus-dev@redhat.com>
+            name: openshift/ose-ptp-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-ptp-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: b63ce47fbd3a5ec7851ad72015cf54d34033c117
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:d063d90f70fbfd210175023f564b1cfccebf52cda6fab7f9ab606e08a4095771
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata:rhaos-4.3-rhel-7-candidate-22606-20200707072222-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-ptp-operator-metadata@sha256:d063d90f70fbfd210175023f564b1cfccebf52cda6fab7f9ab606e08a4095771
+      tags:
+      - rhaos-4.3-rhel-7-candidate-22606-20200707072222-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz

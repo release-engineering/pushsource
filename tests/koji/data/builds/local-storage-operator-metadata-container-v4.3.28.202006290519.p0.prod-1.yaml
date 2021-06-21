@@ -4,6 +4,41 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: arm64
+            build-date: '2020-07-07T07:25:56.863331'
+            com.redhat.build-host: arm64-osbs-13.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: local-storage-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift and manages local volumes.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift and manages local
+              volumes.
+            io.k8s.display-name: OpenShift local-storage-operator
+            io.openshift.build.commit.id: 0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.commit.url: https://github.com/openshift/local-storage-operator/commit/0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.source-location: https://github.com/openshift/local-storage-operator
+            io.openshift.maintainer.component: Storage
+            io.openshift.maintainer.product: OpenShift Container Platform
+            maintainer: Hemant Kumar <hekumar@redhat.com>
+            name: openshift/ose-local-storage-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-local-storage-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: ecd0eece5d31e4ebbf6a0f47c637decd189ef7dc
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:30f197a9de12601460d006e1f8b33e66fe355a46de75cf11c959df8bfc9bdaaa
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:rhaos-4.3-rhel-7-candidate-50460-20200707072547-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:30f197a9de12601460d006e1f8b33e66fe355a46de75cf11c959df8bfc9bdaaa
+      tags:
+      - rhaos-4.3-rhel-7-candidate-50460-20200707072547-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
@@ -16,6 +51,41 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: x86_64
+            build-date: '2020-07-07T07:25:53.177018'
+            com.redhat.build-host: cpt-1006.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: local-storage-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift and manages local volumes.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift and manages local
+              volumes.
+            io.k8s.display-name: OpenShift local-storage-operator
+            io.openshift.build.commit.id: 0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.commit.url: https://github.com/openshift/local-storage-operator/commit/0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.source-location: https://github.com/openshift/local-storage-operator
+            io.openshift.maintainer.component: Storage
+            io.openshift.maintainer.product: OpenShift Container Platform
+            maintainer: Hemant Kumar <hekumar@redhat.com>
+            name: openshift/ose-local-storage-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-local-storage-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: ecd0eece5d31e4ebbf6a0f47c637decd189ef7dc
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:482031ade5610ae584e5c75f844ad8139b4b18a6b7525a29517f5e4cbaf1646b
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:rhaos-4.3-rhel-7-candidate-50813-20200707072548-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:482031ade5610ae584e5c75f844ad8139b4b18a6b7525a29517f5e4cbaf1646b
+      tags:
+      - rhaos-4.3-rhel-7-candidate-50813-20200707072548-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
@@ -23,6 +93,41 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: s390x
+            build-date: '2020-07-07T07:25:54.573065'
+            com.redhat.build-host: s390-c2-vm-03.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: local-storage-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift and manages local volumes.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift and manages local
+              volumes.
+            io.k8s.display-name: OpenShift local-storage-operator
+            io.openshift.build.commit.id: 0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.commit.url: https://github.com/openshift/local-storage-operator/commit/0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.source-location: https://github.com/openshift/local-storage-operator
+            io.openshift.maintainer.component: Storage
+            io.openshift.maintainer.product: OpenShift Container Platform
+            maintainer: Hemant Kumar <hekumar@redhat.com>
+            name: openshift/ose-local-storage-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-local-storage-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: ecd0eece5d31e4ebbf6a0f47c637decd189ef7dc
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:53fb41caedbff04e8ed8b7fab5ec761214c0578303080820223d54282ea95f5a
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:rhaos-4.3-rhel-7-candidate-31634-20200707072549-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:53fb41caedbff04e8ed8b7fab5ec761214c0578303080820223d54282ea95f5a
+      tags:
+      - rhaos-4.3-rhel-7-candidate-31634-20200707072549-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
@@ -30,6 +135,41 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: ppc64le
+            build-date: '2020-07-07T07:25:57.478498'
+            com.redhat.build-host: ppc64le-c2-vm-03.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: local-storage-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift and manages local volumes.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift and manages local
+              volumes.
+            io.k8s.display-name: OpenShift local-storage-operator
+            io.openshift.build.commit.id: 0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.commit.url: https://github.com/openshift/local-storage-operator/commit/0aa47439b66de12f1ee0c80aefa65e7f9076e952
+            io.openshift.build.source-location: https://github.com/openshift/local-storage-operator
+            io.openshift.maintainer.component: Storage
+            io.openshift.maintainer.product: OpenShift Container Platform
+            maintainer: Hemant Kumar <hekumar@redhat.com>
+            name: openshift/ose-local-storage-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-local-storage-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: ecd0eece5d31e4ebbf6a0f47c637decd189ef7dc
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:4e3e4ece862f9bb5ff473efb637c47ebb4916d5925270495583f86d19d22bbf8
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata:rhaos-4.3-rhel-7-candidate-85934-20200707072549-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-local-storage-operator-metadata@sha256:4e3e4ece862f9bb5ff473efb637c47ebb4916d5925270495583f86d19d22bbf8
+      tags:
+      - rhaos-4.3-rhel-7-candidate-85934-20200707072549-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz

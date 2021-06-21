@@ -4,6 +4,44 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            License: GPLv2+
+            architecture: arm64
+            build-date: '2020-07-07T07:51:04.766067'
+            com.redhat.build-host: arm64-osbs-13.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: cluster-logging-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift Container Platform that
+              manages the lifecycle of the Aggregated logging stack.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift Container Platform
+              that manages the lifecycle of the Aggregated logging stack.
+            io.k8s.display-name: Cluster Logging Operator
+            io.openshift.build.commit.id: 1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.commit.url: https://github.com/openshift/cluster-logging-operator/commit/1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.source-location: https://github.com/openshift/cluster-logging-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-cluster-logging-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-cluster-logging-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: db86b4b58c72bfe5067131461caeaf53b48812a0
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:759da12e95ff57da1e0c83ee534f78a2292b79c1bf288e40ff1cb256d42440a7
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:rhaos-4.3-rhel-7-candidate-20098-20200707075056-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:759da12e95ff57da1e0c83ee534f78a2292b79c1bf288e40ff1cb256d42440a7
+      tags:
+      - rhaos-4.3-rhel-7-candidate-20098-20200707075056-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
@@ -16,6 +54,44 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            License: GPLv2+
+            architecture: x86_64
+            build-date: '2020-07-07T07:51:01.831686'
+            com.redhat.build-host: cpt-1005.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: cluster-logging-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift Container Platform that
+              manages the lifecycle of the Aggregated logging stack.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift Container Platform
+              that manages the lifecycle of the Aggregated logging stack.
+            io.k8s.display-name: Cluster Logging Operator
+            io.openshift.build.commit.id: 1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.commit.url: https://github.com/openshift/cluster-logging-operator/commit/1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.source-location: https://github.com/openshift/cluster-logging-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-cluster-logging-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-cluster-logging-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: db86b4b58c72bfe5067131461caeaf53b48812a0
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:f5453808b4231f2b1e3121c8d302ed755475a76154ae353b49381966830c9a18
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:rhaos-4.3-rhel-7-candidate-78708-20200707075057-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:f5453808b4231f2b1e3121c8d302ed755475a76154ae353b49381966830c9a18
+      tags:
+      - rhaos-4.3-rhel-7-candidate-78708-20200707075057-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
@@ -23,6 +99,44 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            License: GPLv2+
+            architecture: s390x
+            build-date: '2020-07-07T07:51:03.575557'
+            com.redhat.build-host: s390-c1-vm-03.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: cluster-logging-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift Container Platform that
+              manages the lifecycle of the Aggregated logging stack.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift Container Platform
+              that manages the lifecycle of the Aggregated logging stack.
+            io.k8s.display-name: Cluster Logging Operator
+            io.openshift.build.commit.id: 1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.commit.url: https://github.com/openshift/cluster-logging-operator/commit/1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.source-location: https://github.com/openshift/cluster-logging-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-cluster-logging-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-cluster-logging-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: db86b4b58c72bfe5067131461caeaf53b48812a0
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:5748c3cfdc9c493f1538d55137a84c25560e4344f097314d9e12b838c0bba189
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:rhaos-4.3-rhel-7-candidate-13969-20200707075057-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:5748c3cfdc9c493f1538d55137a84c25560e4344f097314d9e12b838c0bba189
+      tags:
+      - rhaos-4.3-rhel-7-candidate-13969-20200707075057-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
@@ -30,6 +144,44 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            License: GPLv2+
+            architecture: ppc64le
+            build-date: '2020-07-07T07:51:05.153325'
+            com.redhat.build-host: ppc64le-c1-vm-06.prod.osbs.eng.rdu2.redhat.com
+            com.redhat.component: cluster-logging-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is a component of OpenShift Container Platform that
+              manages the lifecycle of the Aggregated logging stack.
+            distribution-scope: public
+            io.k8s.description: This is a component of OpenShift Container Platform
+              that manages the lifecycle of the Aggregated logging stack.
+            io.k8s.display-name: Cluster Logging Operator
+            io.openshift.build.commit.id: 1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.commit.url: https://github.com/openshift/cluster-logging-operator/commit/1768a1e54769995ac4a3e2f1bcd40f6549302326
+            io.openshift.build.source-location: https://github.com/openshift/cluster-logging-operator
+            io.openshift.maintainer.component: Logging
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,logging
+            maintainer: AOS Logging <aos-logging@redhat.com>
+            name: openshift/ose-cluster-logging-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-cluster-logging-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: db86b4b58c72bfe5067131461caeaf53b48812a0
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:a279d2c29442bfa73550c428c30b058632e0656502ace41f7fffb8c44ed5b9fe
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata:rhaos-4.3-rhel-7-candidate-40827-20200707075058-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-cluster-logging-operator-metadata@sha256:a279d2c29442bfa73550c428c30b058632e0656502ace41f7fffb8c44ed5b9fe
+      tags:
+      - rhaos-4.3-rhel-7-candidate-40827-20200707075058-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz

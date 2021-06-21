@@ -4,6 +4,44 @@
 archives:
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: arm64
+            build-date: '2020-07-07T07:32:49.830389'
+            com.redhat.build-host: arm64-osbs-14.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: sriov-network-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manange and config sriov component
+              in Openshift cluster
+            distribution-scope: public
+            io.k8s.description: This is the component that manange and config sriov
+              component in Openshift cluster
+            io.k8s.display-name: OpenShift sriov-network-operator
+            io.openshift.build.commit.id: 0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.commit.url: https://github.com/openshift/sriov-network-operator/commit/0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.source-location: https://github.com/openshift/sriov-network-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: SR-IOV
+            io.openshift.tags: openshift,networking,sr-iov
+            maintainer: Multus team <multus-dev@redhat.com>
+            name: openshift/ose-sriov-network-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-sriov-network-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 62f4332490eef03d61c2710baa3e17faae7aaa92
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:ab5ea2465f9d924c9f0e30a74ab57990dab383271c19dde33f35ec397be0386c
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:rhaos-4.3-rhel-7-candidate-30090-20200707073241-aarch64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:ab5ea2465f9d924c9f0e30a74ab57990dab383271c19dde33f35ec397be0386c
+      tags:
+      - rhaos-4.3-rhel-7-candidate-30090-20200707073241-aarch64
     image:
       arch: aarch64
   filename: docker-image-sha256:be2056f3f63c8391fe60f5a6043c4d1a718bf52fb49fba39c18628b930661baf.aarch64.tar.gz
@@ -16,6 +54,44 @@ archives:
   type_name: zip
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: x86_64
+            build-date: '2020-07-07T07:32:46.644503'
+            com.redhat.build-host: cpt-1006.osbs.prod.upshift.rdu2.redhat.com
+            com.redhat.component: sriov-network-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manange and config sriov component
+              in Openshift cluster
+            distribution-scope: public
+            io.k8s.description: This is the component that manange and config sriov
+              component in Openshift cluster
+            io.k8s.display-name: OpenShift sriov-network-operator
+            io.openshift.build.commit.id: 0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.commit.url: https://github.com/openshift/sriov-network-operator/commit/0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.source-location: https://github.com/openshift/sriov-network-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: SR-IOV
+            io.openshift.tags: openshift,networking,sr-iov
+            maintainer: Multus team <multus-dev@redhat.com>
+            name: openshift/ose-sriov-network-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-sriov-network-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 62f4332490eef03d61c2710baa3e17faae7aaa92
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:1bf775f662528cbbbab881b78eabbff551c27f5c678429ec87feff3cc84bd87d
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:rhaos-4.3-rhel-7-candidate-96350-20200707073241-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:1bf775f662528cbbbab881b78eabbff551c27f5c678429ec87feff3cc84bd87d
+      tags:
+      - rhaos-4.3-rhel-7-candidate-96350-20200707073241-x86_64
     image:
       arch: x86_64
   filename: docker-image-sha256:05db9dc3ed76f6cf993f0dd35aa51892a38ba51afdf8ed564a236d53d8375a47.x86_64.tar.gz
@@ -23,6 +99,44 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: s390x
+            build-date: '2020-07-07T07:32:48.805411'
+            com.redhat.build-host: s390-c1-vm-05.prod.osbs.eng.bos.redhat.com
+            com.redhat.component: sriov-network-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manange and config sriov component
+              in Openshift cluster
+            distribution-scope: public
+            io.k8s.description: This is the component that manange and config sriov
+              component in Openshift cluster
+            io.k8s.display-name: OpenShift sriov-network-operator
+            io.openshift.build.commit.id: 0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.commit.url: https://github.com/openshift/sriov-network-operator/commit/0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.source-location: https://github.com/openshift/sriov-network-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: SR-IOV
+            io.openshift.tags: openshift,networking,sr-iov
+            maintainer: Multus team <multus-dev@redhat.com>
+            name: openshift/ose-sriov-network-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-sriov-network-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 62f4332490eef03d61c2710baa3e17faae7aaa92
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:b114fc0ff28650327a061d944ccc0ed4c20d16f32a826d8748b32439807e714f
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:rhaos-4.3-rhel-7-candidate-12128-20200707073242-s390x
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:b114fc0ff28650327a061d944ccc0ed4c20d16f32a826d8748b32439807e714f
+      tags:
+      - rhaos-4.3-rhel-7-candidate-12128-20200707073242-s390x
     image:
       arch: s390x
   filename: docker-image-sha256:bbb14d32c62f4303e16256fd8d3f5123e789da1b2aee81e82b316908fcf9e28b.s390x.tar.gz
@@ -30,6 +144,44 @@ archives:
   type_name: tar
 - btype: image
   extra:
+    docker:
+      config:
+        config:
+          Labels:
+            architecture: ppc64le
+            build-date: '2020-07-07T07:32:50.285197'
+            com.redhat.build-host: ppc64le-c1-vm-05.prod.osbs.eng.rdu2.redhat.com
+            com.redhat.component: sriov-network-operator-metadata-container
+            com.redhat.delivery.appregistry: 'true'
+            com.redhat.license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements
+            description: This is the component that manange and config sriov component
+              in Openshift cluster
+            distribution-scope: public
+            io.k8s.description: This is the component that manange and config sriov
+              component in Openshift cluster
+            io.k8s.display-name: OpenShift sriov-network-operator
+            io.openshift.build.commit.id: 0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.commit.url: https://github.com/openshift/sriov-network-operator/commit/0ab7429f9e91f50b5388268bf957f506118cbbd6
+            io.openshift.build.source-location: https://github.com/openshift/sriov-network-operator
+            io.openshift.maintainer.component: Networking
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.maintainer.subcomponent: SR-IOV
+            io.openshift.tags: openshift,networking,sr-iov
+            maintainer: Multus team <multus-dev@redhat.com>
+            name: openshift/ose-sriov-network-operator-metadata
+            release: '1'
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift/ose-sriov-network-operator-metadata/images/v4.3.28.202006290519.p0.prod-1
+            vcs-ref: 62f4332490eef03d61c2710baa3e17faae7aaa92
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: v4.3.28.202006290519.p0.prod
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:00a74f6340dc8defd262b67e02c596e6ec7ad40238943fd5cc2bb911caf1a0de
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata:rhaos-4.3-rhel-7-candidate-26015-20200707073243-ppc64le
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-ose-sriov-network-operator-metadata@sha256:00a74f6340dc8defd262b67e02c596e6ec7ad40238943fd5cc2bb911caf1a0de
+      tags:
+      - rhaos-4.3-rhel-7-candidate-26015-20200707073243-ppc64le
     image:
       arch: ppc64le
   filename: docker-image-sha256:115387bd7efba2bdb7ee9f0d4fff88f03c1579859c6230cc67bb5c0b31263ba8.ppc64le.tar.gz

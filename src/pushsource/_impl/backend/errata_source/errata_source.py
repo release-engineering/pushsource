@@ -203,10 +203,15 @@ class ErrataSource(Source):
         if self._legacy_container_repos:
             repos = target.get("repos") or {}
 
+        sig_keys = set()
         dest = []
         for repo_id, repo_data in repos.items():
             for tag in repo_data.get("tags") or []:
                 dest.append("%s:%s" % (repo_id, tag))
+
+            sig_key = repo_data.get("container_full_sig_key")
+            if sig_key:
+                sig_keys.add(sig_key)
 
         dest = sorted(set(dest))
 
@@ -218,9 +223,22 @@ class ErrataSource(Source):
                 % (erratum.name, item.build)
             )
 
+        if len(sig_keys) > 1:
+            # The API structure in Errata Tool would theoretically allow for multiple
+            # signing keys on a single image. However, it's unclear if there's any use-case
+            # for it, and all existing code in Pub for dealing with container images does not
+            # even come close to handling it correctly, so we're going to flag this as
+            # unsupported for now.
+            raise ValueError(
+                "Unsupported: erratum %s requests multiple signing keys (%s) on build %s"
+                % (erratum.name, ", ".join(sorted(sig_keys)), item.build)
+            )
+
+        dest_signing_key = None if not sig_keys else list(sig_keys)[0]
+
         # koji source provided basic info on container image, ET provides policy on
         # where/how it should be pushed, combine them both to get final push item
-        return attr.evolve(item, dest=dest)
+        return attr.evolve(item, dest=dest, dest_signing_key=dest_signing_key)
 
     def _push_items_from_rpms(self, erratum, rpm_list):
         out = []

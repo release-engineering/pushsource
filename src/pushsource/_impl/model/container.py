@@ -14,6 +14,22 @@ class ContainerImagePushItem(PushItem):
     an image for a single architecture only.
     """
 
+    dest_signing_key = attr.ib(
+        type=str, default=None, converter=lambda s: s.lower() if s else None
+    )
+    """Desired signing key for this container image.
+
+    Typically a 16-character identifier for a signing key, such
+    as ``"199e2f91fd431d51"``, though the format is not enforced
+    by this library.
+
+    A non-empty value for this attribute should be interpreted as a request to
+    use the specified key to generate signatures for this image's manifest(s).
+    See `container-signature`_ docs for information on signatures.
+
+    .. _container-signature: https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md
+    """
+
 
 @attr.s()
 class OperatorManifestPushItem(PushItem):

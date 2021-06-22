@@ -157,3 +157,22 @@ def test_errata_containers_broken_operator_reference(source_factory, fake_koji):
         "koji build cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1 "
         'metadata refers to missing operator-manifests archive "operator_manifests.zip"'
     ) in str(exc_info)
+
+
+def test_errata_containers_multi_sig_key(source_factory, fake_koji):
+    """Errata source gives an error if Errata Tool requests push of a single image with
+    multiple signing keys.
+    """
+
+    source = source_factory(errata="RHBA-2020:2807-sig-key-conflict")
+
+    # It should raise
+    with pytest.raises(ValueError) as exc_info:
+        list(source)
+
+    # It should tell us why
+    assert (
+        "Unsupported: erratum RHBA-2020:2807 requests multiple signing keys "
+        "(199e2f91fd431d51, 222e2f91fd431d51) on build "
+        "cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1"
+    ) in str(exc_info)

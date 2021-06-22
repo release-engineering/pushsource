@@ -10,6 +10,10 @@ from .rpm import RpmPushItem
 from .file import FilePushItem
 from .container import (
     ContainerImagePushItem,
+    ContainerImagePullInfo,
+    ContainerImagePullSpec,
+    ContainerImageDigestPullSpec,
+    ContainerImageTagPullSpec,
     SourceContainerImagePushItem,
     OperatorManifestPushItem,
 )

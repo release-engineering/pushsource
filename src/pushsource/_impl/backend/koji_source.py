@@ -23,12 +23,10 @@ from ..model import (
 )
 from ..helpers import list_argument, try_int
 from .modulemd import Module
-from .koji_containers import ContainerArchiveHelper
+from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
-
-MIME_TYPE_MANIFEST_LIST = "application/vnd.docker.distribution.manifest.list.v2+json"
 
 
 class ListArchivesCommand(object):
@@ -411,7 +409,7 @@ class KojiSource(Source):
             path = self._pathinfo.typedir(meta, archive["btype"])
             item_src = os.path.join(path, archive["filename"])
 
-            helper = ContainerArchiveHelper(archive)
+            helper = ContainerArchiveHelper(meta, archive)
 
             klass = ContainerImagePushItem
             if image.get("sources_for_nvr"):
@@ -438,6 +436,7 @@ class KojiSource(Source):
                     ),
                     source_tags=helper.source_tags,
                     labels=helper.labels,
+                    pull_info=helper.pull_info,
                 )
             )
 

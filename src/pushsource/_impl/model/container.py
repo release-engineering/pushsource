@@ -1,8 +1,241 @@
+import re
+
+import six
 from frozenlist2 import frozenlist
 
 from .base import PushItem
 from .. import compat_attr as attr
 from ..compat import frozendict
+from .conv import instance_of, optional_str
+
+
+MEDIA_TYPE_ORDER = {
+    "application/vnd.docker.distribution.manifest.list.v2+json": 30,
+    "application/vnd.docker.distribution.manifest.v2+json": 20,
+    "application/vnd.docker.distribution.manifest.v1+json": 10,
+}
+
+
+@attr.s()
+class ContainerImagePullSpec(object):
+    """A container image pull spec in parsed form.
+
+    Pull spec refers to a ``"NAME[:TAG|@DIGEST]"`` string used to pull
+    a container image. This class provides a pull spec both in raw
+    string form and parsed into various components, along with information
+    on the available media type.
+    """
+
+    registry = attr.ib(type=str, validator=instance_of(six.string_types))
+    """Registry component of pull spec.
+
+    Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
+    the registry is ``"registry.access.redhat.com"``.
+    """
+
+    repository = attr.ib(type=str, validator=instance_of(six.string_types))
+    """Repository component of pull spec.
+
+    Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
+    the repository is ``"ubi8/ubi-minimal"``.
+    """
+
+    @classmethod
+    def _from_str(cls, pull_spec):
+        # Regex explanation
+        # <registry>: Get everything not "/" until the first "/"
+        # <repository>: Get everything not "@" or ":"
+        # <type>: Either '@' or ':'
+        # <digest_or_tag>: Get the rest of the characters until end of word
+        url_pattern = (
+            r"^(?P<registry>[^\/]+)\/(?P<repository>[^:@]+)"
+            r"(?P<type>[:@])(?P<digest_or_tag>.+)$"
+        )
+        match = re.match(url_pattern, pull_spec)
+        if not match:
+            raise ValueError("Invalid container image pull spec '%s'" % pull_spec)
+
+        out = {
+            "registry": match.group("registry"),
+            "repository": match.group("repository"),
+        }
+        if match.group("type") == "@":
+            out["digest"] = match.group("digest_or_tag")
+            klass = ContainerImageDigestPullSpec
+        else:
+            out["tag"] = match.group("digest_or_tag")
+            klass = ContainerImageTagPullSpec
+
+        return klass(**out)
+
+
+@attr.s()
+class ContainerImageTagPullSpec(ContainerImagePullSpec):
+    """A container image pull spec using a tag."""
+
+    tag = attr.ib(type=str, validator=instance_of(six.string_types))
+    """Tag component of pull spec.
+
+    Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
+    the tag is ``"latest"``.
+    """
+
+    media_types = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
+    """Media type(s) expected to be reachable via this tag, or empty
+    if unknown.
+
+    Generally, the media types are only known for manifest lists obtained
+    from a koji build.
+
+    Example: ``["application/vnd.docker.distribution.manifest.list.v2+json"]``
+
+    :type: List[str]
+    """
+
+    def __str__(self):
+        return "".join([self.registry, "/", self.repository, ":", self.tag])
+
+
+@attr.s()
+class ContainerImageDigestPullSpec(ContainerImagePullSpec):
+    """A container image pull spec using a manifest digest."""
+
+    digest = attr.ib(type=str, validator=instance_of(six.string_types))
+    """Digest component of pull spec.
+
+    Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal@sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b"``,
+    the digest is ``"sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b"``.
+    """
+
+    media_type = attr.ib(type=str, default=None, validator=optional_str)
+    """Media type of the manifest obtained by this pull spec, if known.
+
+    Generally, the media type is known for all digest pull specs obtained
+    via koji. It can be checked to determine whether a pull spec refers to
+    a manifest list or an image manifest.
+
+    Example: ``"application/vnd.docker.distribution.manifest.v2+json"``
+    """
+
+    def __str__(self):
+        return "".join([self.registry, "/", self.repository, "@", self.digest])
+
+
+def specs_converter(specs, expected_class):
+    # a converter for pull specs:
+    # - ensures every spec is an instance of the expected class
+    # - ensures there's at least one spec (reason for this is that we want to
+    #   document it's safe to use e.g. tag_specs[0], digest_specs[0])
+    out = []
+
+    out_strs = set()
+    for spec in specs:
+        if not isinstance(spec, expected_class):
+            raise TypeError("Expected %s, got: %s" % (expected_class, repr(spec)))
+
+        # de-duplicate specs
+        if str(spec) not in out_strs:
+            out_strs.add(str(spec))
+            out.append(spec)
+
+    # Require at least one
+    if not out:
+        raise ValueError("A container image must have at least one pull spec")
+
+    return frozenlist(out)
+
+
+def tag_specs_converter(specs):
+    return specs_converter(specs, ContainerImageTagPullSpec)
+
+
+def digest_specs_converter(specs):
+    # Do the generic handling
+    out = specs_converter(specs, ContainerImageDigestPullSpec)
+
+    # Then also sort them by preferred media types
+    out = sorted(out, key=lambda spec: -MEDIA_TYPE_ORDER.get(spec.media_type, 0))
+
+    return frozenlist(out)
+
+
+@attr.s()
+class ContainerImagePullInfo(object):
+    """Information needed to access a container image from a registry."""
+
+    tag_specs = attr.ib(type=list, converter=tag_specs_converter)
+    """Pull specs to access this image by tag.
+
+    This may include specs which refer to a *manifest list* referencing this
+    image, and also specs which refer directly to the *image manifest* for
+    this image.
+
+    This field always contains at least one pull spec. If you don't care
+    which tag you use, it's reasonable to use ``item.pull_info.tag_specs[0]``.
+
+    Note that, as all tags are mutable, it's possible for this information to
+    be outdated. It is recommended to pull by digest or at least
+    cross-reference with digests.
+
+    :type: List[ContainerImageTagPullSpec]
+    """
+
+    digest_specs = attr.ib(type=list, converter=digest_specs_converter)
+    """Pull specs to access this image by manifest digest.
+
+    This may include specs which refer to a *manifest list* referencing this
+    image, and also specs which refer directly to the *image manifest* for
+    this image.
+
+    These specs are always ordered from most to least preferred manifest type,
+    which means:
+
+    - manifest list if available, else:
+    - schema2 image manifest if available, else:
+    - schema1 image manifest
+
+    This field always contains at least one pull spec. If you don't care
+    which manifest you use, it's reasonable to use
+    ``item.pull_info.manifest_specs[0]``.
+
+    :type: List[ContainerImageDigestPullSpec]
+    """
+
+    media_types = attr.ib(type=list, converter=frozenlist)
+    """All media types for which a manifest is reachable in :meth:`digest_specs`.
+
+    For information on these types see the `image manifest spec`_.
+
+    :type: List[str]
+
+    .. _image manifest spec: http://web.archive.org/web/20210614172014/https://docs.docker.com/registry/spec/manifest-v2-2/#media-types
+    """
+
+    @media_types.default
+    def _default_media_types(self):
+        return frozenlist(
+            [spec.media_type for spec in self.digest_specs if spec.media_type]
+        )
+
+    def digest_spec_for_type(self, media_type):
+        """Get the digest spec for a specific media type, if available.
+
+        Parameters:
+            media_type (str)
+                a MIME type string identifying a type of image manifest or
+                manifest list, e.g. "application/vnd.docker.distribution.manifest.v2+json"
+
+        Returns:
+            :class:`ContainerImageDigestPullSpec`
+                if a digest of the requested type is available
+            ``None``
+                if a digest of the requested type is not available
+        """
+        for spec in self.digest_specs:
+            if spec.media_type == media_type:
+                return spec
 
 
 @attr.s()
@@ -48,6 +281,13 @@ class ContainerImagePushItem(PushItem):
 
     :type: Dict[str, str]
     """
+
+    pull_info = attr.ib(
+        type=ContainerImagePullInfo,
+        default=None,
+        validator=instance_of(ContainerImagePullInfo),
+    )
+    """Metadata for pulling this image from a registry."""
 
 
 @attr.s()

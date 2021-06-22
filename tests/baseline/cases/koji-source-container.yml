@@ -20,6 +20,19 @@ items:
     md5sum: null
     name: docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
     origin: null
+    pull_info:
+      digest_specs:
+      - digest: sha256:9ab2d821d9cd40e2483582d418191d2548e2b839ac26c4bfd1a9996dca773f0f
+        media_type: application/vnd.docker.distribution.manifest.v2+json
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/rhosp16-openstack-swift-container
+      media_types:
+      - application/vnd.docker.distribution.manifest.v2+json
+      tag_specs:
+      - media_types: []
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/rhosp16-openstack-swift-container
+        tag: rhos-16.1-rhel-8-containers-candidate-83243-20210621202300-x86_64
     sha256sum: null
     signing_key: null
     source_tags:

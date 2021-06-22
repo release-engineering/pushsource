@@ -23,6 +23,7 @@ from ..model import (
 )
 from ..helpers import list_argument, try_int
 from .modulemd import Module
+from .koji_containers import ContainerArchiveHelper
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
@@ -410,6 +411,8 @@ class KojiSource(Source):
             path = self._pathinfo.typedir(meta, archive["btype"])
             item_src = os.path.join(path, archive["filename"])
 
+            helper = ContainerArchiveHelper(archive)
+
             klass = ContainerImagePushItem
             if image.get("sources_for_nvr"):
                 # This is a source image.
@@ -433,6 +436,8 @@ class KojiSource(Source):
                         version=meta["version"],
                         release=meta["release"],
                     ),
+                    source_tags=helper.source_tags,
+                    labels=helper.labels,
                 )
             )
 

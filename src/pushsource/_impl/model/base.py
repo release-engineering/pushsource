@@ -5,11 +5,58 @@ import logging
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
-from .conv import md5str, sha256str, upper_if_str, instance_of_str, optional_str
+from .conv import (
+    md5str,
+    sha256str,
+    upper_if_str,
+    instance_of_str,
+    instance_of,
+    optional_str,
+)
 
 
 LOG = logging.getLogger("pushsource")
 CHUNKSIZE = int(os.environ.get("PUSHSOURCE_CHUNKSIZE") or 1024 * 1024 * 16)
+
+
+@attr.s()
+class KojiBuildInfo(object):
+    """A representation of a koji build."""
+
+    name = attr.ib(type=str, validator=instance_of_str)
+    """'name' component of build's NVR.
+
+    Example: in "kf5-kio-5.83.0-2.el8.next", the name is "kf5-kio".
+    """
+
+    version = attr.ib(type=str, validator=instance_of_str)
+    """'version' component of build's NVR.
+
+    Example: in "kf5-kio-5.83.0-2.el8.next", the version is "5.83.0".
+    """
+
+    release = attr.ib(type=str, validator=instance_of_str)
+    """'release' component of build's NVR.
+
+    Example: in "kf5-kio-5.83.0-2.el8.next", the release is "2.el8.next".
+    """
+
+    @classmethod
+    def _from_nvr(cls, nvr_str):
+        if not nvr_str:
+            return
+
+        # Initial state: 'kf5-kio-5.83.0-2.el8.next'
+        # Reverse:       'txen.8le.2-0.38.5-oik-5fk'
+        nvr_rev = nvr_str[::-1]
+
+        # Split:         ['txen.8le.2', '0.38.5', 'oik-5fk']
+        rvn_rev = nvr_rev.split("-", 2)
+
+        # Unreverse:     ['2.el8.next', '5.83.0', 'kf5-kio']
+        (r, v, n) = [s[::-1] for s in rvn_rev]
+
+        return cls(name=n, version=v, release=r)
 
 
 @attr.s()
@@ -87,7 +134,21 @@ class PushItem(object):
     """
 
     build = attr.ib(type=str, default=None, validator=optional_str)
-    """NVR for the koji build from which this push item was extracted, if any."""
+    """NVR for the koji build from which this push item was extracted, if any.
+
+    .. seealso::
+
+        :meth:`build_info`, which provides the same info in parsed form.
+    """
+
+    build_info = attr.ib(
+        type=KojiBuildInfo, validator=instance_of((KojiBuildInfo, type(None)))
+    )
+    """Basic info on the koji build from which this push item was extracted, if any."""
+
+    @build_info.default
+    def _default_build_info(self):
+        return KojiBuildInfo._from_nvr(self.build)
 
     signing_key = attr.ib(
         type=str, default=None, validator=optional_str, converter=upper_if_str

@@ -1,4 +1,4 @@
-from .base import PushItem
+from .base import PushItem, KojiBuildInfo
 from .erratum import (
     ErratumPushItem,
     ErratumReference,

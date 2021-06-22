@@ -11,6 +11,7 @@ items:
 - AmiPushItem:
     billing_codes: null
     build: null
+    build_info: null
     description: A sample image for testing
     dest:
     - dest1

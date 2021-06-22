@@ -10,6 +10,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_comps"
 items:
 - CompsXmlPushItem:
     build: null
+    build_info: null
     dest:
     - dest1
     md5sum: null

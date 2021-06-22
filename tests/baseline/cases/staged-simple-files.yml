@@ -10,6 +10,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_files"
 items:
 - FilePushItem:
     build: null
+    build_info: null
     description: null
     dest:
     - dest1
@@ -23,6 +24,7 @@ items:
     version: null
 - FilePushItem:
     build: null
+    build_info: null
     description: ''
     dest:
     - dest2
@@ -36,6 +38,7 @@ items:
     version: 1.2.3
 - FilePushItem:
     build: null
+    build_info: null
     description: My wonderful ISO
     dest:
     - dest2

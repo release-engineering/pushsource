@@ -10,6 +10,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_errata"
 items:
 - ErratumPushItem:
     build: null
+    build_info: null
     content_types:
     - docker
     description: 'The devtools/rust-toolset-rhel7 container image has been updated
@@ -120,6 +121,7 @@ items:
     version: '1'
 - ErratumPushItem:
     build: null
+    build_info: null
     content_types:
     - rpm
     description: 'The sudo packages contain the sudo utility which allows system administrators

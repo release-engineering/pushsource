@@ -46,6 +46,7 @@
 
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KojiBuildInfo</span><span class="p">,</span>
     <span class="n">RpmPushItem</span><span class="p">,</span>
     <span class="n">ModuleMdPushItem</span><span class="p">,</span>
     <span class="n">ModuleMdSourcePushItem</span><span class="p">,</span>
@@ -449,6 +450,16 @@
                     <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
                     <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
+                    <span class="c1"># Note, we should be able to use the default KojiBuild</span>
+                    <span class="c1"># construction from NVR here. The reason we don&#39;t is that</span>
+                    <span class="c1"># there is some &quot;impossible&quot; test data in Pub which has</span>
+                    <span class="c1"># brew builds whose NVR does not match their (n, v, r)</span>
+                    <span class="c1"># in the build data and it&#39;s quite tough to fix that now.</span>
+                    <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 

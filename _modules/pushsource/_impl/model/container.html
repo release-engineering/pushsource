@@ -45,6 +45,22 @@
 
 <span class="sd">    In the case of a multi-arch image, one ContainerImagePushItem represents</span>
 <span class="sd">    an image for a single architecture only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dest_signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Desired signing key for this container image.</span>
+
+<span class="sd">    Typically a 16-character identifier for a signing key, such</span>
+<span class="sd">    as ``&quot;199e2f91fd431d51&quot;``, though the format is not enforced</span>
+<span class="sd">    by this library.</span>
+
+<span class="sd">    A non-empty value for this attribute should be interpreted as a request to</span>
+<span class="sd">    use the specified key to generate signatures for this image&#39;s manifest(s).</span>
+<span class="sd">    See `container-signature`_ docs for information on signatures.</span>
+
+<span class="sd">    .. _container-signature: https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 

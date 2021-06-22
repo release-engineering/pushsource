@@ -12,3 +12,6 @@ Every push item class has the following properties:
 
 .. autoclass:: pushsource.PushItem()
    :members:
+
+.. autoclass:: pushsource.KojiBuildInfo()
+   :members:

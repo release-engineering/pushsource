@@ -38,11 +38,58 @@
 <span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
-<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">md5str</span><span class="p">,</span> <span class="n">sha256str</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">optional_str</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">md5str</span><span class="p">,</span>
+    <span class="n">sha256str</span><span class="p">,</span>
+    <span class="n">upper_if_str</span><span class="p">,</span>
+    <span class="n">instance_of_str</span><span class="p">,</span>
+    <span class="n">instance_of</span><span class="p">,</span>
+    <span class="n">optional_str</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_CHUNKSIZE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KojiBuildInfo"><a class="viewcode-back" href="../../../../model/base.html#pushsource.KojiBuildInfo">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">KojiBuildInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A representation of a koji build.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;&#39;name&#39; component of build&#39;s NVR.</span>
+
+<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the name is &quot;kf5-kio&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;&#39;version&#39; component of build&#39;s NVR.</span>
+
+<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the version is &quot;5.83.0&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;&#39;release&#39; component of build&#39;s NVR.</span>
+
+<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the release is &quot;2.el8.next&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_nvr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nvr_str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nvr_str</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Initial state: &#39;kf5-kio-5.83.0-2.el8.next&#39;</span>
+        <span class="c1"># Reverse:       &#39;txen.8le.2-0.38.5-oik-5fk&#39;</span>
+        <span class="n">nvr_rev</span> <span class="o">=</span> <span class="n">nvr_str</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Split:         [&#39;txen.8le.2&#39;, &#39;0.38.5&#39;, &#39;oik-5fk&#39;]</span>
+        <span class="n">rvn_rev</span> <span class="o">=</span> <span class="n">nvr_rev</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Unreverse:     [&#39;2.el8.next&#39;, &#39;5.83.0&#39;, &#39;kf5-kio&#39;]</span>
+        <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">rvn_rev</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">r</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PushItem"><a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -120,7 +167,21 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">build</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;NVR for the koji build from which this push item was extracted, if any.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;NVR for the koji build from which this push item was extracted, if any.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        :meth:`build_info`, which provides the same info in parsed form.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">build_info</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">((</span><span class="n">KojiBuildInfo</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Basic info on the koji build from which this push item was extracted, if any.&quot;&quot;&quot;</span>
+
+    <span class="nd">@build_info</span><span class="o">.</span><span class="n">default</span>
+    <span class="k">def</span> <span class="nf">_default_build_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">KojiBuildInfo</span><span class="o">.</span><span class="n">_from_nvr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
 
     <span class="n">signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">upper_if_str</span>

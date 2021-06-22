@@ -236,10 +236,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_container_repos</span><span class="p">:</span>
             <span class="n">repos</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repos&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
 
+        <span class="n">sig_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">dest</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">repo_data</span> <span class="ow">in</span> <span class="n">repos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">repo_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
                 <span class="n">dest</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">))</span>
+
+            <span class="n">sig_key</span> <span class="o">=</span> <span class="n">repo_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_full_sig_key&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sig_key</span><span class="p">:</span>
+                <span class="n">sig_keys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sig_key</span><span class="p">)</span>
 
         <span class="n">dest</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dest</span><span class="p">))</span>
 
@@ -251,9 +256,22 @@
                 <span class="o">%</span> <span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
             <span class="p">)</span>
 
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># The API structure in Errata Tool would theoretically allow for multiple</span>
+            <span class="c1"># signing keys on a single image. However, it&#39;s unclear if there&#39;s any use-case</span>
+            <span class="c1"># for it, and all existing code in Pub for dealing with container images does not</span>
+            <span class="c1"># even come close to handling it correctly, so we&#39;re going to flag this as</span>
+            <span class="c1"># unsupported for now.</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Unsupported: erratum </span><span class="si">%s</span><span class="s2"> requests multiple signing keys (</span><span class="si">%s</span><span class="s2">) on build </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)),</span> <span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">dest_signing_key</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sig_keys</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
         <span class="c1"># koji source provided basic info on container image, ET provides policy on</span>
         <span class="c1"># where/how it should be pushed, combine them both to get final push item</span>
-        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">dest_signing_key</span><span class="o">=</span><span class="n">dest_signing_key</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_push_items_from_rpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>

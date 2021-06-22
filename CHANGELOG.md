@@ -15,14 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by architecture.
 - Added `ModuleMdSourcePushItem` class. Source modulemd documents are now represented
   by this class rather than `ModuleMdPushItem`.
-- Added minimal `ContainerImagePushItem` and `OperatorManifestPushItem` classes for
-  container images. These classes currently are of limited use as they do not yet
-  carry relevant metadata.
+- Added many classes for container-related content, supported by `koji` and `errata`
+  sources.
 
 ### Changed
 
 - `errata` source now produces `ModuleMdSourcePushItem` where applicable, and respects
   FTP paths from Errata Tool for these items.
+- `errata` source is now available for general use and is no longer marked as
+  a technical preview.
 
 ## [2.7.0] - 2021-06-10
 

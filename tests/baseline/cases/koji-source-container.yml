@@ -1,0 +1,25 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "kojitest:container_build=openstack-swift-container-container-source-16.1.6-6.1"
+
+# Push items generated from above.
+items:
+- SourceContainerImagePushItem:
+    build: openstack-swift-container-container-source-16.1.6-6.1
+    build_info:
+      name: openstack-swift-container-container-source
+      release: '6.1'
+      version: 16.1.6
+    dest: []
+    dest_signing_key: null
+    md5sum: null
+    name: docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
+    origin: null
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/openstack-swift-container-container-source/16.1.6/6.1/images/docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
+    state: PENDING

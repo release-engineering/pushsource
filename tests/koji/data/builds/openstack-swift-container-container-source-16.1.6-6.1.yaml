@@ -1,0 +1,38 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    docker:
+      config:
+        config: {}
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:9ab2d821d9cd40e2483582d418191d2548e2b839ac26c4bfd1a9996dca773f0f
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/rhosp16-openstack-swift-container:rhos-16.1-rhel-8-containers-candidate-83243-20210621202300-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/rhosp16-openstack-swift-container@sha256:9ab2d821d9cd40e2483582d418191d2548e2b839ac26c4bfd1a9996dca773f0f
+      tags:
+      - rhos-16.1-rhel-8-containers-candidate-83243-20210621202300-x86_64
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
+  id: 5126790
+  type_name: tar
+extra:
+  image:
+    media_types:
+    - application/vnd.docker.distribution.manifest.v2+json
+    sources_for_nvr: openstack-swift-container-container-16.1.6-6
+    sources_signing_intent: release
+  typeinfo:
+    image:
+      media_types:
+      - application/vnd.docker.distribution.manifest.v2+json
+      sources_for_nvr: openstack-swift-container-container-16.1.6-6
+      sources_signing_intent: release
+id: 1640546
+name: openstack-swift-container-container-source
+nvr: openstack-swift-container-container-source-16.1.6-6.1
+release: '6.1'
+version: 16.1.6

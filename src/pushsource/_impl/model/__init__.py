@@ -8,7 +8,11 @@ from .erratum import (
 )
 from .rpm import RpmPushItem
 from .file import FilePushItem
-from .container import ContainerImagePushItem, OperatorManifestPushItem
+from .container import (
+    ContainerImagePushItem,
+    SourceContainerImagePushItem,
+    OperatorManifestPushItem,
+)
 from .modulemd import ModuleMdPushItem, ModuleMdSourcePushItem
 from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem

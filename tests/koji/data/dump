@@ -57,9 +57,14 @@ def sanitized_archive_extra(extra):
         out["docker"]["digests"] = extra["docker"]["digests"]
         out["docker"]["config"] = {}
         out["docker"]["config"]["config"] = {}
-        out["docker"]["config"]["config"]["Labels"] = extra["docker"]["config"][
-            "config"
-        ]["Labels"]
+
+        try:
+            out["docker"]["config"]["config"]["Labels"] = extra["docker"]["config"][
+                "config"
+            ]["Labels"]
+        except KeyError:
+            # Not always available
+            pass
 
     return out
 

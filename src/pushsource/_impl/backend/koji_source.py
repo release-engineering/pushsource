@@ -19,6 +19,7 @@ from ..model import (
     ModuleMdSourcePushItem,
     OperatorManifestPushItem,
     ContainerImagePushItem,
+    SourceContainerImagePushItem,
 )
 from ..helpers import list_argument, try_int
 from .modulemd import Module
@@ -409,8 +410,13 @@ class KojiSource(Source):
             path = self._pathinfo.typedir(meta, archive["btype"])
             item_src = os.path.join(path, archive["filename"])
 
+            klass = ContainerImagePushItem
+            if image.get("sources_for_nvr"):
+                # This is a source image.
+                klass = SourceContainerImagePushItem
+
             out.append(
-                ContainerImagePushItem(
+                klass(
                     # TODO: name might be changed once we start parsing
                     # the metadata from atomic-reactor.
                     name=archive["filename"],

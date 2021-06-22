@@ -9,6 +9,7 @@ from pushsource._impl.model import (
     ProductIdPushItem,
     RpmPushItem,
     ContainerImagePushItem,
+    SourceContainerImagePushItem,
     OperatorManifestPushItem,
     AmiPushItem,
     AmiRelease,

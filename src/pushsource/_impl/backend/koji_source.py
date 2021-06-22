@@ -13,6 +13,7 @@ from more_executors.futures import f_map
 
 from ..source import Source
 from ..model import (
+    KojiBuildInfo,
     RpmPushItem,
     ModuleMdPushItem,
     ModuleMdSourcePushItem,
@@ -416,6 +417,16 @@ class KojiSource(Source):
                     dest=self._dest,
                     src=item_src,
                     build=nvr,
+                    # Note, we should be able to use the default KojiBuild
+                    # construction from NVR here. The reason we don't is that
+                    # there is some "impossible" test data in Pub which has
+                    # brew builds whose NVR does not match their (n, v, r)
+                    # in the build data and it's quite tough to fix that now.
+                    build_info=KojiBuildInfo(
+                        name=meta["name"],
+                        version=meta["version"],
+                        release=meta["release"],
+                    ),
                 )
             )
 

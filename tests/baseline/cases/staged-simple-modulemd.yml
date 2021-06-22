@@ -10,6 +10,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_modulemd"
 items:
 - ModuleMdPushItem:
     build: null
+    build_info: null
     dest:
     - dest1
     md5sum: null

@@ -10,6 +10,10 @@ url: "erratatest:errata=RHBA-2020:2807"
 items:
 - ContainerImagePushItem:
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-logging-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -23,6 +27,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-logging-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -36,6 +44,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-logging-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -49,6 +61,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-logging-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-logging-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -62,6 +78,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-nfd-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -75,6 +95,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-nfd-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -88,6 +112,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-nfd-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -101,6 +129,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-nfd-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3
     - openshift4/ose-cluster-nfd-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -114,6 +146,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: elasticsearch-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -127,6 +163,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: elasticsearch-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -140,6 +180,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: elasticsearch-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -153,6 +197,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: elasticsearch-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3
     - openshift4/ose-elasticsearch-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -166,6 +214,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: local-storage-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -179,6 +231,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: local-storage-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -192,6 +248,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: local-storage-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -205,6 +265,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: local-storage-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3
     - openshift4/ose-local-storage-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -218,6 +282,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
@@ -232,6 +300,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
@@ -246,6 +318,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
@@ -260,6 +336,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:latest
     - openshift4/ose-ansible-service-broker-rhel7-operator-metadata:v4.3
@@ -274,6 +354,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-template-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -287,6 +371,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-template-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -300,6 +388,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-template-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -313,6 +405,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-template-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3
     - openshift4/ose-template-service-broker-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -326,6 +422,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-metering-ansible-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -339,6 +439,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-metering-ansible-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -352,6 +456,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-metering-ansible-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -365,6 +473,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-metering-ansible-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3
     - openshift4/ose-metering-ansible-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -378,6 +490,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-ptp-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ptp-operator-metadata:v4.3
     - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -391,6 +507,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-ptp-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ptp-operator-metadata:v4.3
     - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -404,6 +524,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-ptp-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ptp-operator-metadata:v4.3
     - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -417,6 +541,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-ptp-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-ptp-operator-metadata:v4.3
     - openshift4/ose-ptp-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -430,6 +558,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: sriov-network-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -443,6 +575,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: sriov-network-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -456,6 +592,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: sriov-network-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -469,6 +609,10 @@ items:
     state: PENDING
 - ContainerImagePushItem:
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: sriov-network-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest:
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3
     - openshift4/ose-sriov-network-rhel7-operator-metadata:v4.3.28.202006290519.p0.prod
@@ -482,6 +626,7 @@ items:
     state: PENDING
 - ErratumPushItem:
     build: null
+    build_info: null
     content_types:
     - docker
     description: 'Red Hat OpenShift Container Platform is Red Hat''s cloud computing
@@ -570,6 +715,10 @@ items:
     version: '3'
 - OperatorManifestPushItem:
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-logging-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -580,6 +729,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: cluster-nfd-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -590,6 +743,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: elasticsearch-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -600,6 +757,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: local-storage-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -610,6 +771,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-ansible-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -620,6 +785,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: openshift-enterprise-template-service-broker-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -630,6 +799,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-metering-ansible-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -640,6 +813,10 @@ items:
     state: PENDING
 - OperatorManifestPushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
+    build_info:
+      name: ose-ptp-operator-metadata-container
+      release: '1'
+      version: v4.3.28.202006290519.p0.prod
     dest: []
     md5sum: null
     name: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip

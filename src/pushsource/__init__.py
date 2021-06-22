@@ -1,6 +1,7 @@
 from pushsource._impl import Source, SourceUrlError
 from pushsource._impl.model import (
     PushItem,
+    KojiBuildInfo,
     FilePushItem,
     CompsXmlPushItem,
     ModuleMdPushItem,

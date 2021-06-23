@@ -332,7 +332,7 @@ class KojiSource(Source):
 
         if not meta:
             message = "Module build not found in koji: %s" % nvr
-            LOG.error(message)
+            LOG.debug(message)
             raise ValueError(message)
 
         build_id = meta["id"]
@@ -364,7 +364,7 @@ class KojiSource(Source):
 
         if not meta:
             message = "Container image build not found in koji: %s" % nvr
-            LOG.error(message)
+            LOG.debug(message)
             raise ValueError(message)
 
         # The metadata we are interested in is documented here:
@@ -376,7 +376,7 @@ class KojiSource(Source):
 
         if image is None:
             message = "Build %s not recognized as a container image build" % nvr
-            LOG.error(message)
+            LOG.debug(message)
             raise ValueError(message)
 
         build_id = meta["id"]
@@ -400,7 +400,7 @@ class KojiSource(Source):
                 "Could not find (exactly) one container image archive on koji build %s"
                 % nvr
             )
-            LOG.error(message)
+            LOG.debug(message)
             raise ValueError(message)
 
         out = []

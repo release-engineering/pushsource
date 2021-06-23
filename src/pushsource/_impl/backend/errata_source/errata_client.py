@@ -21,8 +21,10 @@ class ErrataRaw(object):
 
 
 class ErrataClient(object):
-    def __init__(self, threads, url):
-        self._executor = Executors.thread_pool(max_workers=threads).with_retry()
+    def __init__(self, threads, url, **retry_args):
+        self._executor = Executors.thread_pool(max_workers=threads).with_retry(
+            **retry_args
+        )
         self._url = url
         self._tls = threading.local()
 
@@ -46,6 +48,13 @@ class ErrataClient(object):
             self._tls.errata_service = xmlrpc_client.ServerProxy(self._url)
         return self._tls.errata_service
 
+    def _log_queried_et(self, response, advisory_id):
+        # This message is visible by default for all advisories.
+        # For more detailed logs of each individual call, see DEBUG logs
+        # in _call_et.
+        LOG.info("Queried Errata Tool for %s", advisory_id)
+        return response
+
     def get_raw_f(self, advisory_id):
         """Returns Future[ErrataRaw] holding all ET responses for a particular advisory."""
         all_responses = f_zip(
@@ -54,8 +63,54 @@ class ErrataClient(object):
             self._executor.submit(self._get_advisory_cdn_docker_file_list, advisory_id),
             self._executor.submit(self._get_ftp_paths, advisory_id),
         )
+        all_responses = f_map(
+            all_responses, partial(self._log_queried_et, advisory_id=advisory_id)
+        )
         return f_map(all_responses, lambda tup: ErrataRaw(*tup))
 
     def _call_et(self, method_name, advisory_id):
         method = getattr(self._errata_service, method_name)
-        return method(advisory_id)
+
+        # These APIs have had performance issues occasionally, so let's set up some
+        # detailed structured logs which can be used to check the performance.
+        LOG.debug(
+            "Calling Errata Tool %s(%s)",
+            method_name,
+            advisory_id,
+            extra={
+                "event": {
+                    "type": "errata-tool-call-start",
+                    "method": method_name,
+                    "advisory": advisory_id,
+                }
+            },
+        )
+        try:
+            out = method(advisory_id)
+            LOG.debug(
+                "Errata Tool completed call %s(%s)",
+                method_name,
+                advisory_id,
+                extra={
+                    "event": {
+                        "type": "errata-tool-call-end",
+                        "method": method_name,
+                        "advisory": advisory_id,
+                    }
+                },
+            )
+            return out
+        except:
+            LOG.debug(
+                "Failed to call Errata Tool %s(%s)",
+                method_name,
+                advisory_id,
+                extra={
+                    "event": {
+                        "type": "errata-tool-call-fail",
+                        "method": method_name,
+                        "advisory": advisory_id,
+                    }
+                },
+            )
+            raise

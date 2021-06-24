@@ -52,6 +52,7 @@
     <span class="n">ModuleMdSourcePushItem</span><span class="p">,</span>
     <span class="n">OperatorManifestPushItem</span><span class="p">,</span>
     <span class="n">ContainerImagePushItem</span><span class="p">,</span>
+    <span class="n">SourceContainerImagePushItem</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
 <span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
@@ -442,8 +443,13 @@
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
             <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
 
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImagePushItem</span>
+            <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sources_for_nvr&quot;</span><span class="p">):</span>
+                <span class="c1"># This is a source image.</span>
+                <span class="n">klass</span> <span class="o">=</span> <span class="n">SourceContainerImagePushItem</span>
+
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">ContainerImagePushItem</span><span class="p">(</span>
+                <span class="n">klass</span><span class="p">(</span>
                     <span class="c1"># TODO: name might be changed once we start parsing</span>
                     <span class="c1"># the metadata from atomic-reactor.</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>

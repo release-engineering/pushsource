@@ -32,6 +32,18 @@ class ContainerImagePushItem(PushItem):
 
 
 @attr.s()
+class SourceContainerImagePushItem(ContainerImagePushItem):
+    """A :class:`~pushsource.PushItem` representing a source container image.
+
+    Source container images are a special type of image which are not runnable
+    but instead contain the packaged source code of a related binary image.
+
+    See `this article <https://access.redhat.com/articles/3410171>`_ for more
+    information on source container images.
+    """
+
+
+@attr.s()
 class OperatorManifestPushItem(PushItem):
     """A :class:`~pushsource.PushItem` representing an operator manifests archive
     (typically named ``operator_manifests.zip``).

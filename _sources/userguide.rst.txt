@@ -79,12 +79,14 @@ For detailed information, see the API reference of the associated class.
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
 | Name   | Examples                                                                    | Class                             | Description                                        |
 +========+=============================================================================+===================================+====================================================+
-| koji   | ``koji:https://koji.fedoraproject.org?rpm=python3-3.7.5-2.fc31.x86_64.rpm`` | :class:`~pushsource.KojiSource`   | Obtain RPMs from a koji server                     |
+| koji   | ``koji:https://koji.fedoraproject.org?rpm=python3-3.7.5-2.fc31.x86_64.rpm`` | :class:`~pushsource.KojiSource`   | Obtain RPMs, container images and other content    |
+|        |                                                                             |                                   | from a koji server                                 |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
 | staged | ``staged:/mnt/vol/my/staged/content``                                       | :class:`~pushsource.StagedSource` | Obtain RPMs, files, AMIs and other content from    |
 |        |                                                                             |                                   | locally mounted filesystem                         |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
-| errata | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource` | Obtain RPMs and advisory metadata from Errata Tool |
+| errata | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource` | Obtain RPMs, container images and advisory         |
+|        |                                                                             |                                   | metadata from Errata Tool                          |
 +--------+-----------------------------------------------------------------------------+-----------------------------------+----------------------------------------------------+
 
 

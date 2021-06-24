@@ -40,6 +40,7 @@
 <p>Supported content types:</p>
 <ul class="simple">
 <li><p>RPMs</p></li>
+<li><p>container images (with operator manifests if applicable)</p></li>
 <li><p>modulemd YAML streams (yum repo metadata)</p></li>
 </ul>
 <p>Note that many features of the koji source requires having koji’s volume(s) mounted
@@ -72,6 +73,20 @@ text files as archives (shown as “Module Archives” in the Koji UI).</p>
 (i.e. select only certain arches), you may use <code class="docutils literal notranslate"><span class="pre">module_filter_filename</span></code> to select
 the desired modulemd files, as in example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&amp;module_filter_filename=modulemd.x86_64.txt,modulemd.s390x.txt</span></code></p>
+</section>
+<section id="accessing-container-images">
+<h3>Accessing container images<a class="headerlink" href="#accessing-container-images" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">container_build</span></code> parameter to request container images from one or
+more builds. Builds can be specified by NVR. Builds should be produced by
+<a class="reference external" href="https://osbs.readthedocs.io/">OSBS</a> or should use compatible metadata.</p>
+<p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?container_build=grafana-7-1</span></code></p>
+<p>Push items produced in this case may include:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.ContainerImagePushItem" title="pushsource.ContainerImagePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerImagePushItem</span></code></a> - one for each available image</p></li>
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.SourceContainerImagePushItem" title="pushsource.SourceContainerImagePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceContainerImagePushItem</span></code></a> - for source container images</p></li>
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.OperatorManifestPushItem" title="pushsource.OperatorManifestPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorManifestPushItem</span></code></a> - if images have attached operator
+manifest archives</p></li>
+</ul>
 </section>
 <section id="setting-the-destination-for-push-items">
 <h3>Setting the destination for push items<a class="headerlink" href="#setting-the-destination-for-push-items" title="Permalink to this headline">¶</a></h3>

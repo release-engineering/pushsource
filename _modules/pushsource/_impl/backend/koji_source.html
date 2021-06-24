@@ -56,11 +56,10 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span>
 <span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">.koji_containers</span> <span class="kn">import</span> <span class="n">ContainerArchiveHelper</span><span class="p">,</span> <span class="n">MIME_TYPE_MANIFEST_LIST</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
-
-<span class="n">MIME_TYPE_MANIFEST_LIST</span> <span class="o">=</span> <span class="s2">&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">ListArchivesCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -366,7 +365,7 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Module build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
@@ -398,7 +397,7 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Container image build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="c1"># The metadata we are interested in is documented here:</span>
@@ -408,9 +407,9 @@
         <span class="c1"># Per above doc, it is preferred to use the metadata under &#39;typeinfo&#39; if present</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">image</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Build </span><span class="si">%s</span><span class="s2"> not recognized as a container image build&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
@@ -434,7 +433,7 @@
                 <span class="s2">&quot;Could not find (exactly) one container image archive on koji build </span><span class="si">%s</span><span class="s2">&quot;</span>
                 <span class="o">%</span> <span class="n">nvr</span>
             <span class="p">)</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
@@ -442,6 +441,8 @@
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">image_archives</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
             <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+
+            <span class="n">helper</span> <span class="o">=</span> <span class="n">ContainerArchiveHelper</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
 
             <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImagePushItem</span>
             <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sources_for_nvr&quot;</span><span class="p">):</span>
@@ -466,6 +467,10 @@
                         <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
                         <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
                     <span class="p">),</span>
+                    <span class="n">source_tags</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">source_tags</span><span class="p">,</span>
+                    <span class="n">labels</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+                    <span class="n">arch</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span>
+                    <span class="n">pull_info</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">pull_info</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 

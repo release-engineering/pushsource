@@ -4,19 +4,10 @@ Source: errata
 The ``errata`` push source allows the loading of content from an instance of
 Errata Tool (or "ET").
 
-.. warning::
-
-  This push source is currently provided as a technical preview only and is
-  not recommended for production use!
-
-  - Lacks support for container images
-  - Lacks support for Errata Tool targets other than ``cdn``
-  - There is moderate risk of backwards-incompatible API changes in future releases
-    of the pushsource library
-
 Supported content types:
 
 * RPMs
+* Container images
 * Advisories
 
 

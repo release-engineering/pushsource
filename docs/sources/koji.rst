@@ -9,6 +9,7 @@ The ``koji`` push source allows the loading of content from an instance of
 Supported content types:
 
 * RPMs
+* container images (with operator manifests if applicable)
 * modulemd YAML streams (yum repo metadata)
 
 Note that many features of the koji source requires having koji's volume(s) mounted
@@ -60,6 +61,21 @@ the desired modulemd files, as in example:
 
 ``koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&module_filter_filename=modulemd.x86_64.txt,modulemd.s390x.txt``
 
+Accessing container images
+..........................
+
+Use the ``container_build`` parameter to request container images from one or
+more builds. Builds can be specified by NVR. Builds should be produced by
+`OSBS`_ or should use compatible metadata.
+
+``koji:https://koji.fedoraproject.org/kojihub?container_build=grafana-7-1``
+
+Push items produced in this case may include:
+
+- :class:`~pushsource.ContainerImagePushItem` - one for each available image
+- :class:`~pushsource.SourceContainerImagePushItem` - for source container images
+- :class:`~pushsource.OperatorManifestPushItem` - if images have attached operator
+  manifest archives
 
 Setting the destination for push items
 ......................................
@@ -91,3 +107,6 @@ Python API reference
 .. autoclass:: pushsource.KojiSource
    :members:
    :special-members: __init__
+
+
+.. _OSBS: https://osbs.readthedocs.io/

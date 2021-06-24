@@ -74,8 +74,6 @@ class PushItem(object):
     In the common case of a regular file, a push item name will simply be a filename,
     optionally including leading path components.
 
-    Container image manifests may provide their digest as the name.
-
     In all cases, a non-empty name must be provided.
     """
 

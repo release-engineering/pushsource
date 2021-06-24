@@ -374,7 +374,7 @@ class KojiSource(Source):
         # Per above doc, it is preferred to use the metadata under 'typeinfo' if present
         image = typeinfo.get("image") or extra.get("image")
 
-        if not image:
+        if image is None:
             message = "Build %s not recognized as a container image build" % nvr
             LOG.error(message)
             raise ValueError(message)

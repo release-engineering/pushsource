@@ -1,5 +1,8 @@
+from frozenlist2 import frozenlist
+
 from .base import PushItem
 from .. import compat_attr as attr
+from ..compat import frozendict
 
 
 @attr.s()
@@ -28,6 +31,29 @@ class ContainerImagePushItem(PushItem):
     See `container-signature`_ docs for information on signatures.
 
     .. _container-signature: https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md
+    """
+
+    source_tags = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
+    """Tags placed onto this image when it was built, if known.
+
+    :type: List[str]
+    """
+
+    labels = attr.ib(type=dict, default=attr.Factory(frozendict), converter=frozendict)
+    """Labels of this image, if known.
+
+    This field is not guaranteed to include all labels associated with the image.
+
+    :type: Dict[str, str]
+    """
+
+    arch = attr.ib(type=str, default=None)
+    """Architecture of this image, if known.
+
+    This field uses the conventional architecture strings used throughout the
+    container ecosystem, such as ``"amd64"``.
     """
 
 

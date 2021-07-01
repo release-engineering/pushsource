@@ -42,14 +42,13 @@ according to their type and attributes:
     from pushsource import Source, RpmPushItem
     import logging
 
-    source = Source.get('koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...')
-
-    for item in source:
-        if isinstance(item, RpmPushItem):
-            # do something with RPMs
-            publish_rpm(item)
-        else:
-            # don't know what to do
-            logging.getLogger().warning("Unexpected item: %s", item)
+    with Source.get('koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...') as source:
+        for item in source:
+            if isinstance(item, RpmPushItem):
+                # do something with RPMs
+                publish_rpm(item)
+            else:
+                # don't know what to do
+                logging.getLogger().warning("Unexpected item: %s", item)
 
 For more information, see the :ref:`userguide`.

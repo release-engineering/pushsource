@@ -75,9 +75,17 @@ class StagedSource(
 
         # Note: this executor does not have a retry.
         # NFS already does a lot of its own retries.
-        self._executor = Executors.thread_pool(max_workers=threads).with_timeout(
-            timeout
+        self._executor = (
+            Executors.thread_pool(max_workers=threads)
+            .with_timeout(timeout)
+            .with_cancel_on_shutdown()
         )
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._executor.shutdown()
 
     def __iter__(self):
         # Possible improvement would be to handle the separate dirs concurrently.

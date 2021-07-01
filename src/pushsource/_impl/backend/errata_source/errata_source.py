@@ -79,17 +79,31 @@ class ErrataSource(Source):
         self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
 
         # This executor doesn't use retry because koji & ET executors already do that.
-        self._executor = Executors.thread_pool(max_workers=threads)
+        self._executor = Executors.thread_pool(
+            max_workers=threads
+        ).with_cancel_on_shutdown()
 
         # We set aside a separate thread pool for koji so that there are separate
         # queues for ET and koji calls, yet we avoid creating a new thread pool for
         # each koji source.
-        self._koji_executor = Executors.thread_pool(max_workers=threads).with_retry()
+        self._koji_executor = (
+            Executors.thread_pool(max_workers=threads)
+            .with_retry()
+            .with_cancel_on_shutdown()
+        )
         self._koji_cache = {}
         self._koji_source_url = koji_source
 
         self._legacy_container_repos = try_bool(legacy_container_repos)
         self._timeout = timeout
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._client.shutdown()
+        self._executor.shutdown(True)
+        self._koji_executor.shutdown(True)
 
     @property
     def _errata_service_url(self):
@@ -168,27 +182,31 @@ class ErrataSource(Source):
         #
 
         # We'll be getting container metadata from these builds.
-        koji_source = self._koji_source(container_build=list(docker_file_list.keys()))
+        with self._koji_source(
+            container_build=list(docker_file_list.keys())
+        ) as koji_source:
 
-        out = []
+            out = []
 
-        for item in koji_source:
-            if isinstance(item, ContainerImagePushItem):
-                item = self._enrich_container_push_item(erratum, docker_file_list, item)
-            elif isinstance(item, OperatorManifestPushItem):
-                # Accept this item but nothing special to do
-                pass
-            else:
-                # If build contained anything else, ignore it
-                LOG.debug(
-                    "Erratum %s: ignored unexpected item from koji source: %s",
-                    erratum.name,
-                    item,
-                )
-                continue
+            for item in koji_source:
+                if isinstance(item, ContainerImagePushItem):
+                    item = self._enrich_container_push_item(
+                        erratum, docker_file_list, item
+                    )
+                elif isinstance(item, OperatorManifestPushItem):
+                    # Accept this item but nothing special to do
+                    pass
+                else:
+                    # If build contained anything else, ignore it
+                    LOG.debug(
+                        "Erratum %s: ignored unexpected item from koji source: %s",
+                        erratum.name,
+                        item,
+                    )
+                    continue
 
-            item = attr.evolve(item, origin=erratum.name)
-            out.append(item)
+                item = attr.evolve(item, origin=erratum.name)
+                out.append(item)
 
         return out
 
@@ -260,22 +278,22 @@ class ErrataSource(Source):
         # depending on the ftp_paths response.
         module_filenames.append("modulemd.src.txt")
 
-        # Get a koji source which will yield all modules from the build
-        koji_source = self._koji_source(
-            module_build=[build_nvr], module_filter_filename=module_filenames
-        )
-
         out = []
 
-        for push_item in koji_source:
-            # ET uses filenames to identify the modules here, we must do the same.
-            basename = os.path.basename(push_item.src)
-            dest = modules.pop(basename, [])
+        # Get a koji source which will yield all modules from the build
+        with self._koji_source(
+            module_build=[build_nvr], module_filter_filename=module_filenames
+        ) as koji_source:
 
-            # Fill in more push item details based on the info provided by ET.
-            push_item = attr.evolve(push_item, dest=dest, origin=erratum.name)
+            for push_item in koji_source:
+                # ET uses filenames to identify the modules here, we must do the same.
+                basename = os.path.basename(push_item.src)
+                dest = modules.pop(basename, [])
 
-            out.append(push_item)
+                # Fill in more push item details based on the info provided by ET.
+                push_item = attr.evolve(push_item, dest=dest, origin=erratum.name)
+
+                out.append(push_item)
 
         # Were there any requested modules we couldn't find?
         missing_modules = ", ".join(sorted(modules.keys()))

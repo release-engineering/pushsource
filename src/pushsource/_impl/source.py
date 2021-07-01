@@ -25,16 +25,61 @@ class SourceUrlError(ValueError):
     """
 
 
+class SourceWrapper(object):
+    # Internal class to ensure that all source instances support enter/exit
+    # for with statements even if underlying instance doesn't implement it
+    # (since it originally was not mandatory).
+    def __init__(self, delegate):
+        self.__delegate = delegate
+
+    def __iter__(self):
+        return self.__delegate.__iter__()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+    @classmethod
+    def _maybe_wrap(cls, delegate):
+        if hasattr(delegate, "__enter__"):
+            # no wrapping needed
+            return delegate
+        # wrap with a no-op enter/exit
+        return cls(delegate)
+
+
 class Source(object):
     """A source of push items.
 
     This base class defines the interface for all pushsource backends.
     Instances of a specific backend can be obtained using
     the :meth:`~pushsource.Source.get` method.
+
+    Though not mandatory, instances of ``Source`` are preferably used
+    via ``with`` statements to ensure that all resources are cleaned up
+    when no longer needed, as in example:
+
+    .. code-block:: python
+
+        with Source.get('some-url') as source:
+            for item in source:
+                do_something(item)
+
+    Note that the items produced by a source are not bound to the lifecycle
+    of a source instance, so it's safe to store them and continue using
+    them beyond the end of the ``with`` statement.
     """
 
     _BACKENDS = {}
     _BACKENDS_BUILTIN = {}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
 
     def __iter__(self):
         """Iterate over the push items contained within this source.
@@ -159,7 +204,7 @@ class Source(object):
         def partial_source(*inner_args, **inner_kwargs):
             kwargs = url_kwargs.copy()
             kwargs.update(inner_kwargs)
-            return klass(*inner_args, **kwargs)
+            return SourceWrapper._maybe_wrap(klass(*inner_args, **kwargs))
 
         return partial_source
 

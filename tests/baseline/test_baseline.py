@@ -3,6 +3,7 @@ import glob
 import functools
 import logging
 import difflib
+import threading
 
 import yaml
 import attr
@@ -183,8 +184,14 @@ def test_source_against_baseline(casename, case_helper):
 
     url = case_data["url"]
 
-    source = Source.get(url)
-    all_items = list(source)
+    # Each tested source is checked for thread leaks to encourage
+    # that enter/exit are implemented correctly.
+    threads = threading.active_count()
+
+    with Source.get(url) as source:
+        all_items = list(source)
+
+    assert threading.active_count() == threads
 
     new_case_text = case_helper.serialize(url, all_items)
 

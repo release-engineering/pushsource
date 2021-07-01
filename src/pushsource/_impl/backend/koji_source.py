@@ -203,8 +203,22 @@ class KojiSource(Source):
         self._cache = {} if cache is None else cache
         self._threads = threads
         self._executor = (
-            executor or Executors.thread_pool(max_workers=threads).with_retry()
+            executor
+            or Executors.thread_pool(max_workers=threads)
+            .with_retry()
+            .with_cancel_on_shutdown()
         )
+
+        self._on_shutdown = []
+        if not executor:
+            self._on_shutdown.append(lambda: self._executor.shutdown(True))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        for cb in self._on_shutdown:
+            cb()
 
     @property
     def _koji_session(self):
@@ -591,6 +605,23 @@ class KojiSource(Source):
         # Wait for all fetches to finish
         for t in fetch_threads:
             t.start()
+
+        # If we are asked to shut down early then also shut down those threads
+        # as soon as we can.
+        def fetch_shutdown():
+            try:
+                # Empty the queue
+                while True:
+                    koji_queue.get_nowait()
+            except Empty:
+                pass
+
+            # Then ask the threads to join
+            for t in fetch_threads:
+                t.join()
+
+        self._on_shutdown.append(fetch_shutdown)
+
         for t in fetch_threads:
             t.join(self._timeout)
 

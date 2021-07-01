@@ -42,12 +42,12 @@ def dump_task(task_info):
         return
 
     log.info("STAGED: %s", ", ".join(stagedirs))
-    source = Source.get("staged:", url=stagedirs)
-    count = 0
-    for pushitem in source:
-        log.info("  %s", pushitem)
-        count += 1
-    log.info("=========== %s item(s) ================================", count)
+    with Source.get("staged:", url=stagedirs) as source:
+        count = 0
+        for pushitem in source:
+            log.info("  %s", pushitem)
+            count += 1
+        log.info("=========== %s item(s) ================================", count)
 
 
 def main():

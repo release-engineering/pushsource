@@ -31,10 +31,9 @@ from pushsource import Source
 # Get a source of content; sources and their parameters can be
 # specified by URL. This source will use a couple of RPMs from
 # Fedora koji as the content source.
-source = Source.get('koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm')
-
-# Iterate over the content and do something with it:
-for push_item in source:
+with Source.get('koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm') as source:
+  # Iterate over the content and do something with it:
+  for push_item in source:
     publish(push_item)
 ```
 

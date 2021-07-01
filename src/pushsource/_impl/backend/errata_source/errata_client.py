@@ -22,8 +22,10 @@ class ErrataRaw(object):
 
 class ErrataClient(object):
     def __init__(self, threads, url, **retry_args):
-        self._executor = Executors.thread_pool(max_workers=threads).with_retry(
-            **retry_args
+        self._executor = (
+            Executors.thread_pool(max_workers=threads)
+            .with_retry(**retry_args)
+            .with_cancel_on_shutdown()
         )
         self._url = url
         self._tls = threading.local()
@@ -38,6 +40,9 @@ class ErrataClient(object):
             self._call_et, "get_advisory_cdn_docker_file_list"
         )
         self._get_ftp_paths = partial(self._call_et, "get_ftp_paths")
+
+    def shutdown(self):
+        self._executor.shutdown(True)
 
     @property
     def _errata_service(self):

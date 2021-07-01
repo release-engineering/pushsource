@@ -79,7 +79,8 @@ def test_koji_rpms(fake_koji, koji_dir):
     }
 
     # Eagerly fetch
-    items = list(source)
+    with source:
+        items = list(source)
 
     # It should have constructed a session for the given URL
     assert fake_koji.last_url == "https://koji.example.com/"

@@ -93,6 +93,8 @@ disable=print-statement,
         fixme,
         # some classes have code accessing each other
         protected-access,
+        # false positives on 'staged' backend
+        unused-private-member,
         # we use black code style and don't need additional checks
         bad-continuation,
         line-too-long,

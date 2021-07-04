@@ -236,8 +236,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">executor</span> <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
-        <span class="p">)</span></div>
+            <span class="n">executor</span>
+            <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_on_shutdown</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">executor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_on_shutdown</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_shutdown</span><span class="p">:</span>
+            <span class="n">cb</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_koji_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -624,6 +638,23 @@
         <span class="c1"># Wait for all fetches to finish</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">fetch_threads</span><span class="p">:</span>
             <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># If we are asked to shut down early then also shut down those threads</span>
+        <span class="c1"># as soon as we can.</span>
+        <span class="k">def</span> <span class="nf">fetch_shutdown</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Empty the queue</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">koji_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># Then ask the threads to join</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">fetch_threads</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_on_shutdown</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fetch_shutdown</span><span class="p">)</span>
+
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">fetch_threads</span><span class="p">:</span>
             <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
 

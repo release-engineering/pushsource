@@ -88,15 +88,14 @@ according to their type and attributes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pushsource</span> <span class="kn">import</span> <span class="n">Source</span><span class="p">,</span> <span class="n">RpmPushItem</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...&#39;</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
-        <span class="c1"># do something with RPMs</span>
-        <span class="n">publish_rpm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># don&#39;t know what to do</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected item: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;koji:https://koji.fedoraproject.org/kojihub?rpm=rpm1,rpm2,...&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
+            <span class="c1"># do something with RPMs</span>
+            <span class="n">publish_rpm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># don&#39;t know what to do</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected item: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For more information, see the <a class="reference internal" href="userguide.html#userguide"><span class="std std-ref">User Guide</span></a>.</p>

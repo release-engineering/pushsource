@@ -58,16 +58,61 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<span class="k">class</span> <span class="nc">SourceWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># Internal class to ensure that all source instances support enter/exit</span>
+    <span class="c1"># for with statements even if underlying instance doesn&#39;t implement it</span>
+    <span class="c1"># (since it originally was not mandatory).</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span> <span class="o">=</span> <span class="n">delegate</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_maybe_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">delegate</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
+            <span class="c1"># no wrapping needed</span>
+            <span class="k">return</span> <span class="n">delegate</span>
+        <span class="c1"># wrap with a no-op enter/exit</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">delegate</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="Source"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a><span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A source of push items.</span>
 
 <span class="sd">    This base class defines the interface for all pushsource backends.</span>
 <span class="sd">    Instances of a specific backend can be obtained using</span>
 <span class="sd">    the :meth:`~pushsource.Source.get` method.</span>
+
+<span class="sd">    Though not mandatory, instances of ``Source`` are preferably used</span>
+<span class="sd">    via ``with`` statements to ensure that all resources are cleaned up</span>
+<span class="sd">    when no longer needed, as in example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        with Source.get(&#39;some-url&#39;) as source:</span>
+<span class="sd">            for item in source:</span>
+<span class="sd">                do_something(item)</span>
+
+<span class="sd">    Note that the items produced by a source are not bound to the lifecycle</span>
+<span class="sd">    of a source instance, so it&#39;s safe to store them and continue using</span>
+<span class="sd">    them beyond the end of the ``with`` statement.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_BACKENDS</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">_BACKENDS_BUILTIN</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
 
 <div class="viewcode-block" id="Source.__iter__"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over the push items contained within this source.</span>
@@ -192,7 +237,7 @@
         <span class="k">def</span> <span class="nf">partial_source</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">inner_kwargs</span><span class="p">):</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">SourceWrapper</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">partial_source</span></div>
 

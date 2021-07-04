@@ -154,17 +154,16 @@ item appropriately.</p>
 your code is forwards-compatible with later versions of this library, which may add new types
 of push items to existing sources.</p>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
-  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
-    <span class="n">publish_rpm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ErratumPushItem</span><span class="p">):</span>
-    <span class="n">publish_erratum</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">FilePushItem</span><span class="p">):</span>
-    <span class="n">publish_file</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected push item type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
+      <span class="n">publish_rpm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ErratumPushItem</span><span class="p">):</span>
+      <span class="n">publish_erratum</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">FilePushItem</span><span class="p">):</span>
+      <span class="n">publish_file</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected push item type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -190,7 +189,6 @@ a number of seconds.</p></li>
 </li>
 <li><dl class="simple">
 <dt>Implement the <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> method, while following conventions:</dt><dd><ul class="simple">
-<li><p>Your source might be iterated over more than once.</p></li>
 <li><p>Lazy loading of data is recommended where practical; i.e. prefer to implement a generator
 which yields each piece of data as it is ready, rather than eagerly loading all data
 into a list.</p></li>
@@ -198,6 +196,8 @@ into a list.</p></li>
 </dd>
 </dl>
 </li>
+<li><p>If your class allocates any resources which should be cleaned up when no longer needed,
+implement <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> methods to manage them.</p></li>
 <li><p>Call the <a class="reference internal" href="sources/base.html#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code></a> method providing your backend’s name
 and class as arguments.</p></li>
 </ul>

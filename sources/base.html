@@ -43,6 +43,17 @@
 <p>This base class defines the interface for all pushsource backends.
 Instances of a specific backend can be obtained using
 the <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.</p>
+<p>Though not mandatory, instances of <code class="docutils literal notranslate"><span class="pre">Source</span></code> are preferably used
+via <code class="docutils literal notranslate"><span class="pre">with</span></code> statements to ensure that all resources are cleaned up
+when no longer needed, as in example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;some-url&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+        <span class="n">do_something</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the items produced by a source are not bound to the lifecycle
+of a source instance, so it’s safe to store them and continue using
+them beyond the end of the <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.__iter__">
 <span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.__iter__" title="Permalink to this definition">¶</a></dt>

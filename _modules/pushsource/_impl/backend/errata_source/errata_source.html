@@ -112,17 +112,31 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm_filter_arch</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># This executor doesn&#39;t use retry because koji &amp; ET executors already do that.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
 
         <span class="c1"># We set aside a separate thread pool for koji so that there are separate</span>
         <span class="c1"># queues for ET and koji calls, yet we avoid creating a new thread pool for</span>
         <span class="c1"># each koji source.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span><span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_koji_cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span> <span class="o">=</span> <span class="n">koji_source</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_container_repos</span> <span class="o">=</span> <span class="n">try_bool</span><span class="p">(</span><span class="n">legacy_container_repos</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span></div>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_errata_service_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -201,27 +215,31 @@
         <span class="c1">#</span>
 
         <span class="c1"># We&#39;ll be getting container metadata from these builds.</span>
-        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">container_build</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">docker_file_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
+            <span class="n">container_build</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">docker_file_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
 
-        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ContainerImagePushItem</span><span class="p">):</span>
-                <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enrich_container_push_item</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">docker_file_list</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">OperatorManifestPushItem</span><span class="p">):</span>
-                <span class="c1"># Accept this item but nothing special to do</span>
-                <span class="k">pass</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># If build contained anything else, ignore it</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                    <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: ignored unexpected item from koji source: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                    <span class="n">item</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ContainerImagePushItem</span><span class="p">):</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enrich_container_push_item</span><span class="p">(</span>
+                        <span class="n">erratum</span><span class="p">,</span> <span class="n">docker_file_list</span><span class="p">,</span> <span class="n">item</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">OperatorManifestPushItem</span><span class="p">):</span>
+                    <span class="c1"># Accept this item but nothing special to do</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If build contained anything else, ignore it</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: ignored unexpected item from koji source: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">item</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
 
-            <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out</span>
 
@@ -293,22 +311,22 @@
         <span class="c1"># depending on the ftp_paths response.</span>
         <span class="n">module_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Get a koji source which will yield all modules from the build</span>
-        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
-            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="n">module_filenames</span>
-        <span class="p">)</span>
-
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
-            <span class="c1"># ET uses filenames to identify the modules here, we must do the same.</span>
-            <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
-            <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="c1"># Get a koji source which will yield all modules from the build</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
+            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="n">module_filenames</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
 
-            <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
-            <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">push_item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+                <span class="c1"># ET uses filenames to identify the modules here, we must do the same.</span>
+                <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+                <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="p">[])</span>
 
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
+                <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
+                <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">push_item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
 
         <span class="c1"># Were there any requested modules we couldn&#39;t find?</span>
         <span class="n">missing_modules</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>

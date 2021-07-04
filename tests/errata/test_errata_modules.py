@@ -171,7 +171,8 @@ def test_errata_modules_via_koji(fake_errata_tool, fake_koji, koji_dir):
         build_nvr="postgresql-12-8010120191120141335.e4e244f9",
     )
 
-    items = list(source)
+    with source:
+        items = list(source)
 
     errata_items = [i for i in items if isinstance(i, ErratumPushItem)]
     rpm_items = [i for i in items if isinstance(i, RpmPushItem)]

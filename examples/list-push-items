@@ -51,19 +51,19 @@ FORMATTERS = {
 
 
 def run(args):
-    source = Source.get(args.src_url)
-    log.info("# Loaded source %s", args.src_url)
+    with Source.get(args.src_url) as source:
+        log.info("# Loaded source %s", args.src_url)
 
-    formatter = FORMATTERS.get(args.format)
+        formatter = FORMATTERS.get(args.format)
 
-    itemcount = 0
+        itemcount = 0
 
-    for pushitem in source:
-        out = formatter(pushitem)
-        log.info("%s", out)
-        itemcount += 1
+        for pushitem in source:
+            out = formatter(pushitem)
+            log.info("%s", out)
+            itemcount += 1
 
-    log.info("# %s item(s) found in source", itemcount)
+        log.info("# %s item(s) found in source", itemcount)
 
 
 def main():

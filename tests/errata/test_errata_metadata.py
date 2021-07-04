@@ -163,7 +163,8 @@ def test_errata_url_with_path(fake_errata_tool):
     assert not fake_errata_tool.last_url
 
     # Load all items
-    items = list(source)
+    with source:
+        items = list(source)
 
     # It should have queried the expected XML-RPC endpoint, which was
     # appended to the URL retaining our path component.

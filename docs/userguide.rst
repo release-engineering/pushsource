@@ -113,17 +113,16 @@ Example:
 
 ::
 
-  source = Source.get(...)
-
-  for item in source:
-    if isinstance(item, RpmPushItem):
-      publish_rpm(item)
-    elif isinstance(item, ErratumPushItem):
-      publish_erratum(item)
-    elif isinstance(item, FilePushItem):
-      publish_file(item)
-    else:
-      LOG.warning("Unexpected push item type: %s", item)
+  with Source.get(...) as source:
+    for item in source:
+      if isinstance(item, RpmPushItem):
+        publish_rpm(item)
+      elif isinstance(item, ErratumPushItem):
+        publish_erratum(item)
+      elif isinstance(item, FilePushItem):
+        publish_file(item)
+      else:
+        LOG.warning("Unexpected push item type: %s", item)
 
 
 .. _implementing:
@@ -145,10 +144,11 @@ To implement a backend, follow these steps:
     * If your backend has a customizable timeout, use an argument named `timeout` accepting
       a number of seconds.
 * Implement the ``__iter__`` method, while following conventions:
-    * Your source might be iterated over more than once.
     * Lazy loading of data is recommended where practical; i.e. prefer to implement a generator
       which yields each piece of data as it is ready, rather than eagerly loading all data
       into a list.
+* If your class allocates any resources which should be cleaned up when no longer needed,
+  implement ``__enter__`` and ``__exit__`` methods to manage them.
 * Call the :class:`~pushsource.Source.register_backend` method providing your backend's name
   and class as arguments.
 

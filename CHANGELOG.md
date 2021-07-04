@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Changed
+
+- `Source` instances now support `with` statements to ensure that resources are freed
+  when no longer required.
 
 ## [2.8.0] - 2021-06-25
 

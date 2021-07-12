@@ -1,5 +1,5 @@
 attrs
-more-executors
+more-executors>=2.7.0
 koji>=1.18
 six
 pushcollector

@@ -76,7 +76,7 @@ class StagedSource(
         # Note: this executor does not have a retry.
         # NFS already does a lot of its own retries.
         self._executor = (
-            Executors.thread_pool(max_workers=threads)
+            Executors.thread_pool(name="pushsource-staged", max_workers=threads)
             .with_timeout(timeout)
             .with_cancel_on_shutdown()
         )

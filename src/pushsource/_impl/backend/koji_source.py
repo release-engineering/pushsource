@@ -204,7 +204,7 @@ class KojiSource(Source):
         self._threads = threads
         self._executor = (
             executor
-            or Executors.thread_pool(max_workers=threads)
+            or Executors.thread_pool(name="pushsource-koji", max_workers=threads)
             .with_retry()
             .with_cancel_on_shutdown()
         )

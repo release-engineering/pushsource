@@ -23,7 +23,7 @@ class ErrataRaw(object):
 class ErrataClient(object):
     def __init__(self, threads, url, **retry_args):
         self._executor = (
-            Executors.thread_pool(max_workers=threads)
+            Executors.thread_pool(name="pushsource-errata-client", max_workers=threads)
             .with_retry(**retry_args)
             .with_cancel_on_shutdown()
         )

@@ -80,14 +80,14 @@ class ErrataSource(Source):
 
         # This executor doesn't use retry because koji & ET executors already do that.
         self._executor = Executors.thread_pool(
-            max_workers=threads
+            name="pushsource-errata", max_workers=threads
         ).with_cancel_on_shutdown()
 
         # We set aside a separate thread pool for koji so that there are separate
         # queues for ET and koji calls, yet we avoid creating a new thread pool for
         # each koji source.
         self._koji_executor = (
-            Executors.thread_pool(max_workers=threads)
+            Executors.thread_pool(name="pushsource-errata-koji", max_workers=threads)
             .with_retry()
             .with_cancel_on_shutdown()
         )

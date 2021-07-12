@@ -109,7 +109,7 @@
         <span class="c1"># Note: this executor does not have a retry.</span>
         <span class="c1"># NFS already does a lot of its own retries.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-staged&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_timeout</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
         <span class="p">)</span></div>
@@ -226,7 +226,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../userguide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../sources/base.html">Source</a></li>
@@ -270,7 +270,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -292,7 +292,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

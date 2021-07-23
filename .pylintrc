@@ -215,7 +215,6 @@ enable=abstract-class-instantiated,
   subprocess-popen-preexec-fn,
   subprocess-run-check,
   super-init-not-called,
-  #super-with-arguments,  # enable when py2 dropped
   superfluous-parens,
   syntax-error,
   too-few-format-args,
@@ -270,4 +269,4 @@ enable=abstract-class-instantiated,
   wrong-spelling-in-comment,
   wrong-spelling-in-docstring,
   yield-inside-async-function,
-  yield-outside-function,
+  yield-outside-function

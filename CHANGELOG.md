@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Internally created executors are now named for improved metrics and debuggability.
+- Library no longer has a hard dependency on Python bindings to `rpm`, if RPM-related
+  functionality is not used.
 
 ## [2.9.0] - 2021-07-05
 

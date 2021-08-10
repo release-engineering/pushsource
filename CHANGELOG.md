@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Fixed
+
+- Added a missing dependency declaration on `scandir` for Python versions older than 3.5.
 
 ## [2.10.0] - 2021-08-10
 

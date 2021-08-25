@@ -18,11 +18,25 @@ def test_get_koji():
     assert Source.get("koji:https://koji.example.com/")
 
 
-def test_koji_empty():
+def test_koji_empty(fake_koji):
     """Empty koji source yields no push items"""
 
     source = Source.get("koji:https://koji.example.com/")
     assert list(source) == []
+
+
+def test_koji_connect_error():
+    """Source raises a reasonable error if server can't be contacted"""
+
+    # Note: fake_koji fixture not used here, so this will really try to connect
+    source = Source.get("koji:https://localhost:1234/this-aint-koji")
+    with raises(RuntimeError) as exc_info:
+        list(source)
+
+    assert (
+        "Communication error with koji at https://localhost:1234/this-aint-koji"
+        in str(exc_info.value)
+    )
 
 
 def test_koji_nobuild(fake_koji):

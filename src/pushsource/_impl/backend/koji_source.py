@@ -5,6 +5,7 @@ from functools import partial
 
 from concurrent import futures
 from six.moves.queue import Queue, Empty
+import six
 from threading import Thread
 
 import koji
@@ -27,6 +28,10 @@ from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()
+
+# Arguments used for retry policy.
+# Provided so it can be overridden from tests to reduce time spent on retries.
+RETRY_ARGS = {}
 
 
 class ListArchivesCommand(object):
@@ -205,7 +210,7 @@ class KojiSource(Source):
         self._executor = (
             executor
             or Executors.thread_pool(name="pushsource-koji", max_workers=threads)
-            .with_retry()
+            .with_retry(**RETRY_ARGS)
             .with_cancel_on_shutdown()
         )
 
@@ -230,6 +235,28 @@ class KojiSource(Source):
                 LOG.debug("Creating koji session: %s", self._url)
                 tls.koji_session = koji.ClientSession(self._url)
         return tls.koji_session
+
+    def _koji_check(self):
+        # Do a basic connection check with koji.
+        # If this succeeds, we can be reasonably sure that the koji connection is
+        # more or less working.
+        try:
+            version = self._executor.submit(self._koji_get_version).result()
+        except Exception as ex:  # pylint: disable=broad-except
+            # TODO: drop this log when py2 support is dropped.
+            # It's only here because py2 has no exception chaining.
+            msg = "Communication error with koji at %s" % self._url
+            LOG.exception(msg)
+
+            six.raise_from(RuntimeError(msg), ex)
+
+        LOG.debug("Connected to koji %s at %s", version, self._url)
+
+    def _koji_get_version(self):
+        with CACHE_LOCK:
+            if "koji_version" not in self._cache:
+                self._cache["koji_version"] = self._koji_session.getVersion()
+            return self._cache["koji_version"]
 
     def _get_rpm(self, rpm):
         return self._cache["rpm"][rpm]
@@ -573,6 +600,22 @@ class KojiSource(Source):
             raise
 
     def __iter__(self):
+        # Try a (blocking) call to koji before anything else.
+        #
+        # The reasons for this are:
+        #
+        # - give an error which is hopefully easier to understand if the
+        #   koji connection is completely broken (e.g. caller provides bogus
+        #   URL)
+        #
+        # - work around pyasn1 bug https://github.com/etingof/pyasn1/issues/53
+        #   which affects some (ancient) environments. That thread-safety bug
+        #   can cause parsing of subjectAltName to fail if it first occurs from
+        #   multiple threads simultaneously. Doing a warm-up from one thread
+        #   before we spawn multiple threads is a way to avoid this.
+        #
+        self._koji_check()
+
         # Queue holding all requests we need to make to koji.
         # We try to fetch as much as we can early to make efficient use
         # of multicall.

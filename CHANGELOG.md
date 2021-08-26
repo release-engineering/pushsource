@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.10.3] - 2021-08-27
+
+### Fixed
+
+- Fixed `KojiSource` crash bug introduced in 2.10.2.
+
 ## [2.10.2] - 2021-08-26
 
 ### Fixed
@@ -163,7 +169,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.10.2...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.10.3...HEAD
+[2.10.3]: https://github.com/release-engineering/pushsource/compare/v2.10.2...v2.10.3
 [2.10.2]: https://github.com/release-engineering/pushsource/compare/v2.10.1...v2.10.2
 [2.10.1]: https://github.com/release-engineering/pushsource/compare/v2.10.0...v2.10.1
 [2.10.0]: https://github.com/release-engineering/pushsource/compare/v2.9.0...v2.10.0

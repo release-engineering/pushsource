@@ -255,7 +255,7 @@ class KojiSource(Source):
     def _koji_get_version(self):
         with CACHE_LOCK:
             if "koji_version" not in self._cache:
-                self._cache["koji_version"] = self._koji_session.getVersion()
+                self._cache["koji_version"] = self._koji_session.getKojiVersion()
             return self._cache["koji_version"]
 
     def _get_rpm(self, rpm):

@@ -158,7 +158,7 @@ class FakeKojiSession(object):
             raise value
         return value
 
-    def getVersion(self):
+    def getKojiVersion(self):
         return "fake-version"
 
     def getRPM(self, rpm):

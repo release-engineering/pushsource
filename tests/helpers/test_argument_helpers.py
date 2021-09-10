@@ -1,6 +1,6 @@
 import pytest
 
-from pushsource._impl.helpers import list_argument, try_bool
+from pushsource._impl.helpers import list_argument, try_bool, force_https
 
 
 def test_list_argument():
@@ -35,3 +35,29 @@ def test_try_bool(input, expected_output):
 def test_try_bool_invalid():
     with pytest.raises(ValueError):
         try_bool("this ain't no boolean")
+
+
+@pytest.mark.parametrize(
+    "input, expected_output",
+    [
+        ("http://errata.example.com/some/path", "https://errata.example.com/some/path"),
+        (
+            "https://errata.example.com/some/path",
+            "https://errata.example.com/some/path",
+        ),
+        (
+            "https://errata.example.com/some/path?param1=a",
+            "https://errata.example.com/some/path?param1=a",
+        ),
+        (
+            "https://errata.example.com/some/path#fragment",
+            "https://errata.example.com/some/path#fragment",
+        ),
+        (
+            "https://errata.example.com/some/path?param1=a#fragment",
+            "https://errata.example.com/some/path?param1=a#fragment",
+        ),
+    ],
+)
+def test_force_https(input, expected_output):
+    assert force_https(input) == expected_output

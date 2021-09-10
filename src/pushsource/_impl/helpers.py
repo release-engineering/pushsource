@@ -1,6 +1,9 @@
 import six
 
 
+from six.moves.urllib.parse import urlparse, ParseResult
+
+
 def list_argument(value, retain_none=False):
     """Convert an argument into a list:
 
@@ -85,3 +88,22 @@ def try_bool(value):
     elif value in ["", "0", "false", "no"]:
         return False
     raise ValueError("Expected a boolean, got %s" % repr(value))
+
+
+def force_https(url):
+    """Force ``url`` to use https as its scheme.
+
+    Parameters:
+        url: str
+            A string representation of a URL.
+
+    Returns:
+        str
+            ``url`` with its scheme replaced with https.
+
+    Throws:
+        Any potential error thrown by the urlparse function during parsing.
+    """
+    parsed = urlparse(url)
+    with_https = ParseResult("https", *parsed[1:])
+    return with_https.geturl()

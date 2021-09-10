@@ -38,7 +38,6 @@
 
 <span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
 <span class="kn">from</span> <span class="nn">six.moves.queue</span> <span class="kn">import</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Empty</span>
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 
 <span class="kn">import</span> <span class="nn">koji</span>
@@ -61,10 +60,6 @@
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
-
-<span class="c1"># Arguments used for retry policy.</span>
-<span class="c1"># Provided so it can be overridden from tests to reduce time spent on retries.</span>
-<span class="n">RETRY_ARGS</span> <span class="o">=</span> <span class="p">{}</span>
 
 
 <span class="k">class</span> <span class="nc">ListArchivesCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -243,7 +238,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">executor</span>
             <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-koji&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">with_retry</span><span class="p">(</span><span class="o">**</span><span class="n">RETRY_ARGS</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
             <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
         <span class="p">)</span>
 
@@ -268,28 +263,6 @@
                 <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating koji session: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
                 <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span>
-
-    <span class="k">def</span> <span class="nf">_koji_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Do a basic connection check with koji.</span>
-        <span class="c1"># If this succeeds, we can be reasonably sure that the koji connection is</span>
-        <span class="c1"># more or less working.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_get_version</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
-            <span class="c1"># TODO: drop this log when py2 support is dropped.</span>
-            <span class="c1"># It&#39;s only here because py2 has no exception chaining.</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Communication error with koji at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-            <span class="n">six</span><span class="o">.</span><span class="n">raise_from</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">ex</span><span class="p">)</span>
-
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connected to koji </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_koji_get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">CACHE_LOCK</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;koji_version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;koji_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">getKojiVersion</span><span class="p">()</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;koji_version&quot;</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_get_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="n">rpm</span><span class="p">]</span>
@@ -633,22 +606,6 @@
             <span class="k">raise</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Try a (blocking) call to koji before anything else.</span>
-        <span class="c1">#</span>
-        <span class="c1"># The reasons for this are:</span>
-        <span class="c1">#</span>
-        <span class="c1"># - give an error which is hopefully easier to understand if the</span>
-        <span class="c1">#   koji connection is completely broken (e.g. caller provides bogus</span>
-        <span class="c1">#   URL)</span>
-        <span class="c1">#</span>
-        <span class="c1"># - work around pyasn1 bug https://github.com/etingof/pyasn1/issues/53</span>
-        <span class="c1">#   which affects some (ancient) environments. That thread-safety bug</span>
-        <span class="c1">#   can cause parsing of subjectAltName to fail if it first occurs from</span>
-        <span class="c1">#   multiple threads simultaneously. Doing a warm-up from one thread</span>
-        <span class="c1">#   before we spawn multiple threads is a way to avoid this.</span>
-        <span class="c1">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_check</span><span class="p">()</span>
-
         <span class="c1"># Queue holding all requests we need to make to koji.</span>
         <span class="c1"># We try to fetch as much as we can early to make efficient use</span>
         <span class="c1"># of multicall.</span>

@@ -99,9 +99,9 @@ coveralls==3.2.0 \
     --hash=sha256:15a987d9df877fff44cd81948c5806ffb6eafb757b3443f737888358e96156ee \
     --hash=sha256:aedfcc5296b788ebaf8ace8029376e5f102f67c53d1373f2e821515c15b36527
     # via -r test-requirements.in
-decorator==5.0.9 \
-    --hash=sha256:6e5c199c16f7a9f0e3a61a4a54b3d27e7dad0dbdde92b944426cb20914376323 \
-    --hash=sha256:72ecfba4320a893c53f9706bebb2d55c270c1e51a28789361aa93e4a21319ed5
+decorator==5.1.0 \
+    --hash=sha256:7b12e7c3c6ab203a29e157335e9122cb03de9ab7264b137594103fd4a683b374 \
+    --hash=sha256:e59913af105b9860aa2c8d3272d9de5a56a4e608db9a2f167a8480b323d529a7
     # via gssapi
 distlib==0.3.2 \
     --hash=sha256:106fef6dc37dd8c0e2c0a60d3fca3e77460a48907f335fa28420463a6f799736 \
@@ -129,9 +129,9 @@ gssapi==1.6.14 \
     --hash=sha256:d7ddd253c49b27753809401e4136dabff75389d326707899ae616da4abcd3ca6 \
     --hash=sha256:dac4dae90416f89a3c4924ce365f0fdb7adfeaf68a997341d9c74a779837ab39
     # via requests-gssapi
-identify==2.2.13 \
-    --hash=sha256:7199679b5be13a6b40e6e19ea473e789b11b4e3b60986499b1f589ffb03c217c \
-    --hash=sha256:7bc6e829392bd017236531963d2d937d66fc27cadc643ac0aba2ce9f26157c79
+identify==2.2.14 \
+    --hash=sha256:113a76a6ba614d2a3dd408b3504446bcfac0370da5995aa6a17fd7c6dffde02d \
+    --hash=sha256:32f465f3c48083f345ad29a9df8419a4ce0674bf4a8c3245191d65c83634bdbf
     # via pre-commit
 idna==3.2 \
     --hash=sha256:14475042e284991034cb48e06f6851428fb14c4dc953acd9be9a5e95c7b6dd7a \

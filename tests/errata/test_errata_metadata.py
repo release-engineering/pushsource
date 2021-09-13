@@ -17,9 +17,8 @@ def test_errata_typical_metadata(fake_errata_tool):
     items = list(source)
 
     # It should have queried the expected XML-RPC endpoint.
-    # Note that our https was replaced with http, this is expected!
     assert (
-        fake_errata_tool.last_url == "http://errata.example.com/errata/errata_service"
+        fake_errata_tool.last_url == "https://errata.example.com/errata/errata_service"
     )
 
     # It should have loaded that one advisory
@@ -168,10 +167,9 @@ def test_errata_url_with_path(fake_errata_tool):
 
     # It should have queried the expected XML-RPC endpoint, which was
     # appended to the URL retaining our path component.
-    # Note that our https was replaced with http, this is expected!
     assert (
         fake_errata_tool.last_url
-        == "http://errata.example.com/foo/bar/errata/errata_service"
+        == "https://errata.example.com/foo/bar/errata/errata_service"
     )
 
     # It should have got some data

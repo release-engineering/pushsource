@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.11.0] - 2021-09-15
+
+- `ErrataSource` now uses HTTPS when performing XML-RPC calls to Errata Tool.
+  Previously, HTTP was used.
+
 ## [2.10.3] - 2021-08-27
 
 ### Fixed
@@ -169,7 +174,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.10.3...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.11.0...HEAD
+[2.11.0]: https://github.com/release-engineering/pushsource/compare/v2.10.3...v2.11.0
 [2.10.3]: https://github.com/release-engineering/pushsource/compare/v2.10.2...v2.10.3
 [2.10.2]: https://github.com/release-engineering/pushsource/compare/v2.10.1...v2.10.2
 [2.10.1]: https://github.com/release-engineering/pushsource/compare/v2.10.0...v2.10.1

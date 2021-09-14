@@ -51,7 +51,7 @@
     <span class="n">OperatorManifestPushItem</span><span class="p">,</span>
     <span class="n">conv</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_bool</span>
+<span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_bool</span><span class="p">,</span> <span class="n">force_https</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 
@@ -105,7 +105,7 @@
 <span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
 <span class="sd">                made during queries to Errata Tool.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">force_https</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">errata</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ErrataClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span><span class="p">)</span>
 
@@ -145,13 +145,24 @@
         <span class="c1"># Note the odd handling of scheme here. The reason is that</span>
         <span class="c1"># ET oddly provides different APIs over http and https.</span>
         <span class="c1">#</span>
-        <span class="c1"># This XML-RPC API is available anonymously over *http* only,</span>
-        <span class="c1"># but since this might change in the future, the caller is</span>
-        <span class="c1"># allowed to provide http or https scheme and we&#39;ll apply the</span>
-        <span class="c1"># scheme we know is actually needed.</span>
+        <span class="c1"># This XML-RPC API is available anonymously over *https* only,</span>
+        <span class="c1"># but for compatibility the caller is allowed to provide http</span>
+        <span class="c1"># or https scheme and we&#39;ll apply the scheme we know is actually</span>
+        <span class="c1"># needed.</span>
+        <span class="c1">#</span>
+        <span class="c1"># The XML-RPC endpoint is no longer available over http as of</span>
+        <span class="c1"># 11 Oct 2021. This class&#39;s constructor will still accept either</span>
+        <span class="c1"># http or https, but will force the given url to use https going</span>
+        <span class="c1"># forward.</span>
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span> <span class="o">+</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;errata/errata_service&quot;</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0.scheme}</span><span class="s2">://</span><span class="si">{0.netloc}{0.path}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span>
+
+        <span class="c1"># Note: os.path.join will join these components with a &#39;\&#39; on Windows</span>
+        <span class="c1"># systems, which is not intended. The tradeoff is that os.path.join</span>
+        <span class="c1"># handles cases where path components end with trailing path separators</span>
+        <span class="c1"># and doesn&#39;t doesn&#39;t duplicate them i.e. prevents something like</span>
+        <span class="c1"># https://errata.example.com/some/path//errata/errata_service</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;errata/errata_service&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_koji_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">:</span>

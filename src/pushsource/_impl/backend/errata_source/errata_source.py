@@ -18,7 +18,7 @@ from ...model import (
     OperatorManifestPushItem,
     conv,
 )
-from ...helpers import list_argument, try_bool
+from ...helpers import list_argument, try_bool, force_https
 
 LOG = logging.getLogger("pushsource")
 
@@ -72,7 +72,7 @@ class ErrataSource(Source):
                 Number of seconds after which an error is raised, if no progress is
                 made during queries to Errata Tool.
         """
-        self._url = url
+        self._url = force_https(url)
         self._errata = list_argument(errata)
         self._client = ErrataClient(threads=threads, url=self._errata_service_url)
 
@@ -112,13 +112,24 @@ class ErrataSource(Source):
         # Note the odd handling of scheme here. The reason is that
         # ET oddly provides different APIs over http and https.
         #
-        # This XML-RPC API is available anonymously over *http* only,
-        # but since this might change in the future, the caller is
-        # allowed to provide http or https scheme and we'll apply the
-        # scheme we know is actually needed.
+        # This XML-RPC API is available anonymously over *https* only,
+        # but for compatibility the caller is allowed to provide http
+        # or https scheme and we'll apply the scheme we know is actually
+        # needed.
+        #
+        # The XML-RPC endpoint is no longer available over http as of
+        # 11 Oct 2021. This class's constructor will still accept either
+        # http or https, but will force the given url to use https going
+        # forward.
         parsed = parse.urlparse(self._url)
-        base = "http://" + parsed.netloc
-        return os.path.join(base + parsed.path, "errata/errata_service")
+        base = "{0.scheme}://{0.netloc}{0.path}".format(parsed)
+
+        # Note: os.path.join will join these components with a '\' on Windows
+        # systems, which is not intended. The tradeoff is that os.path.join
+        # handles cases where path components end with trailing path separators
+        # and doesn't doesn't duplicate them i.e. prevents something like
+        # https://errata.example.com/some/path//errata/errata_service
+        return os.path.join(base, "errata/errata_service")
 
     def _koji_source(self, **kwargs):
         if not self._koji_source_url:

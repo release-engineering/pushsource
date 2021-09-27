@@ -1,6 +1,10 @@
 import logging
 
-from urllib.parse import urlparse
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 from ..source import Source
 from ..model import (
@@ -154,7 +158,6 @@ class RegistrySource(Source):
 
         for key in self.signing_keys:
             for uri in self._registry_uris:
-                print("URI", uri)
                 yield self._push_item_from_registry_uri(skopeo, uri, key)
 
 

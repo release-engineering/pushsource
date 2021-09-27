@@ -1,8 +1,19 @@
 import base64
 import json
+
+
+try:
+    from json.decoder import JSONDecodeError
+
+    JSONException = JSONDecodeError
+except ImportError:
+    JSONException = ValueError
+
 import os
 from six.moves.urllib import parse as urlparse
 from requests.adapters import HTTPAdapter
+
+# pylint: disable-next=import-error
 from requests.packages.urllib3.util import Retry
 from requests import Session, exceptions
 
@@ -205,7 +216,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
     except exceptions.HTTPError as e:
         try:
             json_error = e.response.json()
-        except (json.decoder.JSONDecodeError, ValueError):
+        except (ValueError, JSONException):
             json_error = {}
         if e.response.status_code == 404 and (
             "MANIFEST_UNKNOWN" in [err["code"] for err in json_error.get("errors", [])]
@@ -215,7 +226,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
                 "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
             )
             # otherwise probably true 404 or other error, let's reraise it
-        raise
+        raise e
     return content_type, digest, resp.json()
 
 

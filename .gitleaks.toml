@@ -1,0 +1,4 @@
+[allowlist]
+  description = "allow test secrets"
+  files = [ '''pushsource/src/pushsource/_impl/utils/tests/test_containers.py''']
+  paths = [ '''pushsource/src/pushsource/_impl/utils/tests/''']

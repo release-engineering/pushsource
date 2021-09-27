@@ -2,3 +2,5 @@ jinja2
 pytest
 mock
 rpm-py-installer
+requests-mock
+pyhamcrest

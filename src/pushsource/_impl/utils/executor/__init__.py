@@ -20,11 +20,12 @@ LOG = logging.getLogger("pubtools.quay")
 # Docker client is called differently based on the version used. Unify the calls.
 # Only use old call if version 1.X.X is used
 class APIClient(
-    docker.APIClient if int(docker.__version__[0]) > 1 else docker.client.Client
+    # pylint: disable-next=no-member
+    docker.APIClient
+    if int(docker.__version__[0]) > 1
+    else docker.client.Client
 ):
     """Unify the call of Docker client for old and new version."""
-
-    pass
 
 
 # Python 2.6 version of paramiko doesn't support the usage
@@ -53,7 +54,9 @@ class Executor(object):
     commands_cls = None
 
     def __init__(self, *args, **kwargs):
+        # pylint: disable-next=not-callable
         self.executor = self.executor_cls(*args, **kwargs)
+        # pylint: disable-next=not-callable
         self.commands = self.commands_cls(self.executor)
 
     def __enter__(self):
@@ -80,7 +83,6 @@ class ExecutorImpl(object):
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         """Cleanup when used as context manager. No-op by default."""
-        pass
 
     def _run_cmd(self, cmd, err_msg=None, tolerate_err=False, stdin=None):
         """Run a bash command."""

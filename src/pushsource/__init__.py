@@ -1,3 +1,5 @@
+from pushsource._impl import utils
+
 from pushsource._impl import Source, SourceUrlError
 from pushsource._impl.model import (
     PushItem,
@@ -25,4 +27,9 @@ from pushsource._impl.model import (
     ErratumPackageCollection,
 )
 
-from pushsource._impl.backend import ErrataSource, KojiSource, StagedSource
+from pushsource._impl.backend import (
+    ErrataSource,
+    KojiSource,
+    StagedSource,
+    RegistrySource,
+)

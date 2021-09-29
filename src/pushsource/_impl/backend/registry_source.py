@@ -130,7 +130,7 @@ class RegistrySource(Source):
                 ContainerImageTagPullSpec(
                     registry=parsed.netloc,
                     repository=repo,
-                    tag=inspected["RepoTags"][0],
+                    tag=tag,
                     media_types=[content_type],
                 )
             ],
@@ -141,7 +141,7 @@ class RegistrySource(Source):
             dest=self._dest,
             dest_signing_key=signing_key,
             src=uri,
-            source_tags=inspected["RepoTags"],
+            source_tags=[tag],
             labels=inspected["Labels"],
             arch=(inspected.get("Labels", {}) or {}).get("architecture"),
             pull_info=pull_info,

@@ -8,6 +8,7 @@ except ImportError:
 from pytest import raises
 
 from pushsource import (
+    Source,
     RegistrySource,
     ContainerImagePushItem,
     SourceContainerImagePushItem,
@@ -67,7 +68,7 @@ MANIFEST_V2LIST = {
 @patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
 @patch("pushsource._impl.backend.registry_source.get_manifest")
 def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor):
-    """Koji source yields requested RPMs"""
+    """Registry source yield push items."""
 
     mocked_get_manifest.side_effect = [
         (
@@ -136,7 +137,7 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
 def test_registry_push_items_multiple_signing_keys(
     mocked_get_manifest, mocked_skopeo_command_executor
 ):
-    """Koji source yields requested RPMs"""
+    """Registry source yield push items for multiple signing keys."""
 
     mocked_get_manifest.side_effect = [
         (
@@ -225,7 +226,7 @@ def test_registry_push_items_multiple_signing_keys(
 def test_registry_push_items_invalid(
     mocked_get_manifest, mocked_skopeo_command_executor
 ):
-    """Koji source yields requested RPMs"""
+    """Registry source raises value error due to invalid push items"""
 
     mocked_get_manifest.side_effect = [
         (
@@ -259,3 +260,71 @@ def test_registry_push_items_invalid(
     with raises(ValueError):
         with source:
             items = list(source)
+
+
+@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+def test_source_get(mocked_get_manifest, mocked_skopeo_command_executor):
+    """Get registry source based on prefix and test generated push items."""
+
+    mocked_get_manifest.side_effect = [
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+    ]
+    mocked_skopeo_command_executor.return_value.commands.skopeo_inspect.side_effect = [
+        {
+            "Labels": {"architecture": "x86_64"},
+            "Name": "odf4/mcg-operator-bundle",
+            "RepoTags": ["latest"],
+            "Digest": "fake-digest",
+        },
+        {
+            "Labels": {},
+            "Name": "openshift/serverless-1-net-istio-controller-rhel8",
+            "RepoTags": ["1.1"],
+            "Digest": "fake-digest",
+        },
+    ]
+
+    source = Source.get(
+        "registry:",
+        dest="pulp",
+        registry_uris=[
+            "registry.redhat.io/odf4/mcg-operator-bundle:latest",
+            "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
+        ],
+        signing_key="1234abcde",
+        docker_url="unix://var/run/docker.sock",
+        executor_container_image="ubi:8",
+        docker_timeout=None,
+        docker_verify_tls=None,
+        docker_cert_path=None,
+    )
+    # Eagerly fetch
+    with source:
+        items = list(source)
+
+    assert len(items) == 2
+    assert items[0].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].dest_signing_key == "1234abcde"
+    assert items[0].source_tags == ["latest"]
+
+    assert (
+        items[1].name
+        == "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1"
+    )
+    assert (
+        items[1].src
+        == "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1"
+    )
+    assert items[1].dest_signing_key == "1234abcde"
+    assert items[1].source_tags == ["1.1"]

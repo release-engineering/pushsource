@@ -12,13 +12,13 @@ Supported content types:
 registry URLs
 ------------------
 
-Registry source can be obtained by specifying URL:
+Registry source can be obtained by specifying URL + dest tags:
 
-``registry:registry-hostname/namespace/repository:tag``
+``registry:registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2``
 
 For example, referencing a single advisory would look like:
 
-``registry.access.redhat.com/ubi8/ubi:8.4-211``
+``registry.access.redhat.com/ubi8/ubi:8.4-211:latest``
 
 
 Populating registry container push items

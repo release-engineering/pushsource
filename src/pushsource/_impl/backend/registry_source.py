@@ -50,7 +50,9 @@ class RegistrySource(Source):
                 source. If omitted, all push items have empty destinations.
 
             registry_uris (list[str])
-                List of references to container images with tags
+                List of references to container images with tags+dest tags
+                Format <host>/<namespace>/<repo>:<tag>:<destination_tag>:<destination_tag>
+                Example: registry.redhat.io/ubi:8:latest:8:8.1
 
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
@@ -92,26 +94,35 @@ class RegistrySource(Source):
         pass
 
     def _push_item_from_registry_uri(self, skopeo, uri, signing_key):
-        if uri not in self.inspected:
-            self.inspected[uri] = inspected = skopeo.commands.skopeo_inspect(uri)
-        inspected = self.inspected[uri]
+        schema, rest = uri.split("://")
+        host, rest = rest.split("/", 1)
+        repo, tags_part = rest.split(":", 1)
+        tags = tags_part.split(":")
+        source_tag = tags[0]
+        dest_tags = tags[1:]
+        if not dest_tags:
+            raise ValueError("At least one dest tag is required for: %s" % uri)
+        source_uri = "%s/%s:%s" % (host, repo, source_tag)
+        if source_uri not in self.inspected:
+            self.inspected[source_uri] = inspected = skopeo.commands.skopeo_inspect(
+                source_uri
+            )
+        inspected = self.inspected[source_uri]
 
         if (inspected.get("Labels", {}) or {}).get("architecture", "src") != "src":
             klass = ContainerImagePushItem
         else:
             klass = SourceContainerImagePushItem
 
-        parsed = urlparse(uri)
-        repo, tag = parsed.path.split(":")
-        if uri not in self.manifests:
+        if source_uri not in self.manifests:
             manifest_details = get_manifest(
-                "%s://%s" % (parsed.scheme, parsed.netloc),
+                "%s://%s" % (schema, host),
                 repo,
-                tag,
+                source_tag,
                 manifest_types=[MT_S2_LIST],
             )
-            self.manifests[uri] = manifest_details
-        manifest_details = self.manifests[uri]
+            self.manifests[source_uri] = manifest_details
+        manifest_details = self.manifests[source_uri]
         content_type, _, _ = manifest_details
         if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
             raise ValueError("Unsupported manifest type:%s" % content_type)
@@ -119,7 +130,7 @@ class RegistrySource(Source):
         pull_info = ContainerImagePullInfo(
             digest_specs=[
                 ContainerImageDigestPullSpec(
-                    registry=parsed.netloc,
+                    registry=host,
                     repository=repo,
                     digest=inspected["Digest"],
                     media_type=content_type,
@@ -128,20 +139,24 @@ class RegistrySource(Source):
             media_types=[content_type],
             tag_specs=[
                 ContainerImageTagPullSpec(
-                    registry=parsed.netloc,
+                    registry=host,
                     repository=repo,
-                    tag=tag,
+                    tag=source_tag,
                     media_types=[content_type],
                 )
             ],
         )
+        item_dests = []
+        for dest_repo in self._dest:
+            for dest_tag in dest_tags:
+                item_dests.append("%s:%s" % (dest_repo, dest_tag))
 
         return klass(
-            name=uri,
-            dest=self._dest,
+            name=source_uri,
+            dest=item_dests,
             dest_signing_key=signing_key,
-            src=uri,
-            source_tags=[tag],
+            src=source_uri,
+            source_tags=[source_tag],
             labels=inspected["Labels"],
             arch=(inspected.get("Labels", {}) or {}).get("architecture"),
             pull_info=pull_info,

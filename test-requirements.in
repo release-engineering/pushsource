@@ -16,3 +16,6 @@ pytest-cov
 python-dateutil
 rpm-py-installer
 six
+sphinx
+alabaster
+pidiff

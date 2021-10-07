@@ -3,7 +3,6 @@ import threading
 import logging
 from functools import partial
 
-from concurrent import futures
 from six.moves.queue import Queue, Empty
 import six
 from threading import Thread
@@ -22,7 +21,7 @@ from ..model import (
     ContainerImagePushItem,
     SourceContainerImagePushItem,
 )
-from ..helpers import list_argument, try_int
+from ..helpers import list_argument, try_int, as_completed_with_timeout_reset
 from .modulemd import Module
 from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 
@@ -680,7 +679,9 @@ class KojiSource(Source):
             self._modulemd_futures() + self._rpm_futures() + self._container_futures()
         )
 
-        completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
+        completed_fs = as_completed_with_timeout_reset(
+            push_items_fs, timeout=self._timeout
+        )
         for f in completed_fs:
             # If an exception occurred, this is where it will be raised.
             for pushitem in f.result():

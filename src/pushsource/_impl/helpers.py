@@ -1,5 +1,10 @@
+from concurrent.futures import wait, FIRST_COMPLETED
+
 import six
 
+# in py2 TimeoutError is not built-in exception
+if six.PY2:  # pragma: no cover
+    from concurrent.futures import TimeoutError  # pylint: disable=redefined-builtin
 
 from six.moves.urllib.parse import urlparse, ParseResult
 
@@ -107,3 +112,42 @@ def force_https(url):
     parsed = urlparse(url)
     with_https = ParseResult("https", *parsed[1:])
     return with_https.geturl()
+
+
+def as_completed_with_timeout_reset(futures, timeout):
+    """
+    Yields any finished future within time alloted by timeout, raises TimeoutError otherwise.
+    Futures are allowed to continue over timeout, if any processing in caller is slow.
+    Timeout is not applied to futures themselves but rather to wait() call, which means
+    that this function allows to yield all quicker futures and tries to wait for slow ones.
+
+    Parameters:
+        futures: List[Future]
+            list of futures
+
+        timeout: int or float
+            Timeout used for wait() calls
+
+    Returns:
+        Future
+            finished Future object
+
+    Throws:
+        TimeoutError, if waiting for some Future to finish in wait() call takes more
+        time than given timeout.
+    """
+    total_futures = len(futures)
+    pending = futures
+    while pending:
+        finished, pending = wait(pending, timeout=timeout, return_when=FIRST_COMPLETED)
+        # no future finished in timeout given, raise TimeoutError
+        if not finished:
+            # try to cancel futures, we can't cancel those already running or finished
+            for fs in pending:
+                fs.cancel()
+            raise TimeoutError(
+                "%d (of %d) futures unfinished" % (len(pending), total_futures)
+            )
+
+        for fs in finished:
+            yield fs

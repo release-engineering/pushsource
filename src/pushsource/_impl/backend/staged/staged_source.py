@@ -4,8 +4,6 @@ import logging
 import itertools
 import functools
 
-from concurrent import futures
-
 import yaml
 import json
 
@@ -15,7 +13,7 @@ from pushcollector import Collector
 from more_executors import Executors
 
 from ...source import Source
-from ...helpers import list_argument
+from ...helpers import list_argument, as_completed_with_timeout_reset
 
 from .staged_utils import StagingMetadata, StagingLeafDir
 from .staged_ami import StagedAmiMixin
@@ -164,7 +162,9 @@ class StagedSource(
             self._executor.submit(process_dir, leafdir) for leafdir in all_leaf_dirs
         ]
 
-        completed_fs = futures.as_completed(pushitems_fs, timeout=self._timeout)
+        completed_fs = as_completed_with_timeout_reset(
+            pushitems_fs, timeout=self._timeout
+        )
         for f in completed_fs:
             for pushitem in f.result():
                 yield pushitem

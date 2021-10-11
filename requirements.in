@@ -1,0 +1,11 @@
+attrs
+more-executors>=2.7.0
+koji>=1.18
+six
+pushcollector
+PyYAML
+scandir; python_version < '3.5'
+frozendict; python_version >= '3.6'
+frozenlist2
+python-dateutil
+kobo

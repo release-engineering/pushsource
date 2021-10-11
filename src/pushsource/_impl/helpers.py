@@ -142,9 +142,6 @@ def as_completed_with_timeout_reset(futures, timeout):
         finished, pending = wait(pending, timeout=timeout, return_when=FIRST_COMPLETED)
         # no future finished in timeout given, raise TimeoutError
         if not finished:
-            # try to cancel futures, we can't cancel those already running or finished
-            for fs in pending:
-                fs.cancel()
             raise TimeoutError(
                 "%d (of %d) futures unfinished" % (len(pending), total_futures)
             )

@@ -117,15 +117,15 @@ The top-level path by default is provided by the <code class="docutils literal n
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – URL of the XML-RPC endpoint for koji hub.</p></li>
-<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The destination(s) to fill in for push items created by this
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – URL of the XML-RPC endpoint for koji hub.</p></li>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The destination(s) to fill in for push items created by this
 source. If omitted, all push items have empty destinations.</p></li>
-<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.
+<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.
 The source will yield all RPMs identified by this list.</p></li>
-<li><p><strong>module_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+<li><p><strong>module_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
 The source will yield modulemd files belonging to these
 build(s), filtered by <code class="docutils literal notranslate"><span class="pre">module_filter_filename</span></code> (if given).</p></li>
-<li><p><strong>module_filter_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – <p>Filename(s) of modulemd archives to include in output.</p>
+<li><p><strong>module_filter_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – <p>Filename(s) of modulemd archives to include in output.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">module_build</span></code> is given, modulemd files are located as
 koji archives with names of the form <code class="docutils literal notranslate"><span class="pre">modulemd.&lt;arch&gt;.txt</span></code>.
 By default, all of these archives will be processed.</p>
@@ -134,28 +134,28 @@ instead only process modulemd files with those filenames. This
 can be used to select only certain arches.</p>
 <p>Has no effect if <code class="docutils literal notranslate"><span class="pre">module_build</span></code> is not provided.</p>
 </p></li>
-<li><p><strong>container_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+<li><p><strong>container_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
 The source will yield all container images produced by these
 build(s), along with associated artifacts such as operator manifest
 bundles.</p></li>
-<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
+<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
 using one of the provided keys. Include <code class="docutils literal notranslate"><span class="pre">None</span></code> if unsigned
 should also be permitted.</p>
 <p>Keys should be listed in the order of preference.</p>
 </p></li>
-<li><p><strong>basedir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Base directory of koji content (e.g. /mnt/koji).
+<li><p><strong>basedir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Base directory of koji content (e.g. /mnt/koji).
 This directory must be readable locally.</p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads used for concurrent queries to koji.</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of threads used for concurrent queries to koji.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
 made during queries to koji.</p></li>
-<li><p><strong>cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – <p>A cache used to retain the results of XML-RPC calls, to avoid
+<li><p><strong>cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – <p>A cache used to retain the results of XML-RPC calls, to avoid
 repeated calls.</p>
 <p>Providing a cache only gives a benefit if the current process
 will create more than a single instance of KojiSource. In this
 case, some calls may be avoided by passing the same cache
 to each instance.</p>
 </p></li>
-<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.9)"><em>concurrent.futures.Executor</em></a>) – A custom executor used to submit calls to koji.</p></li>
+<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.10)"><em>concurrent.futures.Executor</em></a>) – A custom executor used to submit calls to koji.</p></li>
 </ul>
 </dd>
 </dl>

@@ -148,7 +148,7 @@ depending on the type of content loaded by the source.  For example, RPMs will b
 yielded as instances of <a class="reference internal" href="model/rpm.html#pushsource.RpmPushItem" title="pushsource.RpmPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a> and errata will be yielded
 as instances of <a class="reference internal" href="model/errata.html#pushsource.ErratumPushItem" title="pushsource.ErratumPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a>.</p>
 <p>Commonly, different kinds of processing will be needed for different kinds of push items.
-In this case, it’s recommended to use <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> checks to dispatch each push
+In this case, it’s recommended to use <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> checks to dispatch each push
 item appropriately.</p>
 <p>Consider tolerating push items of an unknown type (perhaps with a warning). This will ensure
 your code is forwards-compatible with later versions of this library, which may add new types

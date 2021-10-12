@@ -18,7 +18,12 @@ from ...model import (
     OperatorManifestPushItem,
     conv,
 )
-from ...helpers import list_argument, try_bool, force_https
+from ...helpers import (
+    list_argument,
+    try_bool,
+    force_https,
+    as_completed_with_timeout_reset,
+)
 
 LOG = logging.getLogger("pushsource")
 
@@ -480,7 +485,9 @@ class ErrataSource(Source):
                 self._executor.submit(self._push_items_from_raw, f.result())
             )
 
-        completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
+        completed_fs = as_completed_with_timeout_reset(
+            push_items_fs, timeout=self._timeout
+        )
         for f in completed_fs:
             for pushitem in f.result():
                 yield pushitem

@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Changed
+
+- Mitigate spurious timeout error by using `as_completed_with_timeout_reset`
 
 ## [2.11.0] - 2021-09-15
 

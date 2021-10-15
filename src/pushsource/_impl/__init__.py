@@ -1,6 +1,3 @@
-import os
-import sys
-
 from . import utils
 
 from .source import Source, SourceUrlError

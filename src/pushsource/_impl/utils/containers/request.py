@@ -41,7 +41,6 @@ class AuthToken(object):
 def update_auth_header(headers, token):
     """
     Adds the token into the request's headers as specified in the Docker v2 API documentation.
-
     https://docs.docker.com/registry/spec/auth/token/#using-the-bearer-token
     """
     headers.update({"authorization": "Bearer %s" % token})
@@ -51,14 +50,11 @@ def update_auth_header(headers, token):
 def request_token(session, response, credentials):
     """
     Attempts to retrieve the correct token based on the 401 response header.
-
     According to the Docker API v2 documentation, the token be retrieved by issuing a GET
     request to the url specified by the `realm` within the `WWW-Authenticate` header. This
     request should add the following query parameters:
-
         service: the name of the service that hosts the desired resource
         scope:   the specific resource and permissions requested
-
     https://docs.docker.com/registry/spec/auth/token/#requesting-a-token
     """
     auth_info = parse_401_response_headers(response.headers)
@@ -96,7 +92,6 @@ def parse_401_response_headers(response_headers):
     """
     Parse the headers from a 401 response into a dictionary that contains the information
     necessary to retrieve a token.
-
     Example:
     Www-Authenticate: Bearer realm="https://auth.docker.io/token",
     service="registry.docker.io",scope="repository:library/nginx:pull,push"

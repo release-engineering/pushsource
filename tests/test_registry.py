@@ -98,7 +98,7 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
     ]
 
     source = RegistrySource(
-        dest=['repo1', 'repo2'],
+        dest=["repo1", "repo2"],
         registry_uris=[
             "https://registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
             "https://registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
@@ -119,7 +119,7 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
-    assert items[0].dest == ['repo1:dest-latest', 'repo2:dest-latest']
+    assert items[0].dest == ["repo1:dest-latest", "repo2:dest-latest"]
 
     assert (
         items[1].name
@@ -131,7 +131,7 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
     )
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
-    assert items[1].dest == ['repo1:dest-1.1', 'repo2:dest-1.1']
+    assert items[1].dest == ["repo1:dest-1.1", "repo2:dest-1.1"]
 
 
 @patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
@@ -192,7 +192,7 @@ def test_registry_push_items_multiple_signing_keys(
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
-    assert items[0].dest == ['repo:dest-latest']
+    assert items[0].dest == ["repo:dest-latest"]
 
     assert (
         items[1].name
@@ -204,7 +204,7 @@ def test_registry_push_items_multiple_signing_keys(
     )
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
-    assert items[1].dest == ['repo:dest-1.1']
+    assert items[1].dest == ["repo:dest-1.1"]
 
     assert items[2].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest", items[
         1
@@ -212,7 +212,7 @@ def test_registry_push_items_multiple_signing_keys(
     assert items[2].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[2].dest_signing_key == "56784321"
     assert items[2].source_tags == ["latest"]
-    assert items[2].dest == ['repo:dest-latest']
+    assert items[2].dest == ["repo:dest-latest"]
 
     assert (
         items[3].name
@@ -224,7 +224,7 @@ def test_registry_push_items_multiple_signing_keys(
     )
     assert items[3].dest_signing_key == "56784321"
     assert items[3].source_tags == ["1.1"]
-    assert items[3].dest == ['repo:dest-1.1']
+    assert items[3].dest == ["repo:dest-1.1"]
 
 
 @patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
@@ -341,7 +341,7 @@ def test_registry_push_items_missing_dest(mocked_skopeo_command_executor):
     """Registry source yield push items."""
 
     source = RegistrySource(
-        dest=['repo1', 'repo2'],
+        dest=["repo1", "repo2"],
         registry_uris=[
             "https://registry.redhat.io/odf4/mcg-operator-bundle:latest",
         ],
@@ -355,7 +355,7 @@ def test_registry_push_items_missing_dest(mocked_skopeo_command_executor):
     # Eagerly fetch
     with source:
         with raises(
-                ValueError,
-                match="https://registry.redhat.io/odf4/mcg-operator-bundle:latest"
+            ValueError,
+            match="https://registry.redhat.io/odf4/mcg-operator-bundle:latest",
         ):
             items = list(source)

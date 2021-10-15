@@ -14,7 +14,7 @@ from ..model import (
     ContainerImageTagPullSpec,
     ContainerImageDigestPullSpec,
 )
-from ..utils.executor.skopeo import SkopeoContainerExecutor
+from pubtools.executors import SkopeoContainerExecutor
 from ..utils.containers import (
     get_manifest,
     MT_S2_V2,

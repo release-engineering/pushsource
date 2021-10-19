@@ -6,7 +6,7 @@ try:
     from json.decoder import JSONDecodeError
 
     JSONException = JSONDecodeError
-except ImportError:
+except ImportError: # pragma: no cover
     JSONException = ValueError
 
 import os
@@ -225,6 +225,22 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
     return content_type, digest, resp.json()
 
 
+def get_blob(registry, repo, digest, manifest_types=None, token=None):
+    auth = get_basic_auth(registry.split("://")[1])
+    token = token or AuthToken()
+    session = Session()
+    resp = registry_request(
+        session,
+        "%s/v2/%s/blobs/%s" % (registry, repo, digest),
+        action="get",
+        auth_token=token,
+        retry_404=True,
+        credentials=auth,
+    )
+    resp.raise_for_status()
+    return resp
+
+
 def api_version_check(registry, token=None, credentials=None):
     """
     Make a call to the registry URL's /v2/ API call to determine if the registry supports API
@@ -255,3 +271,20 @@ def api_version_check(registry, token=None, credentials=None):
         # remote feed.
         pass
     return True
+
+
+def inspect(registry, repo, digest, token=None):
+    auth = get_basic_auth(registry)
+    token = token or AuthToken()
+
+    manifest_type, digest, manifest = get_manifest(registry, repo, digest, manifest_types=[MT_S2_LIST], token=token)
+    print(manifest_type)
+    if manifest_type in (MT_S2_V2, MT_S2_LIST):
+        inspected = get_blob(registry, repo, manifest['config']['digest']).json()
+    else:
+        inspected = {"architecture": manifest['architecture'], "labels": {}}
+    if manifest_type == MT_S2_V2 and not inspected.get('config', {}). get('Labels'):
+        inspected['source'] = True
+    inspected['digest'] = digest
+    return inspected
+

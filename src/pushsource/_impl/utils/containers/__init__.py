@@ -1,4 +1,5 @@
 from .request import (
+    inspect,
     get_manifest,
     api_version_check,
     AuthToken,

@@ -65,9 +65,9 @@ MANIFEST_V2LIST = {
 }
 
 
-@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
 @patch("pushsource._impl.backend.registry_source.get_manifest")
-def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor):
+@patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     """Registry source yield push items."""
 
     mocked_get_manifest.side_effect = [
@@ -82,19 +82,9 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
             MANIFEST_V2LIST,
         ),
     ]
-    mocked_skopeo_command_executor.return_value.commands.skopeo_inspect.side_effect = [
-        {
-            "Labels": {"architecture": "x86_64"},
-            "Name": "odf4/mcg-operator-bundle",
-            "RepoTags": ["latest"],
-            "Digest": "fake-digest",
-        },
-        {
-            "Labels": {},
-            "Name": "openshift/serverless-1-net-istio-controller-rhel8",
-            "RepoTags": ["1.1"],
-            "Digest": "fake-digest",
-        },
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
     ]
 
     source = RegistrySource(
@@ -104,11 +94,6 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
             "https://registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
         ],
         signing_key="1234abcde",
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image="ubi:8",
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
     )
     # Eagerly fetch
     with source:
@@ -134,10 +119,11 @@ def test_registry_push_items(mocked_get_manifest, mocked_skopeo_command_executor
     assert items[1].dest == ["repo1:dest-1.1", "repo2:dest-1.1"]
 
 
-@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
 @patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
 def test_registry_push_items_multiple_signing_keys(
-    mocked_get_manifest, mocked_skopeo_command_executor
+    mocked_inspect,
+    mocked_get_manifest
 ):
     """Registry source yield push items for multiple signing keys."""
 
@@ -153,19 +139,9 @@ def test_registry_push_items_multiple_signing_keys(
             MANIFEST_V2LIST,
         ),
     ]
-    mocked_skopeo_command_executor.return_value.commands.skopeo_inspect.side_effect = [
-        {
-            "Labels": {"architecture": "x86_64"},
-            "Name": "odf4/mcg-operator-bundle",
-            "RepoTags": ["latest"],
-            "Digest": "fake-digest",
-        },
-        {
-            "Labels": {},
-            "Name": "openshift/serverless-1-net-istio-controller-rhel8",
-            "RepoTags": ["1.1"],
-            "Digest": "fake-digest",
-        },
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
     ]
 
     source = RegistrySource(
@@ -175,11 +151,6 @@ def test_registry_push_items_multiple_signing_keys(
             "https://registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
         ],
         signing_key=["1234abcde", "56784321"],
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image="ubi:8",
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
     )
     # Eagerly fetch
     with source:
@@ -227,12 +198,18 @@ def test_registry_push_items_multiple_signing_keys(
     assert items[3].dest == ["repo:dest-1.1"]
 
 
-@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
 @patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
 def test_registry_push_items_invalid(
-    mocked_get_manifest, mocked_skopeo_command_executor
+    mocked_inspect,
+    mocked_get_manifest
 ):
     """Registry source raises value error due to invalid push items"""
+
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
 
     mocked_get_manifest.side_effect = [
         (
@@ -241,36 +218,51 @@ def test_registry_push_items_invalid(
             MANIFEST_V2SCH2,
         ),
     ]
-    mocked_skopeo_command_executor.return_value.commands.skopeo_inspect.side_effect = [
-        {
-            "Labels": {"architecture": "x86_64"},
-            "Name": "odf4/mcg-operator-bundle",
-            "RepoTags": ["latest"],
-            "Digest": "fake-digest",
-        },
-    ]
+    source = RegistrySource(
+        dest="pulp",
+        registry_uris=[
+            "https://registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
+        ],
+        signing_key="1234abcde",
+    )
+    # Eagerly fetch
+    with raises(ValueError) as exc_info:
+        with source:
+            items = list(source)
+    assert str(exc_info.value) == "Unsupported manifest type:application/json"
 
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+def test_registry_push_items_missing_dest_tag(
+    mocked_get_manifest
+):
+    """Registry source raises value error due to invalid push items"""
+
+    mocked_get_manifest.side_effect = [
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+    ]
     source = RegistrySource(
         dest="pulp",
         registry_uris=[
             "https://registry.redhat.io/odf4/mcg-operator-bundle:latest",
         ],
         signing_key="1234abcde",
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image="ubi:8",
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
     )
     # Eagerly fetch
-    with raises(ValueError):
+    with raises(ValueError) as exc_info:
         with source:
             items = list(source)
+    assert "At least one dest tag is required for" in str(exc_info.value)
 
 
-@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
+
 @patch("pushsource._impl.backend.registry_source.get_manifest")
-def test_source_get(mocked_get_manifest, mocked_skopeo_command_executor):
+@patch("pushsource._impl.backend.registry_source.inspect")
+def test_source_get(mocked_inspect, mocked_get_manifest):
     """Get registry source based on prefix and test generated push items."""
 
     mocked_get_manifest.side_effect = [
@@ -280,45 +272,38 @@ def test_source_get(mocked_get_manifest, mocked_skopeo_command_executor):
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
-            "test-digest-1",
+            "application/vnd.docker.distribution.manifest.list.v2+json",
+            "test-digest-2",
             MANIFEST_V2LIST,
         ),
+        (
+            "application/vnd.docker.distribution.manifest.v2+json",
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
     ]
-    mocked_skopeo_command_executor.return_value.commands.skopeo_inspect.side_effect = [
-        {
-            "Labels": {"architecture": "x86_64"},
-            "Name": "odf4/mcg-operator-bundle",
-            "RepoTags": ["latest"],
-            "Digest": "fake-digest",
-        },
-        {
-            "Labels": {},
-            "Name": "openshift/serverless-1-net-istio-controller-rhel8",
-            "RepoTags": ["1.1"],
-            "Digest": "fake-digest",
-        },
-    ]
-
     source = Source.get(
         "registry:",
         dest="pulp",
         registry_uris=[
             "https://registry.redhat.io/odf4/mcg-operator-bundle:latest:latest",
             "https://registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:1.1",
+            "https://registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src:1.1-src",
         ],
         signing_key="1234abcde",
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image="ubi:8",
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
     )
+
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-3", "config": {}, 'source': True},
+    ]
+
     # Eagerly fetch
     with source:
         items = list(source)
 
-    assert len(items) == 2
+    assert len(items) == 3
     assert items[0].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
@@ -335,9 +320,19 @@ def test_source_get(mocked_get_manifest, mocked_skopeo_command_executor):
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
 
+    assert (
+        items[2].name
+        == "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src"
+    )
+    assert (
+        items[2].src
+        == "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src"
+    )
+    assert items[2].dest_signing_key == "1234abcde"
+    assert items[2].source_tags == ["1.1-src"]
 
-@patch("pushsource._impl.backend.registry_source.SkopeoContainerExecutor")
-def test_registry_push_items_missing_dest(mocked_skopeo_command_executor):
+
+def test_registry_push_items_missing_dest():
     """Registry source yield push items."""
 
     source = RegistrySource(
@@ -346,11 +341,6 @@ def test_registry_push_items_missing_dest(mocked_skopeo_command_executor):
             "https://registry.redhat.io/odf4/mcg-operator-bundle:latest",
         ],
         signing_key="1234abcde",
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image="ubi:8",
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
     )
     # Eagerly fetch
     with source:

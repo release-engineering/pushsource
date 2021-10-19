@@ -3,7 +3,7 @@ import logging
 
 try:
     from urllib.parse import urlparse
-except ImportError:
+except ImportError: # pragma: no cover
     from urlparse import urlparse
 
 from ..source import Source
@@ -14,9 +14,9 @@ from ..model import (
     ContainerImageTagPullSpec,
     ContainerImageDigestPullSpec,
 )
-from pubtools.executors import SkopeoContainerExecutor
 from ..utils.containers import (
     get_manifest,
+    inspect,
     MT_S2_V2,
     MT_S2_V1,
     MT_S2_V1_SIGNED,
@@ -93,7 +93,7 @@ class RegistrySource(Source):
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
 
-    def _push_item_from_registry_uri(self, skopeo, uri, signing_key):
+    def _push_item_from_registry_uri(self, uri, signing_key):
         schema, rest = uri.split("://")
         host, rest = rest.split("/", 1)
         repo, tags_part = rest.split(":", 1)
@@ -104,15 +104,15 @@ class RegistrySource(Source):
             raise ValueError("At least one dest tag is required for: %s" % uri)
         source_uri = "%s/%s:%s" % (host, repo, source_tag)
         if source_uri not in self.inspected:
-            self.inspected[source_uri] = inspected = skopeo.commands.skopeo_inspect(
-                source_uri
+            self.inspected[source_uri] = inspect(
+                "%s://%s" % (schema, host),
+                repo,
+                source_tag
             )
-        inspected = self.inspected[source_uri]
-
-        if (inspected.get("Labels", {}) or {}).get("architecture", "src") != "src":
-            klass = ContainerImagePushItem
-        else:
+        if self.inspected[source_uri].get('source'):
             klass = SourceContainerImagePushItem
+        else:
+            klass = ContainerImagePushItem
 
         if source_uri not in self.manifests:
             manifest_details = get_manifest(
@@ -132,7 +132,7 @@ class RegistrySource(Source):
                 ContainerImageDigestPullSpec(
                     registry=host,
                     repository=repo,
-                    digest=inspected["Digest"],
+                    digest=self.inspected[source_uri]["digest"],
                     media_type=content_type,
                 )
             ],
@@ -157,23 +157,15 @@ class RegistrySource(Source):
             dest_signing_key=signing_key,
             src=source_uri,
             source_tags=[source_tag],
-            labels=inspected["Labels"],
-            arch=(inspected.get("Labels", {}) or {}).get("architecture"),
+            labels=self.inspected[source_uri].get("config").get("labels", {}),
+            arch=(self.inspected[source_uri].get("config", {}) or {}).get('labels', {}).get("architecture"),
             pull_info=pull_info,
         )
 
     def __iter__(self):
-        skopeo = SkopeoContainerExecutor(
-            self.executor_container_image,
-            self.docker_url,
-            self.docker_timeout,
-            self.docker_verify_tls,
-            self.docker_cert_path,
-        )
-
         for key in self.signing_keys:
             for uri in self._registry_uris:
-                yield self._push_item_from_registry_uri(skopeo, uri, key)
+                yield self._push_item_from_registry_uri(uri, key)
 
 
 Source._register_backend_builtin("registry", RegistrySource)

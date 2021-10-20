@@ -14,12 +14,26 @@ registry URLs
 
 Registry source can be obtained by specifying URL + dest tags:
 
-``registry:registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2``
+``registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2``
 
 For example, referencing a single advisory would look like:
 
 ``registry.access.redhat.com/ubi8/ubi:8.4-211:latest``
 
+To get source with push items populated from external registry you call 
+Source.get like this:
+
+.. code:
+   Source.get("registry:images_str=registry.access.redhat.com/ubi8/ubi:8.4-211:latest,registry.access.redhat.com/ubi8/ubi:8.3:8.3&dest=ubi-fork&signing_key=01abcdef01234567")
+
+Code above will produce two push items:
+- dest=ubi-fork:latest
+  src=registry.access.redhat.com/ubi8/ubi:8.4-211
+  signing_key=01abcdef01234567
+
+- dest=ubi-fork:8.3
+  src=registry.access.redhat.com/ubi8/ubi:8.3
+  signing_key=01abcdef01234567
 
 Populating registry container push items
 ........................................

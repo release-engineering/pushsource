@@ -6,7 +6,7 @@ try:
     from json.decoder import JSONDecodeError
 
     JSONException = JSONDecodeError
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     JSONException = ValueError
 
 import os
@@ -69,7 +69,6 @@ def request_token(session, response, credentials):
     url_pieces = list(parse_result)
     url_pieces[4] = urlparse.urlencode(query_dict)
     token_url = urlparse.urlunparse(url_pieces)
-    print(token_url)
 
     http_opts = {}
     if credentials:
@@ -161,7 +160,6 @@ def registry_request(
             auth_header = e.response.headers.get("www-authenticate") or ""
             auth_header = auth_header.lower()
             if auth_header.startswith("bearer"):
-                print("REQUEST TOKEN")
                 auth_token.token = request_token(session, response, credentials)
                 update_auth_header(headers, auth_token.token)
             elif auth_header.startswith("basic"):
@@ -182,7 +180,6 @@ def get_basic_auth(host, home=None):
     if os.path.isfile(conf_file):
         config = json.load(open(conf_file))
         auth = config.get("auths", {}).get(host, {}).get("auth")
-        print("GET_BASIC_AUTH", host)
         if auth:
             return base64.b64decode(auth).decode().split(":")
     return None, None
@@ -225,7 +222,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
     return content_type, digest, resp.json()
 
 
-def get_blob(registry, repo, digest, manifest_types=None, token=None):
+def get_blob(registry, repo, digest, token=None):
     auth = get_basic_auth(registry.split("://")[1])
     token = token or AuthToken()
     session = Session()
@@ -274,17 +271,16 @@ def api_version_check(registry, token=None, credentials=None):
 
 
 def inspect(registry, repo, digest, token=None):
-    auth = get_basic_auth(registry)
     token = token or AuthToken()
 
-    manifest_type, digest, manifest = get_manifest(registry, repo, digest, manifest_types=[MT_S2_LIST], token=token)
-    print(manifest_type)
+    manifest_type, digest, manifest = get_manifest(
+        registry, repo, digest, manifest_types=[MT_S2_LIST], token=token
+    )
     if manifest_type in (MT_S2_V2, MT_S2_LIST):
-        inspected = get_blob(registry, repo, manifest['config']['digest']).json()
+        inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
     else:
-        inspected = {"architecture": manifest['architecture'], "labels": {}}
-    if manifest_type == MT_S2_V2 and not inspected.get('config', {}). get('Labels'):
-        inspected['source'] = True
-    inspected['digest'] = digest
+        inspected = {"architecture": manifest["architecture"], "labels": {}}
+    if manifest_type == MT_S2_V2 and not inspected.get("config", {}).get("Labels"):
+        inspected["source"] = True
+    inspected["digest"] = digest
     return inspected
-

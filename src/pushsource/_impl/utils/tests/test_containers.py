@@ -20,7 +20,7 @@ from hamcrest import contains_string
 
 try:
     from unittest.mock import patch, MagicMock
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     from mock import patch, MagicMock
 from urllib3.exceptions import MaxRetryError, ResponseError
 
@@ -463,11 +463,11 @@ def test_parse_401_response_headers_invalid():
 
 
 def test_inspect_v1(requests_mock):
-    registry = 'fake-registry'
-    repo = 'test-repo'
-    tag = 'test-tag'
+    registry = "fake-registry"
+    repo = "test-repo"
+    tag = "test-tag"
     headers = {
-        "docker-content-digest": 'test-digest',
+        "docker-content-digest": "test-digest",
         "content-type": "application/vnd.docker.distribution.manifest.v1+json",
     }
     expected_manifest = {
@@ -507,89 +507,111 @@ def test_inspect_v1(requests_mock):
         headers=headers,
         json=expected_manifest,
     )
-    inspected = inspect('https://fake-registry', 'test-repo', 'test-tag')
+    inspected = inspect("https://fake-registry", "test-repo", "test-tag")
     assert inspected == {"architecture": "amd64", "labels": {}, "digest": "test-digest"}
 
+
 def test_inspect_v2_and_list(requests_mock):
-    registry = 'fake-registry'
-    repo = 'test-repo'
-    tag = 'test-tag'
+    registry = "fake-registry"
+    repo = "test-repo"
+    tag = "test-tag"
     expected_manifest = {
         "schemaVersion": 2,
         "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
         "config": {
             "mediaType": "application/vnd.docker.container.image.v1+json",
             "size": 20150,
-            "digest": "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13"
+            "digest": "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13",
         },
-        "layers": []
+        "layers": [],
     }
     expected_blob = {
         "architecture": "ppc64le",
         "config": {
             "Labels": {
-              "architecture": "ppc64le",
+                "architecture": "ppc64le",
             }
-        }
+        },
     }
     requests_mock.register_uri(
         "GET",
         "https://%s/v2/%s/manifests/%s" % (registry, repo, tag),
         json=lambda req, context: [
-            context.__setattr__('status_code', 200),
+            context.__setattr__("status_code", 200),
             context.__setattr__(
-                'headers',
-                {'Content-Type': 'application/vnd.docker.distribution.manifest.v2+json',
-                 'docker-content-digest': 'test-digest'}),
-            expected_manifest][-1],
+                "headers",
+                {
+                    "Content-Type": "application/vnd.docker.distribution.manifest.v2+json",
+                    "docker-content-digest": "test-digest",
+                },
+            ),
+            expected_manifest,
+        ][-1],
     )
     requests_mock.register_uri(
         "GET",
-        "https://%s/v2/%s/blobs/%s" % (registry, repo, "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13"),
+        "https://%s/v2/%s/blobs/%s"
+        % (
+            registry,
+            repo,
+            "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13",
+        ),
         status_code=200,
         json=expected_blob,
     )
-    inspected = inspect('https://%s' % registry, 'test-repo', 'test-tag')
-    assert inspected == {"architecture": "ppc64le", "config": {"Labels": {'architecture': 'ppc64le'}}, "digest": "test-digest"}
+    inspected = inspect("https://%s" % registry, "test-repo", "test-tag")
+    assert inspected == {
+        "architecture": "ppc64le",
+        "config": {"Labels": {"architecture": "ppc64le"}},
+        "digest": "test-digest",
+    }
 
 
 def test_inspect_source(requests_mock):
-    registry = 'fake-registry'
-    repo = 'test-repo'
-    tag = 'test-tag'
+    registry = "fake-registry"
+    repo = "test-repo"
+    tag = "test-tag"
     expected_manifest = {
         "schemaVersion": 2,
         "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
         "config": {
             "mediaType": "application/vnd.docker.container.image.v1+json",
             "size": 20150,
-            "digest": "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13"
+            "digest": "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13",
         },
-        "layers": []
+        "layers": [],
     }
-    expected_blob = {
-        "architecture": "ppc64le",
-        "config": {
-            "Labels": {
-            }
-        }
-    }
+    expected_blob = {"architecture": "ppc64le", "config": {"Labels": {}}}
     requests_mock.register_uri(
         "GET",
         "https://%s/v2/%s/manifests/%s" % (registry, repo, tag),
         json=lambda req, context: [
-            context.__setattr__('status_code', 200),
+            context.__setattr__("status_code", 200),
             context.__setattr__(
-                'headers',
-                {'Content-Type': 'application/vnd.docker.distribution.manifest.v2+json',
-                 'docker-content-digest': 'test-digest'}),
-            expected_manifest][-1],
+                "headers",
+                {
+                    "Content-Type": "application/vnd.docker.distribution.manifest.v2+json",
+                    "docker-content-digest": "test-digest",
+                },
+            ),
+            expected_manifest,
+        ][-1],
     )
     requests_mock.register_uri(
         "GET",
-        "https://%s/v2/%s/blobs/%s" % (registry, repo, "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13"),
+        "https://%s/v2/%s/blobs/%s"
+        % (
+            registry,
+            repo,
+            "sha256:adb48f5d2b45131f87a2c52a791e08185769c9f9018f7e63b760dcb4f188bd13",
+        ),
         status_code=200,
         json=expected_blob,
     )
-    inspected = inspect('https://%s' % registry, 'test-repo', 'test-tag')
-    assert inspected == {"architecture": "ppc64le", "config": {"Labels": {}}, "digest": "test-digest", "source": True}
+    inspected = inspect("https://%s" % registry, "test-repo", "test-tag")
+    assert inspected == {
+        "architecture": "ppc64le",
+        "config": {"Labels": {}},
+        "digest": "test-digest",
+        "source": True,
+    }

@@ -28,11 +28,7 @@ def all_rst_content():
 
 def public_class_names():
     all_attrs = dir(pushsource)
-    return [
-        elem
-        for elem in all_attrs
-        if not elem.startswith("_") and inspect.isclass(getattr(pushsource, elem))
-    ]
+    return [elem for elem in all_attrs if not elem.startswith("_")]
 
 
 @pytest.mark.parametrize("class_name", public_class_names())

@@ -9,4 +9,3 @@ frozendict; python_version >= '3.6'
 frozenlist2
 python-dateutil
 kobo
-pubtools-executors

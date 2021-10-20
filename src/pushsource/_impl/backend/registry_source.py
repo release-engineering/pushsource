@@ -1,11 +1,5 @@
 import logging
 
-
-try:
-    from urllib.parse import urlparse
-except ImportError: # pragma: no cover
-    from urlparse import urlparse
-
 from ..source import Source
 from ..model import (
     ContainerImagePushItem,
@@ -33,59 +27,37 @@ class RegistrySource(Source):
 
     def __init__(
         self,
-        dest=None,
-        registry_uris=None,
-        signing_key=None,
-        docker_url="unix://var/run/docker.sock",
-        executor_container_image=None,
-        docker_timeout=None,
-        docker_verify_tls=None,
-        docker_cert_path=None,
+        images_str,
+        dest_repos=None,
+        dest_signing_key=None,
     ):
         """Create a new source.
 
         Parameters:
-            dest (str, list[str])
-                The destination(s) to fill in for push items created by this
-                source. If omitted, all push items have empty destinations.
+            dest_repos str,
+                Comma separated string with destination(s) repo(s) to fill in for push
+                items created by this source. If omitted, all push items have
+                empty destinations.
 
-            registry_uris (list[str])
-                List of references to container images with tags+dest tags
-                Format <host>/<namespace>/<repo>:<tag>:<destination_tag>:<destination_tag>
-                Example: registry.redhat.io/ubi:8:latest:8:8.1
+            images_str (list[str])
+                String with references to container images with tags+dest tags
+                Format <scheme>:<host>/<namespace>/<repo>:<tag>:<destination_tag>:<destination_tag>
+                Example: https:registry.redhat.io/ubi:8:latest:8:8.1
 
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
                 using one of the provided keys. Include ``None`` if unsigned
                 should also be permitted.
                 Keys should be listed in the order of preference.
-
-            executor_container_image (str):
-                Path to the container image in which to execute the commands. Must be downloadable
-                without extra permissions.
-
-            docker_url (str):
-                URL of the docker client that should run the container. Local socket by default.
-
-            docker_timeout (int):
-                Timeout for executing Docker commands. Disabled by default.
-
-            docker_verify_tls (bool):
-                Whether to perform TLS verification with the Docker client. Disabled by default.
-
-            docker_cert_path (str):
-                Path to Docker certificates for TLS authentication. '~/.docker' by default.
         """
-        self._registry_uris = registry_uris
-        self._dest = list_argument(dest)
-        self.signing_keys = list_argument(signing_key)
-        self.executor_container_image = executor_container_image
-        self.docker_url = docker_url
-        self.docker_timeout = docker_timeout
-        self.docker_verify_tls = docker_verify_tls
-        self.docker_cert_path = docker_cert_path
-        self.inspected = {}
-        self.manifests = {}
+        self._images = [
+            "%s://%s" % tuple(x.split(":", 1)) for x in images_str.split(",")
+        ]
+        self._dest_repos = dest_repos.split(",")
+        print(self._dest_repos)
+        self._signing_keys = list_argument(dest_signing_key)
+        self._inspected = {}
+        self._manifests = {}
 
     def __enter__(self):
         return self
@@ -103,26 +75,24 @@ class RegistrySource(Source):
         if not dest_tags:
             raise ValueError("At least one dest tag is required for: %s" % uri)
         source_uri = "%s/%s:%s" % (host, repo, source_tag)
-        if source_uri not in self.inspected:
-            self.inspected[source_uri] = inspect(
-                "%s://%s" % (schema, host),
-                repo,
-                source_tag
+        if source_uri not in self._inspected:
+            self._inspected[source_uri] = inspect(
+                "%s://%s" % (schema, host), repo, source_tag
             )
-        if self.inspected[source_uri].get('source'):
+        if self._inspected[source_uri].get("source"):
             klass = SourceContainerImagePushItem
         else:
             klass = ContainerImagePushItem
 
-        if source_uri not in self.manifests:
+        if source_uri not in self._manifests:
             manifest_details = get_manifest(
                 "%s://%s" % (schema, host),
                 repo,
                 source_tag,
                 manifest_types=[MT_S2_LIST],
             )
-            self.manifests[source_uri] = manifest_details
-        manifest_details = self.manifests[source_uri]
+            self._manifests[source_uri] = manifest_details
+        manifest_details = self._manifests[source_uri]
         content_type, _, _ = manifest_details
         if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
             raise ValueError("Unsupported manifest type:%s" % content_type)
@@ -132,7 +102,7 @@ class RegistrySource(Source):
                 ContainerImageDigestPullSpec(
                     registry=host,
                     repository=repo,
-                    digest=self.inspected[source_uri]["digest"],
+                    digest=self._inspected[source_uri]["digest"],
                     media_type=content_type,
                 )
             ],
@@ -147,7 +117,7 @@ class RegistrySource(Source):
             ],
         )
         item_dests = []
-        for dest_repo in self._dest:
+        for dest_repo in self._dest_repos:
             for dest_tag in dest_tags:
                 item_dests.append("%s:%s" % (dest_repo, dest_tag))
 
@@ -157,14 +127,16 @@ class RegistrySource(Source):
             dest_signing_key=signing_key,
             src=source_uri,
             source_tags=[source_tag],
-            labels=self.inspected[source_uri].get("config").get("labels", {}),
-            arch=(self.inspected[source_uri].get("config", {}) or {}).get('labels', {}).get("architecture"),
+            labels=self._inspected[source_uri].get("config").get("labels", {}),
+            arch=(self._inspected[source_uri].get("config", {}) or {})
+            .get("labels", {})
+            .get("architecture"),
             pull_info=pull_info,
         )
 
     def __iter__(self):
-        for key in self.signing_keys:
-            for uri in self._registry_uris:
+        for key in self._signing_keys:
+            for uri in self._images:
                 yield self._push_item_from_registry_uri(uri, key)
 
 

@@ -1,5 +1,3 @@
-from pushsource._impl import utils
-
 from pushsource._impl import Source, SourceUrlError
 from pushsource._impl.model import (
     PushItem,

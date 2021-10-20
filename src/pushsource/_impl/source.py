@@ -166,6 +166,8 @@ class Source(object):
 
         url_kwargs = parse.parse_qs(query)
 
+        print(url_kwargs)
+
         # parse_qs forces everything into lists even if only a single term was given.
         #
         # e.g. arg1=foo&arg1=bar&arg2=baz => {'arg1': ['foo', 'bar'], 'arg2': ['baz']}

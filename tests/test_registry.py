@@ -89,7 +89,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
     source = RegistrySource(
         dest_repos="repo1,repo2",
-        images_str="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
         "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
         dest_signing_key="1234abcde",
     )
@@ -141,7 +141,7 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
 
     source = RegistrySource(
         dest_repos="repo",
-        images_str="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
         "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
         dest_signing_key=["1234abcde", "56784321"],
     )
@@ -210,7 +210,7 @@ def test_registry_push_items_invalid(mocked_inspect, mocked_get_manifest):
     ]
     source = RegistrySource(
         dest_repos="pulp",
-        images_str="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
@@ -233,7 +233,7 @@ def test_registry_push_items_missing_dest_tag(mocked_get_manifest):
     ]
     source = RegistrySource(
         dest_repos="pulp",
-        images_str="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
@@ -266,7 +266,7 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
         ),
     ]
     source = Source.get(
-        "registry:?images_str=https:registry.redhat.io/odf4/mcg-operator-bundle:latest:latest,"
+        "registry:?image=https:registry.redhat.io/odf4/mcg-operator-bundle:latest:latest,"
         "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:1.1,"
         "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src:1.1-src"
         "&dest_repos=repo1,repo2&dest_signing_key=1234abcde"
@@ -315,17 +315,13 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
 
 
 def test_registry_push_items_missing_dest():
-    """Registry source yield push items."""
+    """Registry source yield push item with no destination tags."""
 
     source = RegistrySource(
         dest_repos="repo1,repo2",
-        images_str="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
     with source:
-        with raises(
-            ValueError,
-            match="https://registry.redhat.io/odf4/mcg-operator-bundle:latest",
-        ):
-            items = list(source)
+        items = list(source)

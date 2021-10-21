@@ -27,7 +27,7 @@ class RegistrySource(Source):
 
     def __init__(
         self,
-        images_str,
+        image,
         dest_repos=None,
         dest_signing_key=None,
     ):
@@ -39,22 +39,18 @@ class RegistrySource(Source):
                 items created by this source. If omitted, all push items have
                 empty destinations.
 
-            images_str (list[str])
+            image (list[str])
                 String with references to container images with tags+dest tags
                 Format <scheme>:<host>/<namespace>/<repo>:<tag>:<destination_tag>:<destination_tag>
                 Example: https:registry.redhat.io/ubi:8:latest:8:8.1
 
             signing_key (list[str])
-                GPG signing key ID(s). If provided, content must be signed
-                using one of the provided keys. Include ``None`` if unsigned
-                should also be permitted.
-                Keys should be listed in the order of preference.
+                GPG signing key ID(s). If provided, will be signed with those.
         """
         self._images = [
-            "%s://%s" % tuple(x.split(":", 1)) for x in images_str.split(",")
+            "%s://%s" % tuple(x.split(":", 1)) for x in image.split(",")
         ]
         self._dest_repos = dest_repos.split(",")
-        print(self._dest_repos)
         self._signing_keys = list_argument(dest_signing_key)
         self._inspected = {}
         self._manifests = {}
@@ -72,8 +68,6 @@ class RegistrySource(Source):
         tags = tags_part.split(":")
         source_tag = tags[0]
         dest_tags = tags[1:]
-        if not dest_tags:
-            raise ValueError("At least one dest tag is required for: %s" % uri)
         source_uri = "%s/%s:%s" % (host, repo, source_tag)
         if source_uri not in self._inspected:
             self._inspected[source_uri] = inspect(

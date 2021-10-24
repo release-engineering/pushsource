@@ -22,9 +22,9 @@ decorator==5.1.0 \
     --hash=sha256:7b12e7c3c6ab203a29e157335e9122cb03de9ab7264b137594103fd4a683b374 \
     --hash=sha256:e59913af105b9860aa2c8d3272d9de5a56a4e608db9a2f167a8480b323d529a7
     # via gssapi
-frozendict==2.0.6 ; python_version >= "3.6" \
-    --hash=sha256:3f00de72805cf4c9e81b334f3f04809278b967d2fed84552313a0fcce511beb1 \
-    --hash=sha256:5d3f75832c35d4df041f0e19c268964cbef29c1eb34cd3517cf883f1c2d089b9
+frozendict==2.0.7 ; python_version >= "3.6" \
+    --hash=sha256:a68f609d1af67da80b45519fdcfca2d60249c0a8c96e68279c1b6ddd92128204 \
+    --hash=sha256:d650f9cf3d2c5438b1631488a975a49b3bdd12c7a97eec59b85e57821eebf28a
     # via -r requirements.in
 frozenlist2==1.0.0 \
     --hash=sha256:33f6c6bb2c7d38524ec3c2d6f2d8a3ee2625a9e13096d8bc64db012b516a95e0 \
@@ -55,9 +55,9 @@ idna==3.3 \
     --hash=sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff \
     --hash=sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d
     # via requests
-jsonschema==4.1.0 \
-    --hash=sha256:2b3cca28580511d44326f0e7fc582eab3cbe31aabd1a1c2cfa74a399796ffd84 \
-    --hash=sha256:9dd7c33b4a96138dc37bb86b3610d3b12d30d96433d4d73435ca3025804154a8
+jsonschema==4.1.2 \
+    --hash=sha256:166870c8ab27bd712a8627e0598de4685bd8d199c4d7bd7cacc3d941ba0c6ca0 \
+    --hash=sha256:5c1a282ee6b74235057421fd0f766ac5f2972f77440927f6471c9e8493632fac
     # via pushcollector
 kobo==0.20.1 \
     --hash=sha256:41ef42a6d1cd3b2a0511b61da20e2bddd6147ee1f5e5438fe52a6d8d6916a6ae

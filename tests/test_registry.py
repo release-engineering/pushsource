@@ -89,8 +89,8 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
     source = RegistrySource(
         dest_repos="repo1,repo2",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
@@ -102,7 +102,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
-    assert items[0].dest == ["repo1:dest-latest", "repo2:dest-latest"]
+    assert items[0].dest == ["repo1", "repo2"]
 
     assert (
         items[1].name
@@ -114,7 +114,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     )
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
-    assert items[1].dest == ["repo1:dest-1.1", "repo2:dest-1.1"]
+    assert items[1].dest == ["repo1", "repo2"]
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
@@ -141,8 +141,8 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
 
     source = RegistrySource(
         dest_repos="repo",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:dest-1.1",
+        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
         dest_signing_key=["1234abcde", "56784321"],
     )
     # Eagerly fetch
@@ -156,7 +156,7 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
-    assert items[0].dest == ["repo:dest-latest"]
+    assert items[0].dest == ["repo"]
 
     assert (
         items[1].name
@@ -168,7 +168,7 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
     )
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
-    assert items[1].dest == ["repo:dest-1.1"]
+    assert items[1].dest == ["repo"]
 
     assert items[2].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest", items[
         1
@@ -176,7 +176,7 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
     assert items[2].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[2].dest_signing_key == "56784321"
     assert items[2].source_tags == ["latest"]
-    assert items[2].dest == ["repo:dest-latest"]
+    assert items[2].dest == ["repo"]
 
     assert (
         items[3].name
@@ -188,7 +188,7 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
     )
     assert items[3].dest_signing_key == "56784321"
     assert items[3].source_tags == ["1.1"]
-    assert items[3].dest == ["repo:dest-1.1"]
+    assert items[3].dest == ["repo"]
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
@@ -221,29 +221,6 @@ def test_registry_push_items_invalid(mocked_inspect, mocked_get_manifest):
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
-def test_registry_push_items_missing_dest_tag(mocked_get_manifest):
-    """Registry source raises value error due to invalid push items"""
-
-    mocked_get_manifest.side_effect = [
-        (
-            "application/vnd.docker.distribution.manifest.v1+json",
-            "test-digest-1",
-            MANIFEST_V2SCH2,
-        ),
-    ]
-    source = RegistrySource(
-        dest_repos="pulp",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
-        dest_signing_key="1234abcde",
-    )
-    # Eagerly fetch
-    with raises(ValueError) as exc_info:
-        with source:
-            items = list(source)
-    assert "At least one dest tag is required for" in str(exc_info.value)
-
-
-@patch("pushsource._impl.backend.registry_source.get_manifest")
 @patch("pushsource._impl.backend.registry_source.inspect")
 def test_source_get(mocked_inspect, mocked_get_manifest):
     """Get registry source based on prefix and test generated push items."""
@@ -266,9 +243,9 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
         ),
     ]
     source = Source.get(
-        "registry:?image=https:registry.redhat.io/odf4/mcg-operator-bundle:latest:latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1:1.1,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src:1.1-src"
+        "registry:?image=https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1,"
+        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src"
         "&dest_repos=repo1,repo2&dest_signing_key=1234abcde"
     )
 
@@ -287,7 +264,7 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
     assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
-    assert items[0].dest == ["repo1:latest", "repo2:latest"]
+    assert items[0].dest == ["repo1", "repo2"]
 
     assert (
         items[1].name
@@ -299,7 +276,7 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
     )
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
-    assert items[1].dest == ["repo1:1.1", "repo2:1.1"]
+    assert items[1].dest == ["repo1", "repo2"]
 
     assert (
         items[2].name
@@ -311,17 +288,4 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
     )
     assert items[2].dest_signing_key == "1234abcde"
     assert items[2].source_tags == ["1.1-src"]
-    assert items[2].dest == ["repo1:1.1-src", "repo2:1.1-src"]
-
-
-def test_registry_push_items_missing_dest():
-    """Registry source yield push item with no destination tags."""
-
-    source = RegistrySource(
-        dest_repos="repo1,repo2",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest",
-        dest_signing_key="1234abcde",
-    )
-    # Eagerly fetch
-    with source:
-        items = list(source)
+    assert items[2].dest == ["repo1", "repo2"]

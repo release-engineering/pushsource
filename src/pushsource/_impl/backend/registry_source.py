@@ -47,9 +47,7 @@ class RegistrySource(Source):
             signing_key (list[str])
                 GPG signing key ID(s). If provided, will be signed with those.
         """
-        self._images = [
-            "%s://%s" % tuple(x.split(":", 1)) for x in image.split(",")
-        ]
+        self._images = ["%s://%s" % tuple(x.split(":", 1)) for x in image.split(",")]
         self._dest_repos = dest_repos.split(",")
         self._signing_keys = list_argument(dest_signing_key)
         self._inspected = {}
@@ -64,14 +62,11 @@ class RegistrySource(Source):
     def _push_item_from_registry_uri(self, uri, signing_key):
         schema, rest = uri.split("://")
         host, rest = rest.split("/", 1)
-        repo, tags_part = rest.split(":", 1)
-        tags = tags_part.split(":")
-        source_tag = tags[0]
-        dest_tags = tags[1:]
-        source_uri = "%s/%s:%s" % (host, repo, source_tag)
+        repo, src_tag = rest.split(":", 1)
+        source_uri = "%s/%s:%s" % (host, repo, src_tag)
         if source_uri not in self._inspected:
             self._inspected[source_uri] = inspect(
-                "%s://%s" % (schema, host), repo, source_tag
+                "%s://%s" % (schema, host), repo, src_tag
             )
         if self._inspected[source_uri].get("source"):
             klass = SourceContainerImagePushItem
@@ -82,7 +77,7 @@ class RegistrySource(Source):
             manifest_details = get_manifest(
                 "%s://%s" % (schema, host),
                 repo,
-                source_tag,
+                src_tag,
                 manifest_types=[MT_S2_LIST],
             )
             self._manifests[source_uri] = manifest_details
@@ -105,22 +100,17 @@ class RegistrySource(Source):
                 ContainerImageTagPullSpec(
                     registry=host,
                     repository=repo,
-                    tag=source_tag,
+                    tag=src_tag,
                     media_types=[content_type],
                 )
             ],
         )
-        item_dests = []
-        for dest_repo in self._dest_repos:
-            for dest_tag in dest_tags:
-                item_dests.append("%s:%s" % (dest_repo, dest_tag))
-
         return klass(
             name=source_uri,
-            dest=item_dests,
+            dest=self._dest_repos,
             dest_signing_key=signing_key,
             src=source_uri,
-            source_tags=[source_tag],
+            source_tags=[src_tag],
             labels=self._inspected[source_uri].get("config").get("labels", {}),
             arch=(self._inspected[source_uri].get("config", {}) or {})
             .get("labels", {})

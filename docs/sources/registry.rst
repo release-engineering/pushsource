@@ -29,11 +29,11 @@ Source.get like this:
 Code above will produce two push items:
 - dest=ubi-fork:latest
   src=registry.access.redhat.com/ubi8/ubi:8.4-211
-  signing_key=01abcdef01234567
+  dest_signing_key=01abcdef01234567
 
 - dest=ubi-fork:8.3
   src=registry.access.redhat.com/ubi8/ubi:8.3
-  signing_key=01abcdef01234567
+  dest_signing_key=01abcdef01234567
 
 Populating registry container push items
 ........................................

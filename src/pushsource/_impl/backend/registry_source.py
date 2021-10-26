@@ -28,13 +28,13 @@ class RegistrySource(Source):
     def __init__(
         self,
         image,
-        dest_repos=None,
+        dest=None,
         dest_signing_key=None,
     ):
         """Create a new source.
 
         Parameters:
-            dest_repos str,
+            reposs str,
                 Comma separated string with destination(s) repo(s) to fill in for push
                 items created by this source. If omitted, all push items have
                 empty destinations.
@@ -47,8 +47,8 @@ class RegistrySource(Source):
             signing_key (list[str])
                 GPG signing key ID(s). If provided, will be signed with those.
         """
-        self._images = ["%s://%s" % tuple(x.split(":", 1)) for x in image.split(",")]
-        self._dest_repos = dest_repos.split(",")
+        self._images = ["https://%s" % x for x in image.split(",")]
+        self._repos = dest.split(",")
         self._signing_keys = list_argument(dest_signing_key)
         self._inspected = {}
         self._manifests = {}
@@ -107,7 +107,7 @@ class RegistrySource(Source):
         )
         return klass(
             name=source_uri,
-            dest=self._dest_repos,
+            dest=self._repos,
             dest_signing_key=signing_key,
             src=source_uri,
             source_tags=[src_tag],

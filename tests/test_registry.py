@@ -88,9 +88,9 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     ]
 
     source = RegistrySource(
-        dest_repos="repo1,repo2",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
+        dest="repo1,repo2",
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
@@ -140,9 +140,9 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
     ]
 
     source = RegistrySource(
-        dest_repos="repo",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
+        dest="repo",
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
         dest_signing_key=["1234abcde", "56784321"],
     )
     # Eagerly fetch
@@ -209,8 +209,8 @@ def test_registry_push_items_invalid(mocked_inspect, mocked_get_manifest):
         ),
     ]
     source = RegistrySource(
-        dest_repos="pulp",
-        image="https:registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
+        dest="pulp",
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest:dest-latest",
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch
@@ -243,10 +243,10 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
         ),
     ]
     source = Source.get(
-        "registry:?image=https:registry.redhat.io/odf4/mcg-operator-bundle:latest,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1,"
-        "https:registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src"
-        "&dest_repos=repo1,repo2&dest_signing_key=1234abcde"
+        "registry:?image=registry.redhat.io/odf4/mcg-operator-bundle:latest,"
+        "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1,"
+        "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1-src"
+        "&dest=repo1,repo2&dest_signing_key=1234abcde"
     )
 
     mocked_inspect.side_effect = [

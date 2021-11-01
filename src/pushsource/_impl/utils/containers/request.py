@@ -276,7 +276,12 @@ def inspect(registry, repo, digest, token=None):
     manifest_type, digest, manifest = get_manifest(
         registry, repo, digest, manifest_types=[MT_S2_LIST], token=token
     )
-    if manifest_type in (MT_S2_V2, MT_S2_LIST):
+    if manifest_type == MT_S2_V2:
+        inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
+    elif manifest_type == MT_S2_LIST:
+        manifest_type, digest, manifest = get_manifest(
+            registry, repo, manifest["manifests"][0]["digest"], manifest_types=[MT_S2_V2], token=token
+        )
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
     else:
         inspected = {"architecture": manifest["architecture"], "labels": {}}

@@ -119,6 +119,81 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
 @patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items_no_signing_key(mocked_inspect, mocked_get_manifest):
+    """Registry source yield push items."""
+
+    mocked_get_manifest.side_effect = [
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+    ]
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
+
+    source = RegistrySource(
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest",
+    )
+    # Eagerly fetch
+    with source:
+        items = list(source)
+
+    assert len(items) == 1
+    assert items[0].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].dest_signing_key == None
+    assert items[0].source_tags == ["latest"]
+    assert items[0].dest == []
+
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items_no_dest(mocked_inspect, mocked_get_manifest):
+    """Registry source yield push items."""
+
+    mocked_get_manifest.side_effect = [
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            "application/vnd.docker.distribution.manifest.v1+json",
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+    ]
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
+
+    source = RegistrySource(
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        dest_signing_key="1234abcde",
+    )
+    # Eagerly fetch
+    with source:
+        items = list(source)
+
+    assert len(items) == 1
+    assert items[0].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].dest_signing_key == "1234abcde"
+    assert items[0].source_tags == ["latest"]
+    assert items[0].dest == []
+
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
 def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_manifest):
     """Registry source yield push items for multiple signing keys."""
 

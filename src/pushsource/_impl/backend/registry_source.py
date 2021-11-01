@@ -48,7 +48,10 @@ class RegistrySource(Source):
                 GPG signing key ID(s). If provided, will be signed with those.
         """
         self._images = ["https://%s" % x for x in image.split(",")]
-        self._repos = dest.split(",")
+        if dest:
+            self._repos = dest.split(",")
+        else:
+            self._repos = []
         self._signing_keys = list_argument(dest_signing_key)
         self._inspected = {}
         self._manifests = {}
@@ -119,7 +122,7 @@ class RegistrySource(Source):
         )
 
     def __iter__(self):
-        for key in self._signing_keys:
+        for key in self._signing_keys or [None]:
             for uri in self._images:
                 yield self._push_item_from_registry_uri(uri, key)
 

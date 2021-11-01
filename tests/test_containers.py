@@ -576,24 +576,18 @@ def test_inspect_list(requests_mock):
             {
                 "digest": "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8",
                 "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-                "platform": {
-                    "architecture": "amd64",
-                    "os": "linux"
-                },
-                "size": 1161
+                "platform": {"architecture": "amd64", "os": "linux"},
+                "size": 1161,
             },
             {
                 "digest": "sha256:7302dbd6e274f154b47f04208d756d2c42fa167787f74de67516765eb8e06e38",
                 "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-                "platform": {
-                    "architecture": "ppc64le",
-                    "os": "linux"
-                },
-                "size": 1161
-            }
+                "platform": {"architecture": "ppc64le", "os": "linux"},
+                "size": 1161,
+            },
         ],
         "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
-        "schemaVersion": 2
+        "schemaVersion": 2,
     }
     expected_manifest = {
         "schemaVersion": 2,
@@ -601,8 +595,8 @@ def test_inspect_list(requests_mock):
         "config": {
             "mediaType": "application/vnd.docker.container.image.v1+json",
             "size": 6069,
-            "digest": "sha256:7a37792a49b36c89d4f196dbebd03ffe4c85ccf36d357234418a5b9fc8b5e939"
-        }
+            "digest": "sha256:7a37792a49b36c89d4f196dbebd03ffe4c85ccf36d357234418a5b9fc8b5e939",
+        },
     }
     expected_blob = {
         "architecture": "ppc64le",
@@ -628,7 +622,12 @@ def test_inspect_list(requests_mock):
     )
     requests_mock.register_uri(
         "GET",
-        "https://%s/v2/%s/manifests/%s" % (registry, repo, "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8"),
+        "https://%s/v2/%s/manifests/%s"
+        % (
+            registry,
+            repo,
+            "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8",
+        ),
         json=lambda req, context: [
             context.__setattr__("status_code", 200),
             context.__setattr__(

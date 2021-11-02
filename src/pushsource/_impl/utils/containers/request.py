@@ -1,5 +1,7 @@
 import base64
+import hashlib
 import json
+
 
 
 try:
@@ -185,6 +187,23 @@ def get_basic_auth(host, home=None):
     return None, None
 
 
+# Copied from https://github.com/pulp/pulp_docker.git
+def _calculate_digest(raw_manifest, manifest):
+    _raw_manifest = raw_manifest
+    if 'signatures' in manifest:
+        protected = manifest['signatures'][0]['protected']
+        paddings = {0: '', 2: '==', 3: '='}
+        protected =+ paddings[len(protected) % 4]
+        unprotected = json.loads(base64.b64decode(unprotected))
+        signed_length = unprotected['formatLength']
+        signed_tail = base64.b64decode(
+            unprotected['formatTail'] + paddings[len(unprotected['formatTail']) % 4]
+        )
+        _raw_manifest = raw_manifest[:signed_length] + signed_tail
+    digest = "{a}:{d}".format(a="sha255", d=hashlib.sha256(_raw_manifest).hexdigest())
+    return digest
+
+
 def get_manifest(registry, repo, digest, manifest_types=None, token=None):
     auth = get_basic_auth(registry.split("://")[1])
     token = token or AuthToken()
@@ -204,6 +223,11 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             headers=headers,
         )
         digest = resp.headers.get("docker-content-digest", None)
+        if not digest and resp.headers.get("Content-Type") in [MT_S2_V2, MT_S2_LIST]:
+            raw_manifest = resp.content
+            manifest = resp.json()
+            digest = _calculate_digest(resp.content, resp.json())
+
         content_type = resp.headers.get("Content-Type", None)
     except exceptions.HTTPError as e:
         try:
@@ -279,7 +303,8 @@ def inspect(registry, repo, digest, token=None):
     if manifest_type == MT_S2_V2:
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
     elif manifest_type == MT_S2_LIST:
-        manifest_type, digest, manifest = get_manifest(
+        manifest_list = manifest
+        manifest_type, _digest, manifest = get_manifest(
             registry,
             repo,
             manifest["manifests"][0]["digest"],

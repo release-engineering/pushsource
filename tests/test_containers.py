@@ -655,7 +655,8 @@ def test_inspect_list(requests_mock):
     assert inspected == {
         "architecture": "ppc64le",
         "config": {"Labels": {"architecture": "ppc64le"}},
-        "digest": "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8",
+        # digest should be calculated from manifest list
+        "digest": "sha255:1e89f8bff8d8a6c324ed32ff35ecd457aefec17be856f6bb3a868c2a394dcc88",
     }
 
 

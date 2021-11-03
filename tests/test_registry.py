@@ -364,3 +364,19 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
     assert items[2].dest_signing_key == "1234abcde"
     assert items[2].source_tags == ["1.1-src"]
     assert items[2].dest == ["repo1", "repo2"]
+
+
+def test_source_get_invalid_items():
+    """Get registry source with invalid image URIs."""
+
+    source = Source.get("registry:?image=registry.redhat.io/odf4/mcg-operator-bundle")
+    with raises(ValueError):
+        with source:
+            items = list(source)
+
+    source = Source.get(
+        "registry:?image=registry.redhat.io/odf4/mcg-operator-bundle@latest:latest"
+    )
+    with raises(ValueError):
+        with source:
+            items = list(source)

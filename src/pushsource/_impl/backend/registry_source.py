@@ -1,3 +1,4 @@
+import re
 import logging
 
 from ..source import Source
@@ -20,6 +21,8 @@ from ..utils.containers import (
 from ..helpers import list_argument
 
 LOG = logging.getLogger("pushsource")
+
+IMAGE_URI_REGEX = re.compile("https://([^:@]*):(.+)(([^:]:)+)*")
 
 
 class RegistrySource(Source):
@@ -47,9 +50,9 @@ class RegistrySource(Source):
             signing_key (list[str])
                 GPG signing key ID(s). If provided, will be signed with those.
         """
-        self._images = ["https://%s" % x for x in image.split(",")]
+        self._images = ["https://%s" % x for x in list_argument(image.split(","))]
         if dest:
-            self._repos = dest.split(",")
+            self._repos = list_argument(dest.split(","))
         else:
             self._repos = []
         self._signing_keys = list_argument(dest_signing_key)
@@ -63,6 +66,12 @@ class RegistrySource(Source):
         pass
 
     def _push_item_from_registry_uri(self, uri, signing_key):
+        if not IMAGE_URI_REGEX.match(uri):
+            raise ValueError(
+                "Invalid item uri: %s. Please use format: %s"
+                % (uri, IMAGE_URI_REGEX.pattern)
+            )
+
         schema, rest = uri.split("://")
         host, rest = rest.split("/", 1)
         repo, src_tag = rest.split(":", 1)
@@ -84,6 +93,7 @@ class RegistrySource(Source):
                 manifest_types=[MT_S2_LIST],
             )
             self._manifests[source_uri] = manifest_details
+
         manifest_details = self._manifests[source_uri]
         content_type, _, _ = manifest_details
         if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
@@ -94,7 +104,7 @@ class RegistrySource(Source):
                 ContainerImageDigestPullSpec(
                     registry=host,
                     repository=repo,
-                    digest=self._inspected[source_uri]["digest"],
+                    digest=self._inspected.get(source_uri, {}).get("digest"),
                     media_type=content_type,
                 )
             ],
@@ -114,9 +124,10 @@ class RegistrySource(Source):
             dest_signing_key=signing_key,
             src=source_uri,
             source_tags=[src_tag],
-            labels=self._inspected[source_uri].get("config").get("labels", {}),
-            arch=(self._inspected[source_uri].get("config", {}) or {})
-            .get("labels", {})
+            labels=self._inspected.get(source_uri, {}).get("config").get("Labels", {}),
+            arch=(self._inspected.get(source_uri, {}).get("config", {}) or {})
+            .get("Labels", {})
+            .get("Labels", {})
             .get("architecture"),
             pull_info=pull_info,
         )

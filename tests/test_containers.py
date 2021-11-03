@@ -41,27 +41,21 @@ from pushsource._impl.utils.containers.request import (
 
 
 @pytest.fixture
-def fake_home():
-    tmp_home = None
-    try:
-        tmp_home = tempfile.mkdtemp()
-        orig_home = os.environ.get("HOME", "")
-        os.environ["HOME"] = tmp_home
-        auth_settings = {
-            "auths": {
-                "registry.docker.io": {"auth": "cHViOnJlZGhhdA==", "email": ""},
-                "test-reqistry.redhat.com": {"auth": "cHViOnJlZGhhdA==", "email": ""},
-            }
+def fake_home(tmpdir, monkeypatch):
+    tmp_home = tmpdir.mkdir("home")
+    orig_home = os.environ.get("HOME", "")
+    monkeypatch.setenv("HOME", str(tmp_home))
+    auth_settings = {
+        "auths": {
+            "registry.docker.io": {"auth": "cHViOnJlZGhhdA==", "email": ""},
+            "test-reqistry.redhat.com": {"auth": "cHViOnJlZGhhdA==", "email": ""},
         }
-        os.mkdir(os.path.join(tmp_home, ".docker"))
-        with open(os.path.join(tmp_home, ".docker/config.json"), "w") as f:
-            f.write(json.dumps(auth_settings))
-            f.close()
-            yield tmp_home
-    finally:
-        if tmp_home:
-            shutil.rmtree(tmp_home)
-    os.environ["HOME"] = orig_home
+    }
+    tmp_home.mkdir(".docker")
+    with open(os.path.join(str(tmp_home), ".docker/config.json"), "w") as f:
+        f.write(json.dumps(auth_settings))
+        f.close()
+    yield tmp_home
 
 
 def test_need_token_authentication(requests_mock):
@@ -609,7 +603,7 @@ def test_inspect_list(requests_mock):
     requests_mock.register_uri(
         "GET",
         "https://%s/v2/%s/manifests/%s" % (registry, repo, tag),
-        json=lambda req, context: [
+        content=lambda req, context: [
             context.__setattr__("status_code", 200),
             context.__setattr__(
                 "headers",
@@ -617,7 +611,7 @@ def test_inspect_list(requests_mock):
                     "Content-Type": "application/vnd.docker.distribution.manifest.list.v2+json",
                 },
             ),
-            expected_manifest_list,
+            json.dumps(expected_manifest_list, sort_keys=True).encode("utf-8"),
         ][-1],
     )
     requests_mock.register_uri(
@@ -628,7 +622,7 @@ def test_inspect_list(requests_mock):
             repo,
             "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8",
         ),
-        json=lambda req, context: [
+        content=lambda req, context: [
             context.__setattr__("status_code", 200),
             context.__setattr__(
                 "headers",
@@ -637,7 +631,7 @@ def test_inspect_list(requests_mock):
                     "docker-content-digest": "sha256:e7e5d23bcb765d71604755e93bd32c4dc3df1d1588948f3039e473fff4d4ced8",
                 },
             ),
-            expected_manifest,
+            json.dumps(expected_manifest, sort_keys=True).encode("utf-8"),
         ][-1],
     )
     requests_mock.register_uri(
@@ -653,8 +647,8 @@ def test_inspect_list(requests_mock):
     )
     inspected = inspect("https://%s" % registry, "test-repo", "test-tag")
     assert inspected == {
-        "architecture": "ppc64le",
-        "config": {"Labels": {"architecture": "ppc64le"}},
+        u"architecture": u"ppc64le",
+        u"config": {u"Labels": {u"architecture": u"ppc64le"}},
         # digest should be calculated from manifest list
         "digest": "sha256:1e89f8bff8d8a6c324ed32ff35ecd457aefec17be856f6bb3a868c2a394dcc88",
     }

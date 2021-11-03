@@ -200,7 +200,7 @@ def _calculate_digest(raw_manifest, manifest):
             unprotected['formatTail'] + paddings[len(unprotected['formatTail']) % 4]
         )
         _raw_manifest = raw_manifest[:signed_length] + signed_tail
-    digest = "{a}:{d}".format(a="sha255", d=hashlib.sha256(_raw_manifest).hexdigest())
+    digest = "{a}:{d}".format(a="sha256", d=hashlib.sha256(_raw_manifest).hexdigest())
     return digest
 
 

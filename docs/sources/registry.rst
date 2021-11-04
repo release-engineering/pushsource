@@ -1,49 +1,40 @@
 Source: registry
-==============
+================
 
-The ``registry`` push source allows push container content from external docker
-registry
+The ``registry`` push source allows the loading of content from a
+`container image registry <https://docs.docker.com/registry/spec/api/>`_.
 
 Supported content types:
 
 * Container images
+* Source container images
 
 
-registry URLs
-------------------
+registry source URLs
+--------------------
 
-Registry source can be obtained by specifying URL + dest tags:
+The base form of a Registry source URL is:
 
-``registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2``
+``registry:image=pullspec1[,pullspec2[,...]]``
 
-For example, referencing a single advisory would look like:
+..where each ``pullspec`` is of the form used by tools such as ``docker pull``,
+with the following restrictions:
 
-``registry.access.redhat.com/ubi8/ubi:8.4-211:latest``
+- the pullspec must reference an image by tag (not digest)
+- the pullspec must always include the registry hostname
 
-To get source with push items populated from external registry you call 
-Source.get like this:
+For example, the following URL accesses a single image by tag:
 
-.. code:
-   Source.get("registry:images_str=registry.access.redhat.com/ubi8/ubi:8.4-211:latest,registry.access.redhat.com/ubi8/ubi:8.3:8.3&dest=ubi-fork&signing_key=01abcdef01234567")
+``registry:image=registry.access.redhat.com/ubi8/ubi:8.4-211``
 
-Code above will produce two push items:
-- dest=ubi-fork:latest
-  src=registry.access.redhat.com/ubi8/ubi:8.4-211
-  dest_signing_key=01abcdef01234567
 
-- dest=ubi-fork:8.3
-  src=registry.access.redhat.com/ubi8/ubi:8.3
-  dest_signing_key=01abcdef01234567
+Authentication
+--------------
 
-Populating registry container push items
-........................................
+If the registry host requires authentication, credentials for the registry
+must be available from ``$HOME/.docker/config.json`` using the same format
+as consumed by ``docker`` and ``podman``.
 
-Each push item is specified by one entry in uris list accepted by source.
-Every URI is inspected as container image which serves as identification
-for source containers. Manifest is also fetched from the specified URL
-to determine which manifest type is served by registry. Registry source
-class requests for manifest list, but anything v2 valid returned by registry
-is accepted
 
 Python API reference
 --------------------

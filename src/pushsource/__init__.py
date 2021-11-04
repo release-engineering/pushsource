@@ -25,4 +25,9 @@ from pushsource._impl.model import (
     ErratumPackageCollection,
 )
 
-from pushsource._impl.backend import ErrataSource, KojiSource, StagedSource
+from pushsource._impl.backend import (
+    ErrataSource,
+    KojiSource,
+    StagedSource,
+    RegistrySource,
+)

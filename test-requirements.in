@@ -16,6 +16,8 @@ pytest-cov
 python-dateutil
 rpm-py-installer
 six
+requests-mock
+pyhamcrest
 sphinx
 alabaster
 pidiff

@@ -2,6 +2,8 @@ import base64
 import hashlib
 import json
 
+import os
+import six
 
 try:
     from json.decoder import JSONDecodeError
@@ -10,7 +12,6 @@ try:
 except ImportError:  # pragma: no cover
     JSONException = ValueError
 
-import os
 from six.moves.urllib import parse as urlparse
 from requests.adapters import HTTPAdapter
 
@@ -61,8 +62,8 @@ def request_token(session, response, credentials):
     auth_info = parse_401_response_headers(response.headers)
     try:
         token_url = auth_info.pop("realm")
-    except KeyError:
-        raise IOError("No realm specified for token auth challenge.")
+    except KeyError as e:
+        six.raise_from(IOError("No realm specified for token auth challenge."), e)
 
     parse_result = urlparse.urlparse(token_url)
     query_dict = urlparse.parse_qs(parse_result.query)
@@ -108,9 +109,10 @@ def parse_401_response_headers(response_headers):
     try:
         items = request.parse_http_list(auth_header)
         return request.parse_keqv_list(items)
-    except ValueError:
-        raise IOError(
-            "401 responses are expected to contain authentication information"
+    except ValueError as e:
+        six.raise_from(
+            IOError("401 responses are expected to contain authentication information"),
+            e,
         )
 
 
@@ -179,10 +181,11 @@ def get_basic_auth(host, home=None):
     home_dir = os.path.expanduser("~")
     conf_file = os.path.join(home or home_dir, ".docker/config.json")
     if os.path.isfile(conf_file):
-        config = json.load(open(conf_file))
-        auth = config.get("auths", {}).get(host, {}).get("auth")
-        if auth:
-            return base64.b64decode(auth).decode().split(":")
+        with open(conf_file) as f:
+            config = json.load(f)
+            auth = config.get("auths", {}).get(host, {}).get("auth")
+            if auth:
+                return base64.b64decode(auth).decode().split(":")
     return None, None
 
 
@@ -235,8 +238,11 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             "MANIFEST_UNKNOWN" in [err["code"] for err in json_error.get("errors", [])]
             or "TAG_EXPIRED" in [err["code"] for err in json_error.get("errors", [])]
         ):
-            raise KeyError(
-                "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
+            six.raise_from(
+                KeyError(
+                    "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
+                ),
+                e,
             )
             # otherwise probably true 404 or other error, let's reraise it
         raise e
@@ -277,8 +283,7 @@ def api_version_check(registry, token=None, credentials=None):
     except exceptions.HTTPError as e:
         if e.response.status_code == 404:
             return False
-        raise
-
+        raise e
     try:
         version = response.headers["Docker-Distribution-API-Version"]
         if version != "registry/2.0":

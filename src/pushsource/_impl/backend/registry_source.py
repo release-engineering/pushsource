@@ -50,9 +50,9 @@ class RegistrySource(Source):
             signing_key (list[str])
                 GPG signing key ID(s). If provided, will be signed with those.
         """
-        self._images = ["https://%s" % x for x in list_argument(image.split(","))]
+        self._images = ["https://%s" % x for x in list_argument(image)]
         if dest:
-            self._repos = list_argument(dest.split(","))
+            self._repos = list_argument(dest)
         else:
             self._repos = []
         self._signing_keys = list_argument(dest_signing_key)

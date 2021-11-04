@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Source: registry &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="source-registry">
+<h1>Source: registry<a class="headerlink" href="#source-registry" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">registry</span></code> push source allows push container content from external docker
+registry</p>
+<p>Supported content types:</p>
+<ul class="simple">
+<li><p>Container images</p></li>
+</ul>
+<section id="registry-urls">
+<h2>registry URLs<a class="headerlink" href="#registry-urls" title="Permalink to this headline">¶</a></h2>
+<p>Registry source can be obtained by specifying URL + dest tags:</p>
+<p><code class="docutils literal notranslate"><span class="pre">registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2</span></code></p>
+<p>For example, referencing a single advisory would look like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">registry.access.redhat.com/ubi8/ubi:8.4-211:latest</span></code></p>
+<p>To get source with push items populated from external registry you call
+Source.get like this:</p>
+<p>Code above will produce two push items:
+- dest=ubi-fork:latest</p>
+<blockquote>
+<div><p>src=registry.access.redhat.com/ubi8/ubi:8.4-211
+dest_signing_key=01abcdef01234567</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>dest=ubi-fork:8.3
+src=registry.access.redhat.com/ubi8/ubi:8.3
+dest_signing_key=01abcdef01234567</p></li>
+</ul>
+<section id="populating-registry-container-push-items">
+<h3>Populating registry container push items<a class="headerlink" href="#populating-registry-container-push-items" title="Permalink to this headline">¶</a></h3>
+<p>Each push item is specified by one entry in uris list accepted by source.
+Every URI is inspected as container image which serves as identification
+for source containers. Manifest is also fetched from the specified URL
+to determine which manifest type is served by registry. Registry source
+class requests for manifest list, but anything v2 valid returned by registry
+is accepted</p>
+</section>
+</section>
+<section id="python-api-reference">
+<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.RegistrySource">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">RegistrySource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/registry_source.html#RegistrySource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.RegistrySource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses URIs of container images as source for push items.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.RegistrySource.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/registry_source.html#RegistrySource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.RegistrySource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>str</strong> (<em>reposs</em>) – Comma separated string with destination(s) repo(s) to fill in for push
+items created by this source. If omitted, all push items have
+empty destinations.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>:param<span class="classifier">Comma separated string with destination(s) repo(s) to fill in for push</span></dt><dd><p>items created by this source. If omitted, all push items have
+empty destinations.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – String with references to container images with tags+dest tags
+Format &lt;scheme&gt;:&lt;host&gt;/&lt;namespace&gt;/&lt;repo&gt;:&lt;tag&gt;:&lt;destination_tag&gt;:&lt;destination_tag&gt;
+Example: <a class="reference external" href="https:registry.redhat.io/ubi:8:latest:8:8.1">https:registry.redhat.io/ubi:8:latest:8:8.1</a></p></li>
+<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – GPG signing key ID(s). If provided, will be signed with those.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/sources/registry.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

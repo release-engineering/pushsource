@@ -59,29 +59,34 @@
 
 
 <div class="viewcode-block" id="RegistrySource"><a class="viewcode-back" href="../../../../sources/registry.html#pushsource.RegistrySource">[docs]</a><span class="k">class</span> <span class="nc">RegistrySource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Uses URIs of container images as source for push items.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Uses a container image registry as a source of push items.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="RegistrySource.__init__"><a class="viewcode-back" href="../../../../sources/registry.html#pushsource.RegistrySource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">image</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">dest_signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="RegistrySource.__init__"><a class="viewcode-back" href="../../../../sources/registry.html#pushsource.RegistrySource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest_signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">            reposs str,</span>
-<span class="sd">                Comma separated string with destination(s) repo(s) to fill in for push</span>
-<span class="sd">                items created by this source. If omitted, all push items have</span>
-<span class="sd">                empty destinations.</span>
+<span class="sd">            image (str, list[str])</span>
+<span class="sd">                Pull spec(s) of container images, as a list or a comma-separated string.</span>
 
-<span class="sd">            image (list[str])</span>
-<span class="sd">                String with references to container images with tags+dest tags</span>
-<span class="sd">                Format &lt;scheme&gt;:&lt;host&gt;/&lt;namespace&gt;/&lt;repo&gt;:&lt;tag&gt;:&lt;destination_tag&gt;:&lt;destination_tag&gt;</span>
-<span class="sd">                Example: https:registry.redhat.io/ubi:8:latest:8:8.1</span>
+<span class="sd">                Each pull spec must include a hostname and a tag; referencing images by digest</span>
+<span class="sd">                is currently not supported.</span>
 
-<span class="sd">            signing_key (list[str])</span>
-<span class="sd">                GPG signing key ID(s). If provided, will be signed with those.</span>
+<span class="sd">                ``registry.access.redhat.com/ubi8/ubi:8.4-211`` is an example of a valid pull</span>
+<span class="sd">                spec.</span>
+
+<span class="sd">            dest (str, list[str])</span>
+<span class="sd">                If provided, this value will be used to populate :meth:`~pushsource.PushItem.dest`</span>
+<span class="sd">                on generated push items.</span>
+
+<span class="sd">            dest_signing_key (str, list[str])</span>
+<span class="sd">                If provided, this value will be used to populate</span>
+<span class="sd">                :meth:`~pushsource.ContainerImagePushItem.dest_signing_key` on generated</span>
+<span class="sd">                push items.</span>
+
+<span class="sd">                Note that, as each item holds only a single ``dest_signing_key``, using this</span>
+<span class="sd">                argument can affect the number of generated push items. For example,</span>
+<span class="sd">                providing two keys would produce double the amount of push items as providing</span>
+<span class="sd">                a single key.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_images</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;https://</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">image</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">dest</span><span class="p">:</span>
@@ -200,6 +205,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../sources/staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/registry.html">Source: registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>

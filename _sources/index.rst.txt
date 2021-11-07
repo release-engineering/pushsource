@@ -11,6 +11,7 @@ A library for accessing push items from various sources.
    sources/base
    sources/staged
    sources/koji
+   sources/registry
    sources/errata
    model/base
    model/files

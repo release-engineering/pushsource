@@ -15,6 +15,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Source: errata" href="errata.html" />
+    <link rel="prev" title="Source: koji" href="koji.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -33,70 +35,61 @@
             
   <section id="source-registry">
 <h1>Source: registry<a class="headerlink" href="#source-registry" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">registry</span></code> push source allows push container content from external docker
-registry</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">registry</span></code> push source allows the loading of content from a
+<a class="reference external" href="https://docs.docker.com/registry/spec/api/">container image registry</a>.</p>
 <p>Supported content types:</p>
 <ul class="simple">
 <li><p>Container images</p></li>
+<li><p>Source container images</p></li>
 </ul>
-<section id="registry-urls">
-<h2>registry URLs<a class="headerlink" href="#registry-urls" title="Permalink to this headline">¶</a></h2>
-<p>Registry source can be obtained by specifying URL + dest tags:</p>
-<p><code class="docutils literal notranslate"><span class="pre">registry-hostname/namespace/repository:tag:dest-tag1:dest-tag2</span></code></p>
-<p>For example, referencing a single advisory would look like:</p>
-<p><code class="docutils literal notranslate"><span class="pre">registry.access.redhat.com/ubi8/ubi:8.4-211:latest</span></code></p>
-<p>To get source with push items populated from external registry you call
-Source.get like this:</p>
-<p>Code above will produce two push items:
-- dest=ubi-fork:latest</p>
-<blockquote>
-<div><p>src=registry.access.redhat.com/ubi8/ubi:8.4-211
-dest_signing_key=01abcdef01234567</p>
-</div></blockquote>
+<section id="registry-source-urls">
+<h2>registry source URLs<a class="headerlink" href="#registry-source-urls" title="Permalink to this headline">¶</a></h2>
+<p>The base form of a Registry source URL is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">registry:image=pullspec1[,pullspec2[,...]]</span></code></p>
+<p>..where each <code class="docutils literal notranslate"><span class="pre">pullspec</span></code> is of the form used by tools such as <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code>,
+with the following restrictions:</p>
 <ul class="simple">
-<li><p>dest=ubi-fork:8.3
-src=registry.access.redhat.com/ubi8/ubi:8.3
-dest_signing_key=01abcdef01234567</p></li>
+<li><p>the pullspec must reference an image by tag (not digest)</p></li>
+<li><p>the pullspec must always include the registry hostname</p></li>
 </ul>
-<section id="populating-registry-container-push-items">
-<h3>Populating registry container push items<a class="headerlink" href="#populating-registry-container-push-items" title="Permalink to this headline">¶</a></h3>
-<p>Each push item is specified by one entry in uris list accepted by source.
-Every URI is inspected as container image which serves as identification
-for source containers. Manifest is also fetched from the specified URL
-to determine which manifest type is served by registry. Registry source
-class requests for manifest list, but anything v2 valid returned by registry
-is accepted</p>
+<p>For example, the following URL accesses a single image by tag:</p>
+<p><code class="docutils literal notranslate"><span class="pre">registry:image=registry.access.redhat.com/ubi8/ubi:8.4-211</span></code></p>
 </section>
+<section id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>If the registry host requires authentication, credentials for the registry
+must be available from <code class="docutils literal notranslate"><span class="pre">$HOME/.docker/config.json</span></code> using the same format
+as consumed by <code class="docutils literal notranslate"><span class="pre">docker</span></code> and <code class="docutils literal notranslate"><span class="pre">podman</span></code>.</p>
 </section>
 <section id="python-api-reference">
 <h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.RegistrySource">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">RegistrySource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/registry_source.html#RegistrySource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.RegistrySource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Uses URIs of container images as source for push items.</p>
+<dd><p>Uses a container image registry as a source of push items.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.RegistrySource.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/registry_source.html#RegistrySource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.RegistrySource.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new source.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>str</strong> (<em>reposs</em>) – Comma separated string with destination(s) repo(s) to fill in for push
-items created by this source. If omitted, all push items have
-empty destinations.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>:param<span class="classifier">Comma separated string with destination(s) repo(s) to fill in for push</span></dt><dd><p>items created by this source. If omitted, all push items have
-empty destinations.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – String with references to container images with tags+dest tags
-Format &lt;scheme&gt;:&lt;host&gt;/&lt;namespace&gt;/&lt;repo&gt;:&lt;tag&gt;:&lt;destination_tag&gt;:&lt;destination_tag&gt;
-Example: <a class="reference external" href="https:registry.redhat.io/ubi:8:latest:8:8.1">https:registry.redhat.io/ubi:8:latest:8:8.1</a></p></li>
-<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – GPG signing key ID(s). If provided, will be signed with those.</p></li>
+<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – <p>Pull spec(s) of container images, as a list or a comma-separated string.</p>
+<p>Each pull spec must include a hostname and a tag; referencing images by digest
+is currently not supported.</p>
+<p><code class="docutils literal notranslate"><span class="pre">registry.access.redhat.com/ubi8/ubi:8.4-211</span></code> is an example of a valid pull
+spec.</p>
+</p></li>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – If provided, this value will be used to populate <a class="reference internal" href="../model/base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a>
+on generated push items.</p></li>
+<li><p><strong>dest_signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – <p>If provided, this value will be used to populate
+<a class="reference internal" href="../model/containers.html#pushsource.ContainerImagePushItem.dest_signing_key" title="pushsource.ContainerImagePushItem.dest_signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest_signing_key()</span></code></a> on generated
+push items.</p>
+<p>Note that, as each item holds only a single <code class="docutils literal notranslate"><span class="pre">dest_signing_key</span></code>, using this
+argument can affect the number of generated push items. For example,
+providing two keys would produce double the amount of push items as providing
+a single key.</p>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -129,11 +122,17 @@ Example: <a class="reference external" href="https:registry.redhat.io/ubi:8:late
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="koji.html">Source: koji</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source: registry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#registry-source-urls">registry source URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api-reference">Python API reference</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
@@ -163,6 +162,8 @@ Example: <a class="reference external" href="https:registry.redhat.io/ubi:8:late
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="koji.html" title="previous chapter">Source: koji</a></li>
+      <li>Next: <a href="errata.html" title="next chapter">Source: errata</a></li>
   </ul></li>
 </ul>
 </div>

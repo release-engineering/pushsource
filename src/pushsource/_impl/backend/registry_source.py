@@ -26,29 +26,34 @@ IMAGE_URI_REGEX = re.compile("https://([^:@]*):(.+)(([^:]:)+)*")
 
 
 class RegistrySource(Source):
-    """Uses URIs of container images as source for push items."""
+    """Uses a container image registry as a source of push items."""
 
-    def __init__(
-        self,
-        image,
-        dest=None,
-        dest_signing_key=None,
-    ):
+    def __init__(self, image, dest=None, dest_signing_key=None):
         """Create a new source.
 
         Parameters:
-            reposs str,
-                Comma separated string with destination(s) repo(s) to fill in for push
-                items created by this source. If omitted, all push items have
-                empty destinations.
+            image (str, list[str])
+                Pull spec(s) of container images, as a list or a comma-separated string.
 
-            image (list[str])
-                String with references to container images with tags+dest tags
-                Format <scheme>:<host>/<namespace>/<repo>:<tag>:<destination_tag>:<destination_tag>
-                Example: https:registry.redhat.io/ubi:8:latest:8:8.1
+                Each pull spec must include a hostname and a tag; referencing images by digest
+                is currently not supported.
 
-            signing_key (list[str])
-                GPG signing key ID(s). If provided, will be signed with those.
+                ``registry.access.redhat.com/ubi8/ubi:8.4-211`` is an example of a valid pull
+                spec.
+
+            dest (str, list[str])
+                If provided, this value will be used to populate :meth:`~pushsource.PushItem.dest`
+                on generated push items.
+
+            dest_signing_key (str, list[str])
+                If provided, this value will be used to populate
+                :meth:`~pushsource.ContainerImagePushItem.dest_signing_key` on generated
+                push items.
+
+                Note that, as each item holds only a single ``dest_signing_key``, using this
+                argument can affect the number of generated push items. For example,
+                providing two keys would produce double the amount of push items as providing
+                a single key.
         """
         self._images = ["https://%s" % x for x in list_argument(image)]
         if dest:

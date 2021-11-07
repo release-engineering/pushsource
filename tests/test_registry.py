@@ -88,9 +88,11 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     ]
 
     source = RegistrySource(
-        dest="repo1,repo2",
-        image="registry.redhat.io/odf4/mcg-operator-bundle:latest,"
-        "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
+        dest=["repo1", "repo2"],
+        image=[
+            "registry.redhat.io/odf4/mcg-operator-bundle:latest",
+            "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
+        ],
         dest_signing_key="1234abcde",
     )
     # Eagerly fetch

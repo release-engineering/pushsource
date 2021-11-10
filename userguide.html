@@ -105,9 +105,9 @@ mock:
 For detailed information, see the API reference of the associated class.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 5%" />
-<col style="width: 45%" />
-<col style="width: 20%" />
+<col style="width: 6%" />
+<col style="width: 44%" />
+<col style="width: 21%" />
 <col style="width: 30%" />
 </colgroup>
 <thead>
@@ -130,7 +130,12 @@ from a koji server</p></td>
 <td><p>Obtain RPMs, files, AMIs and other content from
 locally mounted filesystem</p></td>
 </tr>
-<tr class="row-even"><td><p>errata</p></td>
+<tr class="row-even"><td><p>registry</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">registry:registry.access.redhat.com/ubi8/ubi:latest</span></code></p></td>
+<td><p><a class="reference internal" href="sources/registry.html#pushsource.RegistrySource" title="pushsource.RegistrySource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegistrySource</span></code></a></p></td>
+<td><p>Obtain images from a container image registry</p></td>
+</tr>
+<tr class="row-odd"><td><p>errata</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234</span></code></p></td>
 <td><p><a class="reference internal" href="sources/errata.html#pushsource.ErrataSource" title="pushsource.ErrataSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrataSource</span></code></a></p></td>
 <td><p>Obtain RPMs, container images and advisory

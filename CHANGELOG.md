@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.13.1] - 2021-11-24
+
+### Fixed
+
+- Fixed a crash in `registry` source when authentication is used
+
 ## [2.13.0] - 2021-11-08
 
 ### Added
@@ -186,7 +192,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.1...HEAD
+[2.13.1]: https://github.com/release-engineering/pushsource/compare/v2.13.0...v2.13.1
 [2.13.0]: https://github.com/release-engineering/pushsource/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/release-engineering/pushsource/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/release-engineering/pushsource/compare/v2.10.3...v2.11.0

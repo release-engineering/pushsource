@@ -21,3 +21,4 @@ pyhamcrest
 sphinx
 alabaster
 pidiff
+importlib-resources

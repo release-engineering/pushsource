@@ -185,7 +185,7 @@ def get_basic_auth(host, home=None):
             config = json.load(f)
             auth = config.get("auths", {}).get(host, {}).get("auth")
             if auth:
-                return base64.b64decode(auth).decode().split(":")
+                return tuple(base64.b64decode(auth).decode().split(":"))
     return None, None
 
 

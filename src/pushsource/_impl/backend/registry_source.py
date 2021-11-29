@@ -103,7 +103,7 @@ class RegistrySource(Source):
                 self._manifests[source_uri][mtype] = manifest_details
 
             manifest_details = self._manifests[source_uri][mtype]
-            content_type, digest, _ = manifest_details
+            content_type, _, _ = manifest_details
             if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
                 raise ValueError("Unsupported manifest type:%s" % content_type)
 

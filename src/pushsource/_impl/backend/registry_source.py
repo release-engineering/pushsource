@@ -90,36 +90,44 @@ class RegistrySource(Source):
         else:
             klass = ContainerImagePushItem
 
-        if source_uri not in self._manifests:
-            manifest_details = get_manifest(
-                "%s://%s" % (schema, host),
-                repo,
-                src_tag,
-                manifest_types=[MT_S2_LIST],
-            )
-            self._manifests[source_uri] = manifest_details
+        for mtype in [MT_S2_V1, MT_S2_V2, MT_S2_LIST]:
+            if source_uri not in self._manifests:
+                self._manifests[source_uri] = {}
+            if mtype not in self._manifests[source_uri]:
+                manifest_details = get_manifest(
+                    "%s://%s" % (schema, host),
+                    repo,
+                    src_tag,
+                    manifest_types=[mtype],
+                )
+                self._manifests[source_uri][mtype] = manifest_details
 
-        manifest_details = self._manifests[source_uri]
-        content_type, _, _ = manifest_details
-        if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
-            raise ValueError("Unsupported manifest type:%s" % content_type)
+            manifest_details = self._manifests[source_uri][mtype]
+            content_type, digest, _ = manifest_details
+            if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
+                raise ValueError("Unsupported manifest type:%s" % content_type)
 
         pull_info = ContainerImagePullInfo(
             digest_specs=[
                 ContainerImageDigestPullSpec(
                     registry=host,
                     repository=repo,
-                    digest=self._inspected.get(source_uri, {}).get("digest"),
-                    media_type=content_type,
+                    digest=manifest[1],
+                    media_type=manifest[0],
                 )
+                for manifest_type, manifest in self._manifests[source_uri].items()
             ],
-            media_types=[content_type],
+            media_types=[
+                manifest[0] for manifest in self._manifests[source_uri].values()
+            ],
             tag_specs=[
                 ContainerImageTagPullSpec(
                     registry=host,
                     repository=repo,
                     tag=src_tag,
-                    media_types=[content_type],
+                    media_types=[
+                        manifest[0] for manifest in self._manifests[source_uri].values()
+                    ],
                 )
             ],
         )

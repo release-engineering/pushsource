@@ -13,11 +13,17 @@ from pushsource import (
     ContainerImagePushItem,
     SourceContainerImagePushItem,
 )
+from pushsource._impl.utils.containers import (
+    MT_S2_V1,
+    MT_S2_V1_SIGNED,
+    MT_S2_V2,
+    MT_S2_LIST,
+)
 
 
 MANIFEST_V2SCH2 = {
     "schemaVersion": 2,
-    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "mediaType": MT_S2_V2,
     "config": {
         "mediaType": "application/vnd.docker.container.image.v1+json",
         "size": 7023,
@@ -42,9 +48,25 @@ MANIFEST_V2SCH2 = {
     ],
 }
 
+MANIFEST_V1 = {
+    "schemaVersion": 1,
+    "tag": "latest",
+    "name": "odf4/mcg-operator-bundle",
+    "architecture": "amd64",
+    "fsLayers": [
+        {
+            "blobSum": "sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4"
+        },
+        {
+            "blobSum": "sha256:5eb901baf1071ec7a95a08034275fd23d9c776f2f066e18bf9c159c63a21f67a"
+        },
+    ],
+    "history": [],
+}
+
 MANIFEST_V2LIST = {
     "schemaVersion": 2,
-    "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+    "mediaType": MT_S2_LIST,
     "manifests": [
         {
             "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
@@ -72,13 +94,43 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V1,
             "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-2",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-2",
             MANIFEST_V2LIST,
         ),
     ]
@@ -126,13 +178,43 @@ def test_registry_push_items_no_signing_key(mocked_inspect, mocked_get_manifest)
 
     mocked_get_manifest.side_effect = [
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V1,
             "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-2",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-2",
             MANIFEST_V2LIST,
         ),
     ]
@@ -163,13 +245,43 @@ def test_registry_push_items_no_dest(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V1,
             "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-2",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-2",
             MANIFEST_V2LIST,
         ),
     ]
@@ -201,13 +313,43 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
 
     mocked_get_manifest.side_effect = [
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V1,
             "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-2",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-2",
             MANIFEST_V2LIST,
         ),
     ]
@@ -304,19 +446,64 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            "application/vnd.docker.distribution.manifest.v1+json",
+            MT_S2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            "application/vnd.docker.distribution.manifest.list.v2+json",
-            "test-digest-2",
+            MT_S2_V1,
+            "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            "application/vnd.docker.distribution.manifest.v2+json",
-            "test-digest-2",
+            MT_S2_V2,
+            "test-digest-1",
             MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_V1,
+            "test-digest-1",
+            MANIFEST_V1,
+        ),
+        (
+            MT_S2_V2,
+            "test-digest-1",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MT_S2_LIST,
+            "test-digest-1",
+            MANIFEST_V2LIST,
         ),
     ]
     source = Source.get(

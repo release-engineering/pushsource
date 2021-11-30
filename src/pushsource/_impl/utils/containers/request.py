@@ -29,10 +29,12 @@ except ImportError:
     from urllib import request
 
 
-MT_S2_V1 = "application/vnd.docker.distribution.manifest.v1+json"
-MT_S2_V1_SIGNED = "application/vnd.docker.distribution.manifest.v1+prettyjws"
-MT_S2_V2 = "application/vnd.docker.distribution.manifest.v2+json"
-MT_S2_LIST = "application/vnd.docker.distribution.manifest.list.v2+json"
+MEDIATYPE_SCHEMA2_V1 = "application/vnd.docker.distribution.manifest.v1+json"
+MEDIATYPE_SCHEMA2_V1_SIGNED = (
+    "application/vnd.docker.distribution.manifest.v1+prettyjws"
+)
+MEDIATYPE_SCHEMA2_V2 = "application/vnd.docker.distribution.manifest.v2+json"
+MEDIATYPE_SCHEMA2_V2_LIST = "application/vnd.docker.distribution.manifest.list.v2+json"
 
 
 class AuthToken(object):
@@ -211,7 +213,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
     token = token or AuthToken()
 
     if manifest_types is None:
-        manifest_types = [MT_S2_V1, MT_S2_V1_SIGNED]
+        manifest_types = [MEDIATYPE_SCHEMA2_V1, MEDIATYPE_SCHEMA2_V1_SIGNED]
     headers = {"Accept": ",".join(manifest_types)}
     session = Session()
     try:
@@ -225,7 +227,10 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             headers=headers,
         )
         digest = resp.headers.get("docker-content-digest", None)
-        if not digest and resp.headers.get("Content-Type") in [MT_S2_V2, MT_S2_LIST]:
+        if not digest and resp.headers.get("Content-Type") in [
+            MEDIATYPE_SCHEMA2_V2,
+            MEDIATYPE_SCHEMA2_V2_LIST,
+        ]:
             digest = _calculate_digest(resp.content, resp.json())
 
         content_type = resp.headers.get("Content-Type", None)
@@ -300,22 +305,24 @@ def inspect(registry, repo, digest, token=None):
     token = token or AuthToken()
 
     manifest_type, digest, manifest = get_manifest(
-        registry, repo, digest, manifest_types=[MT_S2_LIST], token=token
+        registry, repo, digest, manifest_types=[MEDIATYPE_SCHEMA2_V2_LIST], token=token
     )
-    if manifest_type == MT_S2_V2:
+    if manifest_type == MEDIATYPE_SCHEMA2_V2:
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
-    elif manifest_type == MT_S2_LIST:
+    elif manifest_type == MEDIATYPE_SCHEMA2_V2_LIST:
         manifest_type, _digest, manifest = get_manifest(
             registry,
             repo,
             manifest["manifests"][0]["digest"],
-            manifest_types=[MT_S2_V2],
+            manifest_types=[MEDIATYPE_SCHEMA2_V2],
             token=token,
         )
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
     else:
         inspected = {"architecture": manifest["architecture"], "labels": {}}
-    if manifest_type == MT_S2_V2 and not inspected.get("config", {}).get("Labels"):
+    if manifest_type == MEDIATYPE_SCHEMA2_V2 and not inspected.get("config", {}).get(
+        "Labels"
+    ):
         inspected["source"] = True
     inspected["digest"] = digest
     return inspected

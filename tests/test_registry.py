@@ -14,16 +14,16 @@ from pushsource import (
     SourceContainerImagePushItem,
 )
 from pushsource._impl.utils.containers import (
-    MT_S2_V1,
-    MT_S2_V1_SIGNED,
-    MT_S2_V2,
-    MT_S2_LIST,
+    MEDIATYPE_SCHEMA2_V1,
+    MEDIATYPE_SCHEMA2_V1_SIGNED,
+    MEDIATYPE_SCHEMA2_V2,
+    MEDIATYPE_SCHEMA2_V2_LIST,
 )
 
 
 MANIFEST_V2SCH2 = {
     "schemaVersion": 2,
-    "mediaType": MT_S2_V2,
+    "mediaType": MEDIATYPE_SCHEMA2_V2,
     "config": {
         "mediaType": "application/vnd.docker.container.image.v1+json",
         "size": 7023,
@@ -66,7 +66,7 @@ MANIFEST_V1 = {
 
 MANIFEST_V2LIST = {
     "schemaVersion": 2,
-    "mediaType": MT_S2_LIST,
+    "mediaType": MEDIATYPE_SCHEMA2_V2_LIST,
     "manifests": [
         {
             "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
@@ -94,42 +94,42 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-2",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-2",
             MANIFEST_V2LIST,
         ),
@@ -178,42 +178,42 @@ def test_registry_push_items_no_signing_key(mocked_inspect, mocked_get_manifest)
 
     mocked_get_manifest.side_effect = [
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-2",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-2",
             MANIFEST_V2LIST,
         ),
@@ -245,42 +245,42 @@ def test_registry_push_items_no_dest(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-2",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-2",
             MANIFEST_V2LIST,
         ),
@@ -313,42 +313,42 @@ def test_registry_push_items_multiple_signing_keys(mocked_inspect, mocked_get_ma
 
     mocked_get_manifest.side_effect = [
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-2",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-2",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-2",
             MANIFEST_V2LIST,
         ),
@@ -436,7 +436,57 @@ def test_registry_push_items_invalid(mocked_inspect, mocked_get_manifest):
     with raises(ValueError) as exc_info:
         with source:
             items = list(source)
-    assert str(exc_info.value) == "Unsupported manifest type:application/json"
+    assert str(exc_info.value) == "Unsupported manifest type: application/json"
+
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items_tolerate_text_plain(mocked_inspect, mocked_get_manifest):
+    """Registry source raises value error due to invalid push items"""
+
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-1", "config": {"labels": {"architecture": "amd64"}}},
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
+
+    mocked_get_manifest.side_effect = [
+        (
+            "text/plain",
+            "test-digest-1-1",
+            MANIFEST_V1,
+        ),
+        (
+            MEDIATYPE_SCHEMA2_V2,
+            "test-digest-1-2",
+            MANIFEST_V2SCH2,
+        ),
+        (
+            MEDIATYPE_SCHEMA2_V2_LIST,
+            "test-digest-1-3",
+            MANIFEST_V2LIST,
+        ),
+    ]
+    source = RegistrySource(
+        dest="pulp",
+        image="registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        dest_signing_key="1234abcde",
+    )
+    # Eagerly fetch
+    with source:
+        items = list(source)
+    assert len(items) == 1
+    assert items[0].name == "registry.redhat.io/odf4/mcg-operator-bundle:latest", items[
+        0
+    ].name
+    assert items[0].src == "registry.redhat.io/odf4/mcg-operator-bundle:latest"
+    assert items[0].dest_signing_key == "1234abcde"
+    assert items[0].source_tags == ["latest"]
+    assert items[0].dest == ["pulp"]
+    assert [x.media_type for x in items[0].pull_info.digest_specs] == [
+        MEDIATYPE_SCHEMA2_V2_LIST,
+        MEDIATYPE_SCHEMA2_V2,
+        MEDIATYPE_SCHEMA2_V1,
+    ]
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
@@ -446,62 +496,62 @@ def test_source_get(mocked_inspect, mocked_get_manifest):
 
     mocked_get_manifest.side_effect = [
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_V1,
+            MEDIATYPE_SCHEMA2_V1,
             "test-digest-1",
             MANIFEST_V1,
         ),
         (
-            MT_S2_V2,
+            MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",
             MANIFEST_V2SCH2,
         ),
         (
-            MT_S2_LIST,
+            MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
             MANIFEST_V2LIST,
         ),

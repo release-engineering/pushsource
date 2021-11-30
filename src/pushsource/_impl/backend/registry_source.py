@@ -12,10 +12,10 @@ from ..model import (
 from ..utils.containers import (
     get_manifest,
     inspect,
-    MT_S2_V2,
-    MT_S2_V1,
-    MT_S2_V1_SIGNED,
-    MT_S2_LIST,
+    MEDIATYPE_SCHEMA2_V2,
+    MEDIATYPE_SCHEMA2_V1,
+    MEDIATYPE_SCHEMA2_V1_SIGNED,
+    MEDIATYPE_SCHEMA2_V2_LIST,
 )
 
 from ..helpers import list_argument
@@ -90,7 +90,11 @@ class RegistrySource(Source):
         else:
             klass = ContainerImagePushItem
 
-        for mtype in [MT_S2_V1, MT_S2_V2, MT_S2_LIST]:
+        for mtype in [
+            MEDIATYPE_SCHEMA2_V1,
+            MEDIATYPE_SCHEMA2_V2,
+            MEDIATYPE_SCHEMA2_V2_LIST,
+        ]:
             if source_uri not in self._manifests:
                 self._manifests[source_uri] = {}
             if mtype not in self._manifests[source_uri]:
@@ -104,8 +108,15 @@ class RegistrySource(Source):
 
             manifest_details = self._manifests[source_uri][mtype]
             content_type, _, _ = manifest_details
-            if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
-                raise ValueError("Unsupported manifest type:%s" % content_type)
+            # tolerate text/plain as MEDIATYPE_SCHEMA2_V1 (due to wrong configuration in CDN)
+            if content_type not in [
+                MEDIATYPE_SCHEMA2_V2,
+                MEDIATYPE_SCHEMA2_V1,
+                MEDIATYPE_SCHEMA2_V1_SIGNED,
+                MEDIATYPE_SCHEMA2_V2_LIST,
+                "text/plain",
+            ]:
+                raise ValueError("Unsupported manifest type: %s" % content_type)
 
         pull_info = ContainerImagePullInfo(
             digest_specs=[
@@ -113,9 +124,10 @@ class RegistrySource(Source):
                     registry=host,
                     repository=repo,
                     digest=manifest[1],
-                    media_type=manifest[0],
+                    # replace text/plain with correct value
+                    media_type=manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1),
                 )
-                for manifest_type, manifest in self._manifests[source_uri].items()
+                for manifest in self._manifests[source_uri].values()
             ],
             media_types=[
                 manifest[0] for manifest in self._manifests[source_uri].values()
@@ -126,7 +138,8 @@ class RegistrySource(Source):
                     repository=repo,
                     tag=src_tag,
                     media_types=[
-                        manifest[0] for manifest in self._manifests[source_uri].values()
+                        manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                        for manifest in self._manifests[source_uri].values()
                     ],
                 )
             ],

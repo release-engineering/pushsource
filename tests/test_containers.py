@@ -28,10 +28,10 @@ from pushsource._impl.utils.containers import (
     api_version_check,
     get_manifest,
     inspect,
-    MT_S2_V1,
-    MT_S2_V1_SIGNED,
-    MT_S2_V2,
-    MT_S2_LIST,
+    MEDIATYPE_SCHEMA2_V1,
+    MEDIATYPE_SCHEMA2_V1_SIGNED,
+    MEDIATYPE_SCHEMA2_V2,
+    MEDIATYPE_SCHEMA2_V2_LIST,
 )
 
 from pushsource._impl.utils.containers.request import (
@@ -289,10 +289,20 @@ def test_get_manifest(requests_mock, fake_home):
 @pytest.mark.parametrize(
     "expected_manifest,manifest_type,accept_types, default_should_raise",
     [
-        ({"dummy": "manifest v1"}, MT_S2_V1, [MT_S2_V1, MT_S2_V1_SIGNED], False),
-        ({"dummy": "manifest v1"}, MT_S2_V1, [], False),
-        ({"dummy": "manifest v2"}, MT_S2_V2, [MT_S2_V2], True),
-        ({"dummy": "manifest list"}, MT_S2_LIST, [MT_S2_LIST], True),
+        (
+            {"dummy": "manifest v1"},
+            MEDIATYPE_SCHEMA2_V1,
+            [MEDIATYPE_SCHEMA2_V1, MEDIATYPE_SCHEMA2_V1_SIGNED],
+            False,
+        ),
+        ({"dummy": "manifest v1"}, MEDIATYPE_SCHEMA2_V1, [], False),
+        ({"dummy": "manifest v2"}, MEDIATYPE_SCHEMA2_V2, [MEDIATYPE_SCHEMA2_V2], True),
+        (
+            {"dummy": "manifest list"},
+            MEDIATYPE_SCHEMA2_V2_LIST,
+            [MEDIATYPE_SCHEMA2_V2_LIST],
+            True,
+        ),
     ],
 )
 def test_get_manifest_default(

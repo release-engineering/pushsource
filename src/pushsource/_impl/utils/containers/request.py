@@ -197,8 +197,8 @@ def _calculate_digest(raw_manifest, manifest):
     if "signatures" in manifest:
         protected = manifest["signatures"][0]["protected"]
         paddings = {0: "", 2: "==", 3: "="}
-        protected = +paddings[len(protected) % 4]
-        unprotected = json.loads(base64.b64decode(unprotected))
+        protected += paddings[len(protected) % 4]
+        unprotected = json.loads(base64.b64decode(protected))
         signed_length = unprotected["formatLength"]
         signed_tail = base64.b64decode(
             unprotected["formatTail"] + paddings[len(unprotected["formatTail"]) % 4]
@@ -227,10 +227,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             headers=headers,
         )
         digest = resp.headers.get("docker-content-digest", None)
-        if not digest and resp.headers.get("Content-Type") in [
-            MEDIATYPE_SCHEMA2_V2,
-            MEDIATYPE_SCHEMA2_V2_LIST,
-        ]:
+        if not digest:
             digest = _calculate_digest(resp.content, resp.json())
 
         content_type = resp.headers.get("Content-Type", None)

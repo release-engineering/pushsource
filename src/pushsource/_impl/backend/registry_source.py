@@ -12,10 +12,10 @@ from ..model import (
 from ..utils.containers import (
     get_manifest,
     inspect,
-    MT_S2_V2,
-    MT_S2_V1,
-    MT_S2_V1_SIGNED,
-    MT_S2_LIST,
+    MEDIATYPE_SCHEMA2_V2,
+    MEDIATYPE_SCHEMA2_V1,
+    MEDIATYPE_SCHEMA2_V1_SIGNED,
+    MEDIATYPE_SCHEMA2_V2_LIST,
 )
 
 from ..helpers import list_argument
@@ -90,36 +90,58 @@ class RegistrySource(Source):
         else:
             klass = ContainerImagePushItem
 
-        if source_uri not in self._manifests:
-            manifest_details = get_manifest(
-                "%s://%s" % (schema, host),
-                repo,
-                src_tag,
-                manifest_types=[MT_S2_LIST],
-            )
-            self._manifests[source_uri] = manifest_details
+        for mtype in [
+            MEDIATYPE_SCHEMA2_V1,
+            MEDIATYPE_SCHEMA2_V2,
+            MEDIATYPE_SCHEMA2_V2_LIST,
+        ]:
+            if source_uri not in self._manifests:
+                self._manifests[source_uri] = {}
+            if mtype not in self._manifests[source_uri]:
+                manifest_details = get_manifest(
+                    "%s://%s" % (schema, host),
+                    repo,
+                    src_tag,
+                    manifest_types=[mtype],
+                )
+                self._manifests[source_uri][mtype] = manifest_details
 
-        manifest_details = self._manifests[source_uri]
-        content_type, _, _ = manifest_details
-        if content_type not in [MT_S2_V2, MT_S2_V1, MT_S2_V1_SIGNED, MT_S2_LIST]:
-            raise ValueError("Unsupported manifest type:%s" % content_type)
+            manifest_details = self._manifests[source_uri][mtype]
+            content_type, _, _ = manifest_details
+            # tolerate text/plain as MEDIATYPE_SCHEMA2_V1 (due to wrong configuration in CDN)
+            if content_type not in [
+                MEDIATYPE_SCHEMA2_V2,
+                MEDIATYPE_SCHEMA2_V1,
+                MEDIATYPE_SCHEMA2_V1_SIGNED,
+                MEDIATYPE_SCHEMA2_V2_LIST,
+                "text/plain",
+            ]:
+                raise ValueError("Unsupported manifest type: %s" % content_type)
 
         pull_info = ContainerImagePullInfo(
             digest_specs=[
                 ContainerImageDigestPullSpec(
                     registry=host,
                     repository=repo,
-                    digest=self._inspected.get(source_uri, {}).get("digest"),
-                    media_type=content_type,
+                    digest=manifest[1],
+                    # replace text/plain with correct value
+                    media_type=manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1),
                 )
+                for manifest in self._manifests[source_uri].values()
             ],
-            media_types=[content_type],
+            media_types=[
+                manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                for manifest in self._manifests[source_uri].values()
+            ],
             tag_specs=[
                 ContainerImageTagPullSpec(
                     registry=host,
                     repository=repo,
                     tag=src_tag,
-                    media_types=[content_type],
+                    media_types=[
+                        manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                        for manifest in self._manifests[source_uri].values()
+                    ],
                 )
             ],
         )

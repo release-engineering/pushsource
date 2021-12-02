@@ -130,7 +130,8 @@ class RegistrySource(Source):
                 for manifest in self._manifests[source_uri].values()
             ],
             media_types=[
-                manifest[0] for manifest in self._manifests[source_uri].values()
+                manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                for manifest in self._manifests[source_uri].values()
             ],
             tag_specs=[
                 ContainerImageTagPullSpec(

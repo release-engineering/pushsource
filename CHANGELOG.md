@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.13.2] - 2021-12-03
+
+### Fixed
+
+- Ensure that `registry` source produces manifest pull specs for all manifest types
+
 ## [2.13.1] - 2021-11-24
 
 ### Fixed
@@ -192,7 +198,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.1...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.2...HEAD
+[2.13.2]: https://github.com/release-engineering/pushsource/compare/v2.13.1...v2.13.2
 [2.13.1]: https://github.com/release-engineering/pushsource/compare/v2.13.0...v2.13.1
 [2.13.0]: https://github.com/release-engineering/pushsource/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/release-engineering/pushsource/compare/v2.11.0...v2.12.0

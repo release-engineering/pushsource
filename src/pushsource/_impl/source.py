@@ -179,7 +179,13 @@ class Source(object):
 
         sig = getfullargspec(klass)
 
-        if "url" in sig.args and parsed.path is not query:
+        # We need to know whether the source backend accepts a 'url' argument,
+        # in which case the next block should kick in. If the backend is a partial
+        # created by us, this info may be available in __pushsource_accepts_url.
+        # See commentary a bit later where this is set.
+        accepts_url = getattr(klass, "__pushsource_accepts_url", "url" in sig.args)
+
+        if accepts_url and parsed.path is not query:
             # If the source accepts a url argument, then the 'path' part
             # of the URL we were provided is itself required to be a URL.
             #
@@ -205,6 +211,18 @@ class Source(object):
             kwargs = url_kwargs.copy()
             kwargs.update(inner_kwargs)
             return SourceWrapper._maybe_wrap(klass(*inner_args, **kwargs))
+
+        # If the source accepts a 'url' argument, that affects how source
+        # URLs are parsed, as described in the "Implementing a backend"
+        # docs. This must be carried through when partially binding a source.
+        # Stash it in this attribute which we can read back later.
+        #
+        # TODO: please drop this when python2 goes away.
+        # In modern versions of python, functools.wraps already propagates
+        # the signature of the wrapped function, so it is likely possible
+        # to drop this and slightly change above code to use inspect.signature,
+        # then it will "just work".
+        setattr(partial_source, "__pushsource_accepts_url", accepts_url)
 
         return partial_source
 

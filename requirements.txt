@@ -14,17 +14,17 @@ certifi==2021.10.8 \
     --hash=sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872 \
     --hash=sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569
     # via requests
-charset-normalizer==2.0.8 \
-    --hash=sha256:735e240d9a8506778cd7a453d97e817e536bb1fc29f4f6961ce297b9c7a917b0 \
-    --hash=sha256:83fcdeb225499d6344c8f7f34684c2981270beacc32ede2e669e94f7fa544405
+charset-normalizer==2.0.9 \
+    --hash=sha256:1eecaa09422db5be9e29d7fc65664e6c33bd06f9ced7838578ba40d58bdf3721 \
+    --hash=sha256:b0b883e8e874edfdece9c28f314e3dd5badf067342e42fb162203335ae61aa2c
     # via requests
 decorator==5.1.0 \
     --hash=sha256:7b12e7c3c6ab203a29e157335e9122cb03de9ab7264b137594103fd4a683b374 \
     --hash=sha256:e59913af105b9860aa2c8d3272d9de5a56a4e608db9a2f167a8480b323d529a7
     # via gssapi
-frozendict==2.1.0 ; python_version >= "3.6" \
-    --hash=sha256:0189168749ddea8601afd648146c502533f93ae33840eb76cd71f694742623cd \
-    --hash=sha256:1c0de90a47fcfb9abf18458cb82573e817455e45f9e6a250f8988e6725f3973a
+frozendict==2.1.1 ; python_version >= "3.6" \
+    --hash=sha256:655b879217dd445a2023e16154cc231febef802b5c812d5c2e822280ad69e1dc \
+    --hash=sha256:bbad8ef1a428f5e6f7e195742fd739f56a5a602f9cf9bbe86f55a4848b1fabd6
     # via -r requirements.in
 frozenlist2==1.0.0 \
     --hash=sha256:33f6c6bb2c7d38524ec3c2d6f2d8a3ee2625a9e13096d8bc64db012b516a95e0 \

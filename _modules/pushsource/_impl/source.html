@@ -212,7 +212,13 @@
 
         <span class="n">sig</span> <span class="o">=</span> <span class="n">getfullargspec</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;url&quot;</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">args</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
+        <span class="c1"># We need to know whether the source backend accepts a &#39;url&#39; argument,</span>
+        <span class="c1"># in which case the next block should kick in. If the backend is a partial</span>
+        <span class="c1"># created by us, this info may be available in __pushsource_accepts_url.</span>
+        <span class="c1"># See commentary a bit later where this is set.</span>
+        <span class="n">accepts_url</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="s2">&quot;__pushsource_accepts_url&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">accepts_url</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
             <span class="c1"># If the source accepts a url argument, then the &#39;path&#39; part</span>
             <span class="c1"># of the URL we were provided is itself required to be a URL.</span>
             <span class="c1">#</span>
@@ -238,6 +244,18 @@
             <span class="n">kwargs</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">SourceWrapper</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+        <span class="c1"># If the source accepts a &#39;url&#39; argument, that affects how source</span>
+        <span class="c1"># URLs are parsed, as described in the &quot;Implementing a backend&quot;</span>
+        <span class="c1"># docs. This must be carried through when partially binding a source.</span>
+        <span class="c1"># Stash it in this attribute which we can read back later.</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: please drop this when python2 goes away.</span>
+        <span class="c1"># In modern versions of python, functools.wraps already propagates</span>
+        <span class="c1"># the signature of the wrapped function, so it is likely possible</span>
+        <span class="c1"># to drop this and slightly change above code to use inspect.signature,</span>
+        <span class="c1"># then it will &quot;just work&quot;.</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">partial_source</span><span class="p">,</span> <span class="s2">&quot;__pushsource_accepts_url&quot;</span><span class="p">,</span> <span class="n">accepts_url</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">partial_source</span></div>
 

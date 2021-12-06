@@ -1,0 +1,1730 @@
+advisory_id: RHEA-2020:0346-no-cdn-list
+
+# The empty cdn_file_list here should prevent files from being pushed for this advisory.
+cdn_file_list: {}
+
+cdn_metadata:
+  description: 'This enhancement update adds the postgresql:12 module stream to Red
+    Hat Enterprise Linux 8. (BZ#1721822)
+
+
+    For detailed information on changes in this release, see the Red Hat Enterprise
+    Linux 8.1 Release Notes linked from the References section.'
+  from: release-engineering@redhat.com
+  id: RHEA-2020:0346
+  issued: 2020-02-04 11:39:34 UTC
+  pkglist:
+  - module:
+      arch: aarch64
+      context: e4e244f9
+      name: postgresql
+      stream: '12'
+      version: '8010120191120141335'
+    name: RHEA-2020:0346-postgresql-12-e4e244f9-aarch64
+    packages:
+    - arch: aarch64
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - dfcd6779c025383d84e25587ef733763
+      - sha256
+      - 81e504854497ce409f471a609cc948887bafb50650babc9bbd1118c2126318f3
+      version: 1.4.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6a0f7de0e5ed106b17ad3ffa3a83b3e5
+      - sha256
+      - bd589afc4cb037ecfa1fb9072b63434df9bf30fde33458408ac978d5278acc63
+      version: 1.4.0
+    - arch: aarch64
+      epoch: '0'
+      filename: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: pgaudit-debuginfo
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 516a521e06c30efdaba383e0d651ca7f
+      - sha256
+      - c9368c8aad8576d5ecd0b7da86cec5c77757a104d04514031cf3c431dd8ce75a
+      version: 1.4.0
+    - arch: aarch64
+      epoch: '0'
+      filename: pgaudit-debugsource-1.4.0-4.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: pgaudit-debugsource
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - fd17e584d7463e115ec03a49abd64cb1
+      - sha256
+      - 13330f28ff81134f512a78ad4a7286e55261d805633d6c9dd37544ea2ac1ba13
+      version: 1.4.0
+    - arch: aarch64
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 50b94927906433364119d1b05f2d9cb4
+      - sha256
+      - 3cf3dcb5205a16c457e418cbaf8f75b954028c75c60e744b5b65f80a0112a532
+      version: 0.10.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3cdcb07f12b009485784132dcc4c6cb3
+      - sha256
+      - 901e1c31b0ca06834f285755474fdf59cba378877aadbec64bddeaf8d206198a
+      version: 0.10.0
+    - arch: aarch64
+      epoch: '0'
+      filename: postgres-decoderbufs-debuginfo-0.10.0-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgres-decoderbufs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3ffe86357e5ee67cd053a344d5b3f242
+      - sha256
+      - 295da0cd6b2c1e4b23cba5b862820b35aaca9189f26ad4914a9b015521e006de
+      version: 0.10.0
+    - arch: aarch64
+      epoch: '0'
+      filename: postgres-decoderbufs-debugsource-0.10.0-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgres-decoderbufs-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - dfe66901fc7827c92ca51b25e491fa6c
+      - sha256
+      - f36952d162d1f0c729ad54fd11d83e40998a331e632261c83f9f0c20386dc513
+      version: 0.10.0
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 806697661f6c2e637fe750db06e87391
+      - sha256
+      - 8491434877d7007d1fe42a70a8a69e48eed8c25729a4a69ce3b70d5483475729
+      version: '12.1'
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 348370e47b0071c3e743139f54026c88
+      - sha256
+      - e8ac095700aa8837c13bcd6302d7c2fe03dd06e808f3102980e962a86febe0da
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-contrib-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-contrib
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 336137fade538db9436f724bb43c4eb2
+      - sha256
+      - 8081fd3cdf1ca80c8623bdc857c9ea0728257f3a1eb795dfb6e8b68d244fd819
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-contrib-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-contrib-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6d6e9fd4cf92b53b8f5c1427a79a3deb
+      - sha256
+      - 2a388ce08c20793a434c56528fa912482e4ad843259a2670f3dd2bdb68778110
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - cd0218382d18944388a041496536f1e2
+      - sha256
+      - fb5dc5c13d7659853c9db009ff2e037d61d0006e249314a86ac5b660a53db17d
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-debugsource-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 90ca360cdb0f06b1e8bcfcefdd8393b3
+      - sha256
+      - b2c118604736de071ed035d0cf0f1cbe08d31d4b4b452e796d554ef60f5f0d10
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-docs-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-docs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 5af9fc64d70fd74230f95128b219c6e0
+      - sha256
+      - b3b2b32326b0c43e276aaa267f0b26b0ac7d7a852631330435927a408f0a84b4
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-docs-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-docs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - ba3fb4691e1819c33920372a61a2498d
+      - sha256
+      - 5c02c6be0d28f33849b1055c92d43f37d86fb5a64da9915228260cc7f338224b
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-plperl-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-plperl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 71a03635fe9fc1df6e7bfc6a1b9d9daa
+      - sha256
+      - e4ab8157d4263e9b3140b8faa4dcb3706bbc82bea2a2a1da20bfaeda6a12134c
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-plperl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-plperl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - fbb1c12c2514647fa2443b6546b9539d
+      - sha256
+      - e199966ced4ac234bb3f78f290f39f9e481ef185913da6607fa87376e9c34e7c
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-plpython3-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-plpython3
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 134d80859433b3aa8773872682c914d6
+      - sha256
+      - bbf4eff7c53112bee0806b59a3f2a8f0bf87cb85bab8f0321943cb179344fdce
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-plpython3-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-plpython3-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - de1ec2e72439ed7593e1036c7f07bf1a
+      - sha256
+      - 216a95ddb148842b271da86ef209150d98ff31cc691cf5014c539a2d7d6fdfa9
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-pltcl-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-pltcl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 02028497686ff5df1851dd30c20faae9
+      - sha256
+      - 7298f49cf31ded25e2ac9cd9c7082593c4a63ca5266cb58e241d2fd048ceae53
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-pltcl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-pltcl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6e389121708cadb6ab1a1fc2ccc13082
+      - sha256
+      - 4850e77dd02fe6a1a7921bc10a9c73c18681cb31c4033c91640e14d9989ef35a
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-server-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-server
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - e8e2b590e235cb11fc510c6508e8f4c4
+      - sha256
+      - 1c6696ce43ab5bfb2989c2e737e8731690bcd14589e3d2fa2fb273e0f62c6904
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-server-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-server-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 53f230c53d586a5cd4a8e888cd531167
+      - sha256
+      - 9ebae7cd8d2f5d18c5f7a880ac25639b2ae9c31a6899962217be4b2cbe9699f7
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-server-devel-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-server-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - da1ccf39b190777c67209b04476d11d9
+      - sha256
+      - 792c26b831978fb8c03b71da76c32c6c25aa60514a447cdb3f66de8fab989ed2
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-server-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-server-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 296028f3ab61e6f144bed7e6c699d8b0
+      - sha256
+      - a9e6926d738fe3c681b312d123eb05816871d0be335a25cfbfb2b866e7c08569
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-static-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-static
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3cc4742fb948619d813142e0dee12f0f
+      - sha256
+      - 88c38376b8f0bc435ced36ed64405214a51bdb7358d24db06f2daaa1ffef1f5f
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-test-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-test
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 25034c0aa4736c853a23b148bbd8ab7c
+      - sha256
+      - 1d6ae11466e16570818f3b3567cb0140434cdb8f66d55d2025da4dc96a4b56e0
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-test-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-test-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 8950a9b5fc011f30fc8a5275d55ba8ec
+      - sha256
+      - ba0d7605a572588330863227db2b4afe27a8ddf50b50c57e64c104fbc473d372
+      version: '12.1'
+    - arch: noarch
+      epoch: '0'
+      filename: postgresql-test-rpm-macros-12.1-2.module+el8.1.1+4794+c82b6e09.noarch.rpm
+      name: postgresql-test-rpm-macros
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - aa25002f8cce891275026a24a810e9f6
+      - sha256
+      - 2cc52e7b8865e365811a6158e1f223939a5c1d705ac3525e25aa75ae2482d5ed
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-upgrade-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-upgrade
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 72e6f726485fc5164850d587c46cee72
+      - sha256
+      - 88da32a1efab708554ff27471540105f2e9310f8cabb37cd50ee17b549f56502
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-upgrade-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-upgrade-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - a23aba1cb64556f1c017d048cd394151
+      - sha256
+      - 6bf2cd3c43beffa7907a69ffd5cecf8ba81788df3d570bb2b03e3740e1e5fb40
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-upgrade-devel-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-upgrade-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d2755c8655e25b47e8df2109b6554d9d
+      - sha256
+      - 4e0ae134ac4db56e187c2dd61be72e020be93368ed526785ebae145a723884f0
+      version: '12.1'
+    - arch: aarch64
+      epoch: '0'
+      filename: postgresql-upgrade-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.aarch64.rpm
+      name: postgresql-upgrade-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7dc145d07868f4953f2ab1ff849f6493
+      - sha256
+      - a3fa10af9af971932c317cc6c7001df0b54721be13c10d670f5c81d97d3b3dd7
+      version: '12.1'
+    short: ''
+  - module:
+      arch: ppc64le
+      context: e4e244f9
+      name: postgresql
+      stream: '12'
+      version: '8010120191120141335'
+    name: RHEA-2020:0346-postgresql-12-e4e244f9-ppc64le
+    packages:
+    - arch: ppc64le
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - f7bd57615646d8c1002cd85364c53631
+      - sha256
+      - 89a27384f0ba15a8d3782b91ecfb725ec5d1274101a217b5c72da80cef1371da
+      version: 1.4.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6a0f7de0e5ed106b17ad3ffa3a83b3e5
+      - sha256
+      - bd589afc4cb037ecfa1fb9072b63434df9bf30fde33458408ac978d5278acc63
+      version: 1.4.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: pgaudit-debuginfo
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 5f90ed0acb158f3176bfc65c9a7c11f9
+      - sha256
+      - 6ab08bacb9b10b1196dcf968ab9761846ad87f9912901ee8993d311943f92471
+      version: 1.4.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: pgaudit-debugsource-1.4.0-4.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: pgaudit-debugsource
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 97ed762620198b7a15aa0b9742a09304
+      - sha256
+      - 4d76e7409327219f61e8f8e6d2df79aee84c554a81ddd969d633f451f4050051
+      version: 1.4.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 60242338a49daec130502bdbeb219880
+      - sha256
+      - e8c232f2950a10d8409bb870632ead42963afba610f70672909c87dc49fb37c6
+      version: 0.10.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3cdcb07f12b009485784132dcc4c6cb3
+      - sha256
+      - 901e1c31b0ca06834f285755474fdf59cba378877aadbec64bddeaf8d206198a
+      version: 0.10.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgres-decoderbufs-debuginfo-0.10.0-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgres-decoderbufs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3f72170382f47d5578ab26d1c3784499
+      - sha256
+      - 707f7f9dd54605d906ea4b6b076543348413060b2130b5690f091db1c78b9b5b
+      version: 0.10.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgres-decoderbufs-debugsource-0.10.0-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgres-decoderbufs-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d2252a1f5cde38b68f7ccebf15d71718
+      - sha256
+      - a9183849783f0dd2f0d2b7e900cfee188cdca1385c04d87b668f5e1bfbb5c387
+      version: 0.10.0
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d23c1275160987ac06b84a0542d39023
+      - sha256
+      - ce3c5d5947e924cb9e0d189b3ff7cffb06bb3fbe717bbbf2beac76428000d028
+      version: '12.1'
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 348370e47b0071c3e743139f54026c88
+      - sha256
+      - e8ac095700aa8837c13bcd6302d7c2fe03dd06e808f3102980e962a86febe0da
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-contrib-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-contrib
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - efd2de4e5c17c7968db3de68ae3c8033
+      - sha256
+      - 27c72ffe33c586a2cbb7a055cb859e0daeebf81ab62cc34f2a3a9a361fe05b0c
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-contrib-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-contrib-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6790eb829b09928aee83c279d6dc81f5
+      - sha256
+      - db878b0334e568a98f3ab64d4b330a5955f9ab8cbc3906283792fabe2c7bd98b
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 0abead335b26a935dfc7fcfa80699c6b
+      - sha256
+      - 8618aa2796d2bbcf90075f7af2f9f023203275c29377f7c4655784628046e26b
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-debugsource-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - ec6959b2f328f8646a99b6a738fbfa00
+      - sha256
+      - 661496d328b935ff378555eba6c04fa1f0fe8e5fa5998cdbc36cd3a426331e15
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-docs-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-docs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 1762c0d22ff6d78e71ebdba47edef016
+      - sha256
+      - 97cb239f898f01e03749c56dc1b977fddd731f0b9eed45438e15972b04db847d
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-docs-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-docs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d4e3afa774055abbe2a35fd739ba2ae2
+      - sha256
+      - d147367b66ea720354d65ceddcf5fc8e5f3e6b57b096053d15e718034aabeb83
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-plperl-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-plperl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d1d97d6ab9c952af353a10f946b9a6e9
+      - sha256
+      - 6f68664c052134ee22b1282a71e02ddcf396eb7c69c7c73944194747a005bd0f
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-plperl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-plperl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 681b407b6659afc9fcde4d9e3935ccc8
+      - sha256
+      - b5f67775acde7a41a7d9309d30e7ec81d2069c89fcae4a67a0adb530bd8eaa4d
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-plpython3-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-plpython3
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - c6a9be900d6a8c5588e5cf4fbe066303
+      - sha256
+      - 74d3634f0244c6cb7177c4c776698fe4e8d537dbc9677bdf11e6c8f702b83166
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-plpython3-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-plpython3-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - ecc95544ba55a47793406459a535cafd
+      - sha256
+      - 262c0034739a8d6d04b163843e1c8a78ba74457b52d4156e82a8e407dbf1fb12
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-pltcl-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-pltcl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 8fc94529ab1f5dec876dbea9c1f18456
+      - sha256
+      - 2161ce126189efa987379100ebb7b6581af8b17db368cf3db4b6fca81e8e7653
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-pltcl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-pltcl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 22f8f57e6308fc3f4594a32815a659a1
+      - sha256
+      - c6070636ec9bbaf56730bdcc7390a26dfac7b7762383fa03df407d1937bdd635
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-server-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-server
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 5bbb76227974d72e9387fd583a539e35
+      - sha256
+      - 86cef78557b544cb4f5d9c1da8487d18c80ceb731a2f39b1f05d3acf24ae7f12
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-server-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-server-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - abc5b96619357d039a14eb887fcc8ed1
+      - sha256
+      - d64d8278d77f6b24c5254ac3dfd927b822ffaf41caf82d97d15c759b1ec11592
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-server-devel-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-server-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6b34811f1ed4b7fa8c6e121543efc3c7
+      - sha256
+      - d161edc6ec7c11442e6095947a6241d57d15bca906c6f4006ab71b3f2be878fb
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-server-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-server-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 2aeb262e432a325d0a1c545264b8673f
+      - sha256
+      - e87edff06e7739d6e78e1eab3606f9b5e2a722c1e8f7205831ae3dc164928a30
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-static-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-static
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 9a21a331a040dc0ab2fa8c30a2ca47a9
+      - sha256
+      - 92d132ee29e035791f3de0142bbc3285f9351f62bb37c28fe20fe43d797c2c13
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-test-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-test
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 4c5952fd621d75ab7d053d17ee89a067
+      - sha256
+      - 8675ba5cd6f84934f6b81a38f036338b3965e54b03ba2b70b4ea81bb57cd8ef8
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-test-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-test-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 867a8b4561e67b616b582a862566d40f
+      - sha256
+      - 959c06444111c3936614b8efb94f915b260f2d04e34d1e990c7feb4e0dce271d
+      version: '12.1'
+    - arch: noarch
+      epoch: '0'
+      filename: postgresql-test-rpm-macros-12.1-2.module+el8.1.1+4794+c82b6e09.noarch.rpm
+      name: postgresql-test-rpm-macros
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - aa25002f8cce891275026a24a810e9f6
+      - sha256
+      - 2cc52e7b8865e365811a6158e1f223939a5c1d705ac3525e25aa75ae2482d5ed
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-upgrade-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-upgrade
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - f5887adb9f93ca005d71d6aab4707f8a
+      - sha256
+      - 456e014e9635d78705d3ef63bbca35cb49be6733de27daa4698e092c16d88ac3
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-upgrade-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-upgrade-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 796181d2af9d6d9ee0462ed29c0e99b4
+      - sha256
+      - d922abaf830b2d2703bbf20427b7ab53cf40d8d5d81f13411cafac8755cfcb45
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-upgrade-devel-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-upgrade-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 41b544231521b6fa737316cc43eaf49d
+      - sha256
+      - 0656d656effbf455ad12ea21d4e65cc7995eaa6aa7d29bc261917eed2485bd6a
+      version: '12.1'
+    - arch: ppc64le
+      epoch: '0'
+      filename: postgresql-upgrade-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.ppc64le.rpm
+      name: postgresql-upgrade-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - c4d6c1ceef9573b6cb63599cb914ceec
+      - sha256
+      - edf28bcc62f0dfdaa749b7e03f59e83200ef6598cab903dee617c3e437675d0e
+      version: '12.1'
+    short: ''
+  - module:
+      arch: s390x
+      context: e4e244f9
+      name: postgresql
+      stream: '12'
+      version: '8010120191120141335'
+    name: RHEA-2020:0346-postgresql-12-e4e244f9-s390x
+    packages:
+    - arch: s390x
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 59346c96bc1ede4b92fcd70147cdf87b
+      - sha256
+      - 08858fcbbcd840d6dfcba06d190aba7f0f528520b75111e1360bca4afa292779
+      version: 1.4.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6a0f7de0e5ed106b17ad3ffa3a83b3e5
+      - sha256
+      - bd589afc4cb037ecfa1fb9072b63434df9bf30fde33458408ac978d5278acc63
+      version: 1.4.0
+    - arch: s390x
+      epoch: '0'
+      filename: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: pgaudit-debuginfo
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 27eea05f93d44d9dbcb03be7628a1068
+      - sha256
+      - dcb946628d3d05bce5c44172e7f0c5739ad278f0d1ab45a0a58425f907f8adac
+      version: 1.4.0
+    - arch: s390x
+      epoch: '0'
+      filename: pgaudit-debugsource-1.4.0-4.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: pgaudit-debugsource
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 060162a67b3d012b8acb7a6dacc78626
+      - sha256
+      - 28599d1992aaabfac164268775b70d1c400bd728654d8042042d34e88e2f1f73
+      version: 1.4.0
+    - arch: s390x
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - f030183d6935596bb6065f7561f6ee17
+      - sha256
+      - c929a7b53990338e0cf2490b1f0da413c29b5eab5c7724e74524b13259b64adb
+      version: 0.10.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3cdcb07f12b009485784132dcc4c6cb3
+      - sha256
+      - 901e1c31b0ca06834f285755474fdf59cba378877aadbec64bddeaf8d206198a
+      version: 0.10.0
+    - arch: s390x
+      epoch: '0'
+      filename: postgres-decoderbufs-debuginfo-0.10.0-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgres-decoderbufs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - f8cd52152ef615abccfcd2e1d41e0928
+      - sha256
+      - b87c70823973dbcc6f7b343a450e68c22b20dc219b8ddbf51dc34efbd50db890
+      version: 0.10.0
+    - arch: s390x
+      epoch: '0'
+      filename: postgres-decoderbufs-debugsource-0.10.0-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgres-decoderbufs-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - a8ef352a5ac35d1b1ef30b59b31e740d
+      - sha256
+      - 45ac1b21a9efcc045e981c0ba11f4254bff7ff719844f98f01fd8d02da5e0227
+      version: 0.10.0
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 9ec77a27fa0c1b829d2f6bccf84a17c6
+      - sha256
+      - f7650efb3ce6d2721218b12e6e123602996478406d59010bee877a8d165a68f0
+      version: '12.1'
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 348370e47b0071c3e743139f54026c88
+      - sha256
+      - e8ac095700aa8837c13bcd6302d7c2fe03dd06e808f3102980e962a86febe0da
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-contrib-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-contrib
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d3f57e120aad90cb1f3f50d109698ea1
+      - sha256
+      - 9797e6e78b47ea4fd0cd302292f769607e7161c5cb230d1ba2aea8ef22f29209
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-contrib-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-contrib-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 1af086b31fdd75b10d1206f08001dc18
+      - sha256
+      - abefb52f5f811478d7b413198b0b6a81e4da87eef313e2a54acb48928939742a
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 2acd547eb4a1be597f82b85452a57b57
+      - sha256
+      - c150a1d15981361606c405b28fa9c4974c10a8486bc86447d4dfdd818929ec36
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-debugsource-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3a96fc291dd031c8947331a20763f681
+      - sha256
+      - 2a8f88e564f0f02ad5c70104eaf793572a7a192fdeb4edfd4b4c1862b45c8ef9
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-docs-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-docs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 432262efd89b1dde0bbbd6ee35bd708c
+      - sha256
+      - 013b7b3c51127a8c7c69b2928123d0429002e636e8b35c9a56a131be2a851e3f
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-docs-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-docs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 914fe2084b821e9ee661477d08549075
+      - sha256
+      - 41e053d4535e7009c2b5ab45298406b27fe29f5eb3cd6680f202f00fcec53e1e
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-plperl-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-plperl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6320d1f847254d9f36ce3f5666db8593
+      - sha256
+      - 727bc52a93d68b593df18d658358db7ac3f62bcff7a685fd5e0f029303228461
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-plperl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-plperl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 14bce3283dd3d37cebc0b53b8f2a10fe
+      - sha256
+      - 2d8544b6db220d7dec3f3aa61c3d16b380c9fe833ca47a2461d0da0fe3752e1b
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-plpython3-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-plpython3
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 460e4c33da77b2545f26fa16ad10fae0
+      - sha256
+      - e23d9f31e4893c06e9d2870f107d169681cc22ac9b69fe539e600ebf8eef80ef
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-plpython3-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-plpython3-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - cff71037302ea9d75e59fe9f0b859a75
+      - sha256
+      - 0b8320f08ee8b6badecd3ee3dd1a6924ea458e20107ef285998598033acab719
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-pltcl-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-pltcl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 41761ece89be822d3d073756f55e9301
+      - sha256
+      - 5d50db67537e506bd5bdea62304cde0a8321bf759d26cd7968f6d34c1495ec0f
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-pltcl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-pltcl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - ba48f253a5a3a0b54d2c0f7c16b05902
+      - sha256
+      - 1f04fa22ca67d00dabce4a06f03eadbf57732d5e5c01105efb70f28ad55912c7
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-server-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-server
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - d47f39219c6d23ffde2a45b00c8cf59c
+      - sha256
+      - 9198068d5e4e639638eb2ec59a60c1a74618e6cb9dea1a7985efd2699797a214
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-server-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-server-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - fa34e29623acf2829361b329536a1e53
+      - sha256
+      - 0f527c0a6f9202d49fdb6ed0fd554db26fcfea3f8c53d0d5b7c4a6d9e4a4b262
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-server-devel-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-server-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7c9f5cb33a861581223d87d15d2eb5bf
+      - sha256
+      - 4811a12257c7a236a08c256c0877148d9ab4910270cbf57d0bb7146fc3ece368
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-server-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-server-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 92683b923a9708903c1d3cd304c08ffb
+      - sha256
+      - affe666125030181f641529a7e7680b4d84a24780af2681bdfa36124d326bb53
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-static-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-static
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 982d20e5e5b7c6f1388a4fbae2d29b2c
+      - sha256
+      - 759f7781aab20b4933d6454d138faf8e96cf84f6dfd1a99c9ba181ef702f02bc
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-test-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-test
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 2fcb86edb66f1a16714f46eea48a3bbe
+      - sha256
+      - 8653dc25f0e15e81769af793b2082dfeccb1b475e574a9d05d3f606f512454e7
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-test-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-test-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 93a7b0a965270fcb9abf9ef25c0e80af
+      - sha256
+      - ffe92b57bb3a243304e304a62678cf6df96bbee446e3ab0f07ea7fc2ac39ed6f
+      version: '12.1'
+    - arch: noarch
+      epoch: '0'
+      filename: postgresql-test-rpm-macros-12.1-2.module+el8.1.1+4794+c82b6e09.noarch.rpm
+      name: postgresql-test-rpm-macros
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - aa25002f8cce891275026a24a810e9f6
+      - sha256
+      - 2cc52e7b8865e365811a6158e1f223939a5c1d705ac3525e25aa75ae2482d5ed
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-upgrade-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-upgrade
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 213c3817e335d7721a93db91ac7a0233
+      - sha256
+      - 646947b2aeee738d8c99cc7181e12c51b81c36d132240749034450d07519d8eb
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-upgrade-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-upgrade-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 679920e6e8e6b052a5762632307b2167
+      - sha256
+      - 701ffa6d39d51b9565570d7ab803f4699f6255eb02e7ea35c374bdf1c87b2051
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-upgrade-devel-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-upgrade-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 90f15119d62c08cc01142c59babbcb08
+      - sha256
+      - 918b941e9f2a457433824b02a980bf9fc8fc31d4d6b0b906ca0e07262e8d129a
+      version: '12.1'
+    - arch: s390x
+      epoch: '0'
+      filename: postgresql-upgrade-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.s390x.rpm
+      name: postgresql-upgrade-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6c9ef065c18f2ed8619cc6fed0e325b9
+      - sha256
+      - 345c45d6917e08c8f5edab0b1c758ea23abe369df6add18160b65051c95a85ea
+      version: '12.1'
+    short: ''
+  - module:
+      arch: x86_64
+      context: e4e244f9
+      name: postgresql
+      stream: '12'
+      version: '8010120191120141335'
+    name: RHEA-2020:0346-postgresql-12-e4e244f9-x86_64
+    packages:
+    - arch: SRPMS
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6a0f7de0e5ed106b17ad3ffa3a83b3e5
+      - sha256
+      - bd589afc4cb037ecfa1fb9072b63434df9bf30fde33458408ac978d5278acc63
+      version: 1.4.0
+    - arch: x86_64
+      epoch: '0'
+      filename: pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: pgaudit
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - a1431501361e872a46b5d2eda7f19ab9
+      - sha256
+      - f227bc0cd51daaa44ce26cb273de9f14c341e4720a63b77368806890be83a56e
+      version: 1.4.0
+    - arch: x86_64
+      epoch: '0'
+      filename: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: pgaudit-debuginfo
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6ad025d51e359f11c909e1c8639e087f
+      - sha256
+      - 5a0bbf92044db312b640c20c9596400c467da4abbd0463cb2375d400d22d09d7
+      version: 1.4.0
+    - arch: x86_64
+      epoch: '0'
+      filename: pgaudit-debugsource-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: pgaudit-debugsource
+      release: 4.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - c1ac0dffc1abcc1647640efd45a473d5
+      - sha256
+      - 0e4d2bcd8c92e9cde3c52cd3dba33de3e19cefb1d642e0dd3f993216e05ca6b1
+      version: 1.4.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 3cdcb07f12b009485784132dcc4c6cb3
+      - sha256
+      - 901e1c31b0ca06834f285755474fdf59cba378877aadbec64bddeaf8d206198a
+      version: 0.10.0
+    - arch: x86_64
+      epoch: '0'
+      filename: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgres-decoderbufs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 10175c5e19558aab1f00c4e683bd7700
+      - sha256
+      - 25b2ddef9d76b9e297a1c4b138c0c5b05e5cadb88af24eb32ba46d5186bfc053
+      version: 0.10.0
+    - arch: x86_64
+      epoch: '0'
+      filename: postgres-decoderbufs-debuginfo-0.10.0-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgres-decoderbufs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - e14d0fc89eeb9773ca9bfc62a341090f
+      - sha256
+      - 80df4e30841bb0ec553f80513f7e75576dd726d2563158c6b18ce818a6f0af27
+      version: 0.10.0
+    - arch: x86_64
+      epoch: '0'
+      filename: postgres-decoderbufs-debugsource-0.10.0-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgres-decoderbufs-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 2a5873a6585b79973105792646b1e506
+      - sha256
+      - 034840404ec33836539518bbcd59d55c231162dd30731e6ee820417aac6f4277
+      version: 0.10.0
+    - arch: SRPMS
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 348370e47b0071c3e743139f54026c88
+      - sha256
+      - e8ac095700aa8837c13bcd6302d7c2fe03dd06e808f3102980e962a86febe0da
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - c218fd9b911dcd8c7c531d10df9dc1a6
+      - sha256
+      - e3e7ce93fbea2194a92b1db0eb70a6ce8fee7b4e6ff0a5f36ba87548fe83cef4
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-contrib-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-contrib
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - a35d18a72f5a8c6730a12b47f95cb530
+      - sha256
+      - 7281768282d49615162cb6a8af2b745ab61558a5c3a9c159b5c8c05a4d195631
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-contrib-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-contrib-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - e0e57ce3f5732ec9fb76227e048aeffc
+      - sha256
+      - 55c387d6b7cae8fbccf02f33b66fc9f83064709278e32b255aaab1c23f7da07b
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7417ce630c8108fe1e18211aca372ed8
+      - sha256
+      - 9182ac41d083560a1e1bad9e19b993a9c7738051282417b7442ab9b62e13b64d
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-debugsource-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-debugsource
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - e0ca03b1acd7a71b7fbf874b8942e75b
+      - sha256
+      - ed3d90768a2dce2e1eb0be854bac04c65999a633f29c5ad0855d40ab713f2968
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-docs-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-docs
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 62ba9de76c2088688bb2361e7e5472d7
+      - sha256
+      - ab487944cc55cb7120aa85c4f0c71429fab1f6c3a9b0ecb1fb48c01f002b67b3
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-docs-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-docs-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 42ce02f88a1ddff4ab386c38dd061696
+      - sha256
+      - 6d04580192540a4fe8496b930cb9917494cd4131293bf589d093d388c9dde367
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-plperl-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-plperl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 866e80400f2820b7d0db3b96b5c27111
+      - sha256
+      - 25a4d8567eaae96b7a4875896427e8e5860d88077e166c7044a48cf6fb59719a
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-plperl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-plperl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 252dde0083cae6dbd871bbc96e523271
+      - sha256
+      - 5b70c03c7adf02c8b9c9be04e13b695cefb02a2d25add2d734005de012ac99c9
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-plpython3-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-plpython3
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7b1a43c04154c3d970d28c559653592b
+      - sha256
+      - c10e91907818eb5d82f48f3cd2fbe0699216f1f06fb4932e519fb7f76a95b7ff
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-plpython3-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-plpython3-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 5525e3412bb2503c63f191ae665bcd14
+      - sha256
+      - ba46465218596462ef95d1f1079f46d9221d05f50ed53960cc9d9a3e6097bbd7
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-pltcl-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-pltcl
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 9f25571e45dc8f75046bf42c7e30a6e7
+      - sha256
+      - cb7fe47c64956cae4cadbd603abaa89774b49d85dcfc17cd44e9864d71dea68a
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-pltcl-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-pltcl-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 91d2f01582e9806393e42adebe240234
+      - sha256
+      - 036cc491dedcdc08dafa64bdf75be83cbcbb44c136f4de0957f29a48663c8ece
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-server-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-server
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 45f9ec979da141637f7f395c770c9824
+      - sha256
+      - 6c3313f9efe8c3c45dc0736dd34b7ad1a7c85ffc7ebe47bbcd29a601673500e5
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-server-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-server-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - cb05b76a77f11691ccfe25d984dee9ec
+      - sha256
+      - e1451da93be96a9dd6abb4ccc234ba99266a72de20cab68b4eea59fc7bf00233
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-server-devel-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-server-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - e4785e37c665aab72065171b1f9309cc
+      - sha256
+      - 31f3d3875077960c0a54c051a65a0eff720d05f34cf828a937651ca2a9ee618f
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-server-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-server-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - af93678775faa21753a0c3fe7c9c669c
+      - sha256
+      - 4224dbc7ca8f06cf004363306af7ce9e9ad23304b553363e893df3aa406f2e3b
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-static-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-static
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7de65b8e79cdff1a221a9e602144e48f
+      - sha256
+      - d9c078668557a0dc34d5d8bb7f02c1f120a262e0600b8e3f7329b5d7ced46c22
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-test-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-test
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 9e14eedfb225155a05b07e98ffd57a82
+      - sha256
+      - 4c09d6a5fbf300451491f565e4167a4020145234f1c0cb31fdf9922f8f1bfd50
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-test-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-test-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7b24979b3c45d97555d128e4869f4a5b
+      - sha256
+      - d0f635045784fc2d792eff20341bcf5d34f3008637992495d7bcc238df4a01af
+      version: '12.1'
+    - arch: noarch
+      epoch: '0'
+      filename: postgresql-test-rpm-macros-12.1-2.module+el8.1.1+4794+c82b6e09.noarch.rpm
+      name: postgresql-test-rpm-macros
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - aa25002f8cce891275026a24a810e9f6
+      - sha256
+      - 2cc52e7b8865e365811a6158e1f223939a5c1d705ac3525e25aa75ae2482d5ed
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-upgrade-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-upgrade
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6f950c47ca35e36cf67974af8dccfac7
+      - sha256
+      - 9f97ab49f469216a5ea8f4af8f08f9c8f148832c996b165fe2456db06173c7d6
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-upgrade-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-upgrade-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 6a2e160ff3564e431b170424ab3f9b05
+      - sha256
+      - 645ede107e3d7e2f17ecaac24a770b01f89e69e00c4160cdea1232b238a019cb
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-upgrade-devel-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-upgrade-devel
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 20e5fd1fabe32b1d0d41f267cb652630
+      - sha256
+      - 4ee9c3006dcc0ee87da51709c12eea716ef65368c4d78c60d7ab174311a76fd7
+      version: '12.1'
+    - arch: x86_64
+      epoch: '0'
+      filename: postgresql-upgrade-devel-debuginfo-12.1-2.module+el8.1.1+4794+c82b6e09.x86_64.rpm
+      name: postgresql-upgrade-devel-debuginfo
+      release: 2.module+el8.1.1+4794+c82b6e09
+      src: postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm
+      sum:
+      - md5
+      - 7a30c3dac134acfc362d889e263185ff
+      - sha256
+      - 4eb7f99a81c11b8d32ba740d8d956a8abb7915a19e2b19c762af8ee0d0395944
+      version: '12.1'
+    short: ''
+  pulp_user_metadata:
+    content_types:
+    - module
+  pushcount: '4'
+  reboot_suggested: false
+  references:
+  - href: https://access.redhat.com/errata/RHEA-2020:0346
+    id: RHEA-2020:0346
+    title: RHEA-2020:0346
+    type: self
+  - href: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.1_release_notes/
+    id: ref_0
+    title: other_reference_0
+    type: other
+  release: '0'
+  rights: Copyright 2020 Red Hat Inc
+  severity: None
+  solution: 'Before applying this update, make sure all previously released errata
+
+    relevant to your system have been applied.
+
+
+    For details on how to apply this update, refer to:
+
+
+    https://access.redhat.com/articles/11258'
+  status: final
+  summary: A new postgresql:12 module is now available for Red Hat Enterprise Linux
+    8.
+  title: 'new module: postgresql:12'
+  type: enhancement
+  updated: 2020-02-04 11:39:30 UTC
+  version: '4'
+
+ftp_paths:
+  postgresql-12-8010120191120141335.e4e244f9:
+    sig_key: fd431d51
+    rpms:
+      pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+      postgresql-12.1-2.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+      postgres-decoderbufs-0.10.0-2.module+el8.1.1+4794+c82b6e09.src.rpm:
+      - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/SRPMS/
+    modules:
+    - /ftp/pub/redhat/linux/enterprise/AppStream-8.1.1.MAIN/en/os/modules/

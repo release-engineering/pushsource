@@ -208,6 +208,27 @@ def test_errata_module_sources_no_ftp_paths(source_factory):
     assert src_items == []
 
 
+def test_errata_module_sources_no_cdn_list(source_factory, caplog):
+    """Errata source skips ModuleMdSourcePushItems if ET does not present those
+    modules in get_advisory_cdn_file_list."""
+
+    source = source_factory(errata="RHEA-2020:0346-no-cdn-list")
+
+    items = list(source)
+
+    src_items = [i for i in items if isinstance(i, ModuleMdSourcePushItem)]
+
+    # Should not have found anything since ET didn't return the modules in the file list
+    assert src_items == []
+
+    # Should warn us about the unusual situation.
+    assert (
+        "Erratum RHEA-2020:0346: ignoring module(s) from ftp_paths "
+        "due to absence in cdn_file_list: postgresql-12-8010120191120141335.e4e244f9"
+        in caplog.text
+    )
+
+
 def test_errata_module_missing_sources(source_factory, fake_koji):
     """Errata source gives fatal error if ET requests some FTP paths for modules,
     yet no module sources exist on koji build."""

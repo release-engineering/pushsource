@@ -165,7 +165,7 @@ class ErrataSource(Source):
         erratum = attr.evolve(erratum, dest=sorted(erratum_dest))
 
         # Adjust push item destinations according to FTP paths from ET, if any.
-        items = self._add_ftp_paths(items, erratum, raw.ftp_paths)
+        items = self._add_ftp_paths(items, erratum, raw)
 
         items = items + self._push_items_from_container_manifests(
             erratum, raw.advisory_cdn_docker_file_list
@@ -397,7 +397,9 @@ class ErrataSource(Source):
 
         return out
 
-    def _add_ftp_paths(self, items, erratum, ftp_paths):
+    def _add_ftp_paths(self, items, erratum, raw):
+        ftp_paths = raw.ftp_paths
+
         # ftp_paths structure is like this:
         #
         # {
@@ -462,13 +464,54 @@ class ErrataSource(Source):
                 # Other types of items are unaffected by ftp_paths.
                 out.append(item)
 
-        # If ET requests that modules should be pushed for any builds and we're
-        # missing a modulemd.src.txt for those, it's a fatal error.
         builds_missing_modules = sorted(builds_need_modules - builds_have_modules)
-        if builds_missing_modules:
+        builds_missing_et = []
+        builds_missing_koji = []
+
+        for nvr in builds_missing_modules:
+            # If ET requests that modules should be pushed for any builds and we're
+            # missing a modulemd.src.txt for those, there are two possible reasons for
+            # that:
+            #
+            if not (raw.advisory_cdn_file_list.get(nvr) or {}).get("modules"):
+                #
+                # (1) The same modules were not present in get_advisory_cdn_file_list.
+                #
+                builds_missing_et.append(nvr)
+            else:
+                #
+                # (2) modulemd.src.txt is genuinely missing from koji.
+                #
+                builds_missing_koji.append(nvr)
+
+        if builds_missing_et:
+            # Builds missing in ET are tolerated with just a warning.
+            #
+            # Although this probably *should* not happen, due to lack of any specification
+            # for how these APIs are meant to work, it's a bit risky to treat it as an error.
+            #
+            # Note also that we *could* try to proceed here anyway, and now look up information
+            # for this module from koji. The reason we don't do that is because the destination
+            # for source modules (& RPMs) has been historically calculated by combining *both*
+            # the FTP paths and repo IDs and passing them through alt-src config. If we only
+            # have one of these sources of info and we proceed anyway, then we might push to
+            # incorrect destinations while giving the false impression that everything is working
+            # OK. Safer to not touch the item.
+            #
+            LOG.warning(
+                "Erratum %s: ignoring module(s) from ftp_paths due to absence "
+                "in cdn_file_list: %s",
+                erratum.name,
+                ", ".join(builds_missing_et),
+            )
+
+        if builds_missing_koji:
+            # Builds missing in koji are fatal as there is no reason this should happen; the
+            # koji build might be malformed, incomplete or there have been some
+            # backwards-incompatible changes in the structure of module builds.
             msg = "Erratum %s: missing modulemd sources on koji build(s): %s" % (
                 erratum.name,
-                ", ".join(builds_missing_modules),
+                ", ".join(builds_missing_koji),
             )
             raise ValueError(msg)
 

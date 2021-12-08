@@ -198,7 +198,7 @@
         <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
 
         <span class="c1"># Adjust push item destinations according to FTP paths from ET, if any.</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_ftp_paths</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">ftp_paths</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_ftp_paths</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
 
         <span class="n">items</span> <span class="o">=</span> <span class="n">items</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_container_manifests</span><span class="p">(</span>
             <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_docker_file_list</span>
@@ -430,7 +430,9 @@
 
         <span class="k">return</span> <span class="n">out</span>
 
-    <span class="k">def</span> <span class="nf">_add_ftp_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">ftp_paths</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_add_ftp_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="p">):</span>
+        <span class="n">ftp_paths</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">ftp_paths</span>
+
         <span class="c1"># ftp_paths structure is like this:</span>
         <span class="c1">#</span>
         <span class="c1"># {</span>
@@ -495,13 +497,54 @@
                 <span class="c1"># Other types of items are unaffected by ftp_paths.</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-        <span class="c1"># If ET requests that modules should be pushed for any builds and we&#39;re</span>
-        <span class="c1"># missing a modulemd.src.txt for those, it&#39;s a fatal error.</span>
         <span class="n">builds_missing_modules</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">builds_need_modules</span> <span class="o">-</span> <span class="n">builds_have_modules</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">builds_missing_modules</span><span class="p">:</span>
+        <span class="n">builds_missing_et</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">builds_missing_koji</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nvr</span> <span class="ow">in</span> <span class="n">builds_missing_modules</span><span class="p">:</span>
+            <span class="c1"># If ET requests that modules should be pushed for any builds and we&#39;re</span>
+            <span class="c1"># missing a modulemd.src.txt for those, there are two possible reasons for</span>
+            <span class="c1"># that:</span>
+            <span class="c1">#</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_file_list</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">):</span>
+                <span class="c1">#</span>
+                <span class="c1"># (1) The same modules were not present in get_advisory_cdn_file_list.</span>
+                <span class="c1">#</span>
+                <span class="n">builds_missing_et</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#</span>
+                <span class="c1"># (2) modulemd.src.txt is genuinely missing from koji.</span>
+                <span class="c1">#</span>
+                <span class="n">builds_missing_koji</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">builds_missing_et</span><span class="p">:</span>
+            <span class="c1"># Builds missing in ET are tolerated with just a warning.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Although this probably *should* not happen, due to lack of any specification</span>
+            <span class="c1"># for how these APIs are meant to work, it&#39;s a bit risky to treat it as an error.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Note also that we *could* try to proceed here anyway, and now look up information</span>
+            <span class="c1"># for this module from koji. The reason we don&#39;t do that is because the destination</span>
+            <span class="c1"># for source modules (&amp; RPMs) has been historically calculated by combining *both*</span>
+            <span class="c1"># the FTP paths and repo IDs and passing them through alt-src config. If we only</span>
+            <span class="c1"># have one of these sources of info and we proceed anyway, then we might push to</span>
+            <span class="c1"># incorrect destinations while giving the false impression that everything is working</span>
+            <span class="c1"># OK. Safer to not touch the item.</span>
+            <span class="c1">#</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: ignoring module(s) from ftp_paths due to absence &quot;</span>
+                <span class="s2">&quot;in cdn_file_list: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_et</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">builds_missing_koji</span><span class="p">:</span>
+            <span class="c1"># Builds missing in koji are fatal as there is no reason this should happen; the</span>
+            <span class="c1"># koji build might be malformed, incomplete or there have been some</span>
+            <span class="c1"># backwards-incompatible changes in the structure of module builds.</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: missing modulemd sources on koji build(s): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_modules</span><span class="p">),</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_koji</span><span class="p">),</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 

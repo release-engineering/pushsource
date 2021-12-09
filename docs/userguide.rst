@@ -85,7 +85,7 @@ For detailed information, see the API reference of the associated class.
 | staged   | ``staged:/mnt/vol/my/staged/content``                                       | :class:`~pushsource.StagedSource`   | Obtain RPMs, files, AMIs and other content from    |
 |          |                                                                             |                                     | locally mounted filesystem                         |
 +----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| registry | ``registry:registry.access.redhat.com/ubi8/ubi:latest``                     | :class:`~pushsource.RegistrySource` | Obtain images from a container image registry      |
+| registry | ``registry:image=registry.access.redhat.com/ubi8/ubi:latest``               | :class:`~pushsource.RegistrySource` | Obtain images from a container image registry      |
 |          |                                                                             |                                     |                                                    |
 +----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
 | errata   | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource`   | Obtain RPMs, container images and advisory         |

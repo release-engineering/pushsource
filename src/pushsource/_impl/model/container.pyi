@@ -17,12 +17,10 @@ class ContainerImagePullSpec(object):
 class ContainerImageTagPullSpec(ContainerImagePullSpec):
     tag: Text
     media_types: Sequence[Text]
-    def __str__(self) -> Text: ...
 
 class ContainerImageDigestPullSpec(ContainerImagePullSpec):
     digest: Text
     media_type: Optional[Text] = ...
-    def __str__(self) -> Text: ...
 
 def specs_converter(
     specs: Sequence[PullSpec_contra], expected_class: Type

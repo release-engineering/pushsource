@@ -1,6 +1,4 @@
 from pushsource import PushItem
 
-
 class ModuleMdPushItem(PushItem): ...
-
 class ModuleMdSourcePushItem(PushItem): ...

@@ -3,16 +3,18 @@ from typing import Text, AnyStr, TypeVar, Optional, Type
 
 from pushsource import PushItem
 
-PullSpec_co = TypeVar("PullSpec_co", bound="ContainerImagePullSpec", covariant=True)
-PullSpec_contra = TypeVar(
-    "PullSpec_contra", bound="ContainerImagePullSpec", contravariant=True
+ContainerImagePullSpec_co = TypeVar(
+    "ContainerImagePullSpec_co", bound="ContainerImagePullSpec", covariant=True
+)
+ContainerImagePullSpec_contra = TypeVar(
+    "ContainerImagePullSpec_contra", bound="ContainerImagePullSpec", contravariant=True
 )
 
 class ContainerImagePullSpec(object):
     registry: Text
     repository: Text
     @classmethod
-    def _from_str(cls, pull_spec: AnyStr) -> PullSpec_co: ...
+    def _from_str(cls, pull_spec: AnyStr) -> ContainerImagePullSpec_co: ...
 
 class ContainerImageTagPullSpec(ContainerImagePullSpec):
     tag: Text
@@ -23,13 +25,13 @@ class ContainerImageDigestPullSpec(ContainerImagePullSpec):
     media_type: Optional[Text] = ...
 
 def specs_converter(
-    specs: Sequence[PullSpec_contra], expected_class: Type
-) -> Sequence[PullSpec_co]: ...
+    specs: Sequence[ContainerImagePullSpec_contra], expected_class: Type
+) -> Sequence[ContainerImagePullSpec_co]: ...
 def tag_specs_converter(
-    specs: Sequence[PullSpec_contra],
+    specs: Sequence[ContainerImagePullSpec_contra],
 ) -> Sequence[ContainerImageTagPullSpec]: ...
 def digest_specs_converter(
-    specs: Sequence[PullSpec_contra],
+    specs: Sequence[ContainerImagePullSpec_contra],
 ) -> Sequence[ContainerImageDigestPullSpec]: ...
 
 class ContainerImagePullInfo(object):

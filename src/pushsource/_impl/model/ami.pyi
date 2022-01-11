@@ -4,7 +4,6 @@ from typing import Text, Optional
 from pushsource import PushItem
 from pushsource.type_aliases import Date
 
-
 class AmiRelease(object):
     product: Text
     date: Date

@@ -3,7 +3,6 @@ from typing import Text, overload, List, Optional
 
 from pushsource import PushItem
 
-
 class ErratumReference(object):
     href: Text
     id: Text
@@ -11,7 +10,9 @@ class ErratumReference(object):
     type: Text = ...
     @classmethod
     @overload
-    def _from_data(cls, data: Sequence[Mapping[Text, ...]]) -> MutableSequence["ErratumReference"]: ...
+    def _from_data(
+        cls, data: Sequence[Mapping[Text, ...]]
+    ) -> MutableSequence["ErratumReference"]: ...
     @classmethod
     @overload
     def _from_data(cls, data: Mapping[Text, ...]) -> "ErratumReference": ...

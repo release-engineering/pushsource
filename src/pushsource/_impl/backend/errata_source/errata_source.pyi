@@ -65,4 +65,3 @@ class ErrataSource(Source):
     def _add_ftp_paths(
         self, items: Sequence[PushItem_contra], erratum: ErratumPushItem, raw: ErrataRaw
     ) -> Sequence[PushItem_co]: ...
-

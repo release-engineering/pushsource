@@ -1,5 +1,5 @@
 from collections import Mapping
-from typing import Final, Any, Optional, NoReturn, Union
+from typing import Final, Any, Optional
 
 from pushsource._impl.validator import Validator
 from pushsource._impl.type_aliases import JsonObject

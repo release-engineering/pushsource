@@ -57,7 +57,7 @@ class KojiSource(Source):
         basedir: Optional[str] = ...,
         threads: int = ...,
         timeout: int = ...,
-        cache: Optional[Mapping[str, Any]] = ...,
+        cache: Optional[MutableMapping[str, Any]] = ...,
         executor: Optional[Executor] = ...,
     ) -> None: ...
     def __enter__(self) -> "KojiSource": ...

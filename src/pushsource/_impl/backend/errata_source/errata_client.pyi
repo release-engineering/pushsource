@@ -1,4 +1,3 @@
-# TODO: are stub files subject to the same need for six.moves?
 import xmlrpc.client
 from collections import Sequence
 from typing import Any, TypeVar

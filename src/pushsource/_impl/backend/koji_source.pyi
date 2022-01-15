@@ -11,9 +11,6 @@ from pushsource import Source, RpmPushItem, OperatorManifestPushItem
 from pushsource._impl.model.base import PushItem_co
 from pushsource._impl.type_aliases import MaybeString, JsonObject
 
-# TODO: for now using Union[str, int] until I figure out
-#  which is really intended. This actually might be the best
-#  option after all, but I need to investigate
 Id = Union[str, int]
 
 CACHE_LOCK: ReentrantLock

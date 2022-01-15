@@ -3,7 +3,7 @@ import xmlrpc.client
 from collections import Sequence
 from typing import Any, TypeVar
 
-from pushsource.type_aliases import JsonObject
+from pushsource._impl.type_aliases import JsonObject
 
 ErrataRaw_co = TypeVar("ErrataRaw_co", bound="ErrataRaw", covariant=True)
 

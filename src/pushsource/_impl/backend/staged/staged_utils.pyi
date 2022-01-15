@@ -2,7 +2,7 @@ from collections import Mapping
 from typing import Final, Any, Optional, NoReturn, Union
 
 from pushsource._impl.validator import Validator
-from pushsource.type_aliases import JsonObject
+from pushsource._impl.type_aliases import JsonObject
 
 REQUIRED_VERSION: Final[str] = ...
 VALIDATOR: Final[Validator] = ...

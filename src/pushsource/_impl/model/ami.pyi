@@ -2,7 +2,8 @@ from collections import Sequence
 from typing import Text, Optional
 
 from pushsource import PushItem
-from pushsource.type_aliases import Date
+from pushsource._impl.type_aliases import Date
+
 
 class AmiRelease(object):
     product: Text

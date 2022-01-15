@@ -10,7 +10,7 @@ from pushsource import (
 )
 from pushsource._impl.backend.errata_source.errata_client import ErrataRaw
 from pushsource._impl.model.base import PushItem_co, PushItem_contra
-from pushsource.type_aliases import MaybeString
+from pushsource._impl.type_aliases import MaybeString
 
 # TODO: is the value type a model type or just a Mapping?
 DockerFileList = Mapping[str, Any]

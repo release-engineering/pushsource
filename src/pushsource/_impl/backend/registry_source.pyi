@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 from pushsource import Source, PushItem
 from pushsource._impl.model.base import PushItem_co
-from pushsource.type_aliases import MaybeString
+from pushsource._impl.type_aliases import MaybeString
 
 IMAGE_URI_REGEX: Pattern
 

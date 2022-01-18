@@ -6,6 +6,7 @@ except ImportError:
     from mock import patch, MagicMock
 
 from pytest import raises
+import requests
 
 from pushsource import (
     Source,
@@ -92,6 +93,8 @@ MANIFEST_V2LIST = {
 def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     """Registry source yield push items."""
 
+    response_404 = requests.Response()
+    response_404.status_code = 404
     mocked_get_manifest.side_effect = [
         (
             MEDIATYPE_SCHEMA2_V2,
@@ -103,11 +106,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
             "test-digest-1",
             MANIFEST_V1,
         ),
-        (
-            MEDIATYPE_SCHEMA2_V2,
-            "test-digest-1",
-            MANIFEST_V2SCH2,
-        ),
+        requests.exceptions.HTTPError(response=response_404),
         (
             MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",

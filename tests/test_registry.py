@@ -172,6 +172,35 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")
 @patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items_500_raises(mocked_inspect, mocked_get_manifest):
+    """Registry source yield push items."""
+
+    response_500 = requests.Response()
+    response_500.status_code = 500
+    mocked_get_manifest.side_effect = [
+        requests.exceptions.HTTPError(response=response_500),
+    ]
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
+
+    source = RegistrySource(
+        dest=[
+            "repo1",
+        ],
+        image=[
+            "registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        ],
+        dest_signing_key="1234abcde",
+    )
+    # Eagerly fetch
+    with raises(requests.exceptions.HTTPError):
+        with source:
+            items = list(source)
+
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
 def test_registry_push_items_no_signing_key(mocked_inspect, mocked_get_manifest):
     """Registry source yield push items."""
 

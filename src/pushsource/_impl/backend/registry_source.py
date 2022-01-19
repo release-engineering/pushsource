@@ -111,6 +111,7 @@ class RegistrySource(Source):
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 404:
                         continue
+                    raise e
 
             manifest_details = self._manifests[source_uri][mtype]
             content_type, _, _ = manifest_details

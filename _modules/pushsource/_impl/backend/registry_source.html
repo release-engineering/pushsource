@@ -34,6 +34,8 @@
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">requests</span>
+
 <span class="kn">from</span> <span class="nn">..source</span> <span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ContainerImagePushItem</span><span class="p">,</span>
@@ -131,13 +133,18 @@
             <span class="k">if</span> <span class="n">source_uri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">if</span> <span class="n">mtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]:</span>
-                <span class="n">manifest_details</span> <span class="o">=</span> <span class="n">get_manifest</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">://</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">host</span><span class="p">),</span>
-                    <span class="n">repo</span><span class="p">,</span>
-                    <span class="n">src_tag</span><span class="p">,</span>
-                    <span class="n">manifest_types</span><span class="o">=</span><span class="p">[</span><span class="n">mtype</span><span class="p">],</span>
-                <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">][</span><span class="n">mtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">manifest_details</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">manifest_details</span> <span class="o">=</span> <span class="n">get_manifest</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">://</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">host</span><span class="p">),</span>
+                        <span class="n">repo</span><span class="p">,</span>
+                        <span class="n">src_tag</span><span class="p">,</span>
+                        <span class="n">manifest_types</span><span class="o">=</span><span class="p">[</span><span class="n">mtype</span><span class="p">],</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">][</span><span class="n">mtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">manifest_details</span>
+                <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">raise</span> <span class="n">e</span>
 
             <span class="n">manifest_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">][</span><span class="n">mtype</span><span class="p">]</span>
             <span class="n">content_type</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">manifest_details</span>
@@ -162,33 +169,44 @@
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
             <span class="p">],</span>
-            <span class="n">media_types</span><span class="o">=</span><span class="p">[</span>
-                <span class="n">manifest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="n">MEDIATYPE_SCHEMA2_V1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-            <span class="p">],</span>
+            <span class="n">media_types</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                <span class="nb">set</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">manifest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="n">MEDIATYPE_SCHEMA2_V1</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
             <span class="n">tag_specs</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">ContainerImageTagPullSpec</span><span class="p">(</span>
                     <span class="n">registry</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
                     <span class="n">repository</span><span class="o">=</span><span class="n">repo</span><span class="p">,</span>
                     <span class="n">tag</span><span class="o">=</span><span class="n">src_tag</span><span class="p">,</span>
-                    <span class="n">media_types</span><span class="o">=</span><span class="p">[</span>
-                        <span class="n">manifest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="n">MEDIATYPE_SCHEMA2_V1</span><span class="p">)</span>
-                        <span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-                    <span class="p">],</span>
+                    <span class="n">media_types</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                        <span class="nb">set</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">manifest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="n">MEDIATYPE_SCHEMA2_V1</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">],</span>
         <span class="p">)</span>
+        <span class="c1"># manifest list or v2 sch1</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inspected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_uri</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;Labels&quot;</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inspected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_uri</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">arch</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;architecture&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">klass</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">source_uri</span><span class="p">,</span>
             <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_repos</span><span class="p">,</span>
             <span class="n">dest_signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">,</span>
             <span class="n">src</span><span class="o">=</span><span class="n">source_uri</span><span class="p">,</span>
             <span class="n">source_tags</span><span class="o">=</span><span class="p">[</span><span class="n">src_tag</span><span class="p">],</span>
-            <span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inspected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_uri</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Labels&quot;</span><span class="p">,</span> <span class="p">{}),</span>
-            <span class="n">arch</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inspected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_uri</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})</span>
-            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Labels&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Labels&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;architecture&quot;</span><span class="p">),</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="n">arch</span><span class="o">=</span><span class="n">arch</span><span class="p">,</span>
             <span class="n">pull_info</span><span class="o">=</span><span class="n">pull_info</span><span class="p">,</span>
         <span class="p">)</span>
 

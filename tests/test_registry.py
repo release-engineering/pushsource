@@ -6,6 +6,7 @@ except ImportError:
     from mock import patch, MagicMock
 
 from pytest import raises
+import requests
 
 from pushsource import (
     Source,
@@ -92,6 +93,8 @@ MANIFEST_V2LIST = {
 def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     """Registry source yield push items."""
 
+    response_404 = requests.Response()
+    response_404.status_code = 404
     mocked_get_manifest.side_effect = [
         (
             MEDIATYPE_SCHEMA2_V2,
@@ -103,11 +106,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
             "test-digest-1",
             MANIFEST_V1,
         ),
-        (
-            MEDIATYPE_SCHEMA2_V2,
-            "test-digest-1",
-            MANIFEST_V2SCH2,
-        ),
+        requests.exceptions.HTTPError(response=response_404),
         (
             MEDIATYPE_SCHEMA2_V2_LIST,
             "test-digest-1",
@@ -169,6 +168,35 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
     assert items[1].dest == ["repo1", "repo2"]
+
+
+@patch("pushsource._impl.backend.registry_source.get_manifest")
+@patch("pushsource._impl.backend.registry_source.inspect")
+def test_registry_push_items_500_raises(mocked_inspect, mocked_get_manifest):
+    """Registry source yield push items."""
+
+    response_500 = requests.Response()
+    response_500.status_code = 500
+    mocked_get_manifest.side_effect = [
+        requests.exceptions.HTTPError(response=response_500),
+    ]
+    mocked_inspect.side_effect = [
+        {"digest": "test-digest-2", "config": {"labels": {"architecture": "amd64"}}},
+    ]
+
+    source = RegistrySource(
+        dest=[
+            "repo1",
+        ],
+        image=[
+            "registry.redhat.io/odf4/mcg-operator-bundle:latest",
+        ],
+        dest_signing_key="1234abcde",
+    )
+    # Eagerly fetch
+    with raises(requests.exceptions.HTTPError):
+        with source:
+            items = list(source)
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")

@@ -512,7 +512,11 @@ def test_inspect_v1(requests_mock):
         json=expected_manifest,
     )
     inspected = inspect("https://fake-registry", "test-repo", "test-tag")
-    assert inspected == {"architecture": "amd64", "labels": {}, "digest": "test-digest"}
+    assert inspected == {
+        "architecture": "amd64",
+        "config": {"Labels": {}},
+        "digest": "test-digest",
+    }
 
 
 def test_inspect_v2(requests_mock):

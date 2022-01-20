@@ -1,6 +1,8 @@
 import re
 import logging
 
+import requests
+
 from ..source import Source
 from ..model import (
     ContainerImagePushItem,
@@ -98,13 +100,18 @@ class RegistrySource(Source):
             if source_uri not in self._manifests:
                 self._manifests[source_uri] = {}
             if mtype not in self._manifests[source_uri]:
-                manifest_details = get_manifest(
-                    "%s://%s" % (schema, host),
-                    repo,
-                    src_tag,
-                    manifest_types=[mtype],
-                )
-                self._manifests[source_uri][mtype] = manifest_details
+                try:
+                    manifest_details = get_manifest(
+                        "%s://%s" % (schema, host),
+                        repo,
+                        src_tag,
+                        manifest_types=[mtype],
+                    )
+                    self._manifests[source_uri][mtype] = manifest_details
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code == 404:
+                        continue
+                    raise e
 
             manifest_details = self._manifests[source_uri][mtype]
             content_type, _, _ = manifest_details
@@ -129,33 +136,44 @@ class RegistrySource(Source):
                 )
                 for manifest in self._manifests[source_uri].values()
             ],
-            media_types=[
-                manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
-                for manifest in self._manifests[source_uri].values()
-            ],
+            media_types=list(
+                set(
+                    [
+                        manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                        for manifest in self._manifests[source_uri].values()
+                    ]
+                )
+            ),
             tag_specs=[
                 ContainerImageTagPullSpec(
                     registry=host,
                     repository=repo,
                     tag=src_tag,
-                    media_types=[
-                        manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
-                        for manifest in self._manifests[source_uri].values()
-                    ],
+                    media_types=list(
+                        set(
+                            [
+                                manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                                for manifest in self._manifests[source_uri].values()
+                            ]
+                        )
+                    ),
                 )
             ],
         )
+        # manifest list or v2 sch1
+        labels = self._inspected.get(source_uri, {}).get("config").get(
+            "Labels", {}
+        ) or self._inspected.get(source_uri, {}).get("labels", {})
+        arch = labels.get("architecture")
+
         return klass(
             name=source_uri,
             dest=self._repos,
             dest_signing_key=signing_key,
             src=source_uri,
             source_tags=[src_tag],
-            labels=self._inspected.get(source_uri, {}).get("config").get("Labels", {}),
-            arch=(self._inspected.get(source_uri, {}).get("config", {}) or {})
-            .get("Labels", {})
-            .get("Labels", {})
-            .get("architecture"),
+            labels=labels,
+            arch=arch,
             pull_info=pull_info,
         )
 

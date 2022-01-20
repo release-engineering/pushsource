@@ -305,14 +305,8 @@ def inspect(registry, repo, digest, token=None):
         registry, repo, digest, manifest_types=[MEDIATYPE_SCHEMA2_V2], token=token
     )
     if manifest_type == MEDIATYPE_SCHEMA2_V2:
-        print("v2 sch2")
-        print(json.dumps(manifest, indent=2, sort_keys=True, separators=(",", ":")))
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
-        print("INSPECTED")
-        print(json.dumps(inspected, indent=2, sort_keys=True, separators=(",", ":")))
     elif manifest_type == MEDIATYPE_SCHEMA2_V2_LIST:
-        print("v2 sch2 list")
-        print(json.dumps(manifest, indent=2, sort_keys=True, separators=(",", ":")))
         manifest_type, _digest, manifest = get_manifest(
             registry,
             repo,
@@ -321,11 +315,7 @@ def inspect(registry, repo, digest, token=None):
             token=token,
         )
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
-        print("INSPECTED")
-        print(json.dumps(inspected, indent=2, sort_keys=True, separators=(",", ":")))
     else:
-        print("v2 sch1")
-        print(json.dumps(manifest, indent=2, sort_keys=True, separators=(",", ":")))
         inspected = {"architecture": manifest["architecture"], "config": {"Labels": {}}}
     if manifest_type == MEDIATYPE_SCHEMA2_V2 and not inspected.get("config", {}).get(
         "Labels"

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.13.4] - 2022-01-20
+
+### Fixed
+
+- `registry`: fixed usage with source images and schema1-only images.
+- `errata`: improved logging in one modulemd error case.
+
 ## [2.13.3] - 2021-12-06
 
 ### Fixed
@@ -204,7 +211,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.3...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.4...HEAD
+[2.13.4]: https://github.com/release-engineering/pushsource/compare/v2.13.3...v2.13.4
 [2.13.3]: https://github.com/release-engineering/pushsource/compare/v2.13.2...v2.13.3
 [2.13.2]: https://github.com/release-engineering/pushsource/compare/v2.13.1...v2.13.2
 [2.13.1]: https://github.com/release-engineering/pushsource/compare/v2.13.0...v2.13.1

@@ -302,7 +302,7 @@ def inspect(registry, repo, digest, token=None):
     token = token or AuthToken()
 
     manifest_type, digest, manifest = get_manifest(
-        registry, repo, digest, manifest_types=[MEDIATYPE_SCHEMA2_V2_LIST], token=token
+        registry, repo, digest, manifest_types=[MEDIATYPE_SCHEMA2_V2], token=token
     )
     if manifest_type == MEDIATYPE_SCHEMA2_V2:
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
@@ -316,7 +316,7 @@ def inspect(registry, repo, digest, token=None):
         )
         inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
     else:
-        inspected = {"architecture": manifest["architecture"], "labels": {}}
+        inspected = {"architecture": manifest["architecture"], "config": {"Labels": {}}}
     if manifest_type == MEDIATYPE_SCHEMA2_V2 and not inspected.get("config", {}).get(
         "Labels"
     ):

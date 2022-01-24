@@ -10,6 +10,8 @@ import attr
 import jinja2
 import pytest
 from mock import patch
+from six.moves.collections_abc import Mapping
+from six import PY2
 
 from ..errata.fake_errata_tool import FakeErrataToolController
 from ..koji.fake_koji import FakeKojiController
@@ -23,6 +25,34 @@ THIS_DIR = os.path.dirname(__file__)
 CASE_DIR = os.path.join(THIS_DIR, "cases")
 CASE_TEMPLATE_FILE = os.path.join(THIS_DIR, "template.yml.j2")
 SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
+
+
+def mapping_to_dict(value):
+    # A helper to convert Mappings of any type explicitly into dict.
+    #
+    # Why:
+    # - pyyaml can serialize dict fine, but not arbitrary mappings
+    # - current versions of frozendict are instanceof Mapping but not dict
+    #
+    if isinstance(value, Mapping):
+        return dict(value)
+    return value
+
+
+def asdict(value):
+    # attr.asdict using slightly different arguments for ancient vs modern python.
+    if PY2:
+        # py2 case: ancient attr version does not support value_serializer; luckily
+        # frozendict also is unused, so we don't need it.
+        return attr.asdict(value, recurse=True)
+
+    # modern case must use a value_serializer to convert frozendict into a
+    # serializable type.
+    return attr.asdict(
+        value,
+        recurse=True,
+        value_serializer=lambda _self, _field, value: mapping_to_dict(value),
+    )
 
 
 @pytest.fixture(scope="module")
@@ -124,9 +154,7 @@ class CaseHelper(object):
 
         item_dicts = []
         for item in items:
-            asdict = attr.asdict(item, recurse=True)
-
-            item_dicts.append({type(item).__name__: asdict})
+            item_dicts.append({type(item).__name__: asdict(item)})
 
         out_yaml = self.case_template.render(url=url, items=item_dicts)
         out_yaml = self.unrender(out_yaml)

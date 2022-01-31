@@ -33,7 +33,7 @@
   <h1>Source code for pushsource._impl.model.file</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
-<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">optional_str</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">convert_maybe</span>
 
 
 <div class="viewcode-block" id="FilePushItem"><a class="viewcode-back" href="../../../../model/files.html#pushsource.FilePushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -51,7 +51,40 @@
 <span class="sd">    For example, a push item for ``oc-4.2.33-linux.tar.gz`` may</span>
 <span class="sd">    use a version of ``&quot;4.2.33&quot;`` to denote that the file relates</span>
 <span class="sd">    to OpenShift version 4.2.33.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">display_order</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">convert_maybe</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+    <span class="sd">&quot;&quot;&quot;A display order hint associated with the file.</span>
+
+<span class="sd">    This value is intended for display purposes only.</span>
+<span class="sd">    In a UI presenting a file list, it is suggested that the default order</span>
+<span class="sd">    of files should be set by an ascending sort using this value.</span>
+<span class="sd">    This provides a method of keeping related files grouped together and</span>
+<span class="sd">    presented to users in a logical order.</span>
+
+<span class="sd">    .. versionadded:: 2.14.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@display_order</span><span class="o">.</span><span class="n">validator</span>
+    <span class="k">def</span> <span class="nf">_check_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># OK as field is optional</span>
+            <span class="k">return</span>
+
+        <span class="c1"># It has to be a float or convertible to float</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># Enforce some bounds:</span>
+        <span class="c1"># - UD has used 99999 as a default &quot;sort at end&quot;, so we&#39;ll make that the max</span>
+        <span class="c1">#   permitted value.</span>
+        <span class="c1"># - Pub&#39;s default set on push is 0, so most files in practice have that value.</span>
+        <span class="c1"># - It&#39;s not clear if negative values have been used. However it seems we should</span>
+        <span class="c1">#   allow them as otherwise there is no way to arrange for files to sort earlier</span>
+        <span class="c1">#   than Pub&#39;s historical default.</span>
+        <span class="c1"># - The lower bound may as well be symmetrical with the upper bound.</span>
+        <span class="c1"># - This check will also filter out NaN.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">99999</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">99999</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;display_order must be within range -99999 .. 99999&quot;</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -141,7 +174,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

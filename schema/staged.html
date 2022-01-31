@@ -198,6 +198,12 @@ definitions:
                 type: string
                 minLength: 1
 
+            order:
+                # An ordering hint for display purposes
+                type: number
+                minimum: -99999
+                maximum: 99999
+
             attributes:
                 # Additional metadata, differs per content type.
                 $ref: &quot;#/definitions/attributes_any&quot;
@@ -379,7 +385,7 @@ additionalProperties: false
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

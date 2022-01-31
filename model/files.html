@@ -52,6 +52,7 @@
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="#pushsource.FilePushItem.description" title="pushsource.FilePushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.FilePushItem.display_order" title="pushsource.FilePushItem.display_order"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display_order()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.FilePushItem.version" title="pushsource.FilePushItem.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
 </ul>
 <dl class="py attribute">
@@ -77,6 +78,25 @@ to OpenShift version 4.2.33.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.FilePushItem.display_order">
+<span class="sig-name descname"><span class="pre">display_order</span></span><a class="headerlink" href="#pushsource.FilePushItem.display_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>A display order hint associated with the file.</p>
+<p>This value is intended for display purposes only.
+In a UI presenting a file list, it is suggested that the default order
+of files should be set by an ascending sort using this value.
+This provides a method of keeping related files grouped together and
+presented to users in a logical order.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.14.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -173,7 +193,7 @@ to OpenShift version 4.2.33.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

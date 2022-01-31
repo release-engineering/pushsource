@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- n/a
+
+## [2.14.0] - 2022-02-01
+
 ### Added
 
 - Introduced `FilePushItem.display_order` attribute.
@@ -213,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.13.4...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.14.0...HEAD
+[2.14.0]: https://github.com/release-engineering/pushsource/compare/v2.13.4...v2.14.0
 [2.13.4]: https://github.com/release-engineering/pushsource/compare/v2.13.3...v2.13.4
 [2.13.3]: https://github.com/release-engineering/pushsource/compare/v2.13.2...v2.13.3
 [2.13.2]: https://github.com/release-engineering/pushsource/compare/v2.13.1...v2.13.2

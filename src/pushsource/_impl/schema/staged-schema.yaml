@@ -156,6 +156,12 @@ definitions:
                 type: string
                 minLength: 1
 
+            order:
+                # An ordering hint for display purposes
+                type: number
+                minimum: -99999
+                maximum: 99999
+
             attributes:
                 # Additional metadata, differs per content type.
                 $ref: "#/definitions/attributes_any"

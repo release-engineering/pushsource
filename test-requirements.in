@@ -1,6 +1,5 @@
 PyYAML
 attrs
-black
 coveralls
 frozenlist2
 jinja2

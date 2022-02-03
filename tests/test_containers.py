@@ -237,34 +237,34 @@ def test_get_manifest(requests_mock, fake_home):
         "sha256:25a01ec9bfd13d405583ef21cdc9ba3182684578ee46248559e75eb59cd73f36"
     )
     expected_manifest = {
-        u"architecture": u"amd64",
-        u"fsLayers": [
+        "architecture": "amd64",
+        "fsLayers": [
             {
-                u"blobSum": u"sha256:b4a41a81fce32bd7fb00ad10e6c73285f937ce2110a619d306ec09f487b40cca"
+                "blobSum": "sha256:b4a41a81fce32bd7fb00ad10e6c73285f937ce2110a619d306ec09f487b40cca"
             },
             {
-                u"blobSum": u"sha256:16dc1f96e3a1bb628be2e00518fec2bb97bd5933859de592a00e2eb7774b6ecf"
+                "blobSum": "sha256:16dc1f96e3a1bb628be2e00518fec2bb97bd5933859de592a00e2eb7774b6ecf"
             },
         ],
-        u"name": u"twaugh/buildroot",
-        u"schemaVersion": 1,
-        u"signatures": [
+        "name": "twaugh/buildroot",
+        "schemaVersion": 1,
+        "signatures": [
             {
-                u"header": {
-                    u"alg": u"ES256",
-                    u"jwk": {
-                        u"crv": u"P-256",
-                        u"kid": u"IT3U:4H7H:YPAL:CSU4:CAC2:MFNW:IWV5:YQNM:547A:FMN4:A4D3:UZAG",
-                        u"kty": u"EC",
-                        u"x": u"WjjIX9YwUSO64Zc5iNMODC4mh9vB-mqgt1uEcE7gLfE",
-                        u"y": u"6fhZlalfi9_cvQd-AwBBwGnidIZKIYVzLsSV6HBR8jA",
+                "header": {
+                    "alg": "ES256",
+                    "jwk": {
+                        "crv": "P-256",
+                        "kid": "IT3U:4H7H:YPAL:CSU4:CAC2:MFNW:IWV5:YQNM:547A:FMN4:A4D3:UZAG",
+                        "kty": "EC",
+                        "x": "WjjIX9YwUSO64Zc5iNMODC4mh9vB-mqgt1uEcE7gLfE",
+                        "y": "6fhZlalfi9_cvQd-AwBBwGnidIZKIYVzLsSV6HBR8jA",
                     },
                 },
-                u"protected": u"eyJmb3JtYXRMZW5ndGgiOjIzMjAsImZvcm1hdFRhaWwiOiJDbjAiLCJ0aW1lIjoiMjAxNi0wNy0xM1QwOToxNjoxMFoifQ",
-                u"signature": u"-dqrUzJ8IbSURO__gkbG2vdzQEbjX32Qv2DjWG3mazTGsRXXgYofr-6VY7lMDUwiOERTD9Te9wyyrALMB7Yt1A",
+                "protected": "eyJmb3JtYXRMZW5ndGgiOjIzMjAsImZvcm1hdFRhaWwiOiJDbjAiLCJ0aW1lIjoiMjAxNi0wNy0xM1QwOToxNjoxMFoifQ",
+                "signature": "-dqrUzJ8IbSURO__gkbG2vdzQEbjX32Qv2DjWG3mazTGsRXXgYofr-6VY7lMDUwiOERTD9Te9wyyrALMB7Yt1A",
             }
         ],
-        u"tag": expected_tag,
+        "tag": expected_tag,
     }
 
     headers = {
@@ -475,34 +475,34 @@ def test_inspect_v1(requests_mock):
         "content-type": "application/vnd.docker.distribution.manifest.v1+json",
     }
     expected_manifest = {
-        u"architecture": u"amd64",
-        u"fsLayers": [
+        "architecture": "amd64",
+        "fsLayers": [
             {
-                u"blobSum": u"sha256:b4a41a81fce32bd7fb00ad10e6c73285f937ce2110a619d306ec09f487b40cca"
+                "blobSum": "sha256:b4a41a81fce32bd7fb00ad10e6c73285f937ce2110a619d306ec09f487b40cca"
             },
             {
-                u"blobSum": u"sha256:16dc1f96e3a1bb628be2e00518fec2bb97bd5933859de592a00e2eb7774b6ecf"
+                "blobSum": "sha256:16dc1f96e3a1bb628be2e00518fec2bb97bd5933859de592a00e2eb7774b6ecf"
             },
         ],
-        u"name": u"twaugh/buildroot",
-        u"schemaVersion": 1,
-        u"signatures": [
+        "name": "twaugh/buildroot",
+        "schemaVersion": 1,
+        "signatures": [
             {
-                u"header": {
-                    u"alg": u"ES256",
-                    u"jwk": {
-                        u"crv": u"P-256",
-                        u"kid": u"IT3U:4H7H:YPAL:CSU4:CAC2:MFNW:IWV5:YQNM:547A:FMN4:A4D3:UZAG",
-                        u"kty": u"EC",
-                        u"x": u"WjjIX9YwUSO64Zc5iNMODC4mh9vB-mqgt1uEcE7gLfE",
-                        u"y": u"6fhZlalfi9_cvQd-AwBBwGnidIZKIYVzLsSV6HBR8jA",
+                "header": {
+                    "alg": "ES256",
+                    "jwk": {
+                        "crv": "P-256",
+                        "kid": "IT3U:4H7H:YPAL:CSU4:CAC2:MFNW:IWV5:YQNM:547A:FMN4:A4D3:UZAG",
+                        "kty": "EC",
+                        "x": "WjjIX9YwUSO64Zc5iNMODC4mh9vB-mqgt1uEcE7gLfE",
+                        "y": "6fhZlalfi9_cvQd-AwBBwGnidIZKIYVzLsSV6HBR8jA",
                     },
                 },
-                u"protected": u"eyJmb3JtYXRMZW5ndGgiOjIzMjAsImZvcm1hdFRhaWwiOiJDbjAiLCJ0aW1lIjoiMjAxNi0wNy0xM1QwOToxNjoxMFoifQ",
-                u"signature": u"-dqrUzJ8IbSURO__gkbG2vdzQEbjX32Qv2DjWG3mazTGsRXXgYofr-6VY7lMDUwiOERTD9Te9wyyrALMB7Yt1A",
+                "protected": "eyJmb3JtYXRMZW5ndGgiOjIzMjAsImZvcm1hdFRhaWwiOiJDbjAiLCJ0aW1lIjoiMjAxNi0wNy0xM1QwOToxNjoxMFoifQ",
+                "signature": "-dqrUzJ8IbSURO__gkbG2vdzQEbjX32Qv2DjWG3mazTGsRXXgYofr-6VY7lMDUwiOERTD9Te9wyyrALMB7Yt1A",
             }
         ],
-        u"tag": tag,
+        "tag": tag,
     }
     requests_mock.register_uri(
         "GET",
@@ -661,8 +661,8 @@ def test_inspect_list(requests_mock):
     )
     inspected = inspect("https://%s" % registry, "test-repo", "test-tag")
     assert inspected == {
-        u"architecture": u"ppc64le",
-        u"config": {u"Labels": {u"architecture": u"ppc64le"}},
+        "architecture": "ppc64le",
+        "config": {"Labels": {"architecture": "ppc64le"}},
         # digest should be calculated from manifest list
         "digest": "sha256:1e89f8bff8d8a6c324ed32ff35ecd457aefec17be856f6bb3a868c2a394dcc88",
     }

@@ -14,6 +14,7 @@ items:
     description: null
     dest:
     - dest1
+    display_order: 1.5
     md5sum: null
     name: test.txt
     origin: {{ src_dir }}/tests/staged/data/simple_files
@@ -28,6 +29,7 @@ items:
     description: ''
     dest:
     - dest2
+    display_order: 3.0
     md5sum: null
     name: some-file.txt
     origin: {{ src_dir }}/tests/staged/data/simple_files
@@ -42,6 +44,7 @@ items:
     description: My wonderful ISO
     dest:
     - dest2
+    display_order: null
     md5sum: null
     name: some-iso
     origin: {{ src_dir }}/tests/staged/data/simple_files

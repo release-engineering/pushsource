@@ -15,6 +15,7 @@ class StagingFileMetadata(object):
     relative_path = attr.ib(type=str)
     sha256sum = attr.ib(type=str)
     version = attr.ib(type=str)
+    order = attr.ib(type=float)
 
 
 @attr.s()
@@ -54,6 +55,7 @@ class StagingMetadata(object):
                 relative_path=entry["relative_path"],
                 sha256sum=entry.get("sha256sum"),
                 version=entry.get("version"),
+                order=entry.get("order"),
             )
             if md.relative_path in file_metadata:
                 raise ValueError(

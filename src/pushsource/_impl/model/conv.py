@@ -115,6 +115,22 @@ def int2str(value):
     return value
 
 
+def convert_maybe(fn):
+    # Given a conversion function, returns a wrapped function which performs
+    # no conversion on None values.
+    #
+    # This is useful for the common case of an optional attribute (default=None),
+    # where a converter should be applied if and only if the default value isn't
+    # being used.
+
+    def out(value):
+        if value is None:
+            return None
+        return fn(value)
+
+    return out
+
+
 in_ = attr.validators.in_
 instance_of = attr.validators.instance_of
 instance_of_str = instance_of(six.string_types)

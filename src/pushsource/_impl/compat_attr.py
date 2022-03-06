@@ -6,7 +6,7 @@ import attr
 
 
 def s():
-    kwargs = {"frozen": True}
+    kwargs = {"frozen": True, "slots": True}
     if sys.version_info >= (3,):
         kwargs["kw_only"] = True
     return attr.s(**kwargs)

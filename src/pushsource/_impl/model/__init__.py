@@ -8,6 +8,7 @@ from .erratum import (
 )
 from .rpm import RpmPushItem
 from .file import FilePushItem
+from .directory import DirectoryPushItem
 from .container import (
     ContainerImagePushItem,
     ContainerImagePullInfo,

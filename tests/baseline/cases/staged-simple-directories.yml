@@ -1,0 +1,46 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_directories"
+
+# Push items generated from above.
+items:
+- DirectoryPushItem:
+    build: null
+    build_info: null
+    dest:
+    - dest1
+    md5sum: null
+    name: dest1
+    origin: null
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_directories/dest1/RAW
+    state: PENDING
+- DirectoryPushItem:
+    build: null
+    build_info: null
+    dest:
+    - dest2
+    md5sum: null
+    name: dest2
+    origin: null
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_directories/dest2/RAW
+    state: PENDING
+- DirectoryPushItem:
+    build: null
+    build_info: null
+    dest:
+    - origin
+    md5sum: null
+    name: origin
+    origin: null
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_directories/origin/RAW
+    state: PENDING

@@ -46,6 +46,7 @@
 <span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
 
 <span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">DirectoryPushItem</span>
 <span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">as_completed_with_timeout_reset</span>
 
 <span class="kn">from</span> <span class="nn">.staged_utils</span> <span class="kn">import</span> <span class="n">StagingMetadata</span><span class="p">,</span> <span class="n">StagingLeafDir</span>
@@ -155,6 +156,12 @@
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Scanning </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span> <span class="o">==</span> <span class="s2">&quot;RAW&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">DirectoryPushItem</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">leafdir</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="p">[</span><span class="n">leafdir</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">[</span><span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span><span class="p">](</span><span class="n">leafdir</span><span class="o">=</span><span class="n">leafdir</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_push_items_for_topdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topdir</span><span class="p">):</span>
@@ -179,7 +186,7 @@
         <span class="c1"># All directories which may contain files to be processed</span>
         <span class="n">all_leaf_dirs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">destdir</span> <span class="ow">in</span> <span class="n">destdirs</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RAW&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">):</span>
                 <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="n">file_type</span><span class="p">)</span>
                 <span class="n">all_leaf_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">StagingLeafDir</span><span class="p">(</span>

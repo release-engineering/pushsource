@@ -11,6 +11,7 @@ Supported content types:
 * RPMs
 * Advisories
 * Generic files
+* Complete directories
 * Amazon Machine Images (AMIs)
 * comps.xml files (yum repo metadata)
 * modulemd YAML streams (yum repo metadata)
@@ -52,6 +53,7 @@ Here is a brief overview of the structure of a staging directory:
   root/destination/MODULEMD/*
   root/destination/RPMS/*.rpm
   root/destination/AWS_IMAGES/*
+  root/destination/RAW/*
 
 The staging directory consists of:
 
@@ -184,6 +186,17 @@ Amazon Machine Image (AMI).
 Files in this directory must have metadata included in ``staged.yaml``.
 
 Will yield instances of :class:`~pushsource.AmiPushItem`.
+
+root/destination/RAW/\*
+.......................
+
+``RAW`` should generally be interpreted as a request to recursively publish the
+entire directory tree as-is. Each file in ``RAW`` can be any type of file, to be
+published verbatim. In practice, ``RAW`` is used for kickstart trees, ostrees, and
+origin-only content.
+
+Will yield instances of :class:`~pushsource.DirectoryPushItem`.
+
 
 
 Python API reference

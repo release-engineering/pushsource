@@ -44,6 +44,7 @@ can be provided in a YAML or JSON file.</p>
 <li><p>RPMs</p></li>
 <li><p>Advisories</p></li>
 <li><p>Generic files</p></li>
+<li><p>Complete directories</p></li>
 <li><p>Amazon Machine Images (AMIs)</p></li>
 <li><p>comps.xml files (yum repo metadata)</p></li>
 <li><p>modulemd YAML streams (yum repo metadata)</p></li>
@@ -74,6 +75,7 @@ Each staging directory must use the <a class="reference internal" href="#staging
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">MODULEMD</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/*.</span><span class="n">rpm</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">AWS_IMAGES</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RAW</span><span class="o">/*</span>
 </pre></div>
 </div>
 <p>The staging directory consists of:</p>
@@ -175,6 +177,14 @@ required that source RPMs are placed in the <code class="docutils literal notran
 Amazon Machine Image (AMI).</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
 <p>Will yield instances of <a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a>.</p>
+</section>
+<section id="root-destination-raw">
+<h3>root/destination/RAW/*<a class="headerlink" href="#root-destination-raw" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">RAW</span></code> should generally be interpreted as a request to recursively publish the
+entire directory tree as-is. Each file in <code class="docutils literal notranslate"><span class="pre">RAW</span></code> can be any type of file, to be
+published verbatim. In practice, <code class="docutils literal notranslate"><span class="pre">RAW</span></code> is used for kickstart trees, ostrees, and
+origin-only content.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/directory.html#pushsource.DirectoryPushItem" title="pushsource.DirectoryPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DirectoryPushItem</span></code></a>.</p>
 </section>
 </section>
 <section id="python-api-reference">

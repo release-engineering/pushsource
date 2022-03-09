@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.16.0] - 2022-03-10
+
+### Fixed
+
+- Added a workaround for a python2 strptime thread-safety bug.
+
+### Added
+
+- Introduced `DirectoryPushItem` class for `RAW` content.
+
 ## [2.15.0] - 2022-03-08
 
 ### Changed
@@ -223,7 +233,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.15.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.16.0...HEAD
+[2.16.0]: https://github.com/release-engineering/pushsource/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/release-engineering/pushsource/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/release-engineering/pushsource/compare/v2.13.4...v2.14.0
 [2.13.4]: https://github.com/release-engineering/pushsource/compare/v2.13.3...v2.13.4

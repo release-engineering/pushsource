@@ -13,6 +13,7 @@ from pushcollector import Collector
 from more_executors import Executors
 
 from ...source import Source
+from ...model import DirectoryPushItem
 from ...helpers import list_argument, as_completed_with_timeout_reset
 
 from .staged_utils import StagingMetadata, StagingLeafDir
@@ -122,6 +123,12 @@ class StagedSource(
         LOG.debug("Scanning %s", leafdir.path)
         if not os.path.exists(leafdir.path):
             return []
+        if leafdir.file_type == "RAW":
+            return [
+                DirectoryPushItem(
+                    name=leafdir.dest, src=leafdir.path, dest=[leafdir.dest]
+                )
+            ]
         return self._FILE_TYPES[leafdir.file_type](leafdir=leafdir, metadata=metadata)
 
     def _push_items_for_topdir(self, topdir):
@@ -146,7 +153,7 @@ class StagedSource(
         # All directories which may contain files to be processed
         all_leaf_dirs = []
         for destdir in destdirs:
-            for file_type in self._FILE_TYPES:
+            for file_type in ["RAW"] + list(self._FILE_TYPES):
                 path = os.path.join(destdir, file_type)
                 all_leaf_dirs.append(
                     StagingLeafDir(

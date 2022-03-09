@@ -3,6 +3,7 @@ from pushsource._impl.model import (
     PushItem,
     KojiBuildInfo,
     FilePushItem,
+    DirectoryPushItem,
     CompsXmlPushItem,
     ModuleMdPushItem,
     ModuleMdSourcePushItem,

@@ -1,5 +1,8 @@
 import inspect
 import functools
+from threading import Lock
+
+import pkg_resources
 
 from six.moves.urllib import parse
 
@@ -73,7 +76,8 @@ class Source(object):
     """
 
     _BACKENDS = {}
-    _BACKENDS_BUILTIN = {}
+    _BACKENDS_RESET = {}
+    _INIT_LOCK = Lock()
 
     def __enter__(self):
         return self
@@ -87,6 +91,25 @@ class Source(object):
         Yields a series of :class:`~pushsource.PushItem` instances.
         """
         raise NotImplementedError()
+
+    @classmethod
+    def __ensure_init(cls):
+        # ensures backends are initialized; this is a one-time operation
+        # the first time get() is called.
+        if not cls._BACKENDS_RESET:
+            with cls._INIT_LOCK:
+                if not cls._BACKENDS_RESET:
+                    cls.__load_entrypoints()
+                    cls._BACKENDS_RESET = cls._BACKENDS.copy()
+
+    @classmethod
+    def __load_entrypoints(cls):
+        for ep in pkg_resources.iter_entry_points("pushsource"):
+            # Note we're just trying to import the entry point's module, not
+            # call any method.
+            # resolve vs load is for different versions of pkg_resources.
+            # Result is assigned to a var to avoid a pylint warning.
+            _ = ep.resolve() if hasattr(ep, "resolve") else ep.load(require=False)
 
     @classmethod
     def get(cls, source_url, **kwargs):
@@ -141,6 +164,8 @@ class Source(object):
                 A callable which accepts any number of keyword arguments
                 and returns a :class:`~pushsource.Source`.
         """
+        cls.__ensure_init()
+
         parsed = parse.urlparse(source_url)
         scheme = parsed.scheme
 
@@ -257,13 +282,6 @@ class Source(object):
         cls._BACKENDS[name] = factory
 
     @classmethod
-    def _register_backend_builtin(cls, name, factory):
-        # Private equivalent of register_backend which also flags the
-        # backend as built-in, i.e. it will be restored on a call to reset.
-        cls.register_backend(name, factory)
-        cls._BACKENDS_BUILTIN[name] = factory
-
-    @classmethod
     def reset(cls):
         """Reset the library to the default configuration.
 
@@ -275,4 +293,5 @@ class Source(object):
 
         .. versionadded:: 2.6.0
         """
-        cls._BACKENDS = cls._BACKENDS_BUILTIN.copy()
+        cls.__ensure_init()
+        cls._BACKENDS = cls._BACKENDS_RESET.copy()

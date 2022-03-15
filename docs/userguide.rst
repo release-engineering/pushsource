@@ -158,6 +158,25 @@ To implement a backend, follow these steps:
 After following the above steps, instances of your source can be obtained by
 :meth:`~pushsource.Source.get`, in the same manner as backends built-in to the library.
 
+If you’re unsure how to arrange for your call to :class:`~pushsource.Source.register_backend`
+to occur prior to the usage of :meth:`~pushsource.Source.get`, you may declare entry points
+in the ``pushsource`` group; the library will enforce that all modules in this group are
+imported when :meth:`~pushsource.Source.get` is called. This functionality requires
+pushsource 2.17.0 or later.
+
+For example, in setup.py, one may declare:
+
+.. code-block:: python
+
+  entry_points={
+    "pushsource": [
+        # Left-hand side can be anything.
+        # Right-hand side is the name of your module which, on import time,
+        # should perform a call to "Source.register_backend".
+        "mybackend = mylib.my_pushsource_backend",
+    ]
+  },
+
 
 .. _binding:
 

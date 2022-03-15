@@ -183,4 +183,4 @@ class RegistrySource(Source):
                 yield self._push_item_from_registry_uri(uri, key)
 
 
-Source._register_backend_builtin("registry", RegistrySource)
+Source.register_backend("registry", RegistrySource)

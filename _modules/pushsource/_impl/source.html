@@ -33,6 +33,9 @@
   <h1>Source code for pushsource._impl.source</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
 
 <span class="kn">from</span> <span class="nn">six.moves.urllib</span> <span class="kn">import</span> <span class="n">parse</span>
 
@@ -106,7 +109,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_BACKENDS</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">_BACKENDS_BUILTIN</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_BACKENDS_RESET</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_INIT_LOCK</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
@@ -120,6 +124,25 @@
 <span class="sd">        Yields a series of :class:`~pushsource.PushItem` instances.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__ensure_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="c1"># ensures backends are initialized; this is a one-time operation</span>
+        <span class="c1"># the first time get() is called.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_INIT_LOCK</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">__load_entrypoints</span><span class="p">()</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__load_entrypoints</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">iter_entry_points</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">):</span>
+            <span class="c1"># Note we&#39;re just trying to import the entry point&#39;s module, not</span>
+            <span class="c1"># call any method.</span>
+            <span class="c1"># resolve vs load is for different versions of pkg_resources.</span>
+            <span class="c1"># Result is assigned to a var to avoid a pylint warning.</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;resolve&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">require</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Source.get"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -174,6 +197,8 @@
 <span class="sd">                A callable which accepts any number of keyword arguments</span>
 <span class="sd">                and returns a :class:`~pushsource.Source`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__ensure_init</span><span class="p">()</span>
+
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">source_url</span><span class="p">)</span>
         <span class="n">scheme</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span>
 
@@ -289,13 +314,6 @@
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_register_backend_builtin</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
-        <span class="c1"># Private equivalent of register_backend which also flags the</span>
-        <span class="c1"># backend as built-in, i.e. it will be restored on a call to reset.</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_BUILTIN</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span>
-
 <div class="viewcode-block" id="Source.reset"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.reset">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset the library to the default configuration.</span>
@@ -308,7 +326,8 @@
 
 <span class="sd">        .. versionadded:: 2.6.0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_BUILTIN</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__ensure_init</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
 </pre></div>
 
           </div>

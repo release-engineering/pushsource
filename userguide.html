@@ -208,6 +208,22 @@ and class as arguments.</p></li>
 </ul>
 <p>After following the above steps, instances of your source can be obtained by
 <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>, in the same manner as backends built-in to the library.</p>
+<p>If you’re unsure how to arrange for your call to <a class="reference internal" href="sources/base.html#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code></a>
+to occur prior to the usage of <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>, you may declare entry points
+in the <code class="docutils literal notranslate"><span class="pre">pushsource</span></code> group; the library will enforce that all modules in this group are
+imported when <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> is called. This functionality requires
+pushsource 2.17.0 or later.</p>
+<p>For example, in setup.py, one may declare:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+  <span class="s2">&quot;pushsource&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="c1"># Left-hand side can be anything.</span>
+      <span class="c1"># Right-hand side is the name of your module which, on import time,</span>
+      <span class="c1"># should perform a call to &quot;Source.register_backend&quot;.</span>
+      <span class="s2">&quot;mybackend = mylib.my_pushsource_backend&quot;</span><span class="p">,</span>
+  <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
 </section>
 <section id="binding-partially-configured-backends">
 <span id="binding"></span><h2><a class="toc-backref" href="#id6">Binding partially-configured backends</a><a class="headerlink" href="#binding-partially-configured-backends" title="Permalink to this headline">¶</a></h2>

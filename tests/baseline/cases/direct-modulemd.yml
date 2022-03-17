@@ -1,0 +1,21 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "modulemd:/some/path/to/modules.yaml?name=my-best-module"
+
+# Push items generated from above.
+items:
+- ModuleMdPushItem:
+    build: null
+    build_info: null
+    dest: []
+    md5sum: null
+    name: my-best-module
+    origin: direct
+    sha256sum: null
+    signing_key: null
+    src: /some/path/to/modules.yaml
+    state: PENDING

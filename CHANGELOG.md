@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.18.0] - 2022-03-18
+
+### Added
+
+- Introduced new backends to load a single file: "file", "rpm" and others.
+- Introduced `pushsource-ls` command.
+
 ## [2.17.0] - 2022-03-16
 
 ### Added
@@ -239,7 +246,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.17.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.18.0...HEAD
+[2.18.0]: https://github.com/release-engineering/pushsource/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/release-engineering/pushsource/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/release-engineering/pushsource/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/release-engineering/pushsource/compare/v2.14.0...v2.15.0

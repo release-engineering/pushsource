@@ -76,35 +76,22 @@ Available backends
 The pushsource library includes the following backends.
 For detailed information, see the API reference of the associated class.
 
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| Name         | Examples                                                                    | Class                               | Description                                        |
-+==============+=============================================================================+=====================================+====================================================+
-| koji         | ``koji:https://koji.fedoraproject.org?rpm=python3-3.7.5-2.fc31.x86_64.rpm`` | :class:`~pushsource.KojiSource`     | Obtain RPMs, container images and other content    |
-|              |                                                                             |                                     | from a koji server                                 |
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| staged       | ``staged:/mnt/vol/my/staged/content``                                       | :class:`~pushsource.StagedSource`   | Obtain RPMs, files, AMIs and other content from    |
-|              |                                                                             |                                     | locally mounted filesystem                         |
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| registry     | ``registry:image=registry.access.redhat.com/ubi8/ubi:latest``               | :class:`~pushsource.RegistrySource` | Obtain images from a container image registry      |
-|              |                                                                             |                                     |                                                    |
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| errata       | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource`   | Obtain RPMs, container images and advisory         |
-|              |                                                                             |                                     | metadata from Errata Tool                          |
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| file         | ``file:/tmp/file-to-push``                                                  | n/a                                 | Obtain a single file-backed item of various types. |
-+--------------+-----------------------------------------------------------------------------+                                     |                                                    |
-| dir          | ``dir:/publish-src?dest=/dest1,/dest2``                                     |                                     |                                                    |
-+--------------+-----------------------------------------------------------------------------+                                     |                                                    |
-| rpm          | ``rpm:Downloads/python3-3.7.5-2.fc31.x86_64.rpm?signing_key=a1b2c3``        |                                     | Each backend of this type accepts any arguments    |
-+--------------+-----------------------------------------------------------------------------+                                     | of string type documented on the corresponding     |
-| comps        | ``comps:/my/comps.xml?dest=my-target-repo``                                 |                                     | :class:`~pushsource.PushItem` subclass.            |
-+--------------+-----------------------------------------------------------------------------+                                     | Arguments of more complex types cannot be used.    |
-| modulemd     | ``modulemd:modules.yaml?name=perl:5.24``                                    |                                     |                                                    |
-+--------------+-----------------------------------------------------------------------------+                                     |                                                    |
-| modulemd-src | ``modulemd-src:/some/modulemd.src.txt``                                     |                                     |                                                    |
-+--------------+-----------------------------------------------------------------------------+                                     |                                                    |
-| productid    | ``productid:/files/product.pem``                                            |                                     |                                                    |
-+--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
++----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+| Name     | Examples                                                                    | Class                               | Description                                        |
++==========+=============================================================================+=====================================+====================================================+
+| koji     | ``koji:https://koji.fedoraproject.org?rpm=python3-3.7.5-2.fc31.x86_64.rpm`` | :class:`~pushsource.KojiSource`     | Obtain RPMs, container images and other content    |
+|          |                                                                             |                                     | from a koji server                                 |
++----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+| staged   | ``staged:/mnt/vol/my/staged/content``                                       | :class:`~pushsource.StagedSource`   | Obtain RPMs, files, AMIs and other content from    |
+|          |                                                                             |                                     | locally mounted filesystem                         |
++----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+| registry | ``registry:image=registry.access.redhat.com/ubi8/ubi:latest``               | :class:`~pushsource.RegistrySource` | Obtain images from a container image registry      |
+|          |                                                                             |                                     |                                                    |
++----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+| errata   | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource`   | Obtain RPMs, container images and advisory         |
+|          |                                                                             |                                     | metadata from Errata Tool                          |
++----------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+
 
 Processing push items
 ---------------------

@@ -1,0 +1,26 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "file:my/great/file.txt?dest=repo1,repo2&name=custom-filename"
+
+# Push items generated from above.
+items:
+- FilePushItem:
+    build: null
+    build_info: null
+    description: null
+    dest:
+    - repo1
+    - repo2
+    display_order: null
+    md5sum: null
+    name: custom-filename
+    origin: direct
+    sha256sum: null
+    signing_key: null
+    src: my/great/file.txt
+    state: PENDING
+    version: null

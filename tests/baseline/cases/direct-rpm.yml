@@ -1,0 +1,22 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "rpm:/some/test.rpm?signing_key=a1b2c3&origin=custom-origin"
+
+# Push items generated from above.
+items:
+- RpmPushItem:
+    build: null
+    build_info: null
+    dest: []
+    md5sum: null
+    module_build: null
+    name: test.rpm
+    origin: custom-origin
+    sha256sum: null
+    signing_key: A1B2C3
+    src: /some/test.rpm
+    state: PENDING

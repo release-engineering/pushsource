@@ -1,0 +1,24 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "productid:/dir/greatest-productid-of-all-time?dest=repo1,repo2,repo3"
+
+# Push items generated from above.
+items:
+- ProductIdPushItem:
+    build: null
+    build_info: null
+    dest:
+    - repo1
+    - repo2
+    - repo3
+    md5sum: null
+    name: greatest-productid-of-all-time
+    origin: direct
+    sha256sum: null
+    signing_key: null
+    src: /dir/greatest-productid-of-all-time
+    state: PENDING

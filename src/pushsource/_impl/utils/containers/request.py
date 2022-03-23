@@ -67,7 +67,7 @@ def request_token(session, response, credentials, repo_name):
     except KeyError as e:
         six.raise_from(IOError("No realm specified for token auth challenge."), e)
 
-    if "scope" not in auth_info:
+    if "scope" not in auth_info and repo_name:
         auth_info["scope"] = "repository:%s:pull" % repo_name
 
     parse_result = urlparse.urlparse(token_url)

@@ -74,8 +74,8 @@ jsonschema==4.4.0 \
     --hash=sha256:636694eb41b3535ed608fe04129f26542b59ed99808b4f688aa32dcf55317a83 \
     --hash=sha256:77281a1f71684953ee8b3d488371b162419767973789272434bbc3f29d9c8823
     # via pushcollector
-kobo==0.20.3 \
-    --hash=sha256:e10486b7092a0ef3513df66db60d5344ee3ff709c3096010ba35ecf1d401dbeb
+kobo==0.21.0 \
+    --hash=sha256:bf4de937180afa9b04fa4a7b3443301011862d49c952d9f2eb7d727e8d1afd0f
     # via -r requirements.in
 koji==1.28.0 \
     --hash=sha256:33adbd99cad9354f20e853414ddff482dbc1a5706439db81e123d64570f0abc3 \
@@ -86,9 +86,9 @@ monotonic==1.6 \
     --hash=sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7 \
     --hash=sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c
     # via more-executors
-more-executors==2.10.0 \
-    --hash=sha256:170cdf50289f33e75379e79b1b68a0121be860a79f272d8d372c9cedeae1eb15 \
-    --hash=sha256:b65e77c07d4eec046f6872e314670fc8192106ce1f47c9bd23570af609c29de4
+more-executors==2.10.1 \
+    --hash=sha256:5c64b26f7130e450df4a8ed0471e05d397472a5e18a35ac3c56d772a702d4fea \
+    --hash=sha256:e9e42aa58678a0a9a50255b209a77f91ee25a31dec3c7d4733cb4fe0ced38cf8
     # via
     #   -r requirements.in
     #   pushcollector

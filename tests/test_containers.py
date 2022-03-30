@@ -37,6 +37,7 @@ from pushsource._impl.utils.containers import (
 from pushsource._impl.utils.containers.request import (
     parse_401_response_headers,
     AuthToken,
+    request_token,
 )
 
 
@@ -400,6 +401,42 @@ def test_get_manifest_raise_on_UNKNOWN_MANIFEST(requests_mock, fake_home):
 
     with pytest.raises(KeyError, match=error_message):
         digest, manifest = get_manifest("https://%s" % service, image, tag)
+
+
+def test_request_token_without_scope(requests_mock):
+    image = "repo/sitory"
+    service = "registry.docker.io"
+    expected_token = "new token"
+    headers = {
+        "www-authenticate": 'Bearer realm="https://{0}/token",service="registry.docker.io"'.format(
+            service
+        )
+    }
+    response = MagicMock(headers=headers)
+
+    def call_back(request, context):
+        if request.path_url.find("scope=") >= 0:
+            context.__setattr__("status_code", 200),
+            return {"token": expected_token}
+        else:
+            context.__setattr__("status_code", 401),
+            context.__setattr__("reason", "Unauthorized access"),
+            return {}
+
+    requests_mock.register_uri(
+        "GET",
+        "https://%s/token" % (service,),
+        json=call_back,
+    )
+
+    token = request_token(
+        requests.session(),
+        response=response,
+        credentials=("user", "pass"),
+        repo_name=image,
+    )
+
+    assert token == expected_token
 
 
 def test_request_token_only_if_requested_by_server(requests_mock):

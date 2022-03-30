@@ -51,7 +51,7 @@ def update_auth_header(headers, token):
     return headers
 
 
-def request_token(session, response, credentials):
+def request_token(session, response, credentials, repo_name):
     """
     Attempts to retrieve the correct token based on the 401 response header.
     According to the Docker API v2 documentation, the token be retrieved by issuing a GET
@@ -66,6 +66,9 @@ def request_token(session, response, credentials):
         token_url = auth_info.pop("realm")
     except KeyError as e:
         six.raise_from(IOError("No realm specified for token auth challenge."), e)
+
+    if "scope" not in auth_info and repo_name:
+        auth_info["scope"] = "repository:%s:pull" % repo_name
 
     parse_result = urlparse.urlparse(token_url)
     query_dict = urlparse.parse_qs(parse_result.query)
@@ -128,6 +131,7 @@ def registry_request(
     data=None,
     credentials=None,
     http_opts=None,
+    repo=None,
 ):
     """
     Retrieve a single path within the upstream registry, and return a
@@ -165,7 +169,7 @@ def registry_request(
             auth_header = e.response.headers.get("www-authenticate") or ""
             auth_header = auth_header.lower()
             if auth_header.startswith("bearer"):
-                auth_token.token = request_token(session, response, credentials)
+                auth_token.token = request_token(session, response, credentials, repo)
                 update_auth_header(headers, auth_token.token)
             elif auth_header.startswith("basic"):
                 http_opts["auth"] = credentials
@@ -225,6 +229,7 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             retry_404=True,
             credentials=auth,
             headers=headers,
+            repo=repo,
         )
         digest = resp.headers.get("docker-content-digest", None)
         if not digest:

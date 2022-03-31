@@ -102,6 +102,6 @@ class AmiPushItem(PushItem):
     billing_codes = attr.ib(
         type=AmiBillingCodes,
         default=None,
-        validator=optional(instance_of(AmiBillingCodes)),
+        validator=instance_of(AmiBillingCodes),
     )
     """Billing codes associated with this image."""

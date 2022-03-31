@@ -9,7 +9,9 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_ami"
 # Push items generated from above.
 items:
 - AmiPushItem:
-    billing_codes: null
+    billing_codes:
+      codes: []
+      name: FakeBcName
     build: null
     build_info: null
     description: A sample image for testing

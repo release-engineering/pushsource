@@ -105,6 +105,7 @@ definitions:
         - virtualization
         - volume
         - root_device
+        - billing_codes
 
         additionalProperties: false
 
@@ -226,7 +227,6 @@ definitions:
         # Billing codes for an AMI
         type:
         - object
-        - "null"
         properties:
             name:
                 type: string
@@ -236,7 +236,6 @@ definitions:
                     type: string
         required:
         - name
-        - codes
 
 ###############################################################################
 #  Main schema

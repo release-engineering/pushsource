@@ -267,6 +267,7 @@ def get_blob(registry, repo, digest, token=None):
         auth_token=token,
         retry_404=True,
         credentials=auth,
+        repo=repo,
     )
     resp.raise_for_status()
     return resp

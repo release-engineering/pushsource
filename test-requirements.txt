@@ -203,10 +203,10 @@ kobo==0.22.0 \
     # via
     #   -r requirements.in
     #   -r test-requirements.in
-koji==1.28.0 \
-    --hash=sha256:33adbd99cad9354f20e853414ddff482dbc1a5706439db81e123d64570f0abc3 \
-    --hash=sha256:54196a71e7f246727779ea941871b9ac78d6903962e76cba6dae517da6f5cfae \
-    --hash=sha256:ecea250efd07307a17ee933476a6eb9790ab49b38c8d4a2fca06119bbb6c1c27
+koji==1.28.1 \
+    --hash=sha256:1e8bb3ada29772971ef526fac41d53c2723e81d9c4f0a8c850bcf6df3d4a1a5a \
+    --hash=sha256:7f02d416901b056b76eb0b03439ac49e3b850c7029601d3cad7893357c1b28b7 \
+    --hash=sha256:943ffe37f22faa5d9f16ea434309d71a1a8e4952f540072e62d00bead5a32ffa
     # via
     #   -r requirements.in
     #   -r test-requirements.in
@@ -355,13 +355,13 @@ pyhamcrest==2.0.3 \
     --hash=sha256:c29dc977154c49e17c30d1ed49a0a6e31cb0dc7bcf733ac4aa9cb58519c2b00c \
     --hash=sha256:dfb19cf6d71743e086fbb761ed7faea5aacbc8ec10c17a08b93ecde39192a3db
     # via -r test-requirements.in
-pylint==2.13.4 \
-    --hash=sha256:7cc6d0c4f61dff440f9ed8b657f4ecd615dcfe35345953eb7b1dc74afe901d7a \
-    --hash=sha256:8672cf7441b81410f5de7defdf56e2d559c956fd0579652f2e0a0a35bea2d546
+pylint==2.13.5 \
+    --hash=sha256:c149694cfdeaee1aa2465e6eaab84c87a881a7d55e6e93e09466be7164764d1e \
+    --hash=sha256:dab221658368c7a05242e673c275c488670144123f4bd262b2777249c1c0de9b
     # via -r test-requirements.in
-pyparsing==3.0.7 \
-    --hash=sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea \
-    --hash=sha256:a6c06a88f252e6c322f65faf8f418b16213b51bdfaece0524c1c1bc30c63c484
+pyparsing==3.0.8 \
+    --hash=sha256:7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954 \
+    --hash=sha256:ef7b523f6356f763771559412c0d7134753f037822dad1b16945b7b846f7ad06
     # via packaging
 pyrsistent==0.18.1 \
     --hash=sha256:0e3e1fcc45199df76053026a51cc59ab2ea3fc7c094c6627e93b7b44cdae2c8c \

@@ -74,8 +74,8 @@ jsonschema==4.4.0 \
     --hash=sha256:636694eb41b3535ed608fe04129f26542b59ed99808b4f688aa32dcf55317a83 \
     --hash=sha256:77281a1f71684953ee8b3d488371b162419767973789272434bbc3f29d9c8823
     # via pushcollector
-kobo==0.22.0 \
-    --hash=sha256:0ddde47130232758ddd069320ed590e3a4d054732a6ce673ca118220f802e70a
+kobo==0.23.0 \
+    --hash=sha256:7d7c99e74702930edc2d556172caea45dea5d9b5876e178dbb4070d546bc4fa0
     # via -r requirements.in
 koji==1.28.1 \
     --hash=sha256:1e8bb3ada29772971ef526fac41d53c2723e81d9c4f0a8c850bcf6df3d4a1a5a \

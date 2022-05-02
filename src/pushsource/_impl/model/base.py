@@ -2,9 +2,11 @@ import hashlib
 import os
 import logging
 
+import six
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
+from .cache import TinyCache
 from .conv import (
     md5str,
     sha256str,
@@ -94,7 +96,11 @@ class PushItem(object):
     If the push item does not represent a file, this will generally be omitted.
     """
 
-    dest = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    dest = attr.ib(
+        type=list,
+        default=attr.Factory(frozenlist),
+        converter=TinyCache(frozenlist, frozenlist),
+    )
     """Destination of this push item.
 
     The meaning of "dest" differs depending on the source used and its configuration.
@@ -123,7 +129,9 @@ class PushItem(object):
         :meth:`with_checksums`
     """
 
-    origin = attr.ib(type=str, default=None, validator=optional_str)
+    origin = attr.ib(
+        type=str, default=None, validator=optional_str, converter=TinyCache(str)
+    )
     """A string representing the origin of this push item.
 
     The "origin" field is expected to record some info on how this push item
@@ -149,7 +157,10 @@ class PushItem(object):
         return KojiBuildInfo._from_nvr(self.build)
 
     signing_key = attr.ib(
-        type=str, default=None, validator=optional_str, converter=upper_if_str
+        type=str,
+        default=None,
+        validator=optional_str,
+        converter=TinyCache(six.string_types, upper_if_str),
     )
     """If this push item was GPG signed, this should be an identifier for the
     signing key used.

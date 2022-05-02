@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.19.0] - 2022-05-03
+
+### Changed
+
+- Reduced memory usage by caching duplicate values on `PushItem` instances.
+
 ## [2.18.2] - 2022-04-06
 
 ### Fixed
@@ -258,7 +264,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.18.2...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.19.0...HEAD
+[2.19.0]: https://github.com/release-engineering/pushsource/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/release-engineering/pushsource/compare/v2.18.1...v2.18.2
 [2.18.1]: https://github.com/release-engineering/pushsource/compare/v2.18.0...v2.18.1
 [2.18.0]: https://github.com/release-engineering/pushsource/compare/v2.17.0...v2.18.0

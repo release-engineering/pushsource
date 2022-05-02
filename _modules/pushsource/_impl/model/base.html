@@ -35,9 +35,11 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">.cache</span> <span class="kn">import</span> <span class="n">TinyCache</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">md5str</span><span class="p">,</span>
     <span class="n">sha256str</span><span class="p">,</span>
@@ -127,7 +129,11 @@
 <span class="sd">    If the push item does not represent a file, this will generally be omitted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">dest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">,</span> <span class="n">frozenlist</span><span class="p">),</span>
+    <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Destination of this push item.</span>
 
 <span class="sd">    The meaning of &quot;dest&quot; differs depending on the source used and its configuration.</span>
@@ -156,7 +162,9 @@
 <span class="sd">        :meth:`with_checksums`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;A string representing the origin of this push item.</span>
 
 <span class="sd">    The &quot;origin&quot; field is expected to record some info on how this push item</span>
@@ -182,7 +190,10 @@
         <span class="k">return</span> <span class="n">KojiBuildInfo</span><span class="o">.</span><span class="n">_from_nvr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
 
     <span class="n">signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
-        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">upper_if_str</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;If this push item was GPG signed, this should be an identifier for the</span>
 <span class="sd">    signing key used.</span>

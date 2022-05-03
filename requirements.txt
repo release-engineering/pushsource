@@ -86,9 +86,9 @@ monotonic==1.6 \
     --hash=sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7 \
     --hash=sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c
     # via more-executors
-more-executors==2.10.1 \
-    --hash=sha256:5c64b26f7130e450df4a8ed0471e05d397472a5e18a35ac3c56d772a702d4fea \
-    --hash=sha256:e9e42aa58678a0a9a50255b209a77f91ee25a31dec3c7d4733cb4fe0ced38cf8
+more-executors==2.11.0 \
+    --hash=sha256:3b7f072b2a4b44340207e504905bf659a97aeb6d16a6044fc39eaeb7222c257f \
+    --hash=sha256:7c8bc97257be9348dcfcae87707640d9b27bb77d5b3d64bb32a8ca7e311e8fda
     # via
     #   -r requirements.in
     #   pushcollector

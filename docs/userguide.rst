@@ -93,6 +93,8 @@ For detailed information, see the API reference of the associated class.
 +--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
 | file         | ``file:/tmp/file-to-push``                                                  | n/a                                 | Obtain a single file-backed item of various types. |
 +--------------+-----------------------------------------------------------------------------+                                     |                                                    |
+| cgw          | ``cgw:/tmp/yaml-file-to-push``                                              |                                     |                                                    |
++--------------+-----------------------------------------------------------------------------+                                     |                                                    |
 | dir          | ``dir:/publish-src?dest=/dest1,/dest2``                                     |                                     |                                                    |
 +--------------+-----------------------------------------------------------------------------+                                     |                                                    |
 | rpm          | ``rpm:Downloads/python3-3.7.5-2.fc31.x86_64.rpm?signing_key=a1b2c3``        |                                     | Each backend of this type accepts any arguments    |

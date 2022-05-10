@@ -11,6 +11,7 @@ Supported content types:
 * RPMs
 * Advisories
 * Generic files
+* Content Gateway metadata
 * Complete directories
 * Amazon Machine Images (AMIs)
 * comps.xml files (yum repo metadata)
@@ -49,6 +50,7 @@ Here is a brief overview of the structure of a staging directory:
   root/destination/COMPS/*.xml
   root/destination/ERRATA/*
   root/destination/FILES/*
+  root/destination/CGW/*
   root/destination/PRODUCTID/*
   root/destination/MODULEMD/*
   root/destination/RPMS/*.rpm
@@ -149,6 +151,13 @@ Files in this directory must have metadata included in ``staged.yaml``.
 For historical reasons, this directory may also be named ``ISOS``.
 
 Will yield instances of :class:`~pushsource.FilePushItem`.
+
+root/destination/CGW/\*
+.........................
+
+Each file in CGW should be a valid YAML containing a list of definitions for objects in Content Gateway.
+
+Will yield instances of :class:`~pushsource.CGWPushItem`.
 
 root/destination/PRODUCTID/\*
 .............................

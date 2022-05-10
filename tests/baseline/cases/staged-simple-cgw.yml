@@ -1,0 +1,22 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_cgw"
+
+# Push items generated from above.
+items:
+- CGWPushItem:
+    build: null
+    build_info: null
+    dest:
+    - dest
+    md5sum: null
+    name: cgw.yml
+    origin: {{ src_dir }}/tests/staged/data/simple_cgw
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_cgw/dest/CGW/cgw.yml
+    state: PENDING

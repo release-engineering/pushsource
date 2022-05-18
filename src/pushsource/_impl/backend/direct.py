@@ -3,6 +3,7 @@ import os
 from ..source import Source
 from ..model import (
     FilePushItem,
+    CGWPushItem,
     DirectoryPushItem,
     CompsXmlPushItem,
     RpmPushItem,
@@ -67,6 +68,7 @@ def register(name, item_class):
 
 
 register("file", FilePushItem)
+register("cgw", CGWPushItem)
 register("dir", DirectoryPushItem)
 register("rpm", RpmPushItem)
 register("comps", CompsXmlPushItem)

@@ -15,6 +15,7 @@ A library for accessing push items from various sources.
    sources/errata
    model/base
    model/files
+   model/cgw
    model/directory
    model/rpm
    model/modulemd

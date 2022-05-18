@@ -25,6 +25,7 @@ from .staged_modulemd import StagedModuleMdMixin
 from .staged_productid import StagedProductIdMixin
 from .staged_rpm import StagedRpmMixin
 from .staged_unsupported import StagedUnsupportedMixin
+from .staged_cgw import StagedCGWMixin
 
 LOG = logging.getLogger("pushsource")
 METADATA_FILES = ["staged.yaml", "staged.yml", "staged.json", "pub-mapfile.json"]
@@ -41,6 +42,7 @@ class StagedSource(
     StagedProductIdMixin,
     StagedRpmMixin,
     StagedUnsupportedMixin,
+    StagedCGWMixin,
 ):
     """Uses a directory with a predefined layout (a "staging directory") as
     the source of push items."""

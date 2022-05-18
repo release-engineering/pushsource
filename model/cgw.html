@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Push items: productid &#8212; pushsource  documentation</title>
+    <title>Push items: cgw &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Push items: comps.xml" href="comps.html" />
-    <link rel="prev" title="Push items: AMI" href="ami.html" />
+    <link rel="next" title="Push items: directory" href="directory.html" />
+    <link rel="prev" title="Push items: file" href="files.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -33,16 +33,16 @@
 
           <div class="body" role="main">
             
-  <section id="push-items-productid">
-<h1>Push items: productid<a class="headerlink" href="#push-items-productid" title="Permalink to this headline">¶</a></h1>
+  <section id="push-items-cgw">
+<h1>Push items: cgw<a class="headerlink" href="#push-items-cgw" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="pushsource.ProductIdPushItem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ProductIdPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/productid.html#ProductIdPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ProductIdPushItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a product ID certificate.</p>
-<p>For push items of this type, the <a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> attribute
-refers to a file containing a PEM certificate identifying a product.</p>
-<p>This library does not verify that the referenced file is a valid
-certificate.</p>
+<dt class="sig sig-object py" id="pushsource.CGWPushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">CGWPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/cgw.html#CGWPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.CGWPushItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a Content Gateway (CGW) YAML file.</p>
+<p>For push items of this type, the <a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a>
+attribute refers to a YAML file containing list of definitions
+for objects in Content Gateway.</p>
+<p>This library does not verify that the referenced YAML file is valid.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
@@ -91,14 +91,14 @@ certificate.</p>
 <li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="files.html">Push items: file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: cgw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Push items: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="containers.html">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comps.html">Push items: comps.xml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/errata.html">Schema: errata</a></li>
@@ -119,8 +119,8 @@ certificate.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="ami.html" title="previous chapter">Push items: AMI</a></li>
-      <li>Next: <a href="comps.html" title="next chapter">Push items: comps.xml</a></li>
+      <li>Previous: <a href="files.html" title="previous chapter">Push items: file</a></li>
+      <li>Next: <a href="directory.html" title="next chapter">Push items: directory</a></li>
   </ul></li>
 </ul>
 </div>
@@ -154,7 +154,7 @@ certificate.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/model/productid.rst.txt"
+      <a href="../_sources/model/cgw.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

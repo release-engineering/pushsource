@@ -44,6 +44,7 @@ can be provided in a YAML or JSON file.</p>
 <li><p>RPMs</p></li>
 <li><p>Advisories</p></li>
 <li><p>Generic files</p></li>
+<li><p>Content Gateway metadata</p></li>
 <li><p>Complete directories</p></li>
 <li><p>Amazon Machine Images (AMIs)</p></li>
 <li><p>comps.xml files (yum repo metadata)</p></li>
@@ -71,6 +72,7 @@ Each staging directory must use the <a class="reference internal" href="#staging
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">COMPS</span><span class="o">/*.</span><span class="n">xml</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">ERRATA</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">FILES</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">CGW</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">PRODUCTID</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">MODULEMD</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/*.</span><span class="n">rpm</span>
@@ -150,6 +152,11 @@ installers.</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
 <p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">ISOS</span></code>.</p>
 <p>Will yield instances of <a class="reference internal" href="../model/files.html#pushsource.FilePushItem" title="pushsource.FilePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilePushItem</span></code></a>.</p>
+</section>
+<section id="root-destination-cgw">
+<h3>root/destination/CGW/*<a class="headerlink" href="#root-destination-cgw" title="Permalink to this headline">¶</a></h3>
+<p>Each file in CGW should be a valid YAML containing a list of definitions for objects in Content Gateway.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/cgw.html#pushsource.CGWPushItem" title="pushsource.CGWPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">CGWPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-productid">
 <h3>root/destination/PRODUCTID/*<a class="headerlink" href="#root-destination-productid" title="Permalink to this headline">¶</a></h3>
@@ -254,6 +261,7 @@ made during each step.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/cgw.html">Push items: cgw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>

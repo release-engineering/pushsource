@@ -58,6 +58,7 @@ definitions:
                 enum:
                 - hourly
                 - access
+                - marketplace
 
             virtualization:
                 # Virtualization type.

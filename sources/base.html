@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Source &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="source">
-<h1>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h1>
+<h1>Source<a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">Source</span></code> class is the base from which all pushsource backends derive.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.Source">
@@ -66,7 +67,7 @@ them beyond the end of the <code class="docutils literal notranslate"><span clas
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a push source from the given URL.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Specifies a push source backend and associated arguments.
 For information about push source URLs, see
@@ -75,10 +76,10 @@ For information about push source URLs, see
 the backend.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#pushsource.SourceUrlError" title="pushsource.SourceUrlError"><strong>SourceUrlError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">source_url</span></code> is not a valid push source URL.</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><dl class="simple">
 <dt><a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a></dt><dd><p>A new Source instance initialized with the given arguments.</p>
 </dd>
@@ -97,7 +98,7 @@ instance directly) so that additional arguments may be provided later.</p>
 <p>One of the primary uses of this method is to provide your own preconfigured
 aliases for existing backends, as described in <a class="reference internal" href="../userguide.html#binding"><span class="std std-ref">Binding partially-configured backends</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Specifies a push source backend and associated arguments.
 For information about push source URLs, see
@@ -106,10 +107,10 @@ For information about push source URLs, see
 the backend.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#pushsource.SourceUrlError" title="pushsource.SourceUrlError"><strong>SourceUrlError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">source_url</span></code> is not a valid push source URL.</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><dl class="simple">
 <dt>callable</dt><dd><p>A callable which accepts any number of keyword arguments
 and returns a <a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a>.</p>
@@ -128,7 +129,7 @@ and returns a <a class="reference internal" href="#pushsource.Source" title="pus
 shipped with the pushsource library. See <a class="reference internal" href="../userguide.html#implementing"><span class="std std-ref">Implementing a backend</span></a> for
 more information.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>The name of a backend. This should be a brief unique identifying
 string.</p>
@@ -140,7 +141,7 @@ When invoked, this callable must return an object which implements
 the <a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a> interface.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">factory</span></code> is not callable.</p>
 </dd>
 </dl>
@@ -243,7 +244,7 @@ to <a class="reference internal" href="#pushsource.Source.get" title="pushsource
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -260,7 +261,7 @@ to <a class="reference internal" href="#pushsource.Source.get" title="pushsource
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

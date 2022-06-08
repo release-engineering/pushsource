@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Source: errata &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="source-errata">
-<h1>Source: errata<a class="headerlink" href="#source-errata" title="Permalink to this headline">¶</a></h1>
+<h1>Source: errata<a class="headerlink" href="#source-errata" title="Permalink to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">errata</span></code> push source allows the loading of content from an instance of
 Errata Tool (or “ET”).</p>
 <p>Supported content types:</p>
@@ -44,7 +45,7 @@ Errata Tool (or “ET”).</p>
 <li><p>Advisories</p></li>
 </ul>
 <section id="errata-source-urls">
-<h2>errata source URLs<a class="headerlink" href="#errata-source-urls" title="Permalink to this headline">¶</a></h2>
+<h2>errata source URLs<a class="headerlink" href="#errata-source-urls" title="Permalink to this heading">¶</a></h2>
 <p>The base form of an errata source URL is:</p>
 <p><code class="docutils literal notranslate"><span class="pre">errata:errata-tool-url?errata=RHXA-XXXX:0001[,RHXA-XXXX:0002[,...]]</span></code></p>
 <p>For example, referencing a single advisory would look like:</p>
@@ -52,7 +53,7 @@ Errata Tool (or “ET”).</p>
 <p>The provided Errata Tool URL should be the base URL of the service,
 and not any specific API endpoint.</p>
 <section id="setting-the-koji-source">
-<h3>Setting the koji source<a class="headerlink" href="#setting-the-koji-source" title="Permalink to this headline">¶</a></h3>
+<h3>Setting the koji source<a class="headerlink" href="#setting-the-koji-source" title="Permalink to this heading">¶</a></h3>
 <p>In order to obtain metadata about RPMs, the errata source
 needs to be configured to point at the same koji environment as used by
 the connected ET environment.  This can be done by providing a partial URL
@@ -72,7 +73,7 @@ the source can be referred to more succintly as in:</p>
 </section>
 </section>
 <section id="python-api-reference">
-<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h2>
+<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErrataSource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErrataSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">koji_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm_filter_arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_container_repos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/errata_source/errata_source.html#ErrataSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErrataSource" title="Permalink to this definition">¶</a></dt>
@@ -82,7 +83,7 @@ the source can be referred to more succintly as in:</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">koji_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm_filter_arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_container_repos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/errata_source/errata_source.html#ErrataSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErrataSource.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new source.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>src</em>) – Base URL of Errata Tool, e.g. “<a class="reference external" href="http://errata.example.com">http://errata.example.com</a>”,
 “<a class="reference external" href="https://errata.example.com:8123">https://errata.example.com:8123</a>”.</p></li>
@@ -190,7 +191,7 @@ made during queries to Errata Tool.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -207,7 +208,7 @@ made during queries to Errata Tool.</p></li>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

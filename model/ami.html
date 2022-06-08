@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Push items: AMI &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="push-items-ami">
-<h1>Push items: AMI<a class="headerlink" href="#push-items-ami" title="Permalink to this headline">¶</a></h1>
+<h1>Push items: AMI<a class="headerlink" href="#push-items-ami" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.AmiPushItem">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">AmiPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/ami.html#AmiPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.AmiPushItem" title="Permalink to this definition">¶</a></dt>
@@ -72,7 +73,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.AmiPushItem.release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release metadata associated with this image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pushsource.AmiRelease" title="pushsource.AmiRelease">AmiRelease</a></p>
 </dd>
 </dl>
@@ -83,7 +84,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.AmiPushItem.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Billing type associated with the image, e.g. “hourly” or “access”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -94,7 +95,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">region</span></span><a class="headerlink" href="#pushsource.AmiPushItem.region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Region to which this image should be pushed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -105,7 +106,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">virtualization</span></span><a class="headerlink" href="#pushsource.AmiPushItem.virtualization" title="Permalink to this definition">¶</a></dt>
 <dd><p>Virtualization type, e.g. “hvm” or “pv”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -116,7 +117,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#pushsource.AmiPushItem.volume" title="Permalink to this definition">¶</a></dt>
 <dd><p>EBS volume type, e.g. “gp2” or “io1”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -127,7 +128,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">root_device</span></span><a class="headerlink" href="#pushsource.AmiPushItem.root_device" title="Permalink to this definition">¶</a></dt>
 <dd><p>Root device node used with this image, e.g. “/dev/sda1”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -138,7 +139,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.AmiPushItem.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>A brief human-readable description of the image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -149,7 +150,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">sriov_net_support</span></span><a class="headerlink" href="#pushsource.AmiPushItem.sriov_net_support" title="Permalink to this definition">¶</a></dt>
 <dd><p>“simple” if the image is SRIOV-enabled.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -160,7 +161,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">ena_support</span></span><a class="headerlink" href="#pushsource.AmiPushItem.ena_support" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the image supports Elastic Network Adapter (ENA).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </dd>
 </dl>
@@ -171,7 +172,7 @@ snapshot.</p>
 <span class="sig-name descname"><span class="pre">billing_codes</span></span><a class="headerlink" href="#pushsource.AmiPushItem.billing_codes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Billing codes associated with this image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pushsource.AmiBillingCodes" title="pushsource.AmiBillingCodes">AmiBillingCodes</a></p>
 </dd>
 </dl>
@@ -201,7 +202,7 @@ snapshot.</p>
 <dd><p>A short product name, for example “RHEL” if this is an image for Red Hat
 Enterprise Linux.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -212,7 +213,7 @@ Enterprise Linux.</p>
 <span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#pushsource.AmiRelease.date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Date at which this image was generated.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>date</p>
 </dd>
 </dl>
@@ -223,7 +224,7 @@ Enterprise Linux.</p>
 <span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.AmiRelease.arch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Architecture of the image, for example “x86_64”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -235,7 +236,7 @@ Enterprise Linux.</p>
 <dd><p>Respin count. 0 for original build of an image, incremented by one for
 each rebuild.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
 </dd>
 </dl>
@@ -247,7 +248,7 @@ each rebuild.</p>
 <dd><p>A &lt;major&gt;.&lt;minor&gt; version string for the image’s product version, for example
 “7.9” if this is an image for Red Hat Enterprise Linux 7.9.x.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -258,7 +259,7 @@ each rebuild.</p>
 <span class="sig-name descname"><span class="pre">base_product</span></span><a class="headerlink" href="#pushsource.AmiRelease.base_product" title="Permalink to this definition">¶</a></dt>
 <dd><p>For layered products, name of the base product for which the image should be used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -269,7 +270,7 @@ each rebuild.</p>
 <span class="sig-name descname"><span class="pre">base_version</span></span><a class="headerlink" href="#pushsource.AmiRelease.base_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>For layered products, version of the base product for which the image should be used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -281,7 +282,7 @@ each rebuild.</p>
 <dd><p>Variant of this image’s product (only for products which have variants).  For example,
 “Server”, for Red Hat Enterprise Linux Server.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -292,7 +293,7 @@ each rebuild.</p>
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.AmiRelease.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release type, typically “ga” or “beta”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -314,7 +315,7 @@ each rebuild.</p>
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.AmiBillingCodes.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Billing codes name, for example Hourly2, arbitrary string for making image name unique.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -325,7 +326,7 @@ each rebuild.</p>
 <span class="sig-name descname"><span class="pre">codes</span></span><a class="headerlink" href="#pushsource.AmiBillingCodes.codes" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of billing codes, for example [‘bp-1234abcd’, ‘bp-5678efgh’].</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
 </dd>
 </dl>
@@ -408,7 +409,7 @@ each rebuild.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -425,7 +426,7 @@ each rebuild.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

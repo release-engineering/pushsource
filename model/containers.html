@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Push items: containers &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +35,7 @@
           <div class="body" role="main">
             
   <section id="push-items-containers">
-<h1>Push items: containers<a class="headerlink" href="#push-items-containers" title="Permalink to this headline">¶</a></h1>
+<h1>Push items: containers<a class="headerlink" href="#push-items-containers" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ContainerImagePushItem">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImagePushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePushItem" title="Permalink to this definition">¶</a></dt>
@@ -73,7 +74,7 @@ by this library.</p>
 use the specified key to generate signatures for this image’s manifest(s).
 See <a class="reference external" href="https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md">container-signature</a> docs for information on signatures.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -84,7 +85,7 @@ See <a class="reference external" href="https://github.com/containers/image/blob
 <span class="sig-name descname"><span class="pre">source_tags</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.source_tags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tags placed onto this image when it was built, if known.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
 </dd>
 </dl>
@@ -96,7 +97,7 @@ See <a class="reference external" href="https://github.com/containers/image/blob
 <dd><p>Labels of this image, if known.</p>
 <p>This field is not guaranteed to include all labels associated with the image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
 </dd>
 </dl>
@@ -109,7 +110,7 @@ See <a class="reference external" href="https://github.com/containers/image/blob
 <p>This field uses the conventional architecture strings used throughout the
 container ecosystem, such as <code class="docutils literal notranslate"><span class="pre">&quot;amd64&quot;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -120,7 +121,7 @@ container ecosystem, such as <code class="docutils literal notranslate"><span cl
 <span class="sig-name descname"><span class="pre">pull_info</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.pull_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Metadata for pulling this image from a registry.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pushsource.ContainerImagePullInfo" title="pushsource.ContainerImagePullInfo">ContainerImagePullInfo</a></p>
 </dd>
 </dl>
@@ -179,7 +180,7 @@ which tag you use, it’s reasonable to use <code class="docutils literal notran
 be outdated. It is recommended to pull by digest or at least
 cross-reference with digests.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImageTagPullSpec" title="pushsource.ContainerImageTagPullSpec">ContainerImageTagPullSpec</a>]</p>
 </dd>
 </dl>
@@ -200,7 +201,7 @@ which means:</p>
 <li><p>schema1 image manifest</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec" title="pushsource.ContainerImageDigestPullSpec">ContainerImageDigestPullSpec</a>]</p>
 </dd>
 </dl>
@@ -212,7 +213,7 @@ which means:</p>
 <dd><p>All media types for which a manifest is reachable in <a class="reference internal" href="#pushsource.ContainerImagePullInfo.digest_specs" title="pushsource.ContainerImagePullInfo.digest_specs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest_specs()</span></code></a>.</p>
 <p>For information on these types see the <a class="reference external" href="http://web.archive.org/web/20210614172014/https://docs.docker.com/registry/spec/manifest-v2-2/#media-types">image manifest spec</a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
 </dd>
 </dl>
@@ -223,11 +224,11 @@ which means:</p>
 <span class="sig-name descname"><span class="pre">digest_spec_for_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">media_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePullInfo.digest_spec_for_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePullInfo.digest_spec_for_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the digest spec for a specific media type, if available.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>media_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – a MIME type string identifying a type of image manifest or
 manifest list, e.g. “application/vnd.docker.distribution.manifest.v2+json”</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
 <dt><a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec" title="pushsource.ContainerImageDigestPullSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerImageDigestPullSpec</span></code></a></dt><dd><p>if a digest of the requested type is available</p>
 </dd>
@@ -261,7 +262,7 @@ on the available media type.</p>
 <p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
 the registry is <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com&quot;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -274,7 +275,7 @@ the registry is <code class="docutils literal notranslate"><span class="pre">&qu
 <p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
 the repository is <code class="docutils literal notranslate"><span class="pre">&quot;ubi8/ubi-minimal&quot;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -300,7 +301,7 @@ the repository is <code class="docutils literal notranslate"><span class="pre">&
 <p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal&#64;sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;</span></code>,
 the digest is <code class="docutils literal notranslate"><span class="pre">&quot;sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -315,7 +316,7 @@ via koji. It can be checked to determine whether a pull spec refers to
 a manifest list or an image manifest.</p>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">&quot;application/vnd.docker.distribution.manifest.v2+json&quot;</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -341,7 +342,7 @@ a manifest list or an image manifest.</p>
 <p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
 the tag is <code class="docutils literal notranslate"><span class="pre">&quot;latest&quot;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
@@ -356,7 +357,7 @@ if unknown.</p>
 from a koji build.</p>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">[&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;]</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
 </dd>
 </dl>
@@ -459,7 +460,7 @@ from a koji build.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -476,7 +477,7 @@ from a koji build.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

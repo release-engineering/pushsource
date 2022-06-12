@@ -303,9 +303,9 @@ monotonic==1.6 \
     --hash=sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7 \
     --hash=sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c
     # via more-executors
-more-executors==2.11.0 \
-    --hash=sha256:3b7f072b2a4b44340207e504905bf659a97aeb6d16a6044fc39eaeb7222c257f \
-    --hash=sha256:7c8bc97257be9348dcfcae87707640d9b27bb77d5b3d64bb32a8ca7e311e8fda
+more-executors==2.11.1 \
+    --hash=sha256:06ca3b3ae1b07b2581441589296d486098ebe8740f859f5c7a2e0a687b12628d \
+    --hash=sha256:a5a7c9344168974d17dc0e89fb68c045b516cc74fe9bb1a4f76016dac4d25be5
     # via
     #   -r requirements.in
     #   -r test-requirements.in
@@ -356,9 +356,9 @@ pyhamcrest==2.0.3 \
     --hash=sha256:c29dc977154c49e17c30d1ed49a0a6e31cb0dc7bcf733ac4aa9cb58519c2b00c \
     --hash=sha256:dfb19cf6d71743e086fbb761ed7faea5aacbc8ec10c17a08b93ecde39192a3db
     # via -r test-requirements.in
-pylint==2.14.0 \
-    --hash=sha256:10d291ea5133645f73fc1b51ca137ad6531223c1461a5632a1db029a9bc033b5 \
-    --hash=sha256:ef64ce5d4c17b8906caeaf2c2914ef3036a3a1b7f4a86f5fbf6caff9067c5f63
+pylint==2.14.1 \
+    --hash=sha256:549261e0762c3466cc001024c4419c08252cb8c8d40f5c2c6966fea690e7fe2a \
+    --hash=sha256:bb71e6d169506de585edea997e48d9ff20c0dc0e2fbc1d166bad6b640120326b
     # via -r test-requirements.in
 pyparsing==3.0.9 \
     --hash=sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb \
@@ -447,9 +447,9 @@ pyyaml==6.0 \
     #   -r test-requirements.in
     #   pre-commit
     #   pushcollector
-requests==2.27.1 \
-    --hash=sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61 \
-    --hash=sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d
+requests==2.28.0 \
+    --hash=sha256:bc7861137fbce630f17b03d3ad02ad0bf978c844f3536d0edda6499dafce2b6f \
+    --hash=sha256:d568723a7ebd25875d8d1eaf5dfa068cd2fc8194b2e483d7b1f7c81918dbec6b
     # via
     #   coveralls
     #   koji

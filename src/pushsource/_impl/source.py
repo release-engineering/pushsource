@@ -24,42 +24,6 @@ def getfullargspec(x):
     return inspect.getfullargspec(x)
 
 
-def wait_until_source_present(timeout=900, poll_rate=30):
-    """
-    Decorator for Source's __iter__ function which only yields an item when its source is present.
-
-    The decorator will continue checking if the source exists until timeout is reached.
-    NOTE: If some file is already present but is expected to be overwritten, this decorator
-          won't help.
-
-    Args:
-        timeout (int, optional):
-            How many seconds to poll for before giving up. Defaults to 900.
-        poll_rate (int, optional):
-            How frequently to poll. Defaults to 30.
-    """
-
-    def decorator_wait_until_source_present(func):
-        @functools.wraps(func)
-        def wrapper_wait_until_source_present(*args, **kwargs):
-            generator = func(*args, **kwargs)
-            for item in generator:
-                if not hasattr(item, "src") or not item.src:
-                    yield item
-                else:
-                    for i in range(timeout // poll_rate):
-                        if os.path.exists(item.src):
-                            break
-                        if i == (timeout // poll_rate) - 1:
-                            raise RuntimeError("Push item source {0} is missing".format(item.src))
-                        time.sleep(poll_rate)
-                    yield item
-
-        return wrapper_wait_until_source_present
-
-    return decorator_wait_until_source_present
-
-
 class SourceUrlError(ValueError):
     """Errors of this type are raised when an invalid URL is provided
     to :meth:`~pushsource.Source.get` and related methods.
@@ -67,15 +31,40 @@ class SourceUrlError(ValueError):
 
 
 class SourceWrapper(object):
+    timeout = 900
+    poll_rate = 30
     # Internal class to ensure that all source instances support enter/exit
     # for with statements even if underlying instance doesn't implement it
     # (since it originally was not mandatory).
     def __init__(self, delegate):
         self.__delegate = delegate
 
-    @wait_until_source_present()
     def __iter__(self):
-        return self.__delegate.__iter__()
+        """
+        Poll until a source file is present before yielding an item.
+
+        This is necessary due to a limitation, where file changes may not immediately propagate
+        to NFS.
+
+        Raises:
+            RuntimeError:
+                If source file is still not present after time limit.
+        Yields:
+            PushItem:
+                Created push item.
+        """
+        generator = self.__delegate.__iter__()
+        for item in generator:
+            if not hasattr(item, "src") or not item.src:
+                yield item
+            else:
+                for i in range(self.timeout // self.poll_rate):
+                    if os.path.exists(item.src):
+                        break
+                    if i == (self.timeout // self.poll_rate) - 1:
+                        raise RuntimeError("Push item source {0} is missing".format(item.src))
+                    time.sleep(self.poll_rate)
+                yield item
 
     def __enter__(self):
         return self

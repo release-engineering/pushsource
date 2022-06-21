@@ -1,7 +1,20 @@
 import copy
 from pytest import raises, fixture
+from mock import patch
 
 from pushsource import Source, SourceUrlError
+
+
+@fixture
+def source_factory(fake_errata_tool, fake_koji, koji_dir):
+    ctor = Source.get_partial(
+        "errata:https://errata.example.com",
+        koji_source="koji:https://koji.example.com?basedir=%s" % koji_dir,
+    )
+
+    fake_koji.load_all_builds()
+
+    yield ctor
 
 
 def test_source_abstract():
@@ -92,3 +105,68 @@ def test_bad_url_missing_backend():
         "Requested source 'notexist:foo=bar&baz=quux' but "
         "there is no registered backend 'notexist'"
     ) in str(ex_info.value)
+
+
+@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.source.os.path.exists")
+def test_yield_no_source(mock_path_exists, mock_sleep, source_factory, koji_dir):
+    class TestKoji(object):
+        def __init__(self, **kwargs):
+            self.koji = Source.get("koji:https://koji.example.com?basedir=%s" % koji_dir, **kwargs)
+
+        def __iter__(self):
+            class Object:
+                pass
+
+            item1 = Object()
+            item1.src = None
+            yield item1
+            yield Object()
+
+    Source.register_backend("test-koji", TestKoji)
+    source = source_factory(errata="RHBA-2020:2807", koji_source="test-koji:")
+    items = list(source)
+
+    mock_path_exists.assert_not_called()
+    mock_sleep.assert_not_called()
+
+
+@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.source.os.path.exists")
+def test_yield_once_file_present(mock_path_exists, mock_sleep, source_factory, koji_dir):
+    class TestKoji(object):
+        def __init__(self, **kwargs):
+            self.koji = Source.get("koji:https://koji.example.com?basedir=%s" % koji_dir, **kwargs)
+
+        def __iter__(self):
+            items = list(self.koji)
+            yield items[0]
+
+    mock_path_exists.side_effect = [False, False, False, True]
+    Source.register_backend("test-koji", TestKoji)
+    source = source_factory(errata="RHBA-2020:2807", koji_source="test-koji:")
+    items = list(source)
+
+    assert mock_path_exists.call_count == 4
+    assert mock_sleep.call_count == 3
+
+
+@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.source.os.path.exists")
+def test_yield_timeout_reached(mock_path_exists, mock_sleep, source_factory, koji_dir):
+    class TestKoji(object):
+        def __init__(self, **kwargs):
+            self.koji = Source.get("koji:https://koji.example.com?basedir=%s" % koji_dir, **kwargs)
+
+        def __iter__(self):
+            items = list(self.koji)
+            yield items[0]
+
+    mock_path_exists.return_value = False
+    Source.register_backend("test-koji", TestKoji)
+    source = source_factory(errata="RHBA-2020:2807", koji_source="test-koji:")
+    with raises(RuntimeError, match="Push item source .* is missing"):
+        items = list(source)
+
+    assert mock_path_exists.call_count == 30
+    assert mock_sleep.call_count == 29

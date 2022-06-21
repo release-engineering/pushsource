@@ -1,5 +1,7 @@
 import inspect
 import functools
+import os
+import time
 from threading import Lock
 
 import pkg_resources
@@ -22,6 +24,42 @@ def getfullargspec(x):
     return inspect.getfullargspec(x)
 
 
+def wait_until_source_present(timeout=900, poll_rate=30):
+    """
+    Decorator for Source's __iter__ function which only yields an item when its source is present.
+
+    The decorator will continue checking if the source exists until timeout is reached.
+    NOTE: If some file is already present but is expected to be overwritten, this decorator
+          won't help.
+
+    Args:
+        timeout (int, optional):
+            How many seconds to poll for before giving up. Defaults to 900.
+        poll_rate (int, optional):
+            How frequently to poll. Defaults to 30.
+    """
+
+    def decorator_wait_until_source_present(func):
+        @functools.wraps(func)
+        def wrapper_wait_until_source_present(*args, **kwargs):
+            generator = func(*args, **kwargs)
+            for item in generator:
+                if not hasattr(item, "src") or not item.src:
+                    yield item
+                else:
+                    for i in range(timeout // poll_rate):
+                        if os.path.exists(item.src):
+                            break
+                        if i == (timeout // poll_rate) - 1:
+                            raise RuntimeError("Push item source {0} is missing".format(item.src))
+                        time.sleep(poll_rate)
+                    yield item
+
+        return wrapper_wait_until_source_present
+
+    return decorator_wait_until_source_present
+
+
 class SourceUrlError(ValueError):
     """Errors of this type are raised when an invalid URL is provided
     to :meth:`~pushsource.Source.get` and related methods.
@@ -35,6 +73,7 @@ class SourceWrapper(object):
     def __init__(self, delegate):
         self.__delegate = delegate
 
+    @wait_until_source_present()
     def __iter__(self):
         return self.__delegate.__iter__()
 

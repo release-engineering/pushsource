@@ -1,4 +1,5 @@
 import os
+from mock import patch
 
 import pytest
 
@@ -54,7 +55,8 @@ def test_errata_containers_missing_build(source_factory, fake_koji):
     ) in str(exc_info)
 
 
-def test_errata_ignores_unknown_koji_types(source_factory, koji_dir):
+@patch("pushsource._impl.source.os.path.exists")
+def test_errata_ignores_unknown_koji_types(mock_path_exists, source_factory, koji_dir):
     """Errata source, when requesting containers, will skip unknown push item types
     yielded by koji source."""
 
@@ -79,6 +81,7 @@ def test_errata_ignores_unknown_koji_types(source_factory, koji_dir):
                 yield item
             yield object()
 
+    mock_path_exists.return_value = True
     Source.register_backend("weird-koji", WeirdKoji)
 
     source = source_factory(errata="RHBA-2020:2807", koji_source="weird-koji:")

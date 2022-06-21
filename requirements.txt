@@ -10,9 +10,9 @@ attrs==21.4.0 \
     # via
     #   -r requirements.in
     #   jsonschema
-certifi==2022.5.18.1 \
-    --hash=sha256:9c5705e395cd70084351dd8ad5c41e65655e08ce46f2ec9cf6c2c08390f71eb7 \
-    --hash=sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a
+certifi==2022.6.15 \
+    --hash=sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d \
+    --hash=sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412
     # via requests
 charset-normalizer==2.0.12 \
     --hash=sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597 \
@@ -74,8 +74,8 @@ jsonschema==4.6.0 \
     --hash=sha256:1c92d2db1900b668201f1797887d66453ab1fbfea51df8e4b46236689c427baf \
     --hash=sha256:9d6397ba4a6c0bf0300736057f649e3e12ecbc07d3e81a0dacb72de4e9801957
     # via pushcollector
-kobo==0.24.0 \
-    --hash=sha256:d08f3f67441676a9fb297e12205ebd04ce59509bae8e50aaec2b2ffd86c4dabd
+kobo==0.24.1 \
+    --hash=sha256:d5a30cc20c323f3e9d9b4b2e511650c4b98929b88859bd8cf57463876686e407
     # via -r requirements.in
 koji==1.29.0 \
     --hash=sha256:7a24bc9e9c7508ded2e174f243780c57562422b8c7320714cff839b841b79b7a \

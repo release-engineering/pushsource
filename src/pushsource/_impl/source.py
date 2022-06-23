@@ -87,7 +87,8 @@ class SourceWrapper(object):
 
     def __enter__(self):
         if hasattr(self.__delegate, "__enter__"):
-            return self.__delegate.__enter__()
+            self.__delegate.__enter__()
+            return self
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

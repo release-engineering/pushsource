@@ -76,11 +76,15 @@ class SourceWrapper(object):
                         break
                     if i == (max_attempts) - 1:
                         LOG.warning(
-                            "Push item source %s is missing after %s seconds", item.src, timeout
+                            "Push item source %s is missing after %s seconds",
+                            item.src,
+                            timeout,
                         )
                         break
                     LOG.info(
-                        "Waiting for %s seconds for source file %s to appear", poll_rate, item.src
+                        "Waiting for %s seconds for source file %s to appear",
+                        poll_rate,
+                        item.src,
                     )
                     time.sleep(poll_rate)
                 yield item

@@ -44,10 +44,10 @@ def container_push_item():
         dest_signing_key=None,
         source_tags=["rhaos-4.3-rhel-7-candidate-20098-20200707075056-aarch64"],
         labels={
-                "com.redhat.build-host": "arm64-osbs-13.prod.osbs.eng.bos.redhat.com",
-                "com.redhat.component": "cluster-logging-operator-metadata-container",
-                "com.redhat.delivery.appregistry": "true",
-                "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements",
+            "com.redhat.build-host": "arm64-osbs-13.prod.osbs.eng.bos.redhat.com",
+            "com.redhat.component": "cluster-logging-operator-metadata-container",
+            "com.redhat.delivery.appregistry": "true",
+            "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements",
         },
         arch="arm64",
         pull_info=ContainerImagePullInfo(
@@ -56,7 +56,9 @@ def container_push_item():
                     registry="registry-proxy.engineering.redhat.com",
                     repository="rh-osbs/openshift-ose-cluster-logging-operator-metadata",
                     tag="v4.3.28.202006290519.p0.prod-1",
-                    media_types=["application/vnd.docker.distribution.manifest.list.v2+json"],
+                    media_types=[
+                        "application/vnd.docker.distribution.manifest.list.v2+json"
+                    ],
                 ),
                 ContainerImageTagPullSpec(
                     registry="registry-proxy.engineering.redhat.com",

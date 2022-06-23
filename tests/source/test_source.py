@@ -130,7 +130,9 @@ def test_yield_no_source(mock_path_exists, mock_sleep, koji_dir):
 )
 @patch("pushsource._impl.source.time.sleep")
 @patch("pushsource._impl.source.os.path.exists")
-def test_yield_once_file_present(mock_path_exists, mock_sleep, koji_dir, container_push_item):
+def test_yield_once_file_present(
+    mock_path_exists, mock_sleep, koji_dir, container_push_item
+):
     class TestKoji(object):
         def __init__(self, **kwargs):
             pass
@@ -154,7 +156,9 @@ def test_yield_once_file_present(mock_path_exists, mock_sleep, koji_dir, contain
 )
 @patch("pushsource._impl.source.time.sleep")
 @patch("pushsource._impl.source.os.path.exists")
-def test_yield_timeout_reached(mock_path_exists, mock_sleep, koji_dir, container_push_item):
+def test_yield_timeout_reached(
+    mock_path_exists, mock_sleep, koji_dir, container_push_item
+):
     class TestKoji(object):
         def __init__(self, **kwargs):
             pass

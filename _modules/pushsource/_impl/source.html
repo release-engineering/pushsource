@@ -34,11 +34,16 @@
   <h1>Source code for pushsource._impl.source</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
 
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 
 <span class="kn">from</span> <span class="nn">six.moves.urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">getfullargspec</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -66,25 +71,67 @@
     <span class="c1"># Internal class to ensure that all source instances support enter/exit</span>
     <span class="c1"># for with statements even if underlying instance doesn&#39;t implement it</span>
     <span class="c1"># (since it originally was not mandatory).</span>
+    <span class="c1"># This class also ensures that all source instances support polling</span>
+    <span class="c1"># for the existence of source file before returning the push item.</span>
+    <span class="c1"># This feature is disabled by default and can be enabled with</span>
+    <span class="c1"># environment variables</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span> <span class="o">=</span> <span class="n">delegate</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Poll until a source file is present before yielding an item.</span>
+
+<span class="sd">        This is necessary due to a limitation, where file changes may</span>
+<span class="sd">        not immediately propagate to NFS. If timeout is reached,</span>
+<span class="sd">        yield the item and display a warning.</span>
+
+<span class="sd">        Timeout and poll rate are controlled with environment variables.</span>
+<span class="sd">        PUSHSOURCE_SRC_POLL_TIMEOUT - Maximum number of seconds to poll for</span>
+<span class="sd">        PUSHSOURCE_SRC_POLL_RATE - How frequently to poll (in seconds)</span>
+
+<span class="sd">        The polling feature is disabled by default</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            PushItem:</span>
+<span class="sd">                Created push item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_RATE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;30&quot;</span><span class="p">)</span>
+
+        <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">max_attempts</span> <span class="o">=</span> <span class="n">timeout</span> <span class="o">//</span> <span class="n">poll_rate</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">):</span>
+                        <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_attempts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                            <span class="s2">&quot;Push item source </span><span class="si">%s</span><span class="s2"> is missing after </span><span class="si">%s</span><span class="s2"> seconds&quot;</span><span class="p">,</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+                            <span class="n">timeout</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s2">&quot;Waiting for </span><span class="si">%s</span><span class="s2"> seconds for source file </span><span class="si">%s</span><span class="s2"> to appear&quot;</span><span class="p">,</span>
+                        <span class="n">poll_rate</span><span class="p">,</span>
+                        <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">poll_rate</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">item</span>
 
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_maybe_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">delegate</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
-            <span class="c1"># no wrapping needed</span>
-            <span class="k">return</span> <span class="n">delegate</span>
-        <span class="c1"># wrap with a no-op enter/exit</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">delegate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="p">,</span> <span class="s2">&quot;__exit__&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Source"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a><span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -269,7 +316,7 @@
         <span class="k">def</span> <span class="nf">partial_source</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">inner_kwargs</span><span class="p">):</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">SourceWrapper</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">SourceWrapper</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
         <span class="c1"># If the source accepts a &#39;url&#39; argument, that affects how source</span>
         <span class="c1"># URLs are parsed, as described in the &quot;Implementing a backend&quot;</span>
@@ -420,7 +467,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

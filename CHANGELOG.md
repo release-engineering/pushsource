@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.22.0] - 2022-06-24
+
+### Added
+
+- Introduced a semi-hidden feature which may be used to poll for availability of
+  push item files on locally mounted storage prior to yield.
+
 ## [2.21.0] - 2022-06-08
 
 ### Changed
@@ -277,7 +284,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.21.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.0...HEAD
+[2.22.0]: https://github.com/release-engineering/pushsource/compare/v2.21.0...v2.22.0
 [2.21.0]: https://github.com/release-engineering/pushsource/compare/v2.20.0...v2.21.0
 [2.20.0]: https://github.com/release-engineering/pushsource/compare/v2.19.0...v2.20.0
 [2.19.0]: https://github.com/release-engineering/pushsource/compare/v2.18.2...v2.19.0

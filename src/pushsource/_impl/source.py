@@ -1,10 +1,15 @@
 import inspect
 import functools
+import logging
+import os
+import time
 from threading import Lock
 
 import pkg_resources
 
 from six.moves.urllib import parse
+
+LOG = logging.getLogger("pushsource")
 
 
 def getfullargspec(x):
@@ -32,25 +37,67 @@ class SourceWrapper(object):
     # Internal class to ensure that all source instances support enter/exit
     # for with statements even if underlying instance doesn't implement it
     # (since it originally was not mandatory).
+    # This class also ensures that all source instances support polling
+    # for the existence of source file before returning the push item.
+    # This feature is disabled by default and can be enabled with
+    # environment variables
     def __init__(self, delegate):
         self.__delegate = delegate
 
     def __iter__(self):
-        return self.__delegate.__iter__()
+        """
+        Poll until a source file is present before yielding an item.
+
+        This is necessary due to a limitation, where file changes may
+        not immediately propagate to NFS. If timeout is reached,
+        yield the item and display a warning.
+
+        Timeout and poll rate are controlled with environment variables.
+        PUSHSOURCE_SRC_POLL_TIMEOUT - Maximum number of seconds to poll for
+        PUSHSOURCE_SRC_POLL_RATE - How frequently to poll (in seconds)
+
+        The polling feature is disabled by default
+
+        Yields:
+            PushItem:
+                Created push item.
+        """
+        timeout = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
+        poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
+
+        generator = self.__delegate.__iter__()
+        for item in generator:
+            if not hasattr(item, "src") or not item.src:
+                yield item
+            else:
+                max_attempts = timeout // poll_rate
+                for i in range(max_attempts):
+                    if os.path.exists(item.src):
+                        break
+                    if i == (max_attempts) - 1:
+                        LOG.warning(
+                            "Push item source %s is missing after %s seconds",
+                            item.src,
+                            timeout,
+                        )
+                        break
+                    LOG.info(
+                        "Waiting for %s seconds for source file %s to appear",
+                        poll_rate,
+                        item.src,
+                    )
+                    time.sleep(poll_rate)
+                yield item
 
     def __enter__(self):
+        if hasattr(self.__delegate, "__enter__"):
+            self.__delegate.__enter__()
+            return self
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-    @classmethod
-    def _maybe_wrap(cls, delegate):
-        if hasattr(delegate, "__enter__"):
-            # no wrapping needed
-            return delegate
-        # wrap with a no-op enter/exit
-        return cls(delegate)
+        if hasattr(self.__delegate, "__exit__"):
+            return self.__delegate.__exit__(exc_type, exc_val, exc_tb)
 
 
 class Source(object):
@@ -235,7 +282,7 @@ class Source(object):
         def partial_source(*inner_args, **inner_kwargs):
             kwargs = url_kwargs.copy()
             kwargs.update(inner_kwargs)
-            return SourceWrapper._maybe_wrap(klass(*inner_args, **kwargs))
+            return SourceWrapper(klass(*inner_args, **kwargs))
 
         # If the source accepts a 'url' argument, that affects how source
         # URLs are parsed, as described in the "Implementing a backend"

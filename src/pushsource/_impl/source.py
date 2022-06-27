@@ -42,6 +42,15 @@ class SourceWrapper(object):
     # This feature is disabled by default and can be enabled with
     # environment variables
     def __init__(self, delegate):
+
+        if isinstance(delegate, SourceWrapper):
+            # It is common for multiple layers of Source to be constructed,
+            # but we don't want multiple layers of SourceWrapper since it
+            # would double up the src polling logic while achieving nothing
+            # useful. So, if we are being asked to wrap a SourceWrapper,
+            # we'll pick out the underlying delegate instead and wrap that.
+            delegate = delegate.__delegate
+
         self.__delegate = delegate
 
     def __iter__(self):

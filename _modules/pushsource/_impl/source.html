@@ -76,6 +76,15 @@
     <span class="c1"># This feature is disabled by default and can be enabled with</span>
     <span class="c1"># environment variables</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delegate</span><span class="p">,</span> <span class="n">SourceWrapper</span><span class="p">):</span>
+            <span class="c1"># It is common for multiple layers of Source to be constructed,</span>
+            <span class="c1"># but we don&#39;t want multiple layers of SourceWrapper since it</span>
+            <span class="c1"># would double up the src polling logic while achieving nothing</span>
+            <span class="c1"># useful. So, if we are being asked to wrap a SourceWrapper,</span>
+            <span class="c1"># we&#39;ll pick out the underlying delegate instead and wrap that.</span>
+            <span class="n">delegate</span> <span class="o">=</span> <span class="n">delegate</span><span class="o">.</span><span class="n">__delegate</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span> <span class="o">=</span> <span class="n">delegate</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

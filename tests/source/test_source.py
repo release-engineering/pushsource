@@ -175,3 +175,37 @@ def test_yield_timeout_reached(
     assert len(items) == 1
     assert mock_path_exists.call_count == 30
     assert mock_sleep.call_count == 29
+
+
+@patch.dict(
+    "os.environ",
+    {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
+)
+@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.source.os.path.exists")
+def test_yield_timeout_reached_nodupe(
+    mock_path_exists, mock_sleep, container_push_item, caplog
+):
+    """src polling/timeout logic should only happen once per item even if
+    multiple layers of source have been created.
+    """
+
+    class TestKoji(object):
+        def __init__(self, **kwargs):
+            pass
+
+        def __iter__(self):
+            yield container_push_item
+
+    mock_path_exists.return_value = False
+    Source.register_backend("test-koji", TestKoji)
+    Source.register_backend(
+        "test-koji-outer", Source.get_partial("test-koji:", whatever="argument")
+    )
+    source = Source.get("test-koji-outer:")
+
+    # Should be able to get the item.
+    assert len(list(source)) == 1
+
+    # It should mention the timeout, only once
+    assert caplog.text.count("is missing after 900 seconds") == 1

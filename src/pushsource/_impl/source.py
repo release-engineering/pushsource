@@ -80,10 +80,10 @@ class SourceWrapper(object):
                 yield item
             else:
                 max_attempts = timeout // poll_rate
-                for i in range(max_attempts):
+                for i in range(max_attempts + 1):
                     if os.path.exists(item.src):
                         break
-                    if i == (max_attempts) - 1:
+                    if i == max_attempts:
                         LOG.warning(
                             "Push item source %s is missing after %s seconds",
                             item.src,

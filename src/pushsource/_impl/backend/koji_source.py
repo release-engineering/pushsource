@@ -1,6 +1,7 @@
 import os
 import threading
 import logging
+import time
 from functools import partial
 
 from six.moves.queue import Queue, Empty
@@ -283,18 +284,37 @@ class KojiSource(Source):
 
         candidate_paths = []
 
-        # If signing keys requested, try them in order of preference
-        for key in self._signing_key:
-            if key:
-                key = key.lower()
-                candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
-            else:
-                candidate = unsigned_path
-            candidate_paths.append(candidate)
-            if os.path.exists(candidate):
-                rpm_path = candidate
-                rpm_signing_key = key
+        timeout = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
+        poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
+        max_attempts = timeout // poll_rate
+
+        for i in range(max_attempts + 1):
+            # We only want to poll if signing key is requested
+            if not self._signing_key:
                 break
+            # If signing keys requested, try them in order of preference
+            for key in self._signing_key:
+                if key:
+                    key = key.lower()
+                    candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
+                else:
+                    candidate = unsigned_path
+                if candidate not in candidate_paths:
+                    candidate_paths.append(candidate)
+                if os.path.exists(candidate):
+                    rpm_path = candidate
+                    rpm_signing_key = key
+                    break
+
+            if rpm_path or i == max_attempts:
+                break
+            LOG.info(
+                "Waiting for %s seconds for any of the following paths to appear: %s",
+                poll_rate,
+                ", ".join(candidate_paths)
+            )
+            time.sleep(poll_rate)
+
 
         if self._signing_key:
             # If signing keys requested: we either found an RPM above, or an error occurs

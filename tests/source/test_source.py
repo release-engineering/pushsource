@@ -173,8 +173,8 @@ def test_yield_timeout_reached(
     items = list(source)
 
     assert len(items) == 1
-    assert mock_path_exists.call_count == 30
-    assert mock_sleep.call_count == 29
+    assert mock_path_exists.call_count == 31
+    assert mock_sleep.call_count == 30
 
 
 @patch.dict(
@@ -209,3 +209,5 @@ def test_yield_timeout_reached_nodupe(
 
     # It should mention the timeout, only once
     assert caplog.text.count("is missing after 900 seconds") == 1
+    assert mock_path_exists.call_count == 31
+    assert mock_sleep.call_count == 30

@@ -288,33 +288,45 @@ class KojiSource(Source):
         poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
         max_attempts = timeout // poll_rate
 
+        # If signing keys requested, try them in order of preference
+        # We will wait up to timeout for the highest-priority key to appear
+        # If it fails to appear, try keys with lowering priorities until one is present
+        key = self._signing_key[0] if self._signing_key else None
+        if key:
+            key = key.lower()
+            candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
+
         for i in range(max_attempts + 1):
             # We only want to poll if signing key is requested
-            if not self._signing_key:
+            if not key:
                 break
-            # If signing keys requested, try them in order of preference
-            for key in self._signing_key:
-                if key:
-                    key = key.lower()
-                    candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
-                else:
-                    candidate = unsigned_path
-                if candidate not in candidate_paths:
-                    candidate_paths.append(candidate)
-                if os.path.exists(candidate):
-                    rpm_path = candidate
-                    rpm_signing_key = key
-                    break
-
-            if rpm_path or i == max_attempts:
+            # If path exists, success, highest priority key will be used
+            if os.path.exists(candidate):
+                break
+            # If we reached the timeout, perhaps lower priority keys will be present
+            if i == max_attempts:
+                LOG.info("Path %s has failed to appear, but perhaps a lower priority path is present", candidate)
                 break
             LOG.info(
-                "Waiting for %s seconds for any of the following paths to appear: %s",
+                "Waiting for %s seconds for the following path to appear: %s",
                 poll_rate,
-                ", ".join(candidate_paths)
+                candidate
             )
             time.sleep(poll_rate)
 
+        # If signing keys requested, try them in order of preference
+        # Some key should be present at this stage, let's try them all
+        for key in self._signing_key:
+            if key:
+                key = key.lower()
+                candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
+            else:
+                candidate = unsigned_path
+            candidate_paths.append(candidate)
+            if os.path.exists(candidate):
+                rpm_path = candidate
+                rpm_signing_key = key
+                break
 
         if self._signing_key:
             # If signing keys requested: we either found an RPM above, or an error occurs

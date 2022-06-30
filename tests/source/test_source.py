@@ -99,8 +99,8 @@ def test_bad_url_missing_backend():
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
 )
-@patch("pushsource._impl.source.time.sleep")
-@patch("pushsource._impl.source.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
 def test_yield_no_source(mock_path_exists, mock_sleep, koji_dir):
     class TestKoji(object):
         def __init__(self, **kwargs):
@@ -128,8 +128,8 @@ def test_yield_no_source(mock_path_exists, mock_sleep, koji_dir):
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
 )
-@patch("pushsource._impl.source.time.sleep")
-@patch("pushsource._impl.source.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
 def test_yield_once_file_present(
     mock_path_exists, mock_sleep, koji_dir, container_push_item
 ):
@@ -154,8 +154,8 @@ def test_yield_once_file_present(
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
 )
-@patch("pushsource._impl.source.time.sleep")
-@patch("pushsource._impl.source.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
 def test_yield_timeout_reached(
     mock_path_exists, mock_sleep, koji_dir, container_push_item
 ):
@@ -181,8 +181,8 @@ def test_yield_timeout_reached(
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
 )
-@patch("pushsource._impl.source.time.sleep")
-@patch("pushsource._impl.source.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
 def test_yield_timeout_reached_nodupe(
     mock_path_exists, mock_sleep, container_push_item, caplog
 ):

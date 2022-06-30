@@ -7,8 +7,8 @@ from pushsource import Source, RpmPushItem
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
 )
-@patch("pushsource._impl.backend.koji_source.os.path.exists")
-@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
 def test_koji_poll_for_signed_rpm_highest_priority_key_present(mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog):
     """Highest priority key becomes present after some time."""
 
@@ -58,8 +58,8 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_present(mock_sleep, mock_
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
 )
-@patch("pushsource._impl.backend.koji_source.os.path.exists")
-@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
+@patch("pushsource._impl.helpers.time.sleep")
 def test_koji_poll_for_signed_rpm_highest_priority_key_absent(mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog):
     """Highest priority key is always absent and a lower priority key is found."""
 
@@ -110,7 +110,7 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_absent(mock_sleep, mock_p
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
 )
-@patch("pushsource._impl.source.time.sleep")
+@patch("pushsource._impl.helpers.time.sleep")
 def test_koji_missing_signing_key_timeout(mock_sleep, fake_koji, koji_dir, caplog):
     """RPM is NOTFOUND if requested signing key is not available."""
 

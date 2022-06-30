@@ -1,7 +1,6 @@
 import os
 import threading
 import logging
-import time
 from functools import partial
 
 from six.moves.queue import Queue, Empty
@@ -22,7 +21,7 @@ from ..model import (
     ContainerImagePushItem,
     SourceContainerImagePushItem,
 )
-from ..helpers import list_argument, try_int, as_completed_with_timeout_reset
+from ..helpers import list_argument, try_int, as_completed_with_timeout_reset, wait_exist
 from .modulemd import Module
 from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 
@@ -286,7 +285,6 @@ class KojiSource(Source):
 
         timeout = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
         poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
-        max_attempts = timeout // poll_rate
 
         # If signing keys requested, try them in order of preference
         # We will wait up to timeout for the highest-priority key to appear
@@ -295,24 +293,10 @@ class KojiSource(Source):
         if key:
             key = key.lower()
             candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
+        else:
+            candidate = unsigned_path
 
-        for i in range(max_attempts + 1):
-            # We only want to poll if signing key is requested
-            if not key:
-                break
-            # If path exists, success, highest priority key will be used
-            if os.path.exists(candidate):
-                break
-            # If we reached the timeout, perhaps lower priority keys will be present
-            if i == max_attempts:
-                LOG.info("Path %s has failed to appear, but perhaps a lower priority path is present", candidate)
-                break
-            LOG.info(
-                "Waiting for %s seconds for the following path to appear: %s",
-                poll_rate,
-                candidate
-            )
-            time.sleep(poll_rate)
+        wait_exist(candidate, timeout, poll_rate)
 
         # If signing keys requested, try them in order of preference
         # Some key should be present at this stage, let's try them all

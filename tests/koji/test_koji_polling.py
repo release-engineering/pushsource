@@ -3,13 +3,16 @@ from mock import patch
 
 from pushsource import Source, RpmPushItem
 
+
 @patch.dict(
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
 )
 @patch("pushsource._impl.helpers.os.path.exists")
 @patch("pushsource._impl.helpers.time.sleep")
-def test_koji_poll_for_signed_rpm_highest_priority_key_present(mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog):
+def test_koji_poll_for_signed_rpm_highest_priority_key_present(
+    mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+):
     """Highest priority key becomes present after some time."""
 
     source = Source.get(
@@ -54,13 +57,16 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_present(mock_sleep, mock_
     assert len(items) == 1
     assert mock_sleep.call_count == 1
 
+
 @patch.dict(
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
 )
 @patch("pushsource._impl.helpers.os.path.exists")
 @patch("pushsource._impl.helpers.time.sleep")
-def test_koji_poll_for_signed_rpm_highest_priority_key_absent(mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog):
+def test_koji_poll_for_signed_rpm_highest_priority_key_absent(
+    mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+):
     """Highest priority key is always absent and a lower priority key is found."""
 
     source = Source.get(

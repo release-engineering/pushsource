@@ -21,7 +21,12 @@ from ..model import (
     ContainerImagePushItem,
     SourceContainerImagePushItem,
 )
-from ..helpers import list_argument, try_int, as_completed_with_timeout_reset, wait_exist
+from ..helpers import (
+    list_argument,
+    try_int,
+    as_completed_with_timeout_reset,
+    wait_exist,
+)
 from .modulemd import Module
 from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 

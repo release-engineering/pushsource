@@ -13,6 +13,7 @@ from six.moves.urllib.parse import urlparse, ParseResult
 
 LOG = logging.getLogger("pushsource")
 
+
 def list_argument(value, retain_none=False):
     """Convert an argument into a list:
 

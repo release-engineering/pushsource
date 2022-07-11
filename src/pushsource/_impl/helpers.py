@@ -1,3 +1,6 @@
+import os
+import logging
+import time
 from concurrent.futures import wait, FIRST_COMPLETED
 
 import six
@@ -7,6 +10,8 @@ if six.PY2:  # pragma: no cover
     from concurrent.futures import TimeoutError  # pylint: disable=redefined-builtin
 
 from six.moves.urllib.parse import urlparse, ParseResult
+
+LOG = logging.getLogger("pushsource")
 
 
 def list_argument(value, retain_none=False):
@@ -148,3 +153,34 @@ def as_completed_with_timeout_reset(futures, timeout):
 
         for fs in finished:
             yield fs
+
+
+def wait_exist(path, timeout, poll_rate):
+    """
+    Wait until a file begins to exist or until a timeout is reached.
+
+    Args:
+        path (str):
+            Path to check.
+        timeout (int):
+            Maximum time to wait.
+        poll_rate (int):
+            How often to check for file's existence.
+    """
+    max_attempts = timeout // poll_rate
+    for i in range(max_attempts + 1):
+        if os.path.exists(path):
+            break
+        if i == max_attempts:
+            LOG.warning(
+                "File %s is missing after %s seconds",
+                path,
+                timeout,
+            )
+            break
+        LOG.info(
+            "Waiting for %s seconds for file %s to appear",
+            poll_rate,
+            path,
+        )
+        time.sleep(poll_rate)

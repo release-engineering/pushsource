@@ -2,12 +2,13 @@ import inspect
 import functools
 import logging
 import os
-import time
 from threading import Lock
 
 import pkg_resources
 
 from six.moves.urllib import parse
+
+from pushsource._impl.helpers import wait_exist
 
 LOG = logging.getLogger("pushsource")
 
@@ -79,23 +80,7 @@ class SourceWrapper(object):
             if not hasattr(item, "src") or not item.src:
                 yield item
             else:
-                max_attempts = timeout // poll_rate
-                for i in range(max_attempts):
-                    if os.path.exists(item.src):
-                        break
-                    if i == (max_attempts) - 1:
-                        LOG.warning(
-                            "Push item source %s is missing after %s seconds",
-                            item.src,
-                            timeout,
-                        )
-                        break
-                    LOG.info(
-                        "Waiting for %s seconds for source file %s to appear",
-                        poll_rate,
-                        item.src,
-                    )
-                    time.sleep(poll_rate)
+                wait_exist(item.src, timeout, poll_rate)
                 yield item
 
     def __enter__(self):

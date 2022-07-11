@@ -55,7 +55,12 @@
     <span class="n">ContainerImagePushItem</span><span class="p">,</span>
     <span class="n">SourceContainerImagePushItem</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">try_int</span><span class="p">,</span> <span class="n">as_completed_with_timeout_reset</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">list_argument</span><span class="p">,</span>
+    <span class="n">try_int</span><span class="p">,</span>
+    <span class="n">as_completed_with_timeout_reset</span><span class="p">,</span>
+    <span class="n">wait_exist</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.modulemd</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">.koji_containers</span> <span class="kn">import</span> <span class="n">ContainerArchiveHelper</span><span class="p">,</span> <span class="n">MIME_TYPE_MANIFEST_LIST</span>
 
@@ -317,7 +322,23 @@
 
         <span class="n">candidate_paths</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_RATE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;30&quot;</span><span class="p">)</span>
+
         <span class="c1"># If signing keys requested, try them in order of preference</span>
+        <span class="c1"># We will wait up to timeout for the highest-priority key to appear</span>
+        <span class="c1"># If it fails to appear, try keys with lowering priorities until one is present</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">signed</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">unsigned_path</span>
+
+        <span class="n">wait_exist</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
+
+        <span class="c1"># If signing keys requested, try them in order of preference</span>
+        <span class="c1"># Some key should be present at this stage, let&#39;s try them all</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>

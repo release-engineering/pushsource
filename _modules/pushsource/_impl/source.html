@@ -36,12 +36,13 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
 
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 
 <span class="kn">from</span> <span class="nn">six.moves.urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+
+<span class="kn">from</span> <span class="nn">pushsource._impl.helpers</span> <span class="kn">import</span> <span class="n">wait_exist</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 
@@ -113,23 +114,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">item</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">max_attempts</span> <span class="o">=</span> <span class="n">timeout</span> <span class="o">//</span> <span class="n">poll_rate</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">):</span>
-                        <span class="k">break</span>
-                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_attempts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                            <span class="s2">&quot;Push item source </span><span class="si">%s</span><span class="s2"> is missing after </span><span class="si">%s</span><span class="s2"> seconds&quot;</span><span class="p">,</span>
-                            <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
-                            <span class="n">timeout</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                        <span class="s2">&quot;Waiting for </span><span class="si">%s</span><span class="s2"> seconds for source file </span><span class="si">%s</span><span class="s2"> to appear&quot;</span><span class="p">,</span>
-                        <span class="n">poll_rate</span><span class="p">,</span>
-                        <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
-                    <span class="p">)</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">poll_rate</span><span class="p">)</span>
+                <span class="n">wait_exist</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
                 <span class="k">yield</span> <span class="n">item</span>
 
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.22.2] - 2022-07-12
+
+### Fixed
+
+- Fix the file polling feature to also poll in the Koji source
+- Fix the file polling feature to poll the correct number of times
+
 ## [2.22.1] - 2022-06-29
 
 ### Fixed
@@ -291,7 +298,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.1...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.2...HEAD
+[2.22.2]: https://github.com/release-engineering/pushsource/compare/v2.22.1...v2.22.2
 [2.22.1]: https://github.com/release-engineering/pushsource/compare/v2.22.0...v2.22.1
 [2.22.0]: https://github.com/release-engineering/pushsource/compare/v2.21.0...v2.22.0
 [2.21.0]: https://github.com/release-engineering/pushsource/compare/v2.20.0...v2.21.0

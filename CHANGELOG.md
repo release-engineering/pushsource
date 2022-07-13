@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.22.3] - 2022-07-13
+
+### Fixed
+
+- Fix not displaying warning log when file polling is disabled
+
 ## [2.22.2] - 2022-07-12
 
 ### Fixed
@@ -298,7 +304,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.2...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.3...HEAD
+[2.22.3]: https://github.com/release-engineering/pushsource/compare/v2.22.5...v2.22.3
 [2.22.2]: https://github.com/release-engineering/pushsource/compare/v2.22.1...v2.22.2
 [2.22.1]: https://github.com/release-engineering/pushsource/compare/v2.22.0...v2.22.1
 [2.22.0]: https://github.com/release-engineering/pushsource/compare/v2.21.0...v2.22.0

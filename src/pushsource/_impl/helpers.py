@@ -172,11 +172,12 @@ def wait_exist(path, timeout, poll_rate):
         if os.path.exists(path):
             break
         if i == max_attempts:
-            LOG.warning(
-                "File %s is missing after %s seconds",
-                path,
-                timeout,
-            )
+            if max_attempts > 0:
+                LOG.warning(
+                    "File %s is missing after %s seconds",
+                    path,
+                    timeout,
+                )
             break
         LOG.info(
             "Waiting for %s seconds for file %s to appear",

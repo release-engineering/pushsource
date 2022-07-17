@@ -21,7 +21,12 @@ from ..model import (
     ContainerImagePushItem,
     SourceContainerImagePushItem,
 )
-from ..helpers import list_argument, try_int, as_completed_with_timeout_reset
+from ..helpers import (
+    list_argument,
+    try_int,
+    as_completed_with_timeout_reset,
+    wait_exist,
+)
 from .modulemd import Module
 from .koji_containers import ContainerArchiveHelper, MIME_TYPE_MANIFEST_LIST
 
@@ -283,7 +288,23 @@ class KojiSource(Source):
 
         candidate_paths = []
 
+        timeout = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
+        poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
+
         # If signing keys requested, try them in order of preference
+        # We will wait up to timeout for the highest-priority key to appear
+        # If it fails to appear, try keys with lowering priorities until one is present
+        key = self._signing_key[0] if self._signing_key else None
+        if key:
+            key = key.lower()
+            candidate = os.path.join(build_path, self._pathinfo.signed(meta, key))
+        else:
+            candidate = unsigned_path
+
+        wait_exist(candidate, timeout, poll_rate)
+
+        # If signing keys requested, try them in order of preference
+        # Some key should be present at this stage, let's try them all
         for key in self._signing_key:
             if key:
                 key = key.lower()

@@ -66,7 +66,8 @@ class AttrsRenamer(object):
                     attr_kwargs[argname] = getattr(old_attr, argname)
                 elif (
                     six.PY3
-                    and argname in inspect.signature(old_attr.__class__.__init__).parameters.keys()
+                    and argname
+                    in inspect.signature(old_attr.__class__.__init__).parameters.keys()
                 ):
                     attr_kwargs[argname] = None
             new_attr = old_attr.__class__(**attr_kwargs)

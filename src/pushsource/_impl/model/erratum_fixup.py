@@ -25,6 +25,9 @@ Unfortunately, that does not work because the attrs library internally
 tries to eval some code of the form "<attr_name> = ...", which will never
 work if the name is a keyword.
 """
+import inspect
+
+import six
 
 
 class AttrsRenamer(object):
@@ -61,6 +64,12 @@ class AttrsRenamer(object):
             ]:
                 if hasattr(old_attr, argname):
                     attr_kwargs[argname] = getattr(old_attr, argname)
+                elif (
+                    six.PY3
+                    and argname
+                    in inspect.signature(old_attr.__class__.__init__).parameters.keys()
+                ):
+                    attr_kwargs[argname] = None
             new_attr = old_attr.__class__(**attr_kwargs)
 
             self._attrs_by_name[new_name] = new_attr

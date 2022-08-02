@@ -1,4 +1,4 @@
-attrs
+attrs<22.1.0
 more-executors>=2.7.0
 koji>=1.18
 six

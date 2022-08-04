@@ -29,7 +29,7 @@ class FakeKojiController(object):
         build_file = os.path.join(BUILDS_DIR, nvr + ".yaml")
 
         with open(build_file, "rt") as f:
-            build = yaml.load(f, Loader=yaml.BaseLoader)    #nosec B506
+            build = yaml.load(f, Loader=yaml.BaseLoader)  # nosec B506
 
         archives = build.pop("archives", [])
 

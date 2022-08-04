@@ -45,7 +45,7 @@ def test_partial_with_url_bound():
     Source.register_backend("returns-url", ReturnsUrlSource)
 
     # Let's say that I now overwrite this source and I pre-fill a URL
-    partial = Source.get_partial("returns-url:", url="/tmp")
+    partial = Source.get_partial("returns-url:", url="/dummy")
     Source.register_backend("returns-url", partial)
 
     # Then I should be able to obtain an instance of this source, with
@@ -53,14 +53,14 @@ def test_partial_with_url_bound():
     # still able to be overridden normally.
     items = [i for i in Source.get("returns-url:b=123")]
 
-    assert items == [PushItem(name="/tmp a 123")]
+    assert items == [PushItem(name="/dummy a 123")]
 
 
 def test_partial_with_url_bound_overwrite():
     Source.register_backend("returns-url", ReturnsUrlSource)
 
     # Let's say that I now overwrite this source and I pre-fill a URL
-    partial = Source.get_partial("returns-url:", url="/tmp")
+    partial = Source.get_partial("returns-url:", url="/dummy")
     Source.register_backend("returns-url", partial)
 
     # Then I should be able to obtain an instance of this source, and

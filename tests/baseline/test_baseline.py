@@ -110,7 +110,7 @@ class CaseHelper(object):
     # A helper used to deal with (de)serializing of cases.
 
     def __init__(self, koji_dir):
-        jinja_env = jinja2.Environment()
+        jinja_env = jinja2.Environment()  # nosec B701
 
         src_dir = os.path.join(os.path.dirname(__file__), "../..")
         src_dir = os.path.abspath(src_dir)
@@ -174,7 +174,7 @@ class CaseHelper(object):
 
         template = self.jinja_environment.from_string(raw_case)
         rendered = template.render()
-        data = yaml.load(rendered, Loader=yaml.BaseLoader)
+        data = yaml.load(rendered, Loader=yaml.BaseLoader)  # nosec B506
 
         return (raw_case, data)
 

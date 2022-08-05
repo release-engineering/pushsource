@@ -214,7 +214,7 @@ class PushItem(object):
         hashers = []
 
         if not self.md5sum:
-            hashers.append((hashlib.new("md5"), "md5sum"))
+            hashers.append((hashlib.new("md5"), "md5sum"))  # nosec B324
         if not self.sha256sum:
             hashers.append((hashlib.new("sha256"), "sha256sum"))
 

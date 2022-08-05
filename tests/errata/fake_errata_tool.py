@@ -24,7 +24,7 @@ class FakeErrataToolController(object):
                 if filename.endswith(".yaml"):
                     path = os.path.join(root, filename)
                     with open(path) as fh:
-                        data = yaml.load(fh, Loader=yaml.FullLoader)
+                        data = yaml.load(fh, Loader=yaml.FullLoader)  # nosec B506
                     advisory_id = data["advisory_id"]
                     if advisory_id in out:
                         raise ValueError(

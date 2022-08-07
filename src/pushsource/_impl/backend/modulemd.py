@@ -30,7 +30,7 @@ class Module(object):
         # Obtain a Module instance from a YAML file.
         # Raises if file doesn't contain a module or has multiple documents.
         with open(fname) as f:
-            parsed = yaml.load(f, Loader=yaml.BaseLoader)
+            parsed = yaml.load(f, Loader=yaml.BaseLoader)  # nosec B506
         data = parsed["data"]
 
         return cls(

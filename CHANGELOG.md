@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.23.0] - 2022-08-31
+
+### Changed
+
+- `registry` source now supports list-only tags
+
 ## [2.22.4] - 2022-08-03
 
 ### Fixed
@@ -310,7 +316,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.22.4...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.0...HEAD
+[2.23.0]: https://github.com/release-engineering/pushsource/compare/v2.22.4...v2.23.0
 [2.22.4]: https://github.com/release-engineering/pushsource/compare/v2.22.3...v2.22.4
 [2.22.3]: https://github.com/release-engineering/pushsource/compare/v2.22.2...v2.22.3
 [2.22.2]: https://github.com/release-engineering/pushsource/compare/v2.22.1...v2.22.2

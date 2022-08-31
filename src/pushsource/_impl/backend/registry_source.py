@@ -108,7 +108,7 @@ class RegistrySource(Source):
                         manifest_types=[mtype],
                     )
                     self._manifests[source_uri][mtype] = manifest_details
-                except requests.exceptions.HTTPError as e:
+                except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
                     if e.response.status_code == 404:
                         continue
                     raise e

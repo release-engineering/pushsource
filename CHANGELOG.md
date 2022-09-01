@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.23.1] - 2022-09-01
+
+### Fixed
+
+- Fixed `registry` source sometimes raising an unwarranted `ConnectionError` when
+  discovering available manifest types
+
 ## [2.23.0] - 2022-08-31
 
 ### Changed
@@ -316,7 +323,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.1...HEAD
+[2.23.1]: https://github.com/release-engineering/pushsource/compare/v2.23.0...v2.23.1
 [2.23.0]: https://github.com/release-engineering/pushsource/compare/v2.22.4...v2.23.0
 [2.22.4]: https://github.com/release-engineering/pushsource/compare/v2.22.3...v2.22.4
 [2.22.3]: https://github.com/release-engineering/pushsource/compare/v2.22.2...v2.22.3

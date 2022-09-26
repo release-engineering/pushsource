@@ -109,7 +109,9 @@ class RegistrySource(Source):
                     )
                     self._manifests[source_uri][mtype] = manifest_details
                 except requests.exceptions.RetryError as e:
-                    continue
+                    if "too many 404 error responses" in str(e):
+                        continue
+                    raise e
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 404:
                         continue

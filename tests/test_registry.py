@@ -210,6 +210,7 @@ def test_registry_push_items_500_raises(mocked_inspect, mocked_get_manifest):
         with source:
             items = list(source)
 
+
 @patch("pushsource._impl.backend.registry_source.get_manifest")
 @patch("pushsource._impl.backend.registry_source.inspect")
 def test_registry_push_items_tolerate_404_retries(mocked_inspect, mocked_get_manifest):
@@ -218,7 +219,9 @@ def test_registry_push_items_tolerate_404_retries(mocked_inspect, mocked_get_man
     response_404 = requests.Response()
     response_404.status_code = 404
     mocked_get_manifest.side_effect = [
-        requests.exceptions.RetryError('too many 404 error responses', response=response_404),
+        requests.exceptions.RetryError(
+            "too many 404 error responses", response=response_404
+        ),
         (
             MEDIATYPE_SCHEMA2_V2,
             "test-digest-1",

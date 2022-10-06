@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="User Guide" href="userguide.html" />
@@ -47,7 +48,11 @@
 <li class="toctree-l2"><a class="reference internal" href="userguide.html#binding-partially-configured-backends">Binding partially-configured backends</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/base.html">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sources/base.html#pushsource.Source"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sources/base.html#pushsource.SourceUrlError"><code class="docutils literal notranslate"><span class="pre">SourceUrlError</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staged-source-urls">Staged source URLs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sources/staged.html#staging-structure">Staging structure</a></li>
@@ -70,17 +75,64 @@
 <li class="toctree-l2"><a class="reference internal" href="sources/errata.html#python-api-reference">Python API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/cgw.html">Push items: cgw</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/directory.html">Push items: directory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/containers.html">Push items: containers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/ami.html">Push items: AMI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/productid.html">Push items: productid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/base.html#pushsource.PushItem"><code class="docutils literal notranslate"><span class="pre">PushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/base.html#pushsource.KojiBuildInfo"><code class="docutils literal notranslate"><span class="pre">KojiBuildInfo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/files.html#pushsource.FilePushItem"><code class="docutils literal notranslate"><span class="pre">FilePushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/cgw.html">Push items: cgw</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/cgw.html#pushsource.CGWPushItem"><code class="docutils literal notranslate"><span class="pre">CGWPushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/directory.html">Push items: directory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/directory.html#pushsource.DirectoryPushItem"><code class="docutils literal notranslate"><span class="pre">DirectoryPushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/rpm.html#pushsource.RpmPushItem"><code class="docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/modulemd.html#pushsource.ModuleMdPushItem"><code class="docutils literal notranslate"><span class="pre">ModuleMdPushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/modulemd.html#pushsource.ModuleMdSourcePushItem"><code class="docutils literal notranslate"><span class="pre">ModuleMdSourcePushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/errata.html#pushsource.ErratumPushItem"><code class="docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/errata.html#pushsource.ErratumReference"><code class="docutils literal notranslate"><span class="pre">ErratumReference</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/errata.html#pushsource.ErratumPackageCollection"><code class="docutils literal notranslate"><span class="pre">ErratumPackageCollection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/errata.html#pushsource.ErratumModule"><code class="docutils literal notranslate"><span class="pre">ErratumModule</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/errata.html#pushsource.ErratumPackage"><code class="docutils literal notranslate"><span class="pre">ErratumPackage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/containers.html">Push items: containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.ContainerImagePushItem"><code class="docutils literal notranslate"><span class="pre">ContainerImagePushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.SourceContainerImagePushItem"><code class="docutils literal notranslate"><span class="pre">SourceContainerImagePushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.ContainerImagePullInfo"><code class="docutils literal notranslate"><span class="pre">ContainerImagePullInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.ContainerImagePullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImagePullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.ContainerImageDigestPullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImageDigestPullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.ContainerImageTagPullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImageTagPullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/containers.html#pushsource.OperatorManifestPushItem"><code class="docutils literal notranslate"><span class="pre">OperatorManifestPushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/ami.html">Push items: AMI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/ami.html#pushsource.AmiPushItem"><code class="docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/ami.html#pushsource.AmiRelease"><code class="docutils literal notranslate"><span class="pre">AmiRelease</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model/ami.html#pushsource.AmiBillingCodes"><code class="docutils literal notranslate"><span class="pre">AmiBillingCodes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/productid.html">Push items: productid</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/productid.html#pushsource.ProductIdPushItem"><code class="docutils literal notranslate"><span class="pre">ProductIdPushItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model/comps.html">Push items: comps.xml</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model/comps.html#pushsource.CompsXmlPushItem"><code class="docutils literal notranslate"><span class="pre">CompsXmlPushItem</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="schema/staged.html">Schema: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema/errata.html">Schema: errata</a></li>
 </ul>
@@ -200,7 +252,7 @@ according to their type and attributes:</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.2.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

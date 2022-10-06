@@ -13,6 +13,7 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
    
@@ -142,10 +143,11 @@
                         <span class="n">manifest_types</span><span class="o">=</span><span class="p">[</span><span class="n">mtype</span><span class="p">],</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_manifests</span><span class="p">[</span><span class="n">source_uri</span><span class="p">][</span><span class="n">mtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">manifest_details</span>
-                <span class="k">except</span> <span class="p">(</span>
-                    <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span>
-                    <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span>
-                <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RetryError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;too many 404 error responses&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+                <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
                         <span class="k">continue</span>
                     <span class="k">raise</span> <span class="n">e</span>
@@ -312,7 +314,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.2.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

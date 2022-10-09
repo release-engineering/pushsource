@@ -74,10 +74,10 @@ jsonschema==4.16.0 \
 kobo==0.25.0 \
     --hash=sha256:bc1839425c9a0946cd1bdd9bb63add8ee348d4541eb64d3060f2ddd4fad54f3b
     # via -r requirements.in
-koji==1.30.0 \
-    --hash=sha256:0250d11d10dae9f58ec67318a230f2d5154ced05c0078980ec7ba438dc98bb77 \
-    --hash=sha256:7ceaea01542a1f3d23fc99e893cf3f86cc2b53f2c86c18ba9366d6e3975c312d \
-    --hash=sha256:a54e78b097a0da76e5f30eb5fb4ba7e0752b7bd080ffc2f723da67078c2e321e
+koji==1.30.1 \
+    --hash=sha256:0981e848e556c8299678d7eb0cebc6f2f79485414d955d96cc618e86d03aece2 \
+    --hash=sha256:4b07530e73815cb059c3e8f4f086f0539c3d06033e572146f320fc7b8d14b9b5 \
+    --hash=sha256:86e7a50143f2dd4f8b34ee87680a7f49d788bf12ada0c9bc9d827732c0381afc
     # via -r requirements.in
 monotonic==1.6 \
     --hash=sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7 \

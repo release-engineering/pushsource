@@ -315,7 +315,7 @@ def inspect(registry, repo, digest, token=None):
         token=token,
     )
     if manifest_type == MEDIATYPE_SCHEMA2_V2:
-        inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
+        inspected = get_blob(registry, repo, manifest["config"]["digest"], token=token).json()
     elif manifest_type == MEDIATYPE_SCHEMA2_V2_LIST:
         manifest_type, _digest, manifest = get_manifest(
             registry,
@@ -324,7 +324,7 @@ def inspect(registry, repo, digest, token=None):
             manifest_types=[MEDIATYPE_SCHEMA2_V2],
             token=token,
         )
-        inspected = get_blob(registry, repo, manifest["config"]["digest"]).json()
+        inspected = get_blob(registry, repo, manifest["config"]["digest"], token=token).json()
     else:
         inspected = {"architecture": manifest["architecture"], "config": {"Labels": {}}}
     if manifest_type == MEDIATYPE_SCHEMA2_V2 and not inspected.get("config", {}).get(

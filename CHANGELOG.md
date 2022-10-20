@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.23.3] - 2022-10-20
+
+### Fixed
+
+- fixed inspect method for containers
+
 ## [2.23.2] - 2022-10-06
 
 ### Fixed
@@ -329,7 +335,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.2...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.3...HEAD
+[2.23.2]: https://github.com/release-engineering/pushsource/compare/v2.23.2...v2.23.3
 [2.23.2]: https://github.com/release-engineering/pushsource/compare/v2.23.1...v2.23.2
 [2.23.1]: https://github.com/release-engineering/pushsource/compare/v2.23.0...v2.23.1
 [2.23.0]: https://github.com/release-engineering/pushsource/compare/v2.22.4...v2.23.0

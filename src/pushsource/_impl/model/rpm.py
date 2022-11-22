@@ -1,3 +1,5 @@
+import os 
+
 from .base import PushItem
 from .conv import optional_str
 from .. import compat_attr as attr
@@ -32,3 +34,18 @@ class RpmPushItem(PushItem):
     .. _ghc-8.4-820200708061905.9edba152: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767200
     .. _ghc-8.4.4-74.module_el8+12161+cf1bd7f2: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767130
     """
+
+    @property
+    def size(self):
+        """Return size of item has src attribute. Otherwise return None.
+        Returns:
+            None:
+                If item has no (empty) src attribute.
+            int:
+                If item has non-empty src, return size of the item.
+        """
+
+        if self.src:
+            return os.stat(self.src).st_size
+        else:
+            return None

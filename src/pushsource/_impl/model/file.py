@@ -1,3 +1,5 @@
+import os
+
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import optional_str, convert_maybe
@@ -52,3 +54,18 @@ class FilePushItem(PushItem):
         # - This check will also filter out NaN.
         if not (value >= -99999 and value <= 99999):
             raise ValueError("display_order must be within range -99999 .. 99999")
+
+    @property
+    def size(self):
+        """Return size of item has src attribute. Otherwise return None.
+        Returns:
+            None:
+                If item has no (empty) src attribute.
+            int:
+                If item has non-empty src, return size of the item.
+        """
+
+        if self.src:
+            return os.stat(self.src).st_size
+        else:
+            return None

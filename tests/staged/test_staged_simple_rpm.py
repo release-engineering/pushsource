@@ -40,6 +40,8 @@ def test_staged_simple_rpm(caplog):
             signing_key=None,
         ),
     ]
+    assert files[0].size == 2445
+    assert files[1].size == 1607
     # It should also warn about this
     nonrpm_path = os.path.join(staged_dir, "dest1/RPMS/not-an-rpm.txt")
     msg = "Unexpected non-RPM %s (ignored)" % nonrpm_path

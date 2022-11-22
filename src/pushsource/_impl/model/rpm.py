@@ -1,4 +1,4 @@
-import os 
+import os
 
 from .base import PushItem
 from .conv import optional_str

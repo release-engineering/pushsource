@@ -26,7 +26,7 @@ def test_staged_simple_file(caplog):
             signing_key=None,
             description=None,
             version=None,
-            display_order=1.5
+            display_order=1.5,
         ),
         FilePushItem(
             name="some-file.txt",
@@ -38,25 +38,25 @@ def test_staged_simple_file(caplog):
             origin=staged_dir,
             build=None,
             signing_key=None,
-            description='',
+            description="",
             version="1.2.3",
-            display_order=3.0
+            display_order=3.0,
         ),
         FilePushItem(
-            name='some-iso',
-            state='PENDING',
+            name="some-iso",
+            state="PENDING",
             src=os.path.join(staged_dir, "dest2/ISOS/some-iso"),
-            dest=['dest2'],
+            dest=["dest2"],
             md5sum=None,
-            sha256sum='db68c8a70f8383de71c107dca5fcfe53b1132186d1a6681d9ee3f4eea724fabb',
+            sha256sum="db68c8a70f8383de71c107dca5fcfe53b1132186d1a6681d9ee3f4eea724fabb",
             origin=staged_dir,
             build=None,
             build_info=None,
             signing_key=None,
-            description='My wonderful ISO',
-            version=None, 
-            display_order=None
-        )
+            description="My wonderful ISO",
+            version=None,
+            display_order=None,
+        ),
     ]
     assert files[0].size == 33
     assert files[1].size == 13

@@ -77,7 +77,11 @@ class SourceWrapper(object):
 
         generator = self.__delegate.__iter__()
         for item in generator:
-            if not hasattr(item, "src") or not item.src:
+            if (
+                not hasattr(item, "src")
+                or not item.src
+                or not item.src.startswith("/")
+            ):
                 yield item
             else:
                 wait_exist(item.src, timeout, poll_rate)
@@ -150,7 +154,11 @@ class Source(object):
             # call any method.
             # resolve vs load is for different versions of pkg_resources.
             # Result is assigned to a var to avoid a pylint warning.
-            _ = ep.resolve() if hasattr(ep, "resolve") else ep.load(require=False)
+            _ = (
+                ep.resolve()
+                if hasattr(ep, "resolve")
+                else ep.load(require=False)
+            )
 
     @classmethod
     def get(cls, source_url, **kwargs):
@@ -249,7 +257,9 @@ class Source(object):
         # in which case the next block should kick in. If the backend is a partial
         # created by us, this info may be available in __pushsource_accepts_url.
         # See commentary a bit later where this is set.
-        accepts_url = getattr(klass, "__pushsource_accepts_url", "url" in sig.args)
+        accepts_url = getattr(
+            klass, "__pushsource_accepts_url", "url" in sig.args
+        )
 
         if accepts_url and parsed.path is not query:
             # If the source accepts a url argument, then the 'path' part

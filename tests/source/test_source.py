@@ -130,6 +130,34 @@ def test_yield_no_source(mock_path_exists, mock_sleep, koji_dir):
 )
 @patch("pushsource._impl.helpers.time.sleep")
 @patch("pushsource._impl.helpers.os.path.exists")
+def test_yield_no_mounted_source(mock_path_exists, mock_sleep, koji_dir):
+    class TestKoji(object):
+        def __init__(self, **kwargs):
+            pass
+
+        def __iter__(self):
+            class Object:
+                pass
+
+            item1 = Object()
+            item1.src = "registry.redhat.io/test-repo/test-image:latest"
+            yield item1
+
+    Source.register_backend("test-koji", TestKoji)
+    source = Source.get("test-koji:")
+    items = list(source)
+
+    assert len(items) == 1
+    mock_path_exists.assert_not_called()
+    mock_sleep.assert_not_called()
+
+
+@patch.dict(
+    "os.environ",
+    {"PUSHSOURCE_SRC_POLL_TIMEOUT": "900"},
+)
+@patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.helpers.os.path.exists")
 def test_yield_once_file_present(
     mock_path_exists, mock_sleep, koji_dir, container_push_item
 ):

@@ -42,9 +42,7 @@ setup(
     ],
     install_requires=get_requirements(),
     python_requires=">=2.6",
-    entry_points={
-        "console_scripts": ["pushsource-ls=pushsource._impl.list_cmd:main"]
-    },
+    entry_points={"console_scripts": ["pushsource-ls=pushsource._impl.list_cmd:main"]},
     project_urls={
         "Documentation": "https://release-engineering.github.io/pushsource/",
         "Changelog": "https://github.com/release-engineering/pushsource/blob/master/CHANGELOG.md",

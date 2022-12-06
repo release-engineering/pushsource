@@ -77,7 +77,7 @@ class SourceWrapper(object):
 
         generator = self.__delegate.__iter__()
         for item in generator:
-            if not hasattr(item, "src") or not item.src:
+            if not hasattr(item, "src") or not item.src or not item.src.startswith("/"):
                 yield item
             else:
                 wait_exist(item.src, timeout, poll_rate)

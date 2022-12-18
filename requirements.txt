@@ -10,9 +10,9 @@ attrs==22.1.0 \
     # via
     #   -r requirements.in
     #   jsonschema
-certifi==2022.9.24 \
-    --hash=sha256:0d9c601124e5a6ba9712dbc60d9c53c21e34f5f641fe83002317394311bdce14 \
-    --hash=sha256:90c1a32f1d68f940488354e36370f6cca89f0f106db09518524c88d6ed83f382
+certifi==2022.12.7 \
+    --hash=sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3 \
+    --hash=sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
     # via requests
 charset-normalizer==2.1.1 \
     --hash=sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845 \
@@ -83,13 +83,9 @@ koji==1.31.0 \
     --hash=sha256:5689ae1386a188b3a7cd89c47f46613e0255bfe33f27e9e1d275e6ef48352584 \
     --hash=sha256:906c520834106ece96b941714cd45d16e98e340cd8c2e647a97abc0542a1b9f0
     # via -r requirements.in
-monotonic==1.6 \
-    --hash=sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7 \
-    --hash=sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c
-    # via more-executors
-more-executors==2.11.1 \
-    --hash=sha256:06ca3b3ae1b07b2581441589296d486098ebe8740f859f5c7a2e0a687b12628d \
-    --hash=sha256:a5a7c9344168974d17dc0e89fb68c045b516cc74fe9bb1a4f76016dac4d25be5
+more-executors==2.11.3 \
+    --hash=sha256:13b55a9ee053ae91ecaa8f327adbf9fec55ad4b434a6123e996f09acffaecaf2 \
+    --hash=sha256:859e7881efee83409fbb2d5a2d7d39d4a3dd1b981d0657e3d00148d1e6303396
     # via
     #   -r requirements.in
     #   pushcollector

@@ -40,12 +40,7 @@ def test_ami_release():
         AmiPushItem(
             description="mydescription",
             name="myname",
-            region="myregion",
-            root_device="myrootdevice",
-            virtualization="virt",
-            volume="myvolume",
             release=release,
-            sriov_net_support="sriov",
         )
 
     assert 'The release type must be "AmiRelease"' in str(exc_info.value)

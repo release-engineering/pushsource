@@ -45,19 +45,19 @@ class AmiPushItem(VMIPushItem):
     type = attr.ib(type=str, default=None, validator=optional_str)
     """Billing type associated with the image, e.g. "hourly" or "access"."""
 
-    region = attr.ib(type=str, default=None, validator=instance_of_str)
+    region = attr.ib(type=str, default=None, validator=optional_str)
     """Region to which this image should be pushed."""
 
-    virtualization = attr.ib(type=str, default=None, validator=instance_of_str)
+    virtualization = attr.ib(type=str, default=None, validator=optional_str)
     """Virtualization type, e.g. "hvm" or "pv"."""
 
-    volume = attr.ib(type=str, default=None, validator=instance_of_str)
+    volume = attr.ib(type=str, default=None, validator=optional_str)
     """EBS volume type, e.g. "gp2" or "io1"."""
 
-    root_device = attr.ib(type=str, default=None, validator=instance_of_str)
+    root_device = attr.ib(type=str, default=None, validator=optional_str)
     """Root device node used with this image, e.g. "/dev/sda1"."""
 
-    sriov_net_support = attr.ib(type=str, default=None, validator=instance_of_str)
+    sriov_net_support = attr.ib(type=str, default=None, validator=optional_str)
     """"simple" if the image is SRIOV-enabled."""
 
     ena_support = attr.ib(

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.23.5] - 2023-01-05
+
+### Fixed
+
+- Fixed compatibility with older `attrs` versions
+
 ## [2.23.4] - 2022-12-06
 
 ### Fixed
@@ -341,7 +347,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.4...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.23.5...HEAD
+[2.23.5]: https://github.com/release-engineering/pushsource/compare/v2.23.4...v2.23.5
 [2.23.4]: https://github.com/release-engineering/pushsource/compare/v2.23.3...v2.23.4
 [2.23.3]: https://github.com/release-engineering/pushsource/compare/v2.23.2...v2.23.3
 [2.23.2]: https://github.com/release-engineering/pushsource/compare/v2.23.1...v2.23.2

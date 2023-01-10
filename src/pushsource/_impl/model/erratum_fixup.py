@@ -53,6 +53,8 @@ class AttrsRenamer(object):
             # (we do this dynamically to cope with differences between ancient and newer
             # versions of attrs library)
             attr_kwargs = {"name": new_name}
+            if hasattr(old_attr, "alias"):
+                attr_kwargs["alias"] = new_name
             for argname in [
                 "default",
                 "validator",

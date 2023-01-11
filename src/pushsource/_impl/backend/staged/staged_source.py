@@ -143,7 +143,9 @@ class StagedSource(
         # Apply wait only if topdir mtime is less than X seconds older than current time.
         # The idea is "Only apply wait if the staging dir was recently modified".
         # The lower the value, the fewer pushes will wait,the higher the probability of missing data
-        apply_wait_topdir_age = int(os.getenv("PUSHSOURCE_APPLY_WAIT_TOPDIR_AGE") or "0")
+        apply_wait_topdir_age = int(
+            os.getenv("PUSHSOURCE_APPLY_WAIT_TOPDIR_AGE") or "0"
+        )
 
         if not os.path.exists(topdir):
             LOG.info(

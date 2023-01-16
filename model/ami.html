@@ -14,7 +14,7 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Push items: productid" href="productid.html" />
+    <link rel="next" title="Push items: VHD" href="azure.html" />
     <link rel="prev" title="Push items: containers" href="containers.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -47,36 +47,25 @@ snapshot.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="vmi.html#pushsource.VMIPushItem.description" title="pushsource.VMIPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="vmi.html#pushsource.VMIPushItem.release" title="pushsource.VMIPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.billing_codes" title="pushsource.AmiPushItem.billing_codes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">billing_codes()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiPushItem.description" title="pushsource.AmiPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.ena_support" title="pushsource.AmiPushItem.ena_support"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ena_support()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.region" title="pushsource.AmiPushItem.region"><code class="xref py py-meth docutils literal notranslate"><span class="pre">region()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiPushItem.release" title="pushsource.AmiPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.root_device" title="pushsource.AmiPushItem.root_device"><code class="xref py py-meth docutils literal notranslate"><span class="pre">root_device()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.sriov_net_support" title="pushsource.AmiPushItem.sriov_net_support"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sriov_net_support()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.type" title="pushsource.AmiPushItem.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.virtualization" title="pushsource.AmiPushItem.virtualization"><code class="xref py py-meth docutils literal notranslate"><span class="pre">virtualization()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.volume" title="pushsource.AmiPushItem.volume"><code class="xref py py-meth docutils literal notranslate"><span class="pre">volume()</span></code></a></p></li>
 </ul>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiPushItem.release">
-<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.AmiPushItem.release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release metadata associated with this image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#pushsource.AmiRelease" title="pushsource.AmiRelease">AmiRelease</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.AmiPushItem.type">
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.AmiPushItem.type" title="Permalink to this definition">¶</a></dt>
@@ -133,17 +122,6 @@ snapshot.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiPushItem.description">
-<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.AmiPushItem.description" title="Permalink to this definition">¶</a></dt>
-<dd><p>A brief human-readable description of the image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.AmiPushItem.sriov_net_support">
 <span class="sig-name descname"><span class="pre">sriov_net_support</span></span><a class="headerlink" href="#pushsource.AmiPushItem.sriov_net_support" title="Permalink to this definition">¶</a></dt>
 <dd><p>“simple” if the image is SRIOV-enabled.</p>
@@ -182,121 +160,20 @@ snapshot.</p>
 <dt class="sig sig-object py" id="pushsource.AmiRelease">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">AmiRelease</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/ami.html#AmiRelease"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.AmiRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release metadata associated with an AMI.</p>
+<p>This class has the same attributes as VMIRelease and it’s only kept
+for backwards compatibility.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.arch" title="pushsource.AmiRelease.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.base_product" title="pushsource.AmiRelease.base_product"><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_product()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.base_version" title="pushsource.AmiRelease.base_version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_version()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.date" title="pushsource.AmiRelease.date"><code class="xref py py-meth docutils literal notranslate"><span class="pre">date()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.product" title="pushsource.AmiRelease.product"><code class="xref py py-meth docutils literal notranslate"><span class="pre">product()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.respin" title="pushsource.AmiRelease.respin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">respin()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.type" title="pushsource.AmiRelease.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.variant" title="pushsource.AmiRelease.variant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">variant()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.AmiRelease.version" title="pushsource.AmiRelease.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_product()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_version()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">date()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">product()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">respin()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">variant()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></p></li>
 </ul>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.product">
-<span class="sig-name descname"><span class="pre">product</span></span><a class="headerlink" href="#pushsource.AmiRelease.product" title="Permalink to this definition">¶</a></dt>
-<dd><p>A short product name, for example “RHEL” if this is an image for Red Hat
-Enterprise Linux.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.date">
-<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#pushsource.AmiRelease.date" title="Permalink to this definition">¶</a></dt>
-<dd><p>Date at which this image was generated.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>date</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.arch">
-<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.AmiRelease.arch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Architecture of the image, for example “x86_64”.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.respin">
-<span class="sig-name descname"><span class="pre">respin</span></span><a class="headerlink" href="#pushsource.AmiRelease.respin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Respin count. 0 for original build of an image, incremented by one for
-each rebuild.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.version">
-<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.AmiRelease.version" title="Permalink to this definition">¶</a></dt>
-<dd><p>A &lt;major&gt;.&lt;minor&gt; version string for the image’s product version, for example
-“7.9” if this is an image for Red Hat Enterprise Linux 7.9.x.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.base_product">
-<span class="sig-name descname"><span class="pre">base_product</span></span><a class="headerlink" href="#pushsource.AmiRelease.base_product" title="Permalink to this definition">¶</a></dt>
-<dd><p>For layered products, name of the base product for which the image should be used.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.base_version">
-<span class="sig-name descname"><span class="pre">base_version</span></span><a class="headerlink" href="#pushsource.AmiRelease.base_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>For layered products, version of the base product for which the image should be used.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.variant">
-<span class="sig-name descname"><span class="pre">variant</span></span><a class="headerlink" href="#pushsource.AmiRelease.variant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Variant of this image’s product (only for products which have variants).  For example,
-“Server”, for Red Hat Enterprise Linux Server.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.AmiRelease.type">
-<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.AmiRelease.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release type, typically “ga” or “beta”.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -377,6 +254,8 @@ each rebuild.</p>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.AmiBillingCodes"><code class="docutils literal notranslate"><span class="pre">AmiBillingCodes</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmi.html">Push items: VMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comps.html">Push items: comps.xml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
@@ -399,7 +278,7 @@ each rebuild.</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="containers.html" title="previous chapter">Push items: containers</a></li>
-      <li>Next: <a href="productid.html" title="next chapter">Push items: productid</a></li>
+      <li>Next: <a href="azure.html" title="next chapter">Push items: VHD</a></li>
   </ul></li>
 </ul>
 </div>

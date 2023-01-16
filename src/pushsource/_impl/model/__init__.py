@@ -23,3 +23,5 @@ from .modulemd import ModuleMdPushItem, ModuleMdSourcePushItem
 from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem
 from .ami import AmiPushItem, AmiRelease, AmiBillingCodes
+from .azure import VHDPushItem
+from .vms import VMIPushItem, VMIRelease

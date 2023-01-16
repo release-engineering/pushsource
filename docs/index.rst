@@ -22,6 +22,8 @@ A library for accessing push items from various sources.
    model/errata
    model/containers
    model/ami
+   model/azure
+   model/vmi
    model/productid
    model/comps
    schema/staged

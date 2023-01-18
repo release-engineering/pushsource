@@ -16,6 +16,7 @@ items:
     dest:
     - dest1
     ena_support: true
+    image_id: null
     md5sum: null
     name: fake-image.raw
     origin: {{ src_dir }}/tests/staged/data/simple_ami

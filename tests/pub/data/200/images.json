@@ -1,0 +1,72 @@
+[
+  {
+    "ami": "ami-fake-200-A", 
+    "billing_codes": {
+      "codes": [
+        "bp-fake"
+      ], 
+      "name": "Hourly2"
+    }, 
+    "description": "Provided by Red Hat, Inc.", 
+    "dest": [
+      "us-east-1-hourly"
+    ], 
+    "ena_support": true, 
+    "name": "RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2", 
+    "origin": "/fake/path/aws/", 
+    "region": "us-east-1", 
+    "release": {
+      "arch": "x86_64", 
+      "base_product": "RHEL", 
+      "base_version": null, 
+      "date": "20230109", 
+      "product": "SAP", 
+      "respin": 0, 
+      "type": null, 
+      "variant": "BaseOS", 
+      "version": "8.4.0"
+    }, 
+    "root_device": "/dev/sda1", 
+    "src": "/fake/path/aws/us-east-1-hourly/AWS_IMAGES/rhel-sap-ec2-8.4-20220802.sp.10.x86_64.raw", 
+    "sriov_net_support": "simple", 
+    "state": "PUSHED", 
+    "type": "hourly", 
+    "virtualization": "hvm", 
+    "volume": "gp2"
+  }, 
+  {
+    "ami": "ami-fake-200-B", 
+    "billing_codes": {
+      "codes": [
+        "bp-fake"
+      ], 
+      "name": "Hourly2"
+    }, 
+    "description": "Provided by Red Hat, Inc.", 
+    "dest": [
+      "me-central-1-hourly"
+    ], 
+    "ena_support": true, 
+    "name": "RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2", 
+    "origin": "/fake/path/aws/", 
+    "region": "me-central-1", 
+    "release": {
+      "arch": "x86_64", 
+      "base_product": "RHEL", 
+      "base_version": null, 
+      "date": "20230109", 
+      "product": "SAP", 
+      "respin": 0, 
+      "type": null, 
+      "variant": "BaseOS", 
+      "version": "8.4.0"
+    }, 
+    "root_device": "/dev/sda1", 
+    "src": "/fake/path/aws/me-central-1-hourly/AWS_IMAGES/rhel-sap-ec2-8.4-20220802.sp.10.x86_64.raw", 
+    "sriov_net_support": "simple", 
+    "state": "PUSHED", 
+    "type": "hourly", 
+    "virtualization": "hvm", 
+    "volume": "gp2"
+  }
+]

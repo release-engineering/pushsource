@@ -3,7 +3,7 @@ name: Tox tests
 on: [push, pull_request]
 
 jobs:
-  py27:
+  py38:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -14,11 +14,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: 2.7
+          python-version: 3.8
       - name: Install Tox
         run: pip install tox
       - name: Run Tox
-        run: tox -e py27
+        run: tox -e py38
   static:
     runs-on: ubuntu-latest
     steps:

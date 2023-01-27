@@ -1,5 +1,3 @@
-import six
-
 # A replacement for kobo.rpmlib to give a decent error message
 # when rpm bindings are not available.
 
@@ -10,7 +8,7 @@ MESSAGE = "kobo.rpmlib is not available (consider 'pip install rpm-py-installer'
 
 
 def not_available(*_args, **_kwargs):
-    six.raise_from(RuntimeError(MESSAGE), CAUSE)
+    raise RuntimeError(MESSAGE) from CAUSE
 
 
 get_rpm_header = not_available

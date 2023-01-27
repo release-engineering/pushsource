@@ -14,7 +14,6 @@ import unittest
 
 import pytest
 import re
-import six
 
 from hamcrest import contains_string
 

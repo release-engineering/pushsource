@@ -3,8 +3,7 @@ import threading
 import logging
 from functools import partial
 
-from six.moves.queue import Queue, Empty
-import six
+from queue import Queue, Empty
 from threading import Thread
 
 import koji
@@ -252,7 +251,7 @@ class KojiSource(Source):
             msg = "Communication error with koji at %s" % self._url
             LOG.exception(msg)
 
-            six.raise_from(RuntimeError(msg), ex)
+            raise RuntimeError(msg) from ex
 
         LOG.debug("Connected to koji %s at %s", version, self._url)
 

@@ -6,7 +6,7 @@ from threading import Lock
 
 import pkg_resources
 
-from six.moves.urllib import parse
+from urllib import parse
 
 from pushsource._impl.helpers import wait_exist
 

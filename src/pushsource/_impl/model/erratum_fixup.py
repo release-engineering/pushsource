@@ -27,8 +27,6 @@ work if the name is a keyword.
 """
 import inspect
 
-import six
-
 
 class AttrsRenamer(object):
     def __init__(self, delegate, attrs_old_to_new):
@@ -67,8 +65,7 @@ class AttrsRenamer(object):
                 if hasattr(old_attr, argname):
                     attr_kwargs[argname] = getattr(old_attr, argname)
                 elif (
-                    six.PY3
-                    and argname
+                    argname
                     in inspect.signature(old_attr.__class__.__init__).parameters.keys()
                 ):
                     attr_kwargs[argname] = None

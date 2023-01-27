@@ -2,7 +2,6 @@ import hashlib
 import os
 import logging
 
-import six
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
@@ -160,7 +159,7 @@ class PushItem(object):
         type=str,
         default=None,
         validator=optional_str,
-        converter=TinyCache(six.string_types, upper_if_str),
+        converter=TinyCache(str, upper_if_str),
     )
     """If this push item was GPG signed, this should be an identifier for the
     signing key used.

@@ -10,8 +10,7 @@ import attr
 import jinja2
 import pytest
 from mock import patch
-from six.moves.collections_abc import Mapping
-from six import PY2
+from collections.abc import Mapping
 
 from ..errata.fake_errata_tool import FakeErrataToolController
 from ..koji.fake_koji import FakeKojiController
@@ -40,12 +39,6 @@ def mapping_to_dict(value):
 
 
 def asdict(value):
-    # attr.asdict using slightly different arguments for ancient vs modern python.
-    if PY2:
-        # py2 case: ancient attr version does not support value_serializer; luckily
-        # frozendict also is unused, so we don't need it.
-        return attr.asdict(value, recurse=True)
-
     # modern case must use a value_serializer to convert frozendict into a
     # serializable type.
     return attr.asdict(

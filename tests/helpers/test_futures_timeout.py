@@ -1,9 +1,3 @@
-import six
-
-# in py2 TimeoutError is not built-in exception
-if six.PY2:
-    from concurrent.futures import TimeoutError  # pylint: disable=redefined-builtin
-
 import pytest
 
 from pushsource._impl.helpers import as_completed_with_timeout_reset

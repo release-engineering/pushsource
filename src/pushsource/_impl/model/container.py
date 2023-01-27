@@ -4,7 +4,7 @@ from frozenlist2 import frozenlist
 
 from .base import PushItem
 from .. import compat_attr as attr
-from ..compat import frozendict
+from frozendict import frozendict
 from .conv import instance_of, optional_str
 
 

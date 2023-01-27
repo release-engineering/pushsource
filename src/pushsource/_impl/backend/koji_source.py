@@ -246,11 +246,7 @@ class KojiSource(Source):
         try:
             version = self._executor.submit(self._koji_get_version).result()
         except Exception as ex:  # pylint: disable=broad-except
-            # TODO: drop this log when py2 support is dropped.
-            # It's only here because py2 has no exception chaining.
             msg = "Communication error with koji at %s" % self._url
-            LOG.exception(msg)
-
             raise RuntimeError(msg) from ex
 
         LOG.debug("Connected to koji %s at %s", version, self._url)

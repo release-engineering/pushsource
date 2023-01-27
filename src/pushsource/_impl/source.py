@@ -14,17 +14,6 @@ LOG = logging.getLogger("pushsource")
 
 
 def getfullargspec(x):
-    # Helper for py2 vs py3 differences.
-
-    if not hasattr(inspect, "getfullargspec"):  # pragma: no cover
-        # 1. Must use older, deprecated getargspec.
-        # 2. getfullargspec works fine when called on a class and
-        #    returns spec of constructor, but getargspec complains.
-        #    Make it work more like getfullargspec.
-        if isinstance(x, type):
-            x = x.__init__
-        return inspect.getargspec(x)  # pylint: disable=deprecated-method
-
     return inspect.getfullargspec(x)
 
 

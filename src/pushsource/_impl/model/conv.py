@@ -13,16 +13,6 @@ from .. import compat_attr as attr
 LOG = logging.getLogger("pushsource")
 HEX_PATTERN = re.compile(r"^[0-9a-f]+$")
 
-# Work around http://bugs.python.org/issue7980 which is closed "Won't Fix"
-# for python2:
-#
-# If multiple threads in a process do the first call to strptime at once,
-# a crash can occur. Calling strptime once at import time will avoid that
-# condition.
-#
-# TODO: remove me when py2 support is dropped
-datetime.datetime.strptime("", "")
-
 
 def sloppylist(value, elem_converter=None):
     """Accept real lists or comma-separated values, and output a frozen list.

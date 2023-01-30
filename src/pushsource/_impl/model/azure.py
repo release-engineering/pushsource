@@ -35,9 +35,7 @@ class VHDPushItem(VMIPushItem):
     support_legacy = attr.ib(type=bool, default=False, validator=instance_of(bool))
     """If the image ``generation == V2`` but also supports ``V1``."""
 
-    legacy_sku_id = attr.ib(
-        type=str, default=None, validator=optional(in_(VHDGeneration))
-    )
+    legacy_sku_id = attr.ib(type=str, default=None)
     """The ``V1`` SKU ID (only if ``support_legacy`` is true)."""
 
     disk_version = attr.ib(type=str, default=None)
@@ -59,4 +57,11 @@ class VHDPushItem(VMIPushItem):
         if value and not re.match(r"^(\d+\.)(\d+\.)(\*|\d+)$", value):
             raise ValueError(
                 r"Invalid disk version. Expected format: {int}.{int}.{int}"
+            )
+
+    def __attrs_post_init__(self):
+        if self.legacy_sku_id and not self.support_legacy:
+            raise ValueError(
+                'The attribute "legacy_sku_id" must only be set when'
+                ' "support_legacy" is True.'
             )

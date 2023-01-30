@@ -104,7 +104,9 @@ def parse_401_response_headers(response_headers):
         items = request.parse_http_list(auth_header)
         return request.parse_keqv_list(items)
     except ValueError as e:
-        raise IOError("401 responses are expected to contain authentication information") from e
+        raise IOError(
+            "401 responses are expected to contain authentication information"
+        ) from e
 
 
 def registry_request(
@@ -232,8 +234,8 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             or "TAG_EXPIRED" in [err["code"] for err in json_error.get("errors", [])]
         ):
             raise KeyError(
-                    "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
-                ) from e
+                "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
+            ) from e
         # otherwise probably true 404 or other error, let's reraise it
         raise e
     return content_type, digest, resp.json()

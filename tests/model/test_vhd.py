@@ -20,6 +20,22 @@ def test_invalid_disk_version():
     )
 
 
+def test_invalid_legacy_sku():
+    """Can't create VHDPushItem with legacy_sku set when legacy_support is False."""
+    with raises(ValueError) as exc_info:
+        VHDPushItem(
+            name="test",
+            description="test",
+            disk_version="1.0.0",
+            sas_uri="foo.com/bar",
+            support_legacy=False,
+            legacy_sku_id="legacy_sku_id",
+        )
+    assert (
+        'The attribute "legacy_sku_id" must only be set when "support_legacy" is True.'
+    ) in str(exc_info.value)
+
+
 def test_vmi_release():
     """Ensure that subclasses of VMIRelease can not be associated with VHDPushItem."""
     release_params = {

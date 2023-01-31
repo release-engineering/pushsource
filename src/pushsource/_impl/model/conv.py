@@ -4,7 +4,6 @@ import logging
 from functools import partial
 import re
 
-import six
 from frozenlist2 import frozenlist
 from dateutil import tz
 
@@ -14,23 +13,13 @@ from .. import compat_attr as attr
 LOG = logging.getLogger("pushsource")
 HEX_PATTERN = re.compile(r"^[0-9a-f]+$")
 
-# Work around http://bugs.python.org/issue7980 which is closed "Won't Fix"
-# for python2:
-#
-# If multiple threads in a process do the first call to strptime at once,
-# a crash can occur. Calling strptime once at import time will avoid that
-# condition.
-#
-# TODO: remove me when py2 support is dropped
-datetime.datetime.strptime("", "")
-
 
 def sloppylist(value, elem_converter=None):
     """Accept real lists or comma-separated values, and output a frozen list.
 
     Optionally use elem_converter to convert each list element.
     """
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         value = value.split(",")
     if elem_converter:
         value = [elem_converter(elem) for elem in value]
@@ -41,7 +30,7 @@ sloppyintlist = partial(sloppylist, elem_converter=int)
 
 
 def timestamp(value):
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         for fmt in (
             "%Y-%m-%dT%H:%M:%SZ",
             "%Y-%m-%dT%H:%M:%S",
@@ -64,7 +53,7 @@ def timestamp(value):
 
 
 def datestr(value):
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         for fmt in ("%Y%m%d", "%Y-%m-%d"):
             try:
                 value = datetime.datetime.strptime(value, fmt)
@@ -84,7 +73,7 @@ def hexstr(length, value):
 
     msg = "can't parse %s as a hex string" % repr(value)
 
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         raise TypeError(msg)
 
     if len(value) != length:
@@ -112,7 +101,7 @@ def archstr(value):
 
 
 def upper_if_str(value):
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         return value.upper()
     return value
 
@@ -143,6 +132,6 @@ def convert_maybe(fn):
 
 in_ = attr.validators.in_
 instance_of = attr.validators.instance_of
-instance_of_str = instance_of(six.string_types)
+instance_of_str = instance_of(str)
 optional = attr.validators.optional
 optional_str = optional(instance_of_str)

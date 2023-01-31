@@ -3,31 +3,20 @@ import hashlib
 import json
 
 import os
-import six
 
-try:
-    from json.decoder import JSONDecodeError
+from json.decoder import JSONDecodeError
 
-    JSONException = JSONDecodeError
-except ImportError:  # pragma: no cover
-    JSONException = ValueError
 
-from six.moves.urllib import parse as urlparse
+from urllib import parse as urlparse
 from requests.adapters import HTTPAdapter
 
 # pylint: disable-next=import-error
 from requests.packages.urllib3.util import Retry
 from requests import Session, exceptions
 
-try:
-    import urllib2 as request
-except ImportError:
-    # Yes, there's a six.moves for this import, but,
-    # parse_http_list and parse_keqv_list are no available
-    # in python-six package from RHEL6, these alias
-    # were included in a recent six version.
-    from urllib import request
+from urllib import request
 
+JSONException = JSONDecodeError
 
 MEDIATYPE_SCHEMA2_V1 = "application/vnd.docker.distribution.manifest.v1+json"
 MEDIATYPE_SCHEMA2_V1_SIGNED = (
@@ -65,7 +54,7 @@ def request_token(session, response, credentials, repo_name):
     try:
         token_url = auth_info.pop("realm")
     except KeyError as e:
-        six.raise_from(IOError("No realm specified for token auth challenge."), e)
+        raise IOError("No realm specified for token auth challenge.") from e
 
     if "scope" not in auth_info and repo_name:
         auth_info["scope"] = "repository:%s:pull" % repo_name
@@ -115,10 +104,9 @@ def parse_401_response_headers(response_headers):
         items = request.parse_http_list(auth_header)
         return request.parse_keqv_list(items)
     except ValueError as e:
-        six.raise_from(
-            IOError("401 responses are expected to contain authentication information"),
-            e,
-        )
+        raise IOError(
+            "401 responses are expected to contain authentication information"
+        ) from e
 
 
 def registry_request(
@@ -245,13 +233,10 @@ def get_manifest(registry, repo, digest, manifest_types=None, token=None):
             "MANIFEST_UNKNOWN" in [err["code"] for err in json_error.get("errors", [])]
             or "TAG_EXPIRED" in [err["code"] for err in json_error.get("errors", [])]
         ):
-            six.raise_from(
-                KeyError(
-                    "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
-                ),
-                e,
-            )
-            # otherwise probably true 404 or other error, let's reraise it
+            raise KeyError(
+                "Failed to get the manifest for image '%s' [%s]" % (repo, digest)
+            ) from e
+        # otherwise probably true 404 or other error, let's reraise it
         raise e
     return content_type, digest, resp.json()
 

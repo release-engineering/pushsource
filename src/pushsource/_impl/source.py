@@ -6,26 +6,11 @@ from threading import Lock
 
 import pkg_resources
 
-from six.moves.urllib import parse
+from urllib import parse
 
 from pushsource._impl.helpers import wait_exist
 
 LOG = logging.getLogger("pushsource")
-
-
-def getfullargspec(x):
-    # Helper for py2 vs py3 differences.
-
-    if not hasattr(inspect, "getfullargspec"):  # pragma: no cover
-        # 1. Must use older, deprecated getargspec.
-        # 2. getfullargspec works fine when called on a class and
-        #    returns spec of constructor, but getargspec complains.
-        #    Make it work more like getfullargspec.
-        if isinstance(x, type):
-            x = x.__init__
-        return inspect.getargspec(x)  # pylint: disable=deprecated-method
-
-    return inspect.getfullargspec(x)
 
 
 class SourceUrlError(ValueError):
@@ -243,7 +228,7 @@ class Source(object):
             if isinstance(value, list) and len(value) == 1:
                 url_kwargs[key] = value[0]
 
-        sig = getfullargspec(klass)
+        sig = inspect.getfullargspec(klass)
 
         # We need to know whether the source backend accepts a 'url' argument,
         # in which case the next block should kick in. If the backend is a partial

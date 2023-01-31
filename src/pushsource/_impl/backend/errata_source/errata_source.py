@@ -2,8 +2,7 @@ import os
 import logging
 from concurrent import futures
 
-import six
-from six.moves.urllib import parse
+from urllib import parse
 from more_executors import Executors
 
 from .errata_client import ErrataClient
@@ -277,7 +276,7 @@ class ErrataSource(Source):
     def _push_items_from_rpms(self, erratum, rpm_list):
         out = []
 
-        for build_nvr, build_info in six.iteritems(rpm_list):
+        for build_nvr, build_info in rpm_list.items():
             out.extend(self._rpm_push_items_from_build(erratum, build_nvr, build_info))
             out.extend(
                 self._module_push_items_from_build(erratum, build_nvr, build_info)

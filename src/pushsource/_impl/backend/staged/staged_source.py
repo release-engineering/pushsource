@@ -9,7 +9,7 @@ from datetime import datetime
 import yaml
 import json
 
-from pushsource._impl.compat import scandir
+from os import scandir
 
 from pushcollector import Collector
 from more_executors import Executors

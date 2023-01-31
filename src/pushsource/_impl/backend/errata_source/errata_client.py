@@ -2,7 +2,7 @@ import logging
 import threading
 from functools import partial
 
-from six.moves import xmlrpc_client
+import xmlrpc.client as xmlrpc_client
 from more_executors import Executors
 from more_executors.futures import f_zip, f_map
 

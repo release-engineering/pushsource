@@ -1,7 +1,7 @@
 import logging
 from functools import partial
 
-from pushsource._impl.compat import scandir
+from os import scandir
 
 LOG = logging.getLogger("pushsource")
 

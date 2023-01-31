@@ -1,11 +1,10 @@
 import re
 
-import six
 from frozenlist2 import frozenlist
 
 from .base import PushItem
 from .. import compat_attr as attr
-from ..compat import frozendict
+from frozendict import frozendict
 from .conv import instance_of, optional_str
 
 
@@ -26,14 +25,14 @@ class ContainerImagePullSpec(object):
     on the available media type.
     """
 
-    registry = attr.ib(type=str, validator=instance_of(six.string_types))
+    registry = attr.ib(type=str, validator=instance_of(str))
     """Registry component of pull spec.
 
     Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
     the registry is ``"registry.access.redhat.com"``.
     """
 
-    repository = attr.ib(type=str, validator=instance_of(six.string_types))
+    repository = attr.ib(type=str, validator=instance_of(str))
     """Repository component of pull spec.
 
     Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
@@ -73,7 +72,7 @@ class ContainerImagePullSpec(object):
 class ContainerImageTagPullSpec(ContainerImagePullSpec):
     """A container image pull spec using a tag."""
 
-    tag = attr.ib(type=str, validator=instance_of(six.string_types))
+    tag = attr.ib(type=str, validator=instance_of(str))
     """Tag component of pull spec.
 
     Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal:latest"``,
@@ -102,7 +101,7 @@ class ContainerImageTagPullSpec(ContainerImagePullSpec):
 class ContainerImageDigestPullSpec(ContainerImagePullSpec):
     """A container image pull spec using a manifest digest."""
 
-    digest = attr.ib(type=str, validator=instance_of(six.string_types))
+    digest = attr.ib(type=str, validator=instance_of(str))
     """Digest component of pull spec.
 
     Example: in ``"registry.access.redhat.com/ubi8/ubi-minimal@sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b"``,

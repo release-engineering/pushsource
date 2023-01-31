@@ -13,10 +13,6 @@ from pushsource._impl.helpers import wait_exist
 LOG = logging.getLogger("pushsource")
 
 
-def getfullargspec(x):
-    return inspect.getfullargspec(x)
-
-
 class SourceUrlError(ValueError):
     """Errors of this type are raised when an invalid URL is provided
     to :meth:`~pushsource.Source.get` and related methods.
@@ -232,7 +228,7 @@ class Source(object):
             if isinstance(value, list) and len(value) == 1:
                 url_kwargs[key] = value[0]
 
-        sig = getfullargspec(klass)
+        sig = inspect.getfullargspec(klass)
 
         # We need to know whether the source backend accepts a 'url' argument,
         # in which case the next block should kick in. If the backend is a partial

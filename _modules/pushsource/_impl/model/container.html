@@ -32,12 +32,11 @@
   <h1>Source code for pushsource._impl.model.container</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
-<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">frozendict</span>
+<span class="kn">from</span> <span class="nn">frozendict</span> <span class="kn">import</span> <span class="n">frozendict</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span>
 
 
@@ -58,14 +57,14 @@
 <span class="sd">    on the available media type.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">registry</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">))</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Registry component of pull spec.</span>
 
 <span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
 <span class="sd">    the registry is ``&quot;registry.access.redhat.com&quot;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">repository</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">))</span>
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Repository component of pull spec.</span>
 
 <span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
@@ -105,7 +104,7 @@
 <span class="k">class</span> <span class="nc">ContainerImageTagPullSpec</span><span class="p">(</span><span class="n">ContainerImagePullSpec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A container image pull spec using a tag.&quot;&quot;&quot;</span>
 
-    <span class="n">tag</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">))</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tag component of pull spec.</span>
 
 <span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
@@ -134,7 +133,7 @@
 <span class="k">class</span> <span class="nc">ContainerImageDigestPullSpec</span><span class="p">(</span><span class="n">ContainerImagePullSpec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A container image pull spec using a manifest digest.&quot;&quot;&quot;</span>
 
-    <span class="n">digest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">))</span>
+    <span class="n">digest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Digest component of pull spec.</span>
 
 <span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal@sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;``,</span>

@@ -34,8 +34,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
-<span class="kn">from</span> <span class="nn">six.moves.urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
 <span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
 
 <span class="kn">from</span> <span class="nn">.errata_client</span> <span class="kn">import</span> <span class="n">ErrataClient</span>
@@ -309,7 +308,7 @@
     <span class="k">def</span> <span class="nf">_push_items_from_rpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">rpm_list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span> <span class="ow">in</span> <span class="n">rpm_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rpm_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">))</span>
             <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_module_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">)</span>

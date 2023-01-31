@@ -34,7 +34,6 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
@@ -192,7 +191,7 @@
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span>
-        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">),</span>
     <span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;If this push item was GPG signed, this should be an identifier for the</span>
 <span class="sd">    signing key used.</span>

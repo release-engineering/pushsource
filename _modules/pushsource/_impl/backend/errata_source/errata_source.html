@@ -232,7 +232,6 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
             <span class="n">container_build</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">docker_file_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
-
             <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
@@ -331,7 +330,6 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
             <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="n">module_filenames</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
-
             <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
                 <span class="c1"># ET uses filenames to identify the modules here, we must do the same.</span>
                 <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
@@ -458,7 +456,7 @@
         <span class="n">builds_need_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">builds_have_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_map</span> <span class="ow">in</span> <span class="n">ftp_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">rpm_name</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">rpm_name</span><span class="p">,</span> <span class="n">paths</span> <span class="ow">in</span> <span class="p">(</span><span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">rpm_to_paths</span><span class="p">[</span><span class="n">rpm_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span>
 
             <span class="n">modules</span> <span class="o">=</span> <span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>

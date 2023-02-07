@@ -260,13 +260,13 @@
                 <span class="n">chunk</span> <span class="o">=</span> <span class="n">src_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">CHUNKSIZE</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
                     <span class="k">break</span>
-                <span class="k">for</span> <span class="p">(</span><span class="n">hasher</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">hasher</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
                     <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;End read: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
 
         <span class="n">updated_sums</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">hasher</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">hasher</span><span class="p">,</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
             <span class="n">updated_sums</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_sums</span><span class="p">)</span></div></div>

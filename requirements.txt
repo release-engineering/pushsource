@@ -169,9 +169,9 @@ koji==1.31.1 \
     --hash=sha256:cd97c6c0c7a572a8b4a4b9c45daf37d40778eccbcbed41e8e990a35cbe3810dc \
     --hash=sha256:e0f2dce99c622becfb1c4663ca5b0efddf2ec86380bff4ad031f583283aae80f
     # via -r requirements.in
-more-executors==2.11.3 \
-    --hash=sha256:13b55a9ee053ae91ecaa8f327adbf9fec55ad4b434a6123e996f09acffaecaf2 \
-    --hash=sha256:859e7881efee83409fbb2d5a2d7d39d4a3dd1b981d0657e3d00148d1e6303396
+more-executors==2.11.4 \
+    --hash=sha256:a304139c6bece5be18aed7dcff4c48440412cb7cbe90f64ba4572772fcb0407f \
+    --hash=sha256:f1b21d72c4c15069e891d9b96bca05f9abde149e3c11ca54630c5a1a5ee8f4b5
     # via
     #   -r requirements.in
     #   pushcollector

@@ -35,4 +35,5 @@ from pushsource._impl.backend import (
     KojiSource,
     StagedSource,
     RegistrySource,
+    PubSource,
 )

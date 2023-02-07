@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Added
+- Introduced new source backend - `pub` that is used for extracting push items from Pub service
 
 ## [2.24.0] - 2023-01-17
 

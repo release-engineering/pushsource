@@ -13,6 +13,23 @@ class AmiRelease(VMIRelease):
     for backwards compatibility.
     """
 
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate AmiRelease from raw dict"""
+
+        kwargs = {
+            "product": data["product"],
+            "date": data["date"],
+            "arch": data["arch"],
+            "respin": int(data["respin"]),
+            "version": data.get("version") or None,
+            "base_product": data.get("base_product") or None,
+            "base_version": data.get("base_version") or None,
+            "variant": data.get("variant") or None,
+            "type": data.get("type") or None,
+        }
+        return cls(**kwargs)
+
 
 @attr.s()
 class AmiBillingCodes(object):
@@ -26,6 +43,16 @@ class AmiBillingCodes(object):
 
     :type: list[str]
     """
+
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate AmiBillingCodes from raw dict"""
+
+        kwargs = {
+            "name": data["name"],
+            "codes": data["codes"],
+        }
+        return cls(**kwargs)
 
 
 @attr.s()
@@ -71,3 +98,38 @@ class AmiPushItem(VMIPushItem):
         validator=optional(instance_of(AmiBillingCodes)),
     )
     """Billing codes associated with this image."""
+
+    image_id = attr.ib(type=str, default=None, validator=optional_str)
+    """AMI Image ID used to reference the image in AWS."""
+
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate AmiPushItem from raw list or dict"""
+
+        if isinstance(data, list):
+            return [cls._from_data(elem) for elem in data]
+
+        kwargs = {
+            # base push item fields
+            "name": data["name"],
+            "state": "PENDING",
+            "src": data.get("src") or None,
+            "dest": data.get("dest") or [],
+            "origin": data.get("origin") or None,
+            # ami push item fields
+            "release": AmiRelease._from_data(data.get("release") or {}),
+            "type": data["type"],
+            "region": data["region"],
+            "virtualization": data["virtualization"],
+            "volume": data["volume"],
+            "root_device": data["root_device"],
+            "description": data["description"],
+            "sriov_net_support": data["sriov_net_support"],
+            "ena_support": data.get("ena_support") or None,
+            "billing_codes": AmiBillingCodes._from_data(
+                data.get("billing_codes") or {}
+            ),
+            "image_id": data.get("ami") or None,
+        }
+
+        return cls(**kwargs)

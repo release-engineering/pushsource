@@ -9,7 +9,7 @@ DOC_PATH = os.path.join(os.path.dirname(__file__), "../../docs")
 
 
 def all_rst_files():
-    for (dirpath, _, filenames) in os.walk(DOC_PATH):
+    for dirpath, _, filenames in os.walk(DOC_PATH):
         for name in filenames:
             if name.endswith(".rst"):
                 yield os.path.join(dirpath, name)

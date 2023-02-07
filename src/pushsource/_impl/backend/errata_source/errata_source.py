@@ -200,7 +200,6 @@ class ErrataSource(Source):
         with self._koji_source(
             container_build=list(docker_file_list.keys())
         ) as koji_source:
-
             out = []
 
             for item in koji_source:
@@ -299,7 +298,6 @@ class ErrataSource(Source):
         with self._koji_source(
             module_build=[build_nvr], module_filter_filename=module_filenames
         ) as koji_source:
-
             for push_item in koji_source:
                 # ET uses filenames to identify the modules here, we must do the same.
                 basename = os.path.basename(push_item.src)
@@ -426,7 +424,7 @@ class ErrataSource(Source):
         builds_need_modules = set()
         builds_have_modules = set()
         for build_nvr, build_map in ftp_paths.items():
-            for (rpm_name, paths) in (build_map.get("rpms") or {}).items():
+            for rpm_name, paths in (build_map.get("rpms") or {}).items():
                 rpm_to_paths[rpm_name] = paths
 
             modules = build_map.get("modules") or []

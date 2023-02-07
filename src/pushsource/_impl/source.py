@@ -28,7 +28,6 @@ class SourceWrapper(object):
     # This feature is disabled by default and can be enabled with
     # environment variables
     def __init__(self, delegate):
-
         if isinstance(delegate, SourceWrapper):
             # It is common for multiple layers of Source to be constructed,
             # but we don't want multiple layers of SourceWrapper since it
@@ -249,7 +248,7 @@ class Source(object):
             url_kwargs["url"] = parsed.path
 
         # Coerce some standard arguments to the right type.
-        for (key, converter) in [("threads", int), ("timeout", int)]:
+        for key, converter in [("threads", int), ("timeout", int)]:
             if key in url_kwargs:
                 url_kwargs[key] = converter(url_kwargs[key])
 

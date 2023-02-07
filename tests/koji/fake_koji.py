@@ -66,7 +66,6 @@ class FakeKojiController(object):
         return build_data
 
     def insert_rpms(self, filenames, koji_dir=None, signing_key=None, build_nvr=None):
-
         stored_rpms = []
 
         for filename in filenames:

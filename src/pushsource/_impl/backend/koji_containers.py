@@ -75,7 +75,7 @@ class ContainerArchiveHelper(object):
         # com.redhat.openshift.versions documented at
         # https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/bundle-directory
         # which has its own non-trivial syntax we don't want to get into parsing.
-        for (key, value) in raw_labels.items():
+        for key, value in raw_labels.items():
             if key.startswith("com.redhat."):
                 out[key] = value
 
@@ -123,7 +123,7 @@ def get_digest_specs(raw_specs, digests_map):
 
     # Reverse the type => digest map
     digest_to_type = {}
-    for (media_type, digest) in digests_map.items():
+    for media_type, digest in digests_map.items():
         digest_to_type[digest] = media_type
 
     for raw_spec in raw_specs:

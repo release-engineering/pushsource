@@ -228,13 +228,13 @@ class PushItem(object):
                 chunk = src_file.read(CHUNKSIZE)
                 if not chunk:
                     break
-                for (hasher, _) in hashers:
+                for hasher, _ in hashers:
                     hasher.update(chunk)
 
         LOG.debug("End read: %s", self.src)
 
         updated_sums = {}
-        for (hasher, attribute) in hashers:
+        for hasher, attribute in hashers:
             updated_sums[attribute] = hasher.hexdigest()
 
         return attr.evolve(self, **updated_sums)

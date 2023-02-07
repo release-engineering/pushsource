@@ -89,7 +89,6 @@ def sanitized_archives(archives):
 
 
 def dump_build(session, nvr):
-
     build = session.getBuild(nvr)
 
     # In case user passed an ID

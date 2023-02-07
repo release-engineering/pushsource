@@ -11,6 +11,7 @@ items:
 - ErratumPushItem:
     build: null
     build_info: null
+    container_list: []
     content_types:
     - docker
     description: 'The devtools/rust-toolset-rhel7 container image has been updated
@@ -122,6 +123,7 @@ items:
 - ErratumPushItem:
     build: null
     build_info: null
+    container_list: []
     content_types:
     - rpm
     description: 'The sudo packages contain the sudo utility which allows system administrators

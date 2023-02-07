@@ -27,6 +27,12 @@ definitions:
         - string
         - "null"
 
+    container_list:
+        type: array
+        items:
+            type: string
+        uniqueItems: true
+
     reference_list:
         type: array
         items:
@@ -149,6 +155,8 @@ properties:
         $ref: "#/definitions/reference_list"
     pkglist:
         $ref: "#/definitions/pkg_collection_list"
+    containerlist:
+        $ref: "#/definitions/container_lits"
 
 required:
 - description

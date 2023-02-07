@@ -1779,6 +1779,7 @@ items:
 - ErratumPushItem:
     build: null
     build_info: null
+    container_list: []
     content_types:
     - docker
     description: 'Red Hat OpenShift Container Platform is Red Hat''s cloud computing

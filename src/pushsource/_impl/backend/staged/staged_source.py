@@ -164,7 +164,7 @@ class StagedSource(
                 wait_time,
             )
             time.sleep(wait_time)
-        else:
+        elif apply_wait_topdir_age:
             LOG.info(
                 "Directory '%s' has mtime %s+00:00, being more than "
                 "%s seconds old. Skipping the wait.",

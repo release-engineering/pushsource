@@ -193,7 +193,4 @@ def test_staged_simple_rpm_age_check_disabled(
     mock_load_metadata.assert_called_once()
     mock_push_items_for_leafdir.assert_called()
 
-    assert (
-        "has mtime 1970-01-01T00:16:40+00:00, being more than 0 seconds old. "
-        "Skipping the wait." in caplog.records[1].message
-    )
+    assert "Skipping the wait" not in caplog.text

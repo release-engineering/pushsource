@@ -51,6 +51,9 @@
     <span class="n">OperatorManifestPushItem</span><span class="p">,</span>
     <span class="n">ContainerImagePushItem</span><span class="p">,</span>
     <span class="n">SourceContainerImagePushItem</span><span class="p">,</span>
+    <span class="n">VMIPushItem</span><span class="p">,</span>
+    <span class="n">AmiPushItem</span><span class="p">,</span>
+    <span class="n">VHDPushItem</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">list_argument</span><span class="p">,</span>
@@ -154,6 +157,7 @@
         <span class="n">module_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">module_filter_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">container_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmi_build</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">signing_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">basedir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -199,6 +203,11 @@
 <span class="sd">                build(s), along with associated artifacts such as operator manifest</span>
 <span class="sd">                bundles.</span>
 
+<span class="sd">            vmi_build (list[str, int])</span>
+<span class="sd">                Virtual Machine Image identifier(s). Can be koji build IDs (integers)</span>
+<span class="sd">                or build NVRs.</span>
+<span class="sd">                The source will yield all VMIs identified by this list.</span>
+
 <span class="sd">            signing_key (list[str])</span>
 <span class="sd">                GPG signing key ID(s). If provided, content must be signed</span>
 <span class="sd">                using one of the provided keys. Include ``None`` if unsigned</span>
@@ -236,6 +245,7 @@
             <span class="n">module_filter_filename</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">container_build</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">vmi_build</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
@@ -536,6 +546,110 @@
 
         <span class="k">return</span> <span class="n">out</span>
 
+    <span class="k">def</span> <span class="nf">_push_items_from_vmi_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for virtual machine images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Virtual machine image build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># VMI has the {&#39;typeinfo&#39;: {&#39;image&#39;:{}}} on extra</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Container images have the key `container_koji_task_id` set on extras:</span>
+        <span class="c1"># https://github.com/containerbuildsystem/atomic-reactor/blob/master/docs/koji.md?plain=1#L79</span>
+        <span class="k">if</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_koji_task_id&quot;</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;The build </span><span class="si">%s</span><span class="s2"> is for container images.&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Build </span><span class="si">%s</span><span class="s2"> not recognized as a virtual machine image build&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+
+        <span class="c1"># Supported types of VMI archives</span>
+        <span class="n">ami_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;raw-xz&quot;</span><span class="p">]</span>
+        <span class="n">azure_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;vhd&quot;</span><span class="p">,</span> <span class="s2">&quot;vhd-compressed&quot;</span><span class="p">]</span>
+        <span class="n">cloud_types</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ami_types</span><span class="p">:</span>
+            <span class="n">cloud_types</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">AmiPushItem</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">azure_types</span><span class="p">:</span>
+            <span class="n">cloud_types</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">VHDPushItem</span><span class="p">)</span>
+
+        <span class="c1"># Collect all known VM image archives</span>
+        <span class="n">vmi_archives</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">elem</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span>
+            <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type_name&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Generate the respective PushItem type for each archive</span>
+        <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">vmi_archives</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
+            <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+
+            <span class="n">extra</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arch&quot;</span><span class="p">)</span>
+
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;type_name&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">VMIPushItem</span>
+
+            <span class="n">rel_klass</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
+
+            <span class="c1"># The given name will be composed by the product name and cloud</span>
+            <span class="c1"># marketpalce name, like &quot;rhel-azure&quot; or &quot;rhel-sap-azure&quot;.</span>
+            <span class="c1"># We just want to get the product name without the cloud name,</span>
+            <span class="c1"># like &quot;rhel&quot; and &quot;rhel-sap&quot; in our examples respectively.</span>
+            <span class="n">splitted_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">splitted_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="n">splitted_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Try to get the resping version from release, if available</span>
+            <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">])</span>
+            <span class="n">respin</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">respin</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">respin</span>
+
+            <span class="n">release</span> <span class="o">=</span> <span class="n">rel_klass</span><span class="p">(</span>
+                <span class="n">arch</span><span class="o">=</span><span class="n">arch</span><span class="p">,</span>
+                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;completion_time&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">product</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                <span class="n">respin</span><span class="o">=</span><span class="n">respin</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">klass</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
+                    <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
+                    <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">md5sum</span><span class="o">=</span><span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksum&quot;</span><span class="p">),</span>
+                    <span class="n">release</span><span class="o">=</span><span class="n">release</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
     <span class="k">def</span> <span class="nf">_get_operator_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="p">):</span>
         <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
@@ -602,6 +716,19 @@
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_container_build</span><span class="p">,</span> <span class="n">build</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">build_fs</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_vmi_futures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get info from each requested virtual machine image build.</span>
+        <span class="n">vmi_build_fs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_build</span><span class="p">,</span> <span class="n">build</span><span class="p">),</span> <span class="n">build</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_build</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_vmi_build</span><span class="p">,</span> <span class="n">build</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">vmi_build_fs</span>
         <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_do_fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">):</span>
@@ -681,6 +808,10 @@
         <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
+        <span class="c1"># We&#39;ll need to obtain all virtual machine image builds</span>
+        <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_build</span><span class="p">:</span>
+            <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
         <span class="c1"># Put some threads to work on the queue.</span>
         <span class="n">fetch_exceptions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fetch_threads</span> <span class="o">=</span> <span class="p">[</span>
@@ -724,7 +855,10 @@
         <span class="k">assert</span> <span class="n">koji_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 
         <span class="n">push_items_fs</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_modulemd_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_futures</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_futures</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modulemd_futures</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_futures</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_futures</span><span class="p">()</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_futures</span><span class="p">()</span>
         <span class="p">)</span>
 
         <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">as_completed_with_timeout_reset</span><span class="p">(</span>

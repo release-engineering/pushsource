@@ -21,7 +21,7 @@ def get_requirements():
 
 setup(
     name="pushsource",
-    version="2.24.0",
+    version="2.25.0",
     packages=find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,
@@ -31,7 +31,7 @@ setup(
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Programming Language :: Python :: 3",

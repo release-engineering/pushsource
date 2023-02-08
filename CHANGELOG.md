@@ -7,8 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- n/a
+
+## [2.25.0] - 2023-02-09
+
 ### Added
+
 - Introduced new source backend - `pub` that is used for extracting push items from Pub service
+- `koji` backend now supports loading [VM images](https://release-engineering.github.io/pushsource/model/vmi.html)
+
+### Fixed
+
+- Avoided a spurious INFO log message from `staged` backend
+
+### Removed
+
+- Python 2 is no longer supported
 
 ## [2.24.0] - 2023-01-17
 
@@ -359,7 +373,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.24.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.25.0...HEAD
+[2.25.0]: https://github.com/release-engineering/pushsource/compare/v2.24.0...v2.25.0
 [2.24.0]: https://github.com/release-engineering/pushsource/compare/v2.23.5...v2.24.0
 [2.23.5]: https://github.com/release-engineering/pushsource/compare/v2.23.4...v2.23.5
 [2.23.4]: https://github.com/release-engineering/pushsource/compare/v2.23.3...v2.23.4

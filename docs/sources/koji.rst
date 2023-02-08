@@ -11,6 +11,7 @@ Supported content types:
 * RPMs
 * container images (with operator manifests if applicable)
 * modulemd YAML streams (yum repo metadata)
+* virtual machine images
 
 Note that many features of the koji source requires having koji's volume(s) mounted
 locally.
@@ -77,6 +78,21 @@ Push items produced in this case may include:
 - :class:`~pushsource.OperatorManifestPushItem` - if images have attached operator
   manifest archives
 
+Accessing virtual machine images
+...............................
+
+Use the ``vmi_build`` parameter to request virtual machine images from one or
+more builds. Builds can be specified by NVR. Builds should be produced by
+`Image Builder`_ or should use compatible metadata.
+
+``koji:https://koji.fedoraproject.org/kojihub?vmi_build=fedora-azure-37-1.7``
+
+Push items produced in this case may include:
+
+- :class:`~pushsource.VMIPushItem` - one for each available image
+- :class:`~pushsource.VHDPushItem` - for Azure VHD images.
+- :class:`~pushsource.AmiPushItem` - for AMI raw images.
+
 Setting the destination for push items
 ......................................
 
@@ -110,3 +126,4 @@ Python API reference
 
 
 .. _OSBS: https://osbs.readthedocs.io/
+.. _Image Builder: https://www.osbuild.org/guides/image-builder-service/image-builder-koji.html

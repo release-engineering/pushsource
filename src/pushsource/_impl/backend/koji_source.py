@@ -19,6 +19,9 @@ from ..model import (
     OperatorManifestPushItem,
     ContainerImagePushItem,
     SourceContainerImagePushItem,
+    VMIPushItem,
+    AmiPushItem,
+    VHDPushItem,
 )
 from ..helpers import (
     list_argument,
@@ -122,6 +125,7 @@ class KojiSource(Source):
         module_build=None,
         module_filter_filename=None,
         container_build=None,
+        vmi_build=None,
         signing_key=None,
         basedir=None,
         threads=4,
@@ -167,6 +171,11 @@ class KojiSource(Source):
                 build(s), along with associated artifacts such as operator manifest
                 bundles.
 
+            vmi_build (list[str, int])
+                Virtual Machine Image identifier(s). Can be koji build IDs (integers)
+                or build NVRs.
+                The source will yield all VMIs identified by this list.
+
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
                 using one of the provided keys. Include ``None`` if unsigned
@@ -204,6 +213,7 @@ class KojiSource(Source):
             module_filter_filename, retain_none=True
         )
         self._container_build = [try_int(x) for x in list_argument(container_build)]
+        self._vmi_build = [try_int(x) for x in list_argument(vmi_build)]
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout
@@ -504,6 +514,110 @@ class KojiSource(Source):
 
         return out
 
+    def _push_items_from_vmi_build(self, nvr, meta):
+        LOG.debug("Looking for virtual machine images on %s, %s", nvr, meta)
+
+        if not meta:
+            message = "Virtual machine image build not found in koji: %s" % nvr
+            LOG.debug(message)
+            raise ValueError(message)
+
+        # VMI has the {'typeinfo': {'image':{}}} on extra
+        extra = meta.get("extra") or {}
+        typeinfo = extra.get("typeinfo") or {}
+        image = typeinfo.get("image")
+
+        # Container images have the key `container_koji_task_id` set on extras:
+        # https://github.com/containerbuildsystem/atomic-reactor/blob/master/docs/koji.md?plain=1#L79
+        if extra.get("container_koji_task_id"):
+            message = "The build %s is for container images." % nvr
+            LOG.debug(message)
+            raise ValueError(message)
+
+        if image is None:
+            message = "Build %s not recognized as a virtual machine image build" % nvr
+            LOG.debug(message)
+            raise ValueError(message)
+
+        build_id = meta["id"]
+
+        archives = self._get_archives(build_id)
+
+        # Supported types of VMI archives
+        ami_types = ["raw", "raw-xz"]
+        azure_types = ["vhd", "vhd-compressed"]
+        cloud_types = {}
+
+        for k in ami_types:
+            cloud_types.setdefault(k, AmiPushItem)
+
+        for k in azure_types:
+            cloud_types.setdefault(k, VHDPushItem)
+
+        # Collect all known VM image archives
+        vmi_archives = [
+            elem
+            for elem in archives
+            if elem.get("btype") == "image"
+            and elem.get("type_name") in cloud_types.keys()
+        ]
+
+        out = []
+
+        # Generate the respective PushItem type for each archive
+        for archive in vmi_archives:
+            path = self._pathinfo.typedir(meta, archive["btype"])
+            item_src = os.path.join(path, archive["filename"])
+
+            extra = archive.get("extra") or {}
+            image = extra.get("image") or {}
+            arch = image.get("arch")
+
+            klass = cloud_types.get(archive["type_name"]) or VMIPushItem
+
+            rel_klass = klass._RELEASE_TYPE
+
+            # The given name will be composed by the product name and cloud
+            # marketpalce name, like "rhel-azure" or "rhel-sap-azure".
+            # We just want to get the product name without the cloud name,
+            # like "rhel" and "rhel-sap" in our examples respectively.
+            splitted_name = meta["name"].split("-")
+            if len(splitted_name) > 1:
+                product = "-".join(splitted_name[:-1])
+            else:
+                product = splitted_name[0]
+
+            # Try to get the resping version from release, if available
+            respin = try_int(meta["release"])
+            respin = 0 if not isinstance(respin, int) else respin
+
+            release = rel_klass(
+                arch=arch,
+                date=(meta.get("completion_time") or "").split(" ")[0],
+                product=product.upper(),
+                version=meta["version"],
+                respin=respin,
+            )
+
+            out.append(
+                klass(
+                    name=archive["filename"],
+                    description="",
+                    dest=self._dest,
+                    src=item_src,
+                    build=nvr,
+                    build_info=KojiBuildInfo(
+                        name=meta["name"],
+                        version=meta["version"],
+                        release=meta["release"],
+                    ),
+                    md5sum=archive.get("checksum"),
+                    release=release,
+                )
+            )
+
+        return out
+
     def _get_operator_item(self, nvr, meta, archives):
         extra = meta.get("extra") or {}
         typeinfo = extra.get("typeinfo") or {}
@@ -570,6 +684,19 @@ class KojiSource(Source):
         return [
             f_map(f, partial(self._push_items_from_container_build, build))
             for f, build in build_fs
+        ]
+
+    def _vmi_futures(self):
+        # Get info from each requested virtual machine image build.
+        vmi_build_fs = [
+            (self._executor.submit(self._get_build, build), build)
+            for build in self._vmi_build
+        ]
+
+        # Convert them to lists of push items
+        return [
+            f_map(f, partial(self._push_items_from_vmi_build, build))
+            for f, build in vmi_build_fs
         ]
 
     def _do_fetch(self, koji_queue, exceptions):
@@ -649,6 +776,10 @@ class KojiSource(Source):
         for build_id in self._container_build:
             koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
 
+        # We'll need to obtain all virtual machine image builds
+        for build_id in self._vmi_build:
+            koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
+
         # Put some threads to work on the queue.
         fetch_exceptions = []
         fetch_threads = [
@@ -692,7 +823,10 @@ class KojiSource(Source):
         assert koji_queue.empty()
 
         push_items_fs = (
-            self._modulemd_futures() + self._rpm_futures() + self._container_futures()
+            self._modulemd_futures()
+            + self._rpm_futures()
+            + self._container_futures()
+            + self._vmi_futures()
         )
 
         completed_fs = as_completed_with_timeout_reset(

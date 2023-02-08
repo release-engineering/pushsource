@@ -196,7 +196,7 @@
                 <span class="n">wait_time</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apply_wait_topdir_age</span><span class="p">:</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s2">&quot;Directory &#39;</span><span class="si">%s</span><span class="s2">&#39; has mtime </span><span class="si">%s</span><span class="s2">+00:00, being more than &quot;</span>
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> seconds old. Skipping the wait.&quot;</span><span class="p">,</span>

@@ -265,7 +265,9 @@ class ErratumPushItem(PushItem):
     :type: list[ErratumPackageCollection]
     """
 
-    container_list = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    container_list = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """A list of containers ssociated with the advisory.
 
     :type: list[Dict[str, Dict[str, Union[str, Dict[str, Optional[str]]]]]]
@@ -376,7 +378,9 @@ class ErratumPushItem(PushItem):
 
         # If source of data is ET/staging directory, try to get container_list directly
         if data.get("container_list"):
-            kwargs["container_list"] = sorted(data["container_list"], key=lambda x: sorted(x.keys()))
+            kwargs["container_list"] = sorted(
+                data["container_list"], key=lambda x: sorted(x.keys())
+            )
 
         # If there are content type hints, copy those while dropping the
         # pulp-specific terminology
@@ -386,7 +390,9 @@ class ErratumPushItem(PushItem):
 
         # If source of data is pulp, try to get container_list from pulp_user_metadata
         if pulp_user_metadata.get("container_list"):
-            kwargs["container_list"] = sorted(pulp_user_metadata["container_list"], key=lambda x: sorted(x.keys()))
+            kwargs["container_list"] = sorted(
+                pulp_user_metadata["container_list"], key=lambda x: sorted(x.keys())
+            )
 
         kwargs["references"] = ErratumReference._from_data(data.get("references") or [])
 

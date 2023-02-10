@@ -151,23 +151,24 @@ class ErrataSource(Source):
         return self._errata
 
     def _push_items_from_raw(self, raw):
-
         raw_metadata = raw.advisory_cdn_metadata.copy()
-        if raw.advisory_cdn_metadata.get('container_list'):
+        if raw.advisory_cdn_metadata.get("container_list"):
             raw_metadata = raw.advisory_cdn_metadata.copy()
             new_container_list = []
             # for every item in container list replace build with external repos
-            for clistitem in raw_metadata['container_list'][:]:
+            for clistitem in raw_metadata["container_list"][:]:
                 print(clistitem)
                 new_clistitem = {}
                 for build in list(clistitem.keys()):
-                    build_repos = raw.advisory_cdn_docker_file_list[build]['docker']['target']['external_repos']
+                    build_repos = raw.advisory_cdn_docker_file_list[build]["docker"][
+                        "target"
+                    ]["external_repos"]
                     val = clistitem[build]
                     for repo in build_repos:
                         new_clistitem[repo] = val
                 new_container_list.append(new_clistitem)
                 print(new_container_list)
-            raw_metadata['container_list'] = new_container_list
+            raw_metadata["container_list"] = new_container_list
         erratum = ErratumPushItem._from_data(raw_metadata)
 
         items = self._push_items_from_rpms(erratum, raw.advisory_cdn_file_list)

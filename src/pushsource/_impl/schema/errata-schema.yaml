@@ -26,11 +26,34 @@ definitions:
         type:
         - string
         - "null"
+    containerlistitem:
+        type: object
+        patternProperties:
+            ".*":
+                type: object
+                properties:
+                    digest:
+                        type: string
+                    images:
+                        type: object
+                        patternProperties:
+                            ".*":
+                                type: object
+                                properties:
+                                    digest:
+                                        type: ["string", "null"]
+                                required:
+                                    - digest
+                required:
+                    - digest
+                    - images
+
+
 
     container_list:
         type: array
         items:
-            type: string
+            $ref: "#/definitions/containerlistitem"
         uniqueItems: true
 
     reference_list:

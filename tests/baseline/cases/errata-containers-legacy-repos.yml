@@ -1779,7 +1779,16 @@ items:
 - ErratumPushItem:
     build: null
     build_info: null
-    container_list: []
+    container_list:
+    - openshift4/ose-local-storage-rhel7-operator-metadata:
+        digest: sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7
+        images:
+          docker-image-sha256:05649a19718fde131372c761d359302ccbe81f9744d2893ac4c826b05d670206.ppc64le.tar.gz:
+            digest: null
+          docker-image-sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1.s390x.tar.gz:
+            digest: null
+          docker-image-sha256:c2e3030306f71b94cbffe2d16fcebe6e14f2842ae26789926bcf1afeeecb5859.x86_64.tar.gz:
+            digest: null
     content_types:
     - docker
     description: 'Red Hat OpenShift Container Platform is Red Hat''s cloud computing

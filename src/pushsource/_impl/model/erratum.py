@@ -268,7 +268,7 @@ class ErratumPushItem(PushItem):
     container_list = attr.ib(
         type=list, default=attr.Factory(frozenlist), converter=frozenlist
     )
-    """A list of containers ssociated with the advisory.
+    """A list of container images associated with the advisory.
 
     :type: list[Dict[str, Dict[str, Union[str, Dict[str, Optional[str]]]]]]
     """

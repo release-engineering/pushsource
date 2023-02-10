@@ -48,8 +48,6 @@ definitions:
                     - digest
                     - images
 
-
-
     container_list:
         type: array
         items:

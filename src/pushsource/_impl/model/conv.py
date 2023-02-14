@@ -5,6 +5,7 @@ from functools import partial
 import re
 
 from frozenlist2 import frozenlist
+from frozendict import frozendict
 from dateutil import tz
 
 from .. import compat_attr as attr
@@ -128,6 +129,76 @@ def convert_maybe(fn):
         return fn(value)
 
     return out
+
+
+def freeze(obj):
+    """Convert complex object composed of dicts and lists to equivalent object composed of
+    frozendicts and frozenlists.
+    """
+
+    ret = [None]
+    stack = [(obj, ret, 0)]
+    traversal = []
+
+    # interate over the structure and do post-order traversal
+    while stack:
+        cobj, cparent, ckey = stack.pop(0)
+        if isinstance(cobj, list):
+            for n, i in enumerate(cobj):
+                stack.insert(0, (i, cobj, n))
+        elif isinstance(cobj, dict):
+            for key in cobj:
+                stack.insert(0, (cobj[key], cobj, key))
+        traversal.insert(0, (cobj, cparent, ckey))
+
+    # Walk through traversal record. As traversal is post-order
+    # leafs are processed first and therefore nested dict/lists
+    # are replaced froze first
+    for titem in traversal:
+        cobj, cparent, ckey = titem
+        # if traversal entry is list replace it with frozenlist
+        if isinstance(cobj, list):
+            cparent[ckey] = frozenlist(cobj)
+        # if traversal entry is list replace it with frozendict
+        elif isinstance(cobj, dict):
+            cparent[ckey] = frozendict(cobj)
+        else:
+            cparent[ckey] = cobj
+
+    return ret[0]
+
+
+def unfreeze(obj):
+    """Convert complex object composed of frozendicts and frozenlists to equivalent object composed of
+    dicts and lists.
+    """
+
+    ret = [None]
+    stack = [(obj, ret, 0)]
+    traversal = []
+
+    while stack:
+        cobj, cparent, ckey = stack.pop(0)
+        # cobj_replacement represents unfrozen object. As structure is processed
+        # in post order - leaves are processed first - then it's not possible to 
+        # assign proccessed leaf to frozen parent.
+        # To fix that replace parent object with expected unfrozen object
+        cobj_replacement = cobj
+        if isinstance(cobj, frozenlist):
+            cobj_replacement = [None] * len(cobj)
+            for n, i in enumerate(cobj):
+                stack.insert(0, (i, cobj_replacement, n))
+        elif isinstance(cobj, frozendict):
+            cobj_replacement = {}
+            for key in cobj:
+                stack.insert(0, (cobj[key], cobj_replacement, key))
+        traversal.insert(0, (cobj_replacement, cparent, ckey))
+
+    for titem in traversal:
+        cobj, cparent, ckey = titem
+        cparent[ckey] = cobj
+
+    return ret[0]
 
 
 in_ = attr.validators.in_

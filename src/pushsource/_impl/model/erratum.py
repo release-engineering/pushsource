@@ -12,7 +12,7 @@ from .conv import (
     instance_of_str,
     optional,
     optional_str,
-    freeze
+    freeze,
 )
 from .erratum_fixup import fixup_erratum_class
 
@@ -400,9 +400,7 @@ class ErratumPushItem(PushItem):
         # If source of data is ET/staging directory, try to get container_list directly
         if data.get("container_list"):
             kwargs["container_list"] = freeze(
-                sorted(
-                    data["container_list"], key=lambda x: sorted(x.keys())
-                )
+                sorted(data["container_list"], key=lambda x: sorted(x.keys()))
             )
 
         # If there are content type hints, copy those while dropping the

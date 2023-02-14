@@ -180,7 +180,7 @@ def unfreeze(obj):
     while stack:
         cobj, cparent, ckey = stack.pop(0)
         # cobj_replacement represents unfrozen object. As structure is processed
-        # in post order - leaves are processed first - then it's not possible to 
+        # in post order - leaves are processed first - then it's not possible to
         # assign proccessed leaf to frozen parent.
         # To fix that replace parent object with expected unfrozen object
         cobj_replacement = cobj

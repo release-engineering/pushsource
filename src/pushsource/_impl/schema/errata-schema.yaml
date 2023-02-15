@@ -176,8 +176,6 @@ properties:
         $ref: "#/definitions/reference_list"
     pkglist:
         $ref: "#/definitions/pkg_collection_list"
-    containerlist:
-        $ref: "#/definitions/container_lits"
 
 required:
 - description

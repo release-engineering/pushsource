@@ -162,8 +162,13 @@ class ErrataSource(Source):
                         "target"
                     ]["external_repos"]
                     val = clistitem[build]
+                    new_val = {"digest": val["digest"], "images": {}}
+                    for image, digest_dict in val["images"].items():
+                        arch = image.split(".")[-3]
+                        new_val['images'][arch] = digest_dict
                     for repo in build_repos:
-                        new_clistitem[repo] = val
+                        new_clistitem[repo] = new_val
+
                 new_container_list.append(new_clistitem)
             raw_metadata["container_list"] = new_container_list
         erratum = ErratumPushItem._from_data(raw_metadata)

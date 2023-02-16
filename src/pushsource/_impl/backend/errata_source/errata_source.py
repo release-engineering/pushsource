@@ -165,7 +165,7 @@ class ErrataSource(Source):
                     new_val = {"digest": val["digest"], "images": {}}
                     for image, digest_dict in val["images"].items():
                         arch = image.split(".")[-3]
-                        new_val['images'][arch] = digest_dict
+                        new_val["images"][arch] = digest_dict
                     for repo in build_repos:
                         new_clistitem[repo] = new_val
 

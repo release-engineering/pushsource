@@ -3,8 +3,6 @@ import threading
 import logging
 import itertools
 import functools
-import time
-from datetime import datetime
 
 import yaml
 import json
@@ -137,41 +135,6 @@ class StagedSource(
 
     def _push_items_for_topdir(self, topdir):
         LOG.info("Checking files in: %s", topdir)
-
-        # How long to wait until staged data are synced to snapmirrored volume.
-        wait_time = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
-        # Apply wait only if topdir mtime is less than X seconds older than current time.
-        # The idea is "Only apply wait if the staging dir was recently modified".
-        # The lower the value, the fewer pushes will wait,the higher the probability of missing data
-        apply_wait_topdir_age = int(
-            os.getenv("PUSHSOURCE_APPLY_WAIT_TOPDIR_AGE") or "0"
-        )
-
-        if not os.path.exists(topdir):
-            LOG.info(
-                "Directory '%s' doesn't exist yet. Waiting for %s seconds.",
-                topdir,
-                wait_time,
-            )
-            time.sleep(wait_time)
-        elif int(os.path.getmtime(topdir)) > int(time.time()) - apply_wait_topdir_age:
-            LOG.info(
-                "Directory '%s' has mtime %s+00:00, being less than "
-                "%s seconds old. Waiting for %s seconds.",
-                topdir,
-                datetime.utcfromtimestamp(int(os.path.getmtime(topdir))).isoformat(),
-                apply_wait_topdir_age,
-                wait_time,
-            )
-            time.sleep(wait_time)
-        elif apply_wait_topdir_age:
-            LOG.info(
-                "Directory '%s' has mtime %s+00:00, being more than "
-                "%s seconds old. Skipping the wait.",
-                topdir,
-                datetime.utcfromtimestamp(int(os.path.getmtime(topdir))).isoformat(),
-                apply_wait_topdir_age,
-            )
 
         metadata = self._load_metadata(topdir)
 

@@ -35,8 +35,6 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -169,41 +167,6 @@
 
     <span class="k">def</span> <span class="nf">_push_items_for_topdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topdir</span><span class="p">):</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking files in: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
-
-        <span class="c1"># How long to wait until staged data are synced to snapmirrored volume.</span>
-        <span class="n">wait_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
-        <span class="c1"># Apply wait only if topdir mtime is less than X seconds older than current time.</span>
-        <span class="c1"># The idea is &quot;Only apply wait if the staging dir was recently modified&quot;.</span>
-        <span class="c1"># The lower the value, the fewer pushes will wait,the higher the probability of missing data</span>
-        <span class="n">apply_wait_topdir_age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_APPLY_WAIT_TOPDIR_AGE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">topdir</span><span class="p">):</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;Directory &#39;</span><span class="si">%s</span><span class="s2">&#39; doesn&#39;t exist yet. Waiting for </span><span class="si">%s</span><span class="s2"> seconds.&quot;</span><span class="p">,</span>
-                <span class="n">topdir</span><span class="p">,</span>
-                <span class="n">wait_time</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">topdir</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">-</span> <span class="n">apply_wait_topdir_age</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;Directory &#39;</span><span class="si">%s</span><span class="s2">&#39; has mtime </span><span class="si">%s</span><span class="s2">+00:00, being less than &quot;</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> seconds old. Waiting for </span><span class="si">%s</span><span class="s2"> seconds.&quot;</span><span class="p">,</span>
-                <span class="n">topdir</span><span class="p">,</span>
-                <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">topdir</span><span class="p">)))</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-                <span class="n">apply_wait_topdir_age</span><span class="p">,</span>
-                <span class="n">wait_time</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apply_wait_topdir_age</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;Directory &#39;</span><span class="si">%s</span><span class="s2">&#39; has mtime </span><span class="si">%s</span><span class="s2">+00:00, being more than &quot;</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> seconds old. Skipping the wait.&quot;</span><span class="p">,</span>
-                <span class="n">topdir</span><span class="p">,</span>
-                <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">topdir</span><span class="p">)))</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-                <span class="n">apply_wait_topdir_age</span><span class="p">,</span>
-            <span class="p">)</span>
 
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_metadata</span><span class="p">(</span><span class="n">topdir</span><span class="p">)</span>
 

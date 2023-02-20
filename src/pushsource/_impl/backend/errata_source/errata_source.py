@@ -163,6 +163,9 @@ class ErrataSource(Source):
                     ]["external_repos"]
                     val = clistitem[build]
                     new_val = {"digest": val["digest"], "images": {}}
+                    # for instead of images we want to store only its architecture
+                    # which is part of the image archive, example:
+                    # docker-image-sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1.s390x.tar.gz
                     for image, digest_dict in val["images"].items():
                         arch = image.split(".")[-3]
                         new_val["images"][arch] = digest_dict

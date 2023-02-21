@@ -274,6 +274,7 @@ class ErratumPushItem(PushItem):
     Example of the list:
     
     .. code-block:: python
+
         "container_list": [
             {
                 "openshift4/ose-local-storage-rhel7-operator-metadata": {

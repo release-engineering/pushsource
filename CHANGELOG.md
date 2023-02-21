@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+
+## [2.26.0] - 2023-02-21
+
+### Removed
+
+- File polling for `staged` source has been moved outside of this library
+
 ## [2.25.0] - 2023-02-09
 
 ### Added
@@ -373,7 +380,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.25.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.26.0...HEAD
+[2.26.0]: https://github.com/release-engineering/pushsource/compare/v2.25.0...v2.26.0
 [2.25.0]: https://github.com/release-engineering/pushsource/compare/v2.24.0...v2.25.0
 [2.24.0]: https://github.com/release-engineering/pushsource/compare/v2.23.5...v2.24.0
 [2.23.5]: https://github.com/release-engineering/pushsource/compare/v2.23.4...v2.23.5

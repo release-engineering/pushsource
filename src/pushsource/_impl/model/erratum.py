@@ -12,6 +12,7 @@ from .conv import (
     instance_of_str,
     optional,
     optional_str,
+    freeze,
 )
 from .erratum_fixup import fixup_erratum_class
 
@@ -265,6 +266,36 @@ class ErratumPushItem(PushItem):
     :type: list[ErratumPackageCollection]
     """
 
+    container_list = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
+    """A list of container images associated with the advisory.
+
+    Example of the list:
+    
+    .. code-block:: python
+
+        "container_list": [
+            {
+                "openshift4/ose-local-storage-rhel7-operator-metadata": {
+                    "digest": "sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7",
+                    "images": {
+                        "s390x": {
+                            "digest": "sha256:05649a19718fde131372c761d359302ccbe81f9744d2893ac4c826b05d670206"
+                        },
+                        "ppc64le": {
+                            "digest": "sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1"
+                        },
+                        "x86_64": {
+                            "digest": "sha256:c2e3030306f71b94cbffe2d16fcebe6e14f2842ae26789926bcf1afeeecb5859"
+                        }
+                    }
+                }
+            }
+
+    :type: list[Dict[str, Dict[str, Union[str, Dict[str, Optional[str]]]]]]
+    """
+
     from_ = attr.ib(type=str, default=None, validator=optional_str)
     """Contact email address for the owner of the advisory.
 
@@ -368,11 +399,25 @@ class ErratumPushItem(PushItem):
         if data.get("cdn_repo"):
             kwargs["dest"] = data["cdn_repo"]
 
+        # If source of data is ET/staging directory, try to get container_list directly
+        if data.get("container_list"):
+            kwargs["container_list"] = freeze(
+                sorted(data["container_list"], key=lambda x: sorted(x.keys()))
+            )
+
         # If there are content type hints, copy those while dropping the
         # pulp-specific terminology
         pulp_user_metadata = data.get("pulp_user_metadata") or {}
         if pulp_user_metadata.get("content_types"):
             kwargs["content_types"] = pulp_user_metadata["content_types"]
+
+        # If source of data is pulp, try to get container_list from pulp_user_metadata
+        if pulp_user_metadata.get("container_list"):
+            kwargs["container_list"] = freeze(
+                sorted(
+                    pulp_user_metadata["container_list"], key=lambda x: sorted(x.keys())
+                )
+            )
 
         kwargs["references"] = ErratumReference._from_data(data.get("references") or [])
 

@@ -151,7 +151,30 @@ class ErrataSource(Source):
         return self._errata
 
     def _push_items_from_raw(self, raw):
-        erratum = ErratumPushItem._from_data(raw.advisory_cdn_metadata)
+        raw_metadata = raw.advisory_cdn_metadata.copy()
+        if raw.advisory_cdn_metadata.get("container_list"):
+            new_container_list = []
+            # for every item in container list replace build with external repos
+            for clistitem in raw_metadata["container_list"][:]:
+                new_clistitem = {}
+                for build in list(clistitem.keys()):
+                    build_repos = raw.advisory_cdn_docker_file_list[build]["docker"][
+                        "target"
+                    ]["external_repos"]
+                    val = clistitem[build]
+                    new_val = {"digest": val["digest"], "images": {}}
+                    # for instead of images we want to store only its architecture
+                    # which is part of the image archive, example:
+                    # docker-image-sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1.s390x.tar.gz
+                    for image, digest_dict in val["images"].items():
+                        arch = image.split(".")[-3]
+                        new_val["images"][arch] = digest_dict
+                    for repo in build_repos:
+                        new_clistitem[repo] = new_val
+
+                new_container_list.append(new_clistitem)
+            raw_metadata["container_list"] = new_container_list
+        erratum = ErratumPushItem._from_data(raw_metadata)
 
         items = self._push_items_from_rpms(erratum, raw.advisory_cdn_file_list)
 

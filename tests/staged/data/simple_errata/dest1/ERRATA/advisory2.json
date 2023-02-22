@@ -159,6 +159,24 @@
   "pulp_user_metadata": {
     "content_types": [
       "rpm"
+    ],
+    "container_list": [
+        {
+            "openshift4/ose-local-storage-rhel7-operator-metadata": {
+                "digest": "sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7",
+                "images": {
+                    "s390x": {
+                        "digest": null
+                    },
+                    "ppc64le": {
+                        "digest": null
+                    },
+                    "x86_64": {
+                        "digest": null
+                    }
+                }
+            }
+        }
     ]
   }
 }

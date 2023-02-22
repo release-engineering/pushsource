@@ -13,10 +13,12 @@ from mock import patch
 from collections.abc import Mapping
 
 from ..errata.fake_errata_tool import FakeErrataToolController
+
 from ..koji.fake_koji import FakeKojiController
 
 
 from pushsource import Source
+from pushsource._impl.model.conv import unfreeze
 
 LOG = logging.getLogger("test_baseline")
 
@@ -26,26 +28,15 @@ CASE_TEMPLATE_FILE = os.path.join(THIS_DIR, "template.yml.j2")
 SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
 
 
-def mapping_to_dict(value):
-    # A helper to convert Mappings of any type explicitly into dict.
-    #
-    # Why:
-    # - pyyaml can serialize dict fine, but not arbitrary mappings
-    # - current versions of frozendict are instanceof Mapping but not dict
-    #
-    if isinstance(value, Mapping):
-        return dict(value)
-    return value
-
-
 def asdict(value):
     # modern case must use a value_serializer to convert frozendict into a
     # serializable type.
-    return attr.asdict(
+    ret = attr.asdict(
         value,
         recurse=True,
-        value_serializer=lambda _self, _field, value: mapping_to_dict(value),
+        value_serializer=lambda _self, _field, value: unfreeze(value),
     )
+    return ret
 
 
 @pytest.fixture(scope="module")

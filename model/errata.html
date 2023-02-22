@@ -53,6 +53,7 @@ examples).</p>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.container_list" title="pushsource.ErratumPushItem.container_list"><code class="xref py py-meth docutils literal notranslate"><span class="pre">container_list()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.ErratumPushItem.content_types" title="pushsource.ErratumPushItem.content_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">content_types()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.ErratumPushItem.description" title="pushsource.ErratumPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">from()</span></code></p></li>
@@ -151,6 +152,37 @@ from <a class="reference internal" href="#pushsource.ErratumPackage" title="push
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#pushsource.ErratumPackageCollection" title="pushsource.ErratumPackageCollection">ErratumPackageCollection</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.container_list">
+<span class="sig-name descname"><span class="pre">container_list</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.container_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of container images associated with the advisory.</p>
+<p>Example of the list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;container_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;openshift4/ose-local-storage-rhel7-operator-metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;s390x&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:05649a19718fde131372c761d359302ccbe81f9744d2893ac4c826b05d670206&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;ppc64le&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;x86_64&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:c2e3030306f71b94cbffe2d16fcebe6e14f2842ae26789926bcf1afeeecb5859&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]]]]]]</p>
 </dd>
 </dl>
 </dd></dl>

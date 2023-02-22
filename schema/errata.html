@@ -67,6 +67,33 @@ definitions:
         type:
         - string
         - &quot;null&quot;
+    containerlistitem:
+        type: object
+        patternProperties:
+            &quot;.*&quot;:
+                type: object
+                properties:
+                    digest:
+                        type: string
+                    images:
+                        type: object
+                        patternProperties:
+                            &quot;.*&quot;:
+                                type: object
+                                properties:
+                                    digest:
+                                        type: [&quot;string&quot;, &quot;null&quot;]
+                                required:
+                                    - digest
+                required:
+                    - digest
+                    - images
+
+    container_list:
+        type: array
+        items:
+            $ref: &quot;#/definitions/containerlistitem&quot;
+        uniqueItems: true
 
     reference_list:
         type: array

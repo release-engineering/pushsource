@@ -5,7 +5,7 @@ from functools import partial
 import re
 
 from frozenlist2 import frozenlist
-from frozendict import frozendict
+from frozendict.core import frozendict
 from dateutil import tz
 
 from .. import compat_attr as attr

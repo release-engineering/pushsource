@@ -1,10 +1,10 @@
 import re
 
 from frozenlist2 import frozenlist
+from frozendict.core import frozendict  # pylint: disable=no-name-in-module
 
 from .base import PushItem
 from .. import compat_attr as attr
-from frozendict import frozendict
 from .conv import instance_of, optional_str
 
 

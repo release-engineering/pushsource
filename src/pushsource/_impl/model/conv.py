@@ -5,7 +5,7 @@ from functools import partial
 import re
 
 from frozenlist2 import frozenlist
-from frozendict.core import frozendict
+from frozendict.core import frozendict # pylint: disable=no-name-in-module
 from dateutil import tz
 
 from .. import compat_attr as attr
@@ -197,7 +197,7 @@ def unfreeze(obj):
     for titem in traversal:
         cobj, cparent, ckey = titem
         cparent[ckey] = cobj
-
+    
     return ret[0]
 
 

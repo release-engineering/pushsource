@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
 
+## [2.27.0] - 2023-03-01
+
+### Added
+
+- Added container_list attribute to Erratum model
 
 ## [2.26.0] - 2023-02-21
 
@@ -380,7 +384,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.26.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.27.0...HEAD
+[2.27.0]: https://github.com/release-engineering/pushsource/compare/v2.26.0...v2.27.0
 [2.26.0]: https://github.com/release-engineering/pushsource/compare/v2.25.0...v2.26.0
 [2.25.0]: https://github.com/release-engineering/pushsource/compare/v2.24.0...v2.25.0
 [2.24.0]: https://github.com/release-engineering/pushsource/compare/v2.23.5...v2.24.0

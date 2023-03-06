@@ -56,6 +56,7 @@ class StagedAmiMixin(StagedBaseMixin):
             "description",
             "sriov_net_support",
             "ena_support",
+            "public_image",
         ]
 
         for key in image_attrs:

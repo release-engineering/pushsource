@@ -102,6 +102,11 @@ class AmiPushItem(VMIPushItem):
     image_id = attr.ib(type=str, default=None, validator=optional_str)
     """AMI Image ID used to reference the image in AWS."""
 
+    public_image = attr.ib(
+        type=bool, default=None, validator=optional(instance_of(bool))
+    )
+    """``True`` if the image is allowed to be released publicly (shared with group "all")."""
+
     @classmethod
     def _from_data(cls, data):
         """Instantiate AmiPushItem from raw list or dict"""
@@ -125,11 +130,12 @@ class AmiPushItem(VMIPushItem):
             "root_device": data["root_device"],
             "description": data["description"],
             "sriov_net_support": data["sriov_net_support"],
-            "ena_support": data.get("ena_support") or None,
+            "ena_support": data.get("ena_support"),
             "billing_codes": AmiBillingCodes._from_data(
                 data.get("billing_codes") or {}
             ),
             "image_id": data.get("ami") or None,
+            "public_image": data.get("public_image"),
         }
 
         return cls(**kwargs)

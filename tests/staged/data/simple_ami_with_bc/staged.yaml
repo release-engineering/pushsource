@@ -28,4 +28,4 @@ payload:
         codes:
           - bp-1234
           - bp-abcd
-
+      public_image: true

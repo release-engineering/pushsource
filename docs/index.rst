@@ -13,6 +13,7 @@ A library for accessing push items from various sources.
    sources/koji
    sources/registry
    sources/errata
+   sources/pub
    model/base
    model/files
    model/cgw

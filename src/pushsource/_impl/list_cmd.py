@@ -39,7 +39,7 @@ def format_python(item):
 
 def format_python_black(item):
     code = format_python(item)
-    proc = subprocess.Popen(
+    proc = subprocess.Popen(  # pylint: disable=consider-using-with
         ["black", "-c", code], universal_newlines=True, stdout=subprocess.PIPE
     )
     (out, _) = proc.communicate()

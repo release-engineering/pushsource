@@ -89,7 +89,7 @@ def try_bool(value):
     value = value.lower()
     if value in ["1", "true", "yes"]:
         return True
-    elif value in ["", "0", "false", "no"]:
+    if value in ["", "0", "false", "no"]:
         return False
     raise ValueError("Expected a boolean, got %s" % repr(value))
 

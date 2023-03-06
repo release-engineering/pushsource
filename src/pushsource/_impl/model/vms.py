@@ -58,9 +58,10 @@ class VMIPushItem(PushItem):
     """A brief human-readable description of the image."""
 
     @release.validator
-    def __validate_release(self, attribute, value):
-        # pylint: disable=unused-argument
-        if value and not type(value) == self._RELEASE_TYPE:
+    def __validate_release(self, attribute, value):  # pylint: disable=unused-argument
+        # Strict (unidiomatic) type check ensures that subclasses
+        # of VMIRelease can not be associated with VHDPushItem
+        if value and type(value) is not self._RELEASE_TYPE:  # pylint: disable=unidiomatic-typecheck
             raise ValueError(
                 'The release type must be "%s"' % self._RELEASE_TYPE.__name__
             )

@@ -1,5 +1,6 @@
-import yaml
 import os
+
+import yaml
 
 
 SCHEMA_PATH = os.path.dirname(__file__)

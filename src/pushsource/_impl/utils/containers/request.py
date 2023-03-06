@@ -1,20 +1,15 @@
 import base64
 import hashlib
 import json
-
 import os
-
 from json.decoder import JSONDecodeError
+from urllib import parse as urlparse, request
 
-
-from urllib import parse as urlparse
+from requests import Session, exceptions
 from requests.adapters import HTTPAdapter
-
 # pylint: disable-next=import-error
 from requests.packages.urllib3.util import Retry
-from requests import Session, exceptions
 
-from urllib import request
 
 JSONException = JSONDecodeError
 

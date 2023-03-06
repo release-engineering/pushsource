@@ -50,5 +50,5 @@ class FilePushItem(PushItem):
         #   than Pub's historical default.
         # - The lower bound may as well be symmetrical with the upper bound.
         # - This check will also filter out NaN.
-        if not (value >= -99999 and value <= 99999):
+        if not -99999 <= value <= 99999:
             raise ValueError("display_order must be within range -99999 .. 99999")

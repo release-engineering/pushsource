@@ -61,7 +61,9 @@ class VMIPushItem(PushItem):
     def __validate_release(self, attribute, value):  # pylint: disable=unused-argument
         # Strict (unidiomatic) type check ensures that subclasses
         # of VMIRelease can not be associated with VHDPushItem
-        if value and type(value) is not self._RELEASE_TYPE:  # pylint: disable=unidiomatic-typecheck
+        if (
+            value and type(value) is not self._RELEASE_TYPE
+        ):  # pylint: disable=unidiomatic-typecheck
             raise ValueError(
                 'The release type must be "%s"' % self._RELEASE_TYPE.__name__
             )

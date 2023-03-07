@@ -7,6 +7,7 @@ from urllib import parse as urlparse, request
 
 from requests import Session, exceptions
 from requests.adapters import HTTPAdapter
+
 # pylint: disable-next=import-error
 from requests.packages.urllib3.util import Retry
 

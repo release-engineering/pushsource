@@ -107,7 +107,7 @@ For detailed information, see the API reference of the associated class.
 +--------------+-----------------------------------------------------------------------------+                                     |                                                    |
 | productid    | ``productid:/files/product.pem``                                            |                                     |                                                    |
 +--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
-| pub          | ``pub:https://pub.example.com?task_id=1234``                                | :class: `pushsource.PubSource`      | Obtain AMIs from Pub task metadata                 |
+| pub          | ``pub:https://pub.example.com?task_id=1234``                                | :class:`~pushsource.PubSource`      | Obtain AMIs from Pub task metadata                 |
 +--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
 
 Processing push items

@@ -24,6 +24,7 @@ items:
     md5sum: null
     name: fake-image.raw
     origin: {{ src_dir }}/tests/staged/data/simple_ami_with_bc
+    public_image: true
     region: cn-north-1
     release:
       arch: x86_64

@@ -90,9 +90,12 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A brief human-readable description of the image.&quot;&quot;&quot;</span>
 
     <span class="nd">@release</span><span class="o">.</span><span class="n">validator</span>
-    <span class="k">def</span> <span class="nf">__validate_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># pylint: disable=unused-argument</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__validate_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>
+        <span class="c1"># Strict (unidiomatic) type check ensures that subclasses</span>
+        <span class="c1"># of VMIRelease can not be associated with VHDPushItem</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">value</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
+        <span class="p">):</span>  <span class="c1"># pylint: disable=unidiomatic-typecheck</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s1">&#39;The release type must be &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="p">)</span></div>

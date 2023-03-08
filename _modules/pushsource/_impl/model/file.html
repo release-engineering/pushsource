@@ -82,7 +82,7 @@
         <span class="c1">#   than Pub&#39;s historical default.</span>
         <span class="c1"># - The lower bound may as well be symmetrical with the upper bound.</span>
         <span class="c1"># - This check will also filter out NaN.</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">99999</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">99999</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="o">-</span><span class="mi">99999</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">99999</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;display_order must be within range -99999 .. 99999&quot;</span><span class="p">)</span></div>
 </pre></div>
 

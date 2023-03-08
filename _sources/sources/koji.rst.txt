@@ -79,7 +79,7 @@ Push items produced in this case may include:
   manifest archives
 
 Accessing virtual machine images
-...............................
+................................
 
 Use the ``vmi_build`` parameter to request virtual machine images from one or
 more builds. Builds can be specified by NVR. Builds should be produced by

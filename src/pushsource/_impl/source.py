@@ -3,10 +3,9 @@ import functools
 import logging
 import os
 from threading import Lock
+from urllib import parse
 
 import pkg_resources
-
-from urllib import parse
 
 from pushsource._impl.helpers import wait_exist
 

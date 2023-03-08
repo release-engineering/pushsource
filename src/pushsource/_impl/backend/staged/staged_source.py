@@ -1,14 +1,12 @@
+import functools
+import itertools
+import json
+import logging
 import os
 import threading
-import logging
-import itertools
-import functools
-
-import yaml
-import json
-
 from os import scandir
 
+import yaml
 from pushcollector import Collector
 from more_executors import Executors
 

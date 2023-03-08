@@ -142,10 +142,8 @@ class RegistrySource(Source):
             ],
             media_types=list(
                 set(
-                    [
-                        manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
-                        for manifest in self._manifests[source_uri].values()
-                    ]
+                    manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                    for manifest in self._manifests[source_uri].values()
                 )
             ),
             tag_specs=[
@@ -155,10 +153,8 @@ class RegistrySource(Source):
                     tag=src_tag,
                     media_types=list(
                         set(
-                            [
-                                manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
-                                for manifest in self._manifests[source_uri].values()
-                            ]
+                            manifest[0].replace("text/plain", MEDIATYPE_SCHEMA2_V1)
+                            for manifest in self._manifests[source_uri].values()
                         )
                     ),
                 )

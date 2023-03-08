@@ -100,10 +100,6 @@ definitions:
             billing_codes:
                 $ref: "#/definitions/ami_billing_codes"
 
-            public_image:
-                type:
-                - boolean
-                - "null"
 
         required:
         - release

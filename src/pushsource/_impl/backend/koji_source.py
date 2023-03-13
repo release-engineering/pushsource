@@ -623,6 +623,11 @@ class KojiSource(Source):
         typeinfo = extra.get("typeinfo") or {}
         operator_manifests = typeinfo.get("operator-manifests") or {}
         archive_name = operator_manifests.get("archive")
+        image = typeinfo.get("image") or {}
+        image_operator_manifests = image.get("operator_manifests") or {}
+        related_images = image_operator_manifests.get("related_images") or {}
+        pullspecs = related_images.get("pullspecs") or []
+        operator_related_images = [spec["new"] for spec in pullspecs if spec.get("new")]
 
         if not archive_name:
             # Try legacy form
@@ -649,6 +654,7 @@ class KojiSource(Source):
             dest=self._dest,
             src=item_src,
             build=nvr,
+            related_images=operator_related_images,
         )
 
     def _rpm_futures(self):

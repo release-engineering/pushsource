@@ -1,0 +1,143 @@
+############### GENERATED TEST DATA ########################
+# This file was created by tests/koji/data/dump script.
+#
+archives:
+- btype: image
+  extra:
+    docker:
+      config:
+        config:
+          Labels:
+            License: Apache
+            architecture: x86_64
+            build-date: '2023-03-01T15:03:54'
+            com.redhat.component: security-profiles-operator-bundle-container
+            com.redhat.delivery.appregistry: 'false'
+            com.redhat.delivery.operator.bundle: 'true'
+            com.redhat.license_terms: https://www.redhat.com/agreements
+            com.redhat.openshift.versions: v4.12
+            description: OpenShift Security Profiles Operator
+            distribution-scope: public
+            io.buildah.version: 1.27.3
+            io.k8s.description: OpenShift Security Profiles Operator
+            io.k8s.display-name: Security Profiles Operator
+            io.openshift.build.commit.id: 629f152890bff09778900407b3ad6d6ed5333aa0
+            io.openshift.build.commit.url: git://pkgs.devel.redhat.com/containers/openshift-security-profiles-operator#629f152890bff09778900407b3ad6d6ed5333aa0
+            io.openshift.build.source-location: git://pkgs.devel.redhat.com/containers/openshift-security-profiles-operator#629f152890bff09778900407b3ad6d6ed5333aa0
+            io.openshift.maintainer.product: OpenShift Container Platform
+            io.openshift.tags: openshift,security,selinux,seccomp
+            maintainer: Infrastructure Security and Compliance Team <isc-team@redhat.com>
+            name: openshift-security-profiles-operator-bundle
+            operators.operatorframework.io.bundle.channel.default.v1: release-alpha-rhel-8
+            operators.operatorframework.io.bundle.channels.v1: release-alpha-rhel-8
+            operators.operatorframework.io.bundle.manifests.v1: manifests/
+            operators.operatorframework.io.bundle.mediatype.v1: registry+v1
+            operators.operatorframework.io.bundle.metadata.v1: metadata/
+            operators.operatorframework.io.bundle.package.v1: security-profiles-operator
+            release: '2'
+            summary: OpenShift Security Profiles Operator
+            url: https://access.redhat.com/containers/#/registry.access.redhat.com/openshift-security-profiles-operator-bundle/images/0.5.2-2
+            vcs-ref: e4c877c32b15c866fc6b5f87436fe3d8a0a2bd4f
+            vcs-type: git
+            vendor: Red Hat, Inc.
+            version: 0.5.2
+      digests:
+        application/vnd.docker.distribution.manifest.v2+json: sha256:8a51b1a98b342a03492baf6c475c331bc6d06f233f0d678e6b361192a40bbdc8
+      repositories:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle:rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle@sha256:8a51b1a98b342a03492baf6c475c331bc6d06f233f0d678e6b361192a40bbdc8
+      tags:
+      - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
+    image:
+      arch: x86_64
+  filename: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+  id: 7754530
+  type_name: tar
+- btype: operator-manifests
+  extra: {}
+  filename: operator_manifests.zip
+  id: 7754531
+  type_name: zip
+extra:
+  image:
+    help: null
+    index:
+      digests:
+        application/vnd.docker.distribution.manifest.list.v2+json: sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
+      floating_tags:
+      - latest
+      - 0.5.2
+      pull:
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle@sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
+      - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle:0.5.2-2
+      tags:
+      - 0.5.2-2
+      unique_tags:
+      - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354
+    isolated: false
+    media_types:
+    - application/vnd.docker.distribution.manifest.list.v2+json
+    - application/vnd.docker.distribution.manifest.v1+json
+    - application/vnd.docker.distribution.manifest.v2+json
+    operator_manifests:
+      custom_csv_modifications_applied: false
+      related_images:
+        created_by_osbs: true
+        pullspecs:
+        - new: registry.redhat.io/compliance/openshift-security-profiles-rhel8-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee
+          original: registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee
+          pinned: false
+        - new: registry.redhat.io/compliance/openshift-selinuxd-rhel8@sha256:28e1588aa45b0d0283cadec42ccdc8b9febe0510f083ac9dbf2e480aa012c79d
+          original: registry-proxy.engineering.redhat.com/rh-osbs/openshift-selinuxd@sha256:28e1588aa45b0d0283cadec42ccdc8b9febe0510f083ac9dbf2e480aa012c79d
+          pinned: false
+        - new: registry.redhat.io/openshift4/ose-kube-rbac-proxy@sha256:5df77deac108236c8d3fc84bfaae9f86439557ccb9a08b9cd4fac7ce4e918485
+          original: registry.redhat.io/openshift4/ose-kube-rbac-proxy:latest
+          pinned: true
+    parent_image_builds: {}
+    parent_images:
+    - scratch
+  typeinfo:
+    image:
+      help: null
+      index:
+        digests:
+          application/vnd.docker.distribution.manifest.list.v2+json: sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
+        floating_tags:
+        - latest
+        - 0.5.2
+        pull:
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle@sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
+        - registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator-bundle:0.5.2-2
+        tags:
+        - 0.5.2-2
+        unique_tags:
+        - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354
+      isolated: false
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v1+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      operator_manifests:
+        custom_csv_modifications_applied: false
+        related_images:
+          created_by_osbs: true
+          pullspecs:
+          - new: registry.redhat.io/compliance/openshift-security-profiles-rhel8-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee
+            original: registry-proxy.engineering.redhat.com/rh-osbs/openshift-security-profiles-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee
+            pinned: false
+          - new: registry.redhat.io/compliance/openshift-selinuxd-rhel8@sha256:28e1588aa45b0d0283cadec42ccdc8b9febe0510f083ac9dbf2e480aa012c79d
+            original: registry-proxy.engineering.redhat.com/rh-osbs/openshift-selinuxd@sha256:28e1588aa45b0d0283cadec42ccdc8b9febe0510f083ac9dbf2e480aa012c79d
+            pinned: false
+          - new: registry.redhat.io/openshift4/ose-kube-rbac-proxy@sha256:5df77deac108236c8d3fc84bfaae9f86439557ccb9a08b9cd4fac7ce4e918485
+            original: registry.redhat.io/openshift4/ose-kube-rbac-proxy:latest
+            pinned: true
+      parent_image_builds: {}
+      parent_images:
+      - scratch
+    operator-manifests:
+      archive: operator_manifests.zip
+id: 2398004
+name: security-profiles-operator-bundle-container
+nvr: security-profiles-operator-bundle-container-0.5.2-2
+release: '2'
+version: 0.5.2

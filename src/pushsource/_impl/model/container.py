@@ -309,3 +309,11 @@ class OperatorManifestPushItem(PushItem):
     """A :class:`~pushsource.PushItem` representing an operator manifests archive
     (typically named ``operator_manifests.zip``).
     """
+
+    related_images = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
+    """Operator related images obtained from a koji build.
+
+    :type: List[str]
+    """

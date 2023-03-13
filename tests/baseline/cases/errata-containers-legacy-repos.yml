@@ -1885,6 +1885,7 @@ items:
     md5sum: null
     name: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/cluster-logging-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1899,6 +1900,7 @@ items:
     md5sum: null
     name: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/cluster-nfd-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1913,6 +1915,7 @@ items:
     md5sum: null
     name: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/elasticsearch-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1927,6 +1930,7 @@ items:
     md5sum: null
     name: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/local-storage-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1941,6 +1945,7 @@ items:
     md5sum: null
     name: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/openshift-enterprise-ansible-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1955,6 +1960,7 @@ items:
     md5sum: null
     name: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/openshift-enterprise-template-service-broker-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1969,6 +1975,7 @@ items:
     md5sum: null
     name: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/ose-metering-ansible-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip
@@ -1983,6 +1990,7 @@ items:
     md5sum: null
     name: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
+    related_images: []
     sha256sum: null
     signing_key: null
     src: {{ koji_dir }}/packages/ose-ptp-operator-metadata-container/v4.3.28.202006290519.p0.prod/1/files/operator-manifests/operator_manifests.zip

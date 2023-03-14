@@ -340,6 +340,14 @@
 <span class="k">class</span> <span class="nc">OperatorManifestPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing an operator manifests archive</span>
 <span class="sd">    (typically named ``operator_manifests.zip``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">related_images</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Operator related images obtained from a koji build.</span>
+
+<span class="sd">    :type: List[str]</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 

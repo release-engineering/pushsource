@@ -325,7 +325,7 @@ def test_get_manifest_default(
     request_headers = {}
     if accept_types:
         request_headers = {"Accept": ",".join(accept_types)}
-    requests_mock.get(
+    requests_mock.get(  # nosec B113
         "https://%s/v2/%s/manifests/%s" % (service, image, expected_tag),
         status_code=200,
         headers=headers,

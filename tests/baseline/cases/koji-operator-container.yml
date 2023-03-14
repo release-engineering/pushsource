@@ -1,0 +1,75 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "kojitest:container_build=security-profiles-operator-bundle-container-0.5.2-2"
+
+# Push items generated from above.
+items:
+- ContainerImagePushItem:
+    arch: amd64
+    build: security-profiles-operator-bundle-container-0.5.2-2
+    build_info:
+      name: security-profiles-operator-bundle-container
+      release: '2'
+      version: 0.5.2
+    dest: []
+    dest_signing_key: null
+    labels:
+      com.redhat.component: security-profiles-operator-bundle-container
+      com.redhat.delivery.appregistry: 'false'
+      com.redhat.delivery.operator.bundle: 'true'
+      com.redhat.license_terms: https://www.redhat.com/agreements
+      com.redhat.openshift.versions: v4.12
+    md5sum: null
+    name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+    origin: null
+    pull_info:
+      digest_specs:
+      - digest: sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
+        media_type: application/vnd.docker.distribution.manifest.list.v2+json
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/openshift-security-profiles-operator-bundle
+      - digest: sha256:8a51b1a98b342a03492baf6c475c331bc6d06f233f0d678e6b361192a40bbdc8
+        media_type: application/vnd.docker.distribution.manifest.v2+json
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/openshift-security-profiles-operator-bundle
+      media_types:
+      - application/vnd.docker.distribution.manifest.list.v2+json
+      - application/vnd.docker.distribution.manifest.v2+json
+      tag_specs:
+      - media_types:
+        - application/vnd.docker.distribution.manifest.list.v2+json
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/openshift-security-profiles-operator-bundle
+        tag: 0.5.2-2
+      - media_types: []
+        registry: registry-proxy.engineering.redhat.com
+        repository: rh-osbs/openshift-security-profiles-operator-bundle
+        tag: rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
+    sha256sum: null
+    signing_key: null
+    source_tags:
+    - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
+    src: {{ koji_dir }}/packages/security-profiles-operator-bundle-container/0.5.2/2/images/docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+    state: PENDING
+- OperatorManifestPushItem:
+    build: security-profiles-operator-bundle-container-0.5.2-2
+    build_info:
+      name: security-profiles-operator-bundle-container
+      release: '2'
+      version: 0.5.2
+    dest: []
+    md5sum: null
+    name: security-profiles-operator-bundle-container-0.5.2-2/operator_manifests.zip
+    origin: null
+    related_images:
+    - registry.redhat.io/compliance/openshift-security-profiles-rhel8-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee
+    - registry.redhat.io/compliance/openshift-selinuxd-rhel8@sha256:28e1588aa45b0d0283cadec42ccdc8b9febe0510f083ac9dbf2e480aa012c79d
+    - registry.redhat.io/openshift4/ose-kube-rbac-proxy@sha256:5df77deac108236c8d3fc84bfaae9f86439557ccb9a08b9cd4fac7ce4e918485
+    sha256sum: null
+    signing_key: null
+    src: {{ koji_dir }}/packages/security-profiles-operator-bundle-container/0.5.2/2/files/operator-manifests/operator_manifests.zip
+    state: PENDING

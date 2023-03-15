@@ -56,6 +56,43 @@ class AmiBillingCodes(object):
 
 
 @attr.s()
+class AmiSecurityGroup(object):
+    """Security group information to be associated with a Marketplace VM."""
+
+    from_port = attr.ib(type=int, validator=instance_of(int))
+    """If the protocol is TCP or UDP, this is the start of the port range.
+    If the protocol is ICMP or ICMPv6, this is the type number.
+    A value of -1 indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types,
+    you must specify all ICMP/ICMPv6 codes."""
+
+    ip_protocol = attr.ib(type=str, validator=instance_of_str)
+    """The IP protocol name ( tcp , udp , icmp , icmpv6 )."""
+
+    ip_ranges = attr.ib(type=list, converter=frozenlist)
+    """List of the IPv4 ranges, for example ['22.22.22.22', '33.33.33.33'].
+
+    :type: list[str]
+    """
+
+    to_port = attr.ib(type=int, validator=instance_of(int))
+    """If the protocol is ICMP or ICMPv6, this is the code.
+    A value of -1 indicates all ICMP/ICMPv6 codes.
+    If you specify all ICMP/ICMPv6 types, you must specify all ICMP/ICMPv6 codes.."""
+
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate SecurityGroup from raw dict"""
+
+        kwargs = {
+            "from_port": data["from_port"],
+            "ip_protocol": data["ip_protocol"],
+            "ip_ranges": data["ip_ranges"],
+            "to_port": data["to_port"],
+        }
+        return cls(**kwargs)
+
+
+@attr.s()
 class AmiPushItem(VMIPushItem):
     """A :class:`~pushsource.PushItem` representing an Amazon Machine Image (or "AMI").
 
@@ -99,6 +136,21 @@ class AmiPushItem(VMIPushItem):
     )
     """Billing codes associated with this image."""
 
+    release_notes = attr.ib(type=str, default=None, validator=optional_str)
+    """"Notes regarding changes in the newest version."""
+
+    usage_instructions = attr.ib(type=str, default=None, validator=optional_str)
+    """Step by step instructions for the end-user to launch, configure and access the product.
+
+    Write with a less-technical customer in mind.
+    """
+
+    recommended_instance_type = attr.ib(type=str, default=None, validator=optional_str)
+    """Recommended instance type for AMI e.g. "t2.micro", "r6a.large" """
+
+    marketplace_entity_type = attr.ib(type=str, default=None, validator=optional_str)
+    """Type of entity e.g. "AMIProduct", "SaasProduct", "ServerProduct". """
+
     image_id = attr.ib(type=str, default=None, validator=optional_str)
     """AMI Image ID used to reference the image in AWS."""
 
@@ -106,6 +158,18 @@ class AmiPushItem(VMIPushItem):
         type=bool, default=None, validator=optional(instance_of(bool))
     )
     """``True`` if the image is allowed to be released publicly (shared with group "all")."""
+
+    scanning_port = attr.ib(type=int, default=None, validator=optional(instance_of(int)))
+    """AMI scanning port, used when importing the AMI into AWS Marketplace to validate the AMI."""
+
+    user_name = attr.ib(type=str, default=None, validator=optional_str)
+    """The username used to login to the AMI. (Usually set to ec2-user)"""
+
+    version_title = attr.ib(type=str, default=None, validator=optional_str)
+    """The title given to a version. This will display in AWS Marketplace as the name of the version."""
+
+    security_groups = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    """Automatically created security groups for the product. """
 
     @classmethod
     def _from_data(cls, data):
@@ -136,6 +200,14 @@ class AmiPushItem(VMIPushItem):
             ),
             "image_id": data.get("ami") or None,
             "public_image": data.get("public_image"),
+            "release_notes": data.get("release_notes") or None,
+            "usage_instructions": data.get("usage_instructions") or None,
+            "recommended_instance_type": data.get("recommended_instance_type") or None,
+            "marketplace_entity_type": data.get("marketplace_entity_type") or None,
+            "scanning_port": data.get("scanning_port") or None,
+            "user_name": data.get("user_name") or None,
+            "version_title": data.get("version_title") or None,
+            "security_groups":[AmiSecurityGroup._from_data(security_group) for security_group in (data.get("security_groups") or []) ],
         }
 
         return cls(**kwargs)

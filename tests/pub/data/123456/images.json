@@ -32,6 +32,18 @@
       "state": "PUSHED", 
       "type": "hourly", 
       "virtualization": "hvm", 
-      "volume": "gp2"
+      "volume": "gp2",
+      "release_notes": "Fake release notes",
+      "usage_instructions": "Fake use instructions",
+      "recommended_instance_type": "t2.micro",
+      "marketplace_entity_type": "AMI",
+      "scanning_port":  10,
+      "user_name": "Fake-Username",
+      "version_title": "version title",
+      "security_groups": [
+        {"from_port":10, "ip_protocol": "udp", "ip_ranges":["8.1.8.8"], "to_port":90},
+        {"from_port":11, "ip_protocol": "tcp", "ip_ranges":["8.2.8.8"], "to_port":91}
+      ]
+
     }
 ]

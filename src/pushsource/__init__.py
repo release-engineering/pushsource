@@ -22,6 +22,7 @@ from pushsource._impl.model import (
     AmiPushItem,
     AmiRelease,
     AmiBillingCodes,
+    AmiSecurityGroup,
     VHDPushItem,
     ErratumPushItem,
     ErratumReference,

@@ -9,3 +9,6 @@ Push items: AMI
 
 .. autoclass:: pushsource.AmiBillingCodes()
    :members:
+
+.. autoclass:: pushsource.AmiSecurityGroup()
+   :members:

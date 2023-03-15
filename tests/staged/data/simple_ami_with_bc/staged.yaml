@@ -18,6 +18,20 @@ payload:
         type: ga
         variant: Fake-Variant
         version: Fake-Version
+      marketplace_entity_type: AMIProduct
+      recommended_instance_type: t2.micro
+      usage_instructions: fake usage instructions
+      release_notes: fake release notes
+      scanning_port: 1244
+      user_name: Fake-Username
+      version_title: Fake-Version-Title
+      security_groups:
+      - from_port: 0
+        ip_protocol: Fake-Protocol
+        ip_ranges:
+        - 22.22.22.22
+        - 33.33.33.33
+        to_port: 1
       root_device: /dev/sda1
       sriov_net_support: simple
       type: access

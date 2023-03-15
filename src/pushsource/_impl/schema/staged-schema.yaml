@@ -104,6 +104,66 @@ definitions:
                 type:
                 - boolean
                 - "null"
+            release_notes:
+                $ref: "#/definitions/optional_string"
+
+            usage_instructions:
+                $ref: "#/definitions/optional_string"
+
+            recommended_instance_type:
+                $ref: "#/definitions/optional_string"
+
+            marketplace_entity_type:
+                $ref: "#/definitions/optional_string"
+
+            scanning_port:
+                type:
+                    - number
+                    - "null"
+                minimum: 0
+                maximum: 65536
+
+            user_name:
+                $ref: "#/definitions/optional_string"
+            version_title:
+                $ref: "#/definitions/optional_string"
+            security_groups:
+                type:
+                    - array
+                    - "null"
+                items:
+                    type: object
+                    properties:
+                        ip_protocol:
+                            type: string
+                        ip_ranges:
+                            type: array
+                            items:
+                                type: string
+                    if:
+                        properties:
+                            ip_protocol:
+                                enum: ["icmp", "icmpv6"]
+                    then:
+                        properties:
+                            from_port:
+                                type: number
+                                minimum: -1
+                                maximum: 255
+                            to_port:
+                                type: number
+                                minimum: -1
+                                maximum: 255
+                    else:
+                        properties:
+                            from_port:
+                                type: number
+                                minimum: 0
+                                maximum: 65536
+                            to_port:
+                                type: number
+                                minimum: 0
+                                maximum: 65536
 
         required:
         - release
@@ -244,6 +304,7 @@ definitions:
         required:
         - name
         - codes
+
 
 ###############################################################################
 #  Main schema

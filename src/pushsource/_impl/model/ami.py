@@ -159,7 +159,9 @@ class AmiPushItem(VMIPushItem):
     )
     """``True`` if the image is allowed to be released publicly (shared with group "all")."""
 
-    scanning_port = attr.ib(type=int, default=None, validator=optional(instance_of(int)))
+    scanning_port = attr.ib(
+        type=int, default=None, validator=optional(instance_of(int))
+    )
     """AMI scanning port, used when importing the AMI into AWS Marketplace to validate the AMI."""
 
     user_name = attr.ib(type=str, default=None, validator=optional_str)
@@ -168,7 +170,9 @@ class AmiPushItem(VMIPushItem):
     version_title = attr.ib(type=str, default=None, validator=optional_str)
     """The title given to a version. This will display in AWS Marketplace as the name of the version."""
 
-    security_groups = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    security_groups = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
     """Automatically created security groups for the product. """
 
     @classmethod
@@ -207,7 +211,10 @@ class AmiPushItem(VMIPushItem):
             "scanning_port": data.get("scanning_port") or None,
             "user_name": data.get("user_name") or None,
             "version_title": data.get("version_title") or None,
-            "security_groups":[AmiSecurityGroup._from_data(security_group) for security_group in (data.get("security_groups") or []) ],
+            "security_groups": [
+                AmiSecurityGroup._from_data(security_group)
+                for security_group in (data.get("security_groups") or [])
+            ],
         }
 
         return cls(**kwargs)

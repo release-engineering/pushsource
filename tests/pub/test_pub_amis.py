@@ -75,10 +75,10 @@ def test_get_ami_push_items_single_task(requests_mock):
             ena_support=True,
             billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
             image_id="ami-fake-123456",
-            release_notes= "Fake release notes",
-            usage_instructions= "Fake use instructions",
-            recommended_instance_type= "t2.micro",
-            marketplace_entity_type= "AMI",
+            release_notes="Fake release notes",
+            usage_instructions="Fake use instructions",
+            recommended_instance_type="t2.micro",
+            marketplace_entity_type="AMI",
             scanning_port=10,
             user_name="Fake-Username",
             version_title="version title",
@@ -181,10 +181,10 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             ena_support=True,
             billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
             image_id="ami-fake-123456",
-            release_notes= "Fake release notes",
-            usage_instructions= "Fake use instructions",
-            recommended_instance_type= "t2.micro",
-            marketplace_entity_type= "AMI",
+            release_notes="Fake release notes",
+            usage_instructions="Fake use instructions",
+            recommended_instance_type="t2.micro",
+            marketplace_entity_type="AMI",
             scanning_port=10,
             user_name="Fake-Username",
             version_title="version title",
@@ -229,8 +229,14 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             ena_support=True,
             billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
             image_id="ami-fake-200-A",
-            security_groups=[AmiSecurityGroup(from_port=-1, ip_protocol="icmpv6", ip_ranges=["255.255.255.255"], to_port=255)]
-
+            security_groups=[
+                AmiSecurityGroup(
+                    from_port=-1,
+                    ip_protocol="icmpv6",
+                    ip_ranges=["255.255.255.255"],
+                    to_port=255,
+                )
+            ],
         ),
         AmiPushItem(
             name="RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2",
@@ -264,8 +270,11 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             ena_support=True,
             billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
             image_id="ami-fake-200-B",
-            security_groups=[AmiSecurityGroup(from_port=1, ip_protocol="icmp", ip_ranges=["1.1.1.1"], to_port=10)]
-
+            security_groups=[
+                AmiSecurityGroup(
+                    from_port=1, ip_protocol="icmp", ip_ranges=["1.1.1.1"], to_port=10
+                )
+            ],
         ),
     ]
 

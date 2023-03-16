@@ -17,10 +17,12 @@ items:
     - dest1
     ena_support: true
     image_id: null
+    marketplace_entity_type: null
     md5sum: null
     name: fake-image.raw
     origin: {{ src_dir }}/tests/staged/data/simple_ami
     public_image: true
+    recommended_instance_type: null
     region: cn-north-1
     release:
       arch: x86_64
@@ -32,12 +34,18 @@ items:
       type: ga
       variant: Fake-Variant
       version: Fake-Version
+    release_notes: null
     root_device: /dev/sda1
+    scanning_port: null
+    security_groups: []
     sha256sum: null
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_ami/dest1/AWS_IMAGES/fake-image.raw
     sriov_net_support: simple
     state: PENDING
     type: access
+    usage_instructions: null
+    user_name: null
+    version_title: null
     virtualization: hvm
     volume: gp2

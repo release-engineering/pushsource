@@ -32,7 +32,9 @@
     "state": "PUSHED", 
     "type": "hourly", 
     "virtualization": "hvm", 
-    "volume": "gp2"
+    "volume": "gp2",
+    "security_groups": [{"from_port":-1, "ip_protocol": "icmpv6", "ip_ranges":["255.255.255.255"], "to_port":255}]
+
   }, 
   {
     "ami": "ami-fake-200-B", 
@@ -67,6 +69,8 @@
     "state": "PUSHED", 
     "type": "hourly", 
     "virtualization": "hvm", 
-    "volume": "gp2"
+    "volume": "gp2",
+    "security_groups": [{"from_port":1, "ip_protocol": "icmp", "ip_ranges":["1.1.1.1"], "to_port":10}]
+
   }
 ]

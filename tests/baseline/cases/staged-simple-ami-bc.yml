@@ -21,10 +21,12 @@ items:
     - dest1
     ena_support: true
     image_id: null
+    marketplace_entity_type: AMIProduct
     md5sum: null
     name: fake-image.raw
     origin: {{ src_dir }}/tests/staged/data/simple_ami_with_bc
     public_image: true
+    recommended_instance_type: t2.micro
     region: cn-north-1
     release:
       arch: x86_64
@@ -36,12 +38,24 @@ items:
       type: ga
       variant: Fake-Variant
       version: Fake-Version
+    release_notes: fake release notes
     root_device: /dev/sda1
+    scanning_port: 1244
+    security_groups:
+    - from_port: 0
+      ip_protocol: Fake-Protocol
+      ip_ranges:
+      - 22.22.22.22
+      - 33.33.33.33
+      to_port: 1
     sha256sum: null
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_ami_with_bc/dest1/AWS_IMAGES/fake-image.raw
     sriov_net_support: simple
     state: PENDING
     type: access
+    usage_instructions: fake usage instructions
+    user_name: Fake-Username
+    version_title: Fake-Version-Title
     virtualization: hvm
     volume: gp2

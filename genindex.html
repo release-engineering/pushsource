@@ -88,6 +88,8 @@
 </li>
       <li><a href="model/ami.html#pushsource.AmiRelease">AmiRelease (class in pushsource)</a>
 </li>
+      <li><a href="model/ami.html#pushsource.AmiSecurityGroup">AmiSecurityGroup (class in pushsource)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/containers.html#pushsource.ContainerImagePushItem.arch">arch (pushsource.ContainerImagePushItem attribute)</a>
@@ -214,11 +216,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/errata.html#pushsource.ErratumPackage.filename">filename (pushsource.ErratumPackage attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/files.html#pushsource.FilePushItem">FilePushItem (class in pushsource)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/errata.html#pushsource.ErratumPushItem.from_">from_ (pushsource.ErratumPushItem attribute)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiSecurityGroup.from_port">from_port (pushsource.AmiSecurityGroup attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -250,9 +254,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/errata.html#pushsource.ErratumReference.id">id (pushsource.ErratumReference attribute)</a>
 </li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.image_id">image_id (pushsource.AmiPushItem attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="model/ami.html#pushsource.AmiPushItem.image_id">image_id (pushsource.AmiPushItem attribute)</a>
+      <li><a href="model/ami.html#pushsource.AmiSecurityGroup.ip_protocol">ip_protocol (pushsource.AmiSecurityGroup attribute)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiSecurityGroup.ip_ranges">ip_ranges (pushsource.AmiSecurityGroup attribute)</a>
 </li>
       <li><a href="model/errata.html#pushsource.ErratumPushItem.issued">issued (pushsource.ErratumPushItem attribute)</a>
 </li>
@@ -286,6 +294,8 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.marketplace_entity_type">marketplace_entity_type (pushsource.AmiPushItem attribute)</a>
+</li>
       <li><a href="model/errata.html#pushsource.ErratumPackage.md5sum">md5sum (pushsource.ErratumPackage attribute)</a>
 
       <ul>
@@ -380,6 +390,8 @@
         <li><a href="model/errata.html#pushsource.ErratumPushItem.reboot_suggested">(pushsource.ErratumPushItem attribute)</a>
 </li>
       </ul></li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.recommended_instance_type">recommended_instance_type (pushsource.AmiPushItem attribute)</a>
+</li>
       <li><a href="model/azure.html#pushsource.VHDPushItem.recommended_sizes">recommended_sizes (pushsource.VHDPushItem attribute)</a>
 </li>
       <li><a href="model/errata.html#pushsource.ErratumPushItem.references">references (pushsource.ErratumPushItem attribute)</a>
@@ -406,6 +418,8 @@
         <li><a href="model/vmi.html#pushsource.VMIPushItem.release">(pushsource.VMIPushItem attribute)</a>
 </li>
       </ul></li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.release_notes">release_notes (pushsource.AmiPushItem attribute)</a>
+</li>
       <li><a href="model/containers.html#pushsource.ContainerImagePullSpec.repository">repository (pushsource.ContainerImagePullSpec attribute)</a>
 </li>
       <li><a href="sources/base.html#pushsource.Source.reset">reset() (pushsource.Source class method)</a>
@@ -425,6 +439,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/azure.html#pushsource.VHDPushItem.sas_uri">sas_uri (pushsource.VHDPushItem attribute)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.scanning_port">scanning_port (pushsource.AmiPushItem attribute)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.security_groups">security_groups (pushsource.AmiPushItem attribute)</a>
 </li>
       <li><a href="model/errata.html#pushsource.ErratumPushItem.severity">severity (pushsource.ErratumPushItem attribute)</a>
 </li>
@@ -446,10 +464,10 @@
 </li>
       <li><a href="sources/base.html#pushsource.Source">Source (class in pushsource)</a>
 </li>
-      <li><a href="model/containers.html#pushsource.ContainerImagePushItem.source_tags">source_tags (pushsource.ContainerImagePushItem attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/containers.html#pushsource.ContainerImagePushItem.source_tags">source_tags (pushsource.ContainerImagePushItem attribute)</a>
+</li>
       <li><a href="model/containers.html#pushsource.SourceContainerImagePushItem">SourceContainerImagePushItem (class in pushsource)</a>
 </li>
       <li><a href="sources/base.html#pushsource.SourceUrlError">SourceUrlError (class in pushsource)</a>
@@ -492,6 +510,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/ami.html#pushsource.AmiSecurityGroup.to_port">to_port (pushsource.AmiSecurityGroup attribute)</a>
+</li>
       <li><a href="model/ami.html#pushsource.AmiPushItem.type">type (pushsource.AmiPushItem attribute)</a>
 
       <ul>
@@ -509,6 +529,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/errata.html#pushsource.ErratumPushItem.updated">updated (pushsource.ErratumPushItem attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.usage_instructions">usage_instructions (pushsource.AmiPushItem attribute)</a>
+</li>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.user_name">user_name (pushsource.AmiPushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -534,6 +560,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model/ami.html#pushsource.AmiPushItem.version_title">version_title (pushsource.AmiPushItem attribute)</a>
+</li>
       <li><a href="model/azure.html#pushsource.VHDPushItem">VHDPushItem (class in pushsource)</a>
 </li>
       <li><a href="model/ami.html#pushsource.AmiPushItem.virtualization">virtualization (pushsource.AmiPushItem attribute)</a>

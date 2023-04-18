@@ -1,0 +1,46 @@
+advisory_id: RHSA-2022:78146
+cdn_docker_file_list: {}
+cdn_file_list: {}
+cdn_metadata:
+  appliance_image_list:
+  - rhel-ec2-8.7-1: {}
+  cdn_repo:
+  - rhel-8-for-x86_64-appstream-rpms__8
+  description: A new Red Hat image for EC2 is now available
+  from: release-engineering@redhat.com
+  id: RHSA-2022:78146
+  issued: 2022-11-04 10:53:56 UTC
+  pkglist:
+  - name: RHSA-2022:78146
+    packages: []
+    short: ''
+  pulp_user_metadata:
+    content_types:
+    - raw-xz
+  pushcount: '1'
+  reboot_suggested: false
+  references:
+  - href: https://access.redhat.com/errata/RHSA-2022:78146
+    id: RHSA-2022:78146
+    title: RHSA-2022:78146
+    type: self
+  - href: https://bugzilla.redhat.com/show_bug.cgi?id=2003892
+    id: '2003892'
+    title: Rebuild RHEL 8.7 image for EC2
+    type: bugzilla
+  - href: https://access.redhat.com/security/updates/classification/#moderate
+    id: classification
+    title: moderate
+    type: other
+  release: '0'
+  rights: Copyright 2022 Red Hat Inc
+  severity: Moderate
+  solution: A new pre-installed cloud image is available in AWS. For your convenience,
+    you can launch a new image instead of applying updates to the old one.
+  status: final
+  summary: A new Red Hat image for EC2 is now available
+  title: 'Moderate: Moderate:'
+  type: security
+  updated: 2022-11-04 10:53:56 UTC
+  version: '1'
+ftp_paths: {}

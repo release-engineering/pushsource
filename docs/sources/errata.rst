@@ -9,6 +9,7 @@ Supported content types:
 * RPMs
 * Container images
 * Advisories
+* Virtual machine images
 
 
 errata source URLs

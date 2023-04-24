@@ -193,6 +193,12 @@ class ErrataSource(Source):
             erratum, raw.advisory_cdn_docker_file_list
         )
 
+        appliance_image_list = raw.advisory_cdn_metadata.get("appliance_image_list")
+
+        items = items + self._push_items_from_appliance_image_list(
+            erratum, appliance_image_list
+        )
+
         return [erratum] + items
 
     def _push_items_from_container_manifests(self, erratum, docker_file_list):
@@ -244,6 +250,20 @@ class ErrataSource(Source):
 
                 item = attr.evolve(item, origin=erratum.name)
                 out.append(item)
+
+        return out
+
+    def _push_items_from_appliance_image_list(self, erratum, appliance_image_list):
+        out = []
+        if appliance_image_list:
+            nvr_list = []
+            for image in appliance_image_list:
+                nvr_list.extend([nvr for nvr in image.keys()])
+
+            with self._koji_source(vmi_build=nvr_list) as koji_source:
+                for push_item in koji_source:
+                    push_item = attr.evolve(push_item, origin=erratum.name)
+                    out.append(push_item)
 
         return out
 

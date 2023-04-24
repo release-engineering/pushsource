@@ -1,0 +1,37 @@
+advisory_id: RHBA-2022:78522
+cdn_docker_file_list: {}
+cdn_file_list: {}
+cdn_metadata:
+  appliance_image_list:
+  - rhel-azure-8.7-20221115.sp.1: {}
+  cdn_repo: []
+  description: A new Red Hat image for Azure is now available.
+  from: release-engineering@redhat.com
+  id: RHBA-2022:78522
+  issued: 2022-11-15 17:36:59 UTC
+  pkglist:
+  - name: RHBA-2022:78522
+    packages: []
+    short: ''
+  pulp_user_metadata:
+    content_types:
+    - vhd-compressed
+  pushcount: '1'
+  reboot_suggested: false
+  references:
+  - href: https://access.redhat.com/errata/RHBA-2022:78522
+    id: RHBA-2022:78522
+    title: RHBA-2022:78522
+    type: self
+  release: '0'
+  rights: Copyright 2022 Red Hat Inc
+  severity: None
+  solution: A new pre-installed cloud image is available in Azure. For your convenience,
+    you can launch a new image instead of applying updates to the old one.
+  status: final
+  summary: A new Red Hat image for Azure is now available.
+  title: Testing errata advisory with VHD image (Azure)
+  type: bugfix
+  updated: 2022-11-15 17:36:59 UTC
+  version: '1'
+ftp_paths: {}

@@ -93,8 +93,9 @@ class ContainerArchiveHelper(object):
         ################## List pull specs - from build #################################
         build_raw_specs = self.build_index.get("pull") or {}
         build_digests = self.build_index.get("digests") or {}
+        unique_tags = self.build_index.get("unique_tags") or []
         list_digest_specs = get_digest_specs(build_raw_specs, build_digests)
-        list_tag_specs = get_tag_specs(build_raw_specs)
+        list_tag_specs = get_tag_specs(build_raw_specs, unique_tags)
 
         # Metadata does not explicitly tell us the media type per tag, but these tag
         # specs are known to be for manifest lists. We'll sanity check that this type
@@ -114,8 +115,16 @@ class ContainerArchiveHelper(object):
         )
 
 
-def get_tag_specs(raw_specs):
-    return [ContainerImagePullSpec._from_str(s) for s in raw_specs if "@" not in s]
+def get_tag_specs(raw_specs, unique_tags=None):
+    out = []
+    for raw_spec in raw_specs:
+        if "@" not in raw_spec:
+            # Replace the floating tag in spec with a unique tag
+            if unique_tags:
+                raw_spec = "{0}:{1}".format(raw_spec.split(":")[0], unique_tags[0])
+            spec = ContainerImagePullSpec._from_str(raw_spec)
+            out.append(spec)
+    return out
 
 
 def get_digest_specs(raw_specs, digests_map):

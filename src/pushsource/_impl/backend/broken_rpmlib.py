@@ -4,7 +4,7 @@
 # importer is expected to put a more specific cause here.
 CAUSE = RuntimeError("unknown error")
 
-MESSAGE = "kobo.rpmlib is not available (consider 'pip install rpm-py-installer')"
+MESSAGE = "kobo.rpmlib is not available (consider 'pip install rpmdyn')"
 
 
 def not_available(*_args, **_kwargs):

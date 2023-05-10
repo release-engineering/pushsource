@@ -46,7 +46,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-56520-20200707074906
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
@@ -95,7 +95,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-56520-20200707074906
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
@@ -144,7 +144,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-56520-20200707074906
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
@@ -193,7 +193,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-56520-20200707074906
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-logging-operator-metadata
@@ -242,7 +242,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-65305-20200707075731
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
@@ -291,7 +291,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-65305-20200707075731
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
@@ -340,7 +340,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-65305-20200707075731
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
@@ -389,7 +389,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-65305-20200707075731
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-cluster-nfd-operator-metadata
@@ -438,7 +438,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-57368-20200707075038
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
@@ -487,7 +487,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-57368-20200707075038
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
@@ -536,7 +536,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-57368-20200707075038
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
@@ -585,7 +585,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-57368-20200707075038
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-elasticsearch-operator-metadata
@@ -634,7 +634,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-33656-20200707072400
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
@@ -683,7 +683,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-33656-20200707072400
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
@@ -732,7 +732,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-33656-20200707072400
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
@@ -781,7 +781,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-33656-20200707072400
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-local-storage-operator-metadata
@@ -831,7 +831,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-52606-20200707080252
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
@@ -881,7 +881,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-52606-20200707080252
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
@@ -931,7 +931,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-52606-20200707080252
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
@@ -981,7 +981,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-52606-20200707080252
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-ansible-service-broker-operator-metadata
@@ -1030,7 +1030,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-98159-20200707075510
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
@@ -1079,7 +1079,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-98159-20200707075510
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
@@ -1128,7 +1128,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-98159-20200707075510
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
@@ -1177,7 +1177,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-98159-20200707075510
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-openshift-enterprise-template-service-broker-operator-metadata
@@ -1226,7 +1226,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-80281-20200707073911
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
@@ -1275,7 +1275,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-80281-20200707073911
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
@@ -1324,7 +1324,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-80281-20200707073911
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
@@ -1373,7 +1373,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-80281-20200707073911
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ose-metering-ansible-operator-metadata
@@ -1422,7 +1422,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-15503-20200707071931
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
@@ -1471,7 +1471,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-15503-20200707071931
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
@@ -1520,7 +1520,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-15503-20200707071931
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
@@ -1569,7 +1569,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-15503-20200707071931
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-ptp-operator-metadata
@@ -1618,7 +1618,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-88311-20200707073051
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
@@ -1667,7 +1667,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-88311-20200707073051
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
@@ -1716,7 +1716,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-88311-20200707073051
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
@@ -1765,7 +1765,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata
-        tag: v4.3.28.202006290519.p0.prod-1
+        tag: rhaos-4.3-rhel-7-candidate-88311-20200707073051
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-ose-sriov-network-operator-metadata

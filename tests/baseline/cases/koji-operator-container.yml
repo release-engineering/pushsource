@@ -44,7 +44,7 @@ items:
         - application/vnd.docker.distribution.manifest.list.v2+json
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-security-profiles-operator-bundle
-        tag: 0.5.2-2
+        tag: rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354
       - media_types: []
         registry: registry-proxy.engineering.redhat.com
         repository: rh-osbs/openshift-security-profiles-operator-bundle

@@ -7,11 +7,13 @@ from frozenlist2 import frozenlist
 from .. import compat_attr as attr
 from .cache import TinyCache
 from .conv import (
+    convert_maybe,
     md5str,
     sha256str,
     upper_if_str,
     instance_of_str,
     instance_of,
+    optional,
     optional_str,
 )
 
@@ -41,6 +43,14 @@ class KojiBuildInfo(object):
 
     Example: in "kf5-kio-5.83.0-2.el8.next", the release is "2.el8.next".
     """
+
+    id = attr.ib(
+        type=int,
+        default=None,
+        validator=optional(instance_of(int)),
+        converter=convert_maybe(int),
+    )
+    """Optional attribute to store the 'build_id' from Koji."""
 
     @classmethod
     def _from_nvr(cls, nvr_str):

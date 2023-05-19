@@ -496,6 +496,7 @@ class KojiSource(Source):
                     # brew builds whose NVR does not match their (n, v, r)
                     # in the build data and it's quite tough to fix that now.
                     build_info=KojiBuildInfo(
+                        id=int(build_id),
                         name=meta["name"],
                         version=meta["version"],
                         release=meta["release"],
@@ -607,6 +608,7 @@ class KojiSource(Source):
                     src=item_src,
                     build=nvr,
                     build_info=KojiBuildInfo(
+                        id=int(build_id),
                         name=meta["name"],
                         version=meta["version"],
                         release=meta["release"],

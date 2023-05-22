@@ -12,6 +12,7 @@ items:
     arch: amd64
     build: security-profiles-operator-bundle-container-0.5.2-2
     build_info:
+      id: 2398004
       name: security-profiles-operator-bundle-container
       release: '2'
       version: 0.5.2
@@ -58,6 +59,7 @@ items:
 - OperatorManifestPushItem:
     build: security-profiles-operator-bundle-container-0.5.2-2
     build_info:
+      id: null
       name: security-profiles-operator-bundle-container
       release: '2'
       version: 0.5.2

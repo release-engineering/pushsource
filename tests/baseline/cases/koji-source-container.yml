@@ -12,6 +12,7 @@ items:
     arch: amd64
     build: openstack-swift-container-container-source-16.1.6-6.1
     build_info:
+      id: 1640546
       name: openstack-swift-container-container-source
       release: '6.1'
       version: 16.1.6

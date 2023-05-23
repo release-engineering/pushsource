@@ -87,6 +87,7 @@ def test_errata_ami_via_koji(fake_errata_tool, fake_koji, koji_dir):
                 name="rhel",
                 version="8.7",
                 release="1",
+                id="1234",
             ),
             signing_key=None,
             release=AmiRelease(
@@ -195,6 +196,7 @@ def test_errata_vhd_via_koji(fake_errata_tool, fake_koji, koji_dir):
                 name="rhel",
                 version="8.7",
                 release="1",
+                id="1234",
             ),
             signing_key=None,
             release=VMIRelease(

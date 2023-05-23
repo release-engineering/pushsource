@@ -9,6 +9,7 @@ from pushsource import (
     VMIPushItem,
     AmiRelease,
     VMIRelease,
+    KojiBuildInfo,
 )
 
 
@@ -160,6 +161,9 @@ def test_koji_vmis(fake_koji, koji_dir):
             sha256sum=None,
             origin=None,
             build=nvr,
+            build_info=KojiBuildInfo(
+                name=name, version=version, release=release, id=1234
+            ),
             signing_key=None,
             release=rel_obj,
         )
@@ -223,6 +227,9 @@ def test_koji_vmi_compound_product_name(fake_koji, koji_dir):
         sha256sum=None,
         origin=None,
         build="foobuild-azure-1.0-1",
+        build_info=KojiBuildInfo(
+            name="foobuild-azure", version="1.0", release="1", id=1234
+        ),
         signing_key=None,
         release=rel_obj,
     )

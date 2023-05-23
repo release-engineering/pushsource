@@ -38,11 +38,13 @@
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">.cache</span> <span class="kn">import</span> <span class="n">TinyCache</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">convert_maybe</span><span class="p">,</span>
     <span class="n">md5str</span><span class="p">,</span>
     <span class="n">sha256str</span><span class="p">,</span>
     <span class="n">upper_if_str</span><span class="p">,</span>
     <span class="n">instance_of_str</span><span class="p">,</span>
     <span class="n">instance_of</span><span class="p">,</span>
+    <span class="n">optional</span><span class="p">,</span>
     <span class="n">optional_str</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -72,6 +74,14 @@
 
 <span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the release is &quot;2.el8.next&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">int</span><span class="p">)),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">convert_maybe</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional attribute to store the &#39;build_id&#39; from Koji.&quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_from_nvr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nvr_str</span><span class="p">):</span>
@@ -363,7 +373,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

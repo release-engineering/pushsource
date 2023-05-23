@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Push items &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -256,6 +256,7 @@ the item does not reference a file).</p>
 <dd><p>A representation of a koji build.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.id" title="pushsource.KojiBuildInfo.id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">id()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.name" title="pushsource.KojiBuildInfo.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.release" title="pushsource.KojiBuildInfo.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.version" title="pushsource.KojiBuildInfo.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
@@ -292,6 +293,17 @@ the item does not reference a file).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pushsource.KojiBuildInfo.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional attribute to store the ‘build_id’ from Koji.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -397,7 +409,7 @@ the item does not reference a file).</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

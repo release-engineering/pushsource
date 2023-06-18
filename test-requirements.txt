@@ -263,9 +263,9 @@ exceptiongroup==1.1.1 \
     --hash=sha256:232c37c63e4f682982c8b6459f33a8981039e5fb8756b2074364e5055c498c9e \
     --hash=sha256:d484c3090ba2889ae2928419117447a14daf3c1231d5e30d0aae34f354f01785
     # via pytest
-filelock==3.12.1 \
-    --hash=sha256:42f1e4ff2b497311213d61ad7aac5fed9050608e5309573f101eefa94143134a \
-    --hash=sha256:82b1f7da46f0ae42abf1bc78e548667f484ac59d2bcec38c713cee7e2eb51e83
+filelock==3.12.2 \
+    --hash=sha256:002740518d8aa59a26b0c76e10fb8c6e15eae825d34b6fdf670333fd7b938d81 \
+    --hash=sha256:cbb791cdea2a72f23da6ac5b5269ab0a0d161e9ef0100e653b69049a7706d1ec
     # via virtualenv
 frozendict==2.3.8 ; python_version >= "3.6" \
     --hash=sha256:0bc4767e2f83db5b701c787e22380296977368b0c57e485ca71b2eedfa11c4a3 \
@@ -433,9 +433,9 @@ lazy-object-proxy==1.9.0 \
     --hash=sha256:f2457189d8257dd41ae9b434ba33298aec198e30adf2dcdaaa3a28b9994f6adb \
     --hash=sha256:f699ac1c768270c9e384e4cbd268d6e67aebcfae6cd623b4d7c3bfde5a35db59
     # via astroid
-markdown-it-py==2.2.0 \
-    --hash=sha256:5a35f8d1870171d9acc47b99612dc146129b631baf04970128b568f190d0cc30 \
-    --hash=sha256:7c9a5e412688bc771c67432cbfebcdd686c93ce6484913dccf06cb5a0bea35a1
+markdown-it-py==3.0.0 \
+    --hash=sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1 \
+    --hash=sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb
     # via rich
 markupsafe==2.1.3 \
     --hash=sha256:05fb21170423db021895e1ea1e1f3ab3adb85d1c2333cbc2310f2a26bc77272e \
@@ -526,9 +526,9 @@ pidiff==1.7.0 \
     --hash=sha256:8c586a117618d996861607831794c7e565c82e43c68451d83ecbbacff5defdf4 \
     --hash=sha256:d34450d317a6e7dc4e3f91f305737b8208d720328ca625ba0dc6584c9c7edec6
     # via -r test-requirements.in
-platformdirs==3.5.3 \
-    --hash=sha256:0ade98a4895e87dc51d47151f7d2ec290365a585151d97b4d8d6312ed6132fed \
-    --hash=sha256:e48fabd87db8f3a7df7150a4a5ea22c546ee8bc39bc2473244730d4b56d2cc4e
+platformdirs==3.6.0 \
+    --hash=sha256:57e28820ca8094678b807ff529196506d7a21e17156cb1cddb3e74cebce54640 \
+    --hash=sha256:ffa199e3fbab8365778c4a10e1fbf1b9cd50707de826eb304b50e57ec0cc8d38
     # via
     #   pylint
     #   virtualenv
@@ -536,9 +536,9 @@ pluggy==1.0.0 \
     --hash=sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159 \
     --hash=sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3
     # via pytest
-pre-commit==3.3.2 \
-    --hash=sha256:66e37bec2d882de1f17f88075047ef8962581f83c234ac08da21a0c58953d1f0 \
-    --hash=sha256:8056bc52181efadf4aac792b1f4f255dfd2fb5a350ded7335d251a68561e8cb6
+pre-commit==3.3.3 \
+    --hash=sha256:10badb65d6a38caff29703362271d7dca483d01da88f9d7e05d0b97171c136cb \
+    --hash=sha256:a2256f489cd913d575c145132ae196fe335da32d91a8294b7afe6622335dd023
     # via -r test-requirements.in
 pushcollector==1.3.0 \
     --hash=sha256:18281fcd4247ca8b668c25348bbc2f9cc032912cecc7037824a74ad8adcbb1c3 \
@@ -673,17 +673,17 @@ requests-mock==1.11.0 \
     --hash=sha256:ef10b572b489a5f28e09b708697208c4a3b2b89ef80a9f01584340ea357ec3c4 \
     --hash=sha256:f7fae383f228633f6bececebdab236c478ace2284d6292c6e7e2867b9ab74d15
     # via -r test-requirements.in
-rich==13.4.1 \
-    --hash=sha256:76f6b65ea7e5c5d924ba80e322231d7cb5b5981aa60bfc1e694f1bc097fe6fe1 \
-    --hash=sha256:d204aadb50b936bf6b1a695385429d192bc1fdaf3e8b907e8e26f4c4e4b5bf75
+rich==13.4.2 \
+    --hash=sha256:8f87bc7ee54675732fa66a05ebfe489e27264caeeff3728c945d25971b6485ec \
+    --hash=sha256:d653d6bccede5844304c605d5aac802c7cf9621efd700b46c7ec2b51ea914898
     # via bandit
 rpmdyn==2023.5.9 \
     --hash=sha256:9d9857f536a8aa7486e8721c41e638a003512f60132eb1906248ecd8b88da966 \
     --hash=sha256:bcad7dbea07483ce89b76464c3e79c7c153fc8b2d2b78657bd9983b12513a650
     # via -r test-requirements.in
-semver==3.0.0 \
-    --hash=sha256:94df43924c4521ec7d307fc86da1531db6c2c33d9d5cdc3e64cca0eb68569269 \
-    --hash=sha256:ab4f69fb1d1ecfb5d81f96411403d7a611fa788c45d252cf5b408025df3ab6ce
+semver==3.0.1 \
+    --hash=sha256:2a23844ba1647362c7490fe3995a86e097bb590d16f0f32dfc383008f19e4cdf \
+    --hash=sha256:9ec78c5447883c67b97f98c3b6212796708191d22e4ad30f4570f840171cbce1
     # via pidiff
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
@@ -756,9 +756,9 @@ urllib3==2.0.3 \
     --hash=sha256:48e7fafa40319d358848e1bc6809b208340fafe2096f1725d05d67443d0483d1 \
     --hash=sha256:bee28b5e56addb8226c96f7f13ac28cb4c301dd5ea8a6ca179c0b9835e032825
     # via requests
-virtualenv==20.23.0 \
-    --hash=sha256:6abec7670e5802a528357fdc75b26b9f57d5d92f29c5462ba0fbe45feacc685e \
-    --hash=sha256:a85caa554ced0c0afbd0d638e7e2d7b5f92d23478d05d17a76daeac8f279f924
+virtualenv==20.23.1 \
+    --hash=sha256:34da10f14fea9be20e0fd7f04aba9732f84e593dac291b757ce42e3368a39419 \
+    --hash=sha256:8ff19a38c1021c742148edc4f81cb43d7f8c6816d2ede2ab72af5b84c749ade1
     # via pre-commit
 virtualenv-api==2.1.18 \
     --hash=sha256:2115cceaeab27faf2909780c442f4ee7a33fda9a49fe8255967432290a0557af \

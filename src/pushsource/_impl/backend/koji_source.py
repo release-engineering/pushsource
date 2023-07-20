@@ -472,7 +472,6 @@ class KojiSource(Source):
         out = []
 
         for archive in image_archives:
-
             helper = ContainerArchiveHelper(meta, archive)
 
             klass = ContainerImagePushItem

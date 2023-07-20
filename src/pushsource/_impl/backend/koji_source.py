@@ -472,8 +472,6 @@ class KojiSource(Source):
         out = []
 
         for archive in image_archives:
-            path = self._pathinfo.typedir(meta, archive["btype"])
-            item_src = os.path.join(path, archive["filename"])
 
             helper = ContainerArchiveHelper(meta, archive)
 
@@ -488,7 +486,6 @@ class KojiSource(Source):
                     # the metadata from atomic-reactor.
                     name=archive["filename"],
                     dest=self._dest,
-                    src=item_src,
                     build=nvr,
                     # Note, we should be able to use the default KojiBuild
                     # construction from NVR here. The reason we don't is that
@@ -647,14 +644,9 @@ class KojiSource(Source):
             ) % (nvr, archive_name)
             raise ValueError(message)
 
-        archive = operator_archive[0]
-        path = self._pathinfo.typedir(meta, archive["btype"])
-        item_src = os.path.join(path, archive["filename"])
-
         return OperatorManifestPushItem(
             name=os.path.join(nvr, archive_name),
             dest=self._dest,
-            src=item_src,
             build=nvr,
             related_images=operator_related_images,
         )

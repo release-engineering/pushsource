@@ -39,5 +39,5 @@ items:
     signing_key: null
     source_tags:
     - rhos-16.1-rhel-8-containers-candidate-83243-20210621202300-x86_64
-    src: {{ koji_dir }}/packages/openstack-swift-container-container-source/16.1.6/6.1/images/docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
+    src: null
     state: PENDING

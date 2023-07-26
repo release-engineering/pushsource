@@ -54,7 +54,7 @@ items:
     signing_key: null
     source_tags:
     - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
-    src: {{ koji_dir }}/packages/security-profiles-operator-bundle-container/0.5.2/2/images/docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+    src: null
     state: PENDING
 - OperatorManifestPushItem:
     build: security-profiles-operator-bundle-container-0.5.2-2
@@ -73,5 +73,5 @@ items:
     - registry.redhat.io/openshift4/ose-kube-rbac-proxy@sha256:5df77deac108236c8d3fc84bfaae9f86439557ccb9a08b9cd4fac7ce4e918485
     sha256sum: null
     signing_key: null
-    src: {{ koji_dir }}/packages/security-profiles-operator-bundle-container/0.5.2/2/files/operator-manifests/operator_manifests.zip
+    src: null
     state: PENDING

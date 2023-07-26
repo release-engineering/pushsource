@@ -503,9 +503,6 @@
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">image_archives</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
-            <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
-
             <span class="n">helper</span> <span class="o">=</span> <span class="n">ContainerArchiveHelper</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
 
             <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImagePushItem</span>
@@ -519,7 +516,6 @@
                     <span class="c1"># the metadata from atomic-reactor.</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
                     <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
-                    <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
                     <span class="c1"># Note, we should be able to use the default KojiBuild</span>
                     <span class="c1"># construction from NVR here. The reason we don&#39;t is that</span>
@@ -678,14 +674,9 @@
             <span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">archive_name</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="n">archive</span> <span class="o">=</span> <span class="n">operator_archive</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
-        <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
-
         <span class="k">return</span> <span class="n">OperatorManifestPushItem</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">archive_name</span><span class="p">),</span>
             <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
-            <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
             <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
             <span class="n">related_images</span><span class="o">=</span><span class="n">operator_related_images</span><span class="p">,</span>
         <span class="p">)</span>

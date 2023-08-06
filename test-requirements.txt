@@ -377,9 +377,9 @@ jinja2==3.1.2 \
     # via
     #   -r test-requirements.in
     #   sphinx
-jsonschema==4.18.4 \
-    --hash=sha256:971be834317c22daaa9132340a51c01b50910724082c2c1a2ac87eeec153a3fe \
-    --hash=sha256:fb3642735399fa958c0d2aad7057901554596c63349f4f6b283c493cf692a25d
+jsonschema==4.18.6 \
+    --hash=sha256:ce71d2f8c7983ef75a756e568317bf54bc531dc3ad7e66a128eae0d51623d8a3 \
+    --hash=sha256:dc274409c36175aad949c68e5ead0853aaffbe8e88c830ae66bb3c7a1728ad2d
     # via
     #   pidiff
     #   pushcollector
@@ -555,9 +555,9 @@ pycparser==2.21 \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
     # via cffi
-pygments==2.15.1 \
-    --hash=sha256:8ace4d3c1dd481894b2005f560ead0f9f19ee64fe983366be1a21e171d12775c \
-    --hash=sha256:db2db3deb4b4179f399a09054b023b6a586b76499d36965813c71aa8ed7b5fd1
+pygments==2.16.1 \
+    --hash=sha256:13fc09fa63bc8d8671a6d247e1eb303c4b343eaee81d861f3404db2935653692 \
+    --hash=sha256:1daff0494820c69bc8941e407aa20f577374ee88364ee10a98fdbe0aece96e29
     # via
     #   rich
     #   sphinx
@@ -633,9 +633,9 @@ pyyaml==6.0.1 \
     #   bandit
     #   pre-commit
     #   pushcollector
-referencing==0.30.0 \
-    --hash=sha256:47237742e990457f7512c7d27486394a9aadaf876cbfaa4be65b27b4f4d47c6b \
-    --hash=sha256:c257b08a399b6c2f5a3510a50d28ab5dbc7bbde049bcaf954d43c446f83ab548
+referencing==0.30.2 \
+    --hash=sha256:449b6669b6121a9e96a7f9e410b245d471e8d48964c67113ce9afe50c8dd7bdf \
+    --hash=sha256:794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -655,9 +655,9 @@ requests-mock==1.11.0 \
     --hash=sha256:ef10b572b489a5f28e09b708697208c4a3b2b89ef80a9f01584340ea357ec3c4 \
     --hash=sha256:f7fae383f228633f6bececebdab236c478ace2284d6292c6e7e2867b9ab74d15
     # via -r test-requirements.in
-rich==13.5.0 \
-    --hash=sha256:62c81e88dc078d2372858660e3d5566746870133e51321f852ccc20af5c7e7b2 \
-    --hash=sha256:996670a7618ccce27c55ba6fc0142e6e343773e11d34c96566a17b71b0e6f179
+rich==13.5.2 \
+    --hash=sha256:146a90b3b6b47cac4a73c12866a499e9817426423f57c5a66949c086191a8808 \
+    --hash=sha256:fb9d6c0a0f643c99eed3875b5377a184132ba9be4d61516a55273d3554d75a39
     # via bandit
 rpds-py==0.9.2 \
     --hash=sha256:0173c0444bec0a3d7d848eaeca2d8bd32a1b43f3d3fde6617aac3731fa4be05f \
@@ -786,9 +786,9 @@ snowballstemmer==2.2.0 \
     --hash=sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1 \
     --hash=sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a
     # via sphinx
-sphinx==7.1.1 \
-    --hash=sha256:4e6c5ea477afa0fb90815210fd1312012e1d7542589ab251ac9b53b7c0751bce \
-    --hash=sha256:59b8e391f0768a96cd233e8300fe7f0a8dc2f64f83dc2a54336a9a84f428ff4e
+sphinx==7.1.2 \
+    --hash=sha256:780f4d32f1d7d1126576e0e5ecc19dc32ab76cd24e950228dcf7b1f6d3d9e22f \
+    --hash=sha256:d170a81825b2fcacb6dfd5a0d7f578a053e45d3f2b153fecc948c37344eb4cbe
     # via -r test-requirements.in
 sphinxcontrib-applehelp==1.0.4 \
     --hash=sha256:29d341f67fb0f6f586b23ad80e072c8e6ad0b48417db2bde114a4c9746feb228 \

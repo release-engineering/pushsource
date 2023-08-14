@@ -13,7 +13,6 @@ from pushsource._impl.model import (
     ContainerImageDigestPullSpec,
 )
 
-
 @fixture
 def fake_errata_tool():
     controller = FakeErrataToolController()

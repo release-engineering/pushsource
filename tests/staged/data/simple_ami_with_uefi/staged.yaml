@@ -21,7 +21,7 @@ payload:
       root_device: /dev/sda1
       sriov_net_support: simple
       type: access
-      uefi_support: null
+      uefi_support: true
       virtualization: hvm
       volume: gp2
       public_image: true

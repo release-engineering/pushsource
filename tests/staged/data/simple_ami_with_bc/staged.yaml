@@ -35,6 +35,7 @@ payload:
       root_device: /dev/sda1
       sriov_net_support: simple
       type: access
+      uefi_support: null
       virtualization: hvm
       volume: gp2
       billing_codes:

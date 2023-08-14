@@ -4,16 +4,12 @@
 # To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
 
 # URL of Source to test.
-url: "staged:{{ src_dir }}/tests/staged/data/simple_ami_with_bc"
+url: "staged:{{ src_dir }}/tests/staged/data/simple_ami_with_uefi"
 
 # Push items generated from above.
 items:
 - AmiPushItem:
-    billing_codes:
-      codes:
-      - bp-1234
-      - bp-abcd
-      name: FakeBcName
+    billing_codes: null
     build: null
     build_info: null
     description: A sample image for testing
@@ -21,12 +17,12 @@ items:
     - dest1
     ena_support: true
     image_id: null
-    marketplace_entity_type: AMIProduct
+    marketplace_entity_type: null
     md5sum: null
     name: fake-image.raw
-    origin: {{ src_dir }}/tests/staged/data/simple_ami_with_bc
+    origin: {{ src_dir }}/tests/staged/data/simple_ami_with_uefi
     public_image: true
-    recommended_instance_type: t2.micro
+    recommended_instance_type: null
     region: cn-north-1
     release:
       arch: x86_64
@@ -38,25 +34,19 @@ items:
       type: ga
       variant: Fake-Variant
       version: Fake-Version
-    release_notes: fake release notes
+    release_notes: null
     root_device: /dev/sda1
-    scanning_port: 1244
-    security_groups:
-    - from_port: 0
-      ip_protocol: Fake-Protocol
-      ip_ranges:
-      - 22.22.22.22
-      - 33.33.33.33
-      to_port: 1
+    scanning_port: null
+    security_groups: []
     sha256sum: null
     signing_key: null
-    src: {{ src_dir }}/tests/staged/data/simple_ami_with_bc/dest1/AWS_IMAGES/fake-image.raw
+    src: {{ src_dir }}/tests/staged/data/simple_ami_with_uefi/dest1/AWS_IMAGES/fake-image.raw
     sriov_net_support: simple
     state: PENDING
     type: access
-    uefi_support: null
-    usage_instructions: fake usage instructions
-    user_name: Fake-Username
-    version_title: Fake-Version-Title
+    uefi_support: true
+    usage_instructions: null
+    user_name: null
+    version_title: null
     virtualization: hvm
     volume: gp2

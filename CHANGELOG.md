@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.35.0] - 2023-08-16
+
+### Added
+
+- Introduced `AmiPushItem.uefi_support` attribute
+
 ## [2.34.0] - 2023-07-27
 
 ### Changed
@@ -427,7 +433,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.34.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.35.0...HEAD
+[2.35.0]: https://github.com/release-engineering/pushsource/compare/v2.34.0...v2.35.0
 [2.34.0]: https://github.com/release-engineering/pushsource/compare/v2.33.0...v2.34.0
 [2.33.0]: https://github.com/release-engineering/pushsource/compare/v2.32.0...v2.33.0
 [2.32.0]: https://github.com/release-engineering/pushsource/compare/v2.31.0...v2.32.0

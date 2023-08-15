@@ -44,6 +44,7 @@ items:
     sriov_net_support: simple
     state: PENDING
     type: access
+    uefi_support: null
     usage_instructions: null
     user_name: null
     version_title: null

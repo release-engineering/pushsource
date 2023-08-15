@@ -56,6 +56,7 @@ class StagedAmiMixin(StagedBaseMixin):
             "description",
             "sriov_net_support",
             "ena_support",
+            "uefi_support",
             "public_image",
             "release_notes",
             "usage_instructions",

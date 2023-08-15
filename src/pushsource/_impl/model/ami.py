@@ -129,6 +129,11 @@ class AmiPushItem(VMIPushItem):
     )
     """``True`` if the image supports Elastic Network Adapter (ENA)."""
 
+    uefi_support = attr.ib(
+        type=bool, default=None, validator=optional(instance_of(bool))
+    )
+    """``True`` if the image supports UEFI boot."""
+
     billing_codes = attr.ib(
         type=AmiBillingCodes,
         default=None,
@@ -199,6 +204,7 @@ class AmiPushItem(VMIPushItem):
             "description": data["description"],
             "sriov_net_support": data["sriov_net_support"],
             "ena_support": data.get("ena_support"),
+            "uefi_support": data.get("uefi_support"),
             "billing_codes": AmiBillingCodes._from_data(
                 data.get("billing_codes") or {}
             ),

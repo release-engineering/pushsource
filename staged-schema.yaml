@@ -97,6 +97,11 @@ definitions:
                 - boolean
                 - "null"
 
+            uefi_support:
+                type:
+                - boolean
+                - "null"
+
             billing_codes:
                 $ref: "#/definitions/ami_billing_codes"
 

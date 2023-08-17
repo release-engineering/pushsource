@@ -649,7 +649,7 @@ class KojiSource(Source):
             dest=self._dest,
             build=nvr,
             related_images=operator_related_images,
-            labels=helper.labels
+            labels=helper.labels,
         )
 
     def _rpm_futures(self):

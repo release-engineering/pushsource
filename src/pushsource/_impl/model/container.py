@@ -317,3 +317,11 @@ class OperatorManifestPushItem(PushItem):
 
     :type: List[str]
     """
+
+    labels = attr.ib(type=dict, default=attr.Factory(frozendict), converter=frozendict)
+    """Labels of this image, if known.
+
+    This field is not guaranteed to include all labels associated with the image.
+
+    :type: Dict[str, str]
+    """

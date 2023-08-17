@@ -64,6 +64,7 @@ items:
       release: '2'
       version: 0.5.2
     dest: []
+    labels: {}
     md5sum: null
     name: security-profiles-operator-bundle-container-0.5.2-2/operator_manifests.zip
     origin: null

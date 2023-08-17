@@ -642,12 +642,14 @@ class KojiSource(Source):
                 'archive "%s"'
             ) % (nvr, archive_name)
             raise ValueError(message)
+        helper = ContainerArchiveHelper(meta, operator_archive[0])
 
         return OperatorManifestPushItem(
             name=os.path.join(nvr, archive_name),
             dest=self._dest,
             build=nvr,
             related_images=operator_related_images,
+            labels=helper.labels
         )
 
     def _rpm_futures(self):

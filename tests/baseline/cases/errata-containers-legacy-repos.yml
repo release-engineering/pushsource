@@ -1919,6 +1919,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -1935,6 +1936,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -1951,6 +1953,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -1967,6 +1970,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -1983,6 +1987,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -1999,6 +2004,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -2015,6 +2021,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807
@@ -2031,6 +2038,7 @@ items:
       release: '1'
       version: v4.3.28.202006290519.p0.prod
     dest: []
+    labels: {}
     md5sum: null
     name: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
     origin: RHBA-2020:2807

@@ -635,8 +635,12 @@ class KojiSource(Source):
             # No operator manifests on this build
             return
 
-        operator_archive = [a for a in archives if a["filename"] == operator_archive_name]
-        non_operator_archives = [a for a in archives if a["filename"] != operator_archive_name]
+        operator_archive = [
+            a for a in archives if a["filename"] == operator_archive_name
+        ]
+        non_operator_archives = [
+            a for a in archives if a["filename"] != operator_archive_name
+        ]
         if len(operator_archive) != 1:
             message = (
                 "koji build %s metadata refers to missing operator-manifests "

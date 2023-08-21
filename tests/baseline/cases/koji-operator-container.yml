@@ -64,7 +64,12 @@ items:
       release: '2'
       version: 0.5.2
     dest: []
-    labels: {}
+    labels:
+      com.redhat.component: security-profiles-operator-bundle-container
+      com.redhat.delivery.appregistry: 'false'
+      com.redhat.delivery.operator.bundle: 'true'
+      com.redhat.license_terms: https://www.redhat.com/agreements
+      com.redhat.openshift.versions: v4.12
     md5sum: null
     name: security-profiles-operator-bundle-container-0.5.2-2/operator_manifests.zip
     origin: null

@@ -24,6 +24,12 @@ items:
       com.redhat.delivery.operator.bundle: 'true'
       com.redhat.license_terms: https://www.redhat.com/agreements
       com.redhat.openshift.versions: v4.12
+      operators.operatorframework.io.bundle.channel.default.v1: release-alpha-rhel-8
+      operators.operatorframework.io.bundle.channels.v1: release-alpha-rhel-8
+      operators.operatorframework.io.bundle.manifests.v1: manifests/
+      operators.operatorframework.io.bundle.mediatype.v1: registry+v1
+      operators.operatorframework.io.bundle.metadata.v1: metadata/
+      operators.operatorframework.io.bundle.package.v1: security-profiles-operator
     md5sum: null
     name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
     origin: null

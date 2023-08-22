@@ -5,6 +5,8 @@ from .. import compat_attr as attr
 
 MIME_TYPE_MANIFEST_LIST = "application/vnd.docker.distribution.manifest.list.v2+json"
 
+INCLUDE_LABELS = ["operators.operatorframework.", "com.redhat."]
+
 
 class ContainerArchiveHelper(object):
     def __init__(self, build, archive):
@@ -76,7 +78,7 @@ class ContainerArchiveHelper(object):
         # https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/bundle-directory
         # which has its own non-trivial syntax we don't want to get into parsing.
         for key, value in raw_labels.items():
-            if key.startswith("com.redhat."):
+            if any([key.startswith(prefix) for prefix in INCLUDE_LABELS]):
                 out[key] = value
 
         return out

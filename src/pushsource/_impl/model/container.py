@@ -318,10 +318,8 @@ class OperatorManifestPushItem(PushItem):
     :type: List[str]
     """
 
-    labels = attr.ib(type=dict, default=attr.Factory(frozendict), converter=frozendict)
-    """Labels of this image, if known.
+    container_image_items = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    """List of related container image push items.
 
-    This field is not guaranteed to include all labels associated with the image.
-
-    :type: Dict[str, str]
+    :type: List[ContainerImagePushItem]
     """

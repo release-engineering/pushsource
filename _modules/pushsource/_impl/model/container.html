@@ -370,6 +370,14 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Operator related images obtained from a koji build.</span>
 
 <span class="sd">    :type: List[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">container_image_items</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of related container image push items.</span>
+
+<span class="sd">    :type: List[ContainerImagePushItem]</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 </pre></div>

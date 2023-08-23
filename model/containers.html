@@ -379,6 +379,7 @@ from a koji build.</p>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.OperatorManifestPushItem.container_image_items" title="pushsource.OperatorManifestPushItem.container_image_items"><code class="xref py py-meth docutils literal notranslate"><span class="pre">container_image_items()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.OperatorManifestPushItem.related_images" title="pushsource.OperatorManifestPushItem.related_images"><code class="xref py py-meth docutils literal notranslate"><span class="pre">related_images()</span></code></a></p></li>
 </ul>
 <dl class="py attribute">
@@ -388,6 +389,17 @@ from a koji build.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.OperatorManifestPushItem.container_image_items">
+<span class="sig-name descname"><span class="pre">container_image_items</span></span><a class="headerlink" href="#pushsource.OperatorManifestPushItem.container_image_items" title="Link to this definition">¶</a></dt>
+<dd><p>List of related container image push items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImagePushItem" title="pushsource.ContainerImagePushItem">ContainerImagePushItem</a>]</p>
 </dd>
 </dl>
 </dd></dl>

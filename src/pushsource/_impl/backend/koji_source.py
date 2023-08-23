@@ -505,7 +505,7 @@ class KojiSource(Source):
             )
 
         # If this build had any operator-manifests archive, add that too.
-        operator = self._get_operator_item(nvr, meta, archives)
+        operator = self._get_operator_item(nvr, meta, archives, out)
         if operator:
             out.append(operator)
 
@@ -616,38 +616,41 @@ class KojiSource(Source):
 
         return out
 
-    def _get_operator_item(self, nvr, meta, archives):
+    def _get_operator_item(self, nvr, meta, archives, container_items):
         extra = meta.get("extra") or {}
         typeinfo = extra.get("typeinfo") or {}
         operator_manifests = typeinfo.get("operator-manifests") or {}
-        archive_name = operator_manifests.get("archive")
+        operator_archive_name = operator_manifests.get("archive")
         image = typeinfo.get("image") or {}
         image_operator_manifests = image.get("operator_manifests") or {}
         related_images = image_operator_manifests.get("related_images") or {}
         pullspecs = related_images.get("pullspecs") or []
         operator_related_images = [spec["new"] for spec in pullspecs if spec.get("new")]
 
-        if not archive_name:
+        if not operator_archive_name:
             # Try legacy form
-            archive_name = extra.get("operator_manifests_archive")
+            operator_archive_name = extra.get("operator_manifests_archive")
 
-        if not archive_name:
+        if not operator_archive_name:
             # No operator manifests on this build
             return
 
-        operator_archive = [a for a in archives if a["filename"] == archive_name]
+        operator_archive = [
+            a for a in archives if a["filename"] == operator_archive_name
+        ]
         if len(operator_archive) != 1:
             message = (
                 "koji build %s metadata refers to missing operator-manifests "
                 'archive "%s"'
-            ) % (nvr, archive_name)
+            ) % (nvr, operator_archive_name)
             raise ValueError(message)
 
         return OperatorManifestPushItem(
-            name=os.path.join(nvr, archive_name),
+            name=os.path.join(nvr, operator_archive_name),
             dest=self._dest,
             build=nvr,
             related_images=operator_related_images,
+            container_image_items=container_items,
         )
 
     def _rpm_futures(self):

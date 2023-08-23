@@ -317,3 +317,11 @@ class OperatorManifestPushItem(PushItem):
 
     :type: List[str]
     """
+
+    container_image_items = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+    )
+    """List of related container image push items.
+
+    :type: List[ContainerImagePushItem]
+    """

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.model.base &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
    
@@ -53,7 +53,9 @@
 <span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_CHUNKSIZE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="KojiBuildInfo"><a class="viewcode-back" href="../../../../model/base.html#pushsource.KojiBuildInfo">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<div class="viewcode-block" id="KojiBuildInfo">
+<a class="viewcode-back" href="../../../../model/base.html#pushsource.KojiBuildInfo">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">KojiBuildInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A representation of a koji build.&quot;&quot;&quot;</span>
 
@@ -101,7 +103,10 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">r</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PushItem"><a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PushItem">
+<a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">PushItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A PushItem represents a single piece of content to be published.</span>
 <span class="sd">    This may be an RPM, an advisory, a generic file, and so on.</span>
@@ -209,7 +214,9 @@
 <span class="sd">    doesn&#39;t enforce this.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PushItem.with_checksums"><a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>    <span class="k">def</span> <span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PushItem.with_checksums">
+<a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>
+    <span class="k">def</span> <span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this push item with checksums present.</span>
 
 <span class="sd">        Many pushsource backends will produce push items with empty checksum attributes,</span>
@@ -278,7 +285,9 @@
         <span class="k">for</span> <span class="n">hasher</span><span class="p">,</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
             <span class="n">updated_sums</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_sums</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_sums</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
           </div>
@@ -373,7 +382,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

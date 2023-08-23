@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
     <title>Source &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Source: staged" href="staged.html" />
@@ -32,11 +32,11 @@
           <div class="body" role="main">
             
   <section id="source">
-<h1>Source<a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h1>
+<h1>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">Source</span></code> class is the base from which all pushsource backends derive.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.Source">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source" title="Link to this definition">¶</a></dt>
 <dd><p>A source of push items.</p>
 <p>This base class defines the interface for all pushsource backends.
 Instances of a specific backend can be obtained using
@@ -54,14 +54,14 @@ of a source instance, so it’s safe to store them and continue using
 them beyond the end of the <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.__iter__">
-<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.__iter__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.__iter__" title="Link to this definition">¶</a></dt>
 <dd><p>Iterate over the push items contained within this source.</p>
 <p>Yields a series of <a class="reference internal" href="../model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> instances.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.get">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Link to this definition">¶</a></dt>
 <dd><p>Obtain a push source from the given URL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -88,7 +88,7 @@ the backend.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.get_partial">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get_partial" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get_partial" title="Link to this definition">¶</a></dt>
 <dd><p>Obtain a push source constructor from the given URL and arguments.</p>
 <p>This method returns a constructor for a push source (rather than a push source
 instance directly) so that additional arguments may be provided later.</p>
@@ -120,7 +120,7 @@ and returns a <a class="reference internal" href="#pushsource.Source" title="pus
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.register_backend">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.register_backend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.register_backend" title="Link to this definition">¶</a></dt>
 <dd><p>Register a new pushsource backend.</p>
 <p>This method allows registering additional backends beyond those
 shipped with the pushsource library. See <a class="reference internal" href="../userguide.html#implementing"><span class="std std-ref">Implementing a backend</span></a> for
@@ -146,7 +146,7 @@ the <a class="reference internal" href="#pushsource.Source" title="pushsource.So
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.Source.reset">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.reset" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.reset" title="Link to this definition">¶</a></dt>
 <dd><p>Reset the library to the default configuration.</p>
 <p>This method will undo the effect of any prior calls to
 <a class="reference internal" href="#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a>, restoring only the
@@ -161,7 +161,7 @@ default backends provided by the pushsource library.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.SourceUrlError">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">SourceUrlError</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#SourceUrlError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.SourceUrlError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">SourceUrlError</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#SourceUrlError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.SourceUrlError" title="Link to this definition">¶</a></dt>
 <dd><p>Errors of this type are raised when an invalid URL is provided
 to <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> and related methods.</p>
 </dd></dl>
@@ -265,7 +265,7 @@ to <a class="reference internal" href="#pushsource.Source.get" title="pushsource
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

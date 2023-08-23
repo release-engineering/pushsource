@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
     <title>Source: koji &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Source: registry" href="registry.html" />
@@ -32,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="source-koji">
-<span id="id1"></span><h1>Source: koji<a class="headerlink" href="#source-koji" title="Permalink to this heading">¶</a></h1>
+<span id="id1"></span><h1>Source: koji<a class="headerlink" href="#source-koji" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">koji</span></code> push source allows the loading of content from an instance of
 <a class="reference external" href="https://pagure.io/koji/">koji</a>.</p>
 <p>Supported content types:</p>
@@ -45,7 +45,7 @@
 <p>Note that many features of the koji source requires having koji’s volume(s) mounted
 locally.</p>
 <section id="koji-source-urls">
-<h2>koji source URLs<a class="headerlink" href="#koji-source-urls" title="Permalink to this heading">¶</a></h2>
+<h2>koji source URLs<a class="headerlink" href="#koji-source-urls" title="Link to this heading">¶</a></h2>
 <p>The base form of a Koji source URL is:</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:koji-xmlrpc-endpoint?contenttype1=...[&amp;contenttype2=...[&amp;...]]</span></code></p>
 <p>For example, accessing a couple of RPMs from Fedora koji may be achieved by
@@ -53,7 +53,7 @@ URL:</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm</span></code></p>
 <p>The next subsections provide more detail on specific content types.</p>
 <section id="accessing-rpms">
-<h3>Accessing RPMs<a class="headerlink" href="#accessing-rpms" title="Permalink to this heading">¶</a></h3>
+<h3>Accessing RPMs<a class="headerlink" href="#accessing-rpms" title="Link to this heading">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">rpm</span></code> parameter to request RPMs by filename.</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm</span></code></p>
 <p>This will yield unsigned RPMs by default.  If you require signed RPMs,
@@ -63,7 +63,7 @@ occur if signed RPMs are not available.</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm&amp;signing_key=12c944d0</span></code></p>
 </section>
 <section id="accessing-modulemd-streams">
-<h3>Accessing modulemd streams<a class="headerlink" href="#accessing-modulemd-streams" title="Permalink to this heading">¶</a></h3>
+<h3>Accessing modulemd streams<a class="headerlink" href="#accessing-modulemd-streams" title="Link to this heading">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">module_build</span></code> parameter to request modulemd streams from one or more
 builds.  Builds can be specified by NVR.  Use the NVR of build(s) containing modulemd
 text files as archives (shown as “Module Archives” in the Koji UI).</p>
@@ -74,7 +74,7 @@ the desired modulemd files, as in example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&amp;module_filter_filename=modulemd.x86_64.txt,modulemd.s390x.txt</span></code></p>
 </section>
 <section id="accessing-container-images">
-<h3>Accessing container images<a class="headerlink" href="#accessing-container-images" title="Permalink to this heading">¶</a></h3>
+<h3>Accessing container images<a class="headerlink" href="#accessing-container-images" title="Link to this heading">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">container_build</span></code> parameter to request container images from one or
 more builds. Builds can be specified by NVR. Builds should be produced by
 <a class="reference external" href="https://osbs.readthedocs.io/">OSBS</a> or should use compatible metadata.</p>
@@ -88,7 +88,7 @@ manifest archives</p></li>
 </ul>
 </section>
 <section id="accessing-virtual-machine-images">
-<h3>Accessing virtual machine images<a class="headerlink" href="#accessing-virtual-machine-images" title="Permalink to this heading">¶</a></h3>
+<h3>Accessing virtual machine images<a class="headerlink" href="#accessing-virtual-machine-images" title="Link to this heading">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">vmi_build</span></code> parameter to request virtual machine images from one or
 more builds. Builds can be specified by NVR. Builds should be produced by
 <a class="reference external" href="https://www.osbuild.org/guides/image-builder-service/image-builder-koji.html">Image Builder</a> or should use compatible metadata.</p>
@@ -101,7 +101,7 @@ more builds. Builds can be specified by NVR. Builds should be produced by
 </ul>
 </section>
 <section id="setting-the-destination-for-push-items">
-<h3>Setting the destination for push items<a class="headerlink" href="#setting-the-destination-for-push-items" title="Permalink to this heading">¶</a></h3>
+<h3>Setting the destination for push items<a class="headerlink" href="#setting-the-destination-for-push-items" title="Link to this heading">¶</a></h3>
 <p>As koji itself contains no policy regarding where content should be pushed,
 a koji source by default yields all push items with an empty destination.</p>
 <p>If you know ahead of time the destination(s) to which your push items should be distributed,
@@ -109,7 +109,7 @@ you may include these in the <code class="docutils literal notranslate"><span cl
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?module_build=flatpak-common-f32-3220200518173809.caf21102&amp;dest=target-repo1,target-repo2</span></code></p>
 </section>
 <section id="adjusting-koji-basedir">
-<h3>Adjusting <code class="docutils literal notranslate"><span class="pre">koji.BASEDIR</span></code><a class="headerlink" href="#adjusting-koji-basedir" title="Permalink to this heading">¶</a></h3>
+<h3>Adjusting <code class="docutils literal notranslate"><span class="pre">koji.BASEDIR</span></code><a class="headerlink" href="#adjusting-koji-basedir" title="Link to this heading">¶</a></h3>
 <p>Some features of the koji source require read-only access to koji’s working volume(s).
 The top-level path by default is provided by the <code class="docutils literal notranslate"><span class="pre">koji</span></code> library as <code class="docutils literal notranslate"><span class="pre">/mnt/koji</span></code>.</p>
 <p>To use a different path, include <code class="docutils literal notranslate"><span class="pre">basedir</span></code> in the source URL:</p>
@@ -117,14 +117,14 @@ The top-level path by default is provided by the <code class="docutils literal n
 </section>
 </section>
 <section id="python-api-reference">
-<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this heading">¶</a></h2>
+<h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.KojiSource">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource" title="Link to this definition">¶</a></dt>
 <dd><p>Uses koji artifacts as the source of push items.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.KojiSource.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new source.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -278,7 +278,7 @@ to each instance.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

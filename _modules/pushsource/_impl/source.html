@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.source &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -43,10 +43,13 @@
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SourceUrlError"><a class="viewcode-back" href="../../../sources/base.html#pushsource.SourceUrlError">[docs]</a><span class="k">class</span> <span class="nc">SourceUrlError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<div class="viewcode-block" id="SourceUrlError">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.SourceUrlError">[docs]</a>
+<span class="k">class</span> <span class="nc">SourceUrlError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Errors of this type are raised when an invalid URL is provided</span>
 <span class="sd">    to :meth:`~pushsource.Source.get` and related methods.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">SourceWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -108,7 +111,9 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Source"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a><span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Source">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a>
+<span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A source of push items.</span>
 
 <span class="sd">    This base class defines the interface for all pushsource backends.</span>
@@ -140,12 +145,15 @@
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Source.__iter__"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Source.__iter__">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.__iter__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over the push items contained within this source.</span>
 
 <span class="sd">        Yields a series of :class:`~pushsource.PushItem` instances.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__ensure_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -166,7 +174,9 @@
             <span class="c1"># Result is assigned to a var to avoid a pylint warning.</span>
             <span class="n">_</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;resolve&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">require</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Source.get"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Source.get">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Obtain a push source from the given URL.</span>
 
@@ -190,7 +200,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span><span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)()</span></div>
 
-<div class="viewcode-block" id="Source.get_partial"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get_partial">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Source.get_partial">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get_partial">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_partial</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Obtain a push source constructor from the given URL and arguments.</span>
 
@@ -306,7 +319,10 @@
 
         <span class="k">return</span> <span class="n">partial_source</span></div>
 
-<div class="viewcode-block" id="Source.register_backend"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.register_backend">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Source.register_backend">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.register_backend">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">register_backend</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a new pushsource backend.</span>
 
@@ -336,7 +352,10 @@
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div>
 
-<div class="viewcode-block" id="Source.reset"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.reset">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Source.reset">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.reset">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the library to the default configuration.</span>
 
@@ -349,7 +368,9 @@
 <span class="sd">        .. versionadded:: 2.6.0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">__ensure_init</span><span class="p">()</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+</div>
+
 </pre></div>
 
           </div>
@@ -444,7 +465,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

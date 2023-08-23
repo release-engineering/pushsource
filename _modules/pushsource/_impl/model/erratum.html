@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.model.erratum &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
    
@@ -48,7 +48,9 @@
 <span class="kn">from</span> <span class="nn">.erratum_fixup</span> <span class="kn">import</span> <span class="n">fixup_erratum_class</span>
 
 
-<div class="viewcode-block" id="ErratumReference"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumReference">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<div class="viewcode-block" id="ErratumReference">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumReference">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumReference</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference within a :meth:`~ErratumPushItem.references` list.&quot;&quot;&quot;</span>
 
@@ -83,7 +85,10 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ErratumModule"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumModule">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ErratumModule">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumModule">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumModule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A module entry within a :meth:`~ErratumPushItem.pkglist`.&quot;&quot;&quot;</span>
 
@@ -118,7 +123,10 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ErratumPackage"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackage">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ErratumPackage">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackage">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumPackage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A package (RPM) entry within a :meth:`~ErratumPushItem.pkglist`.&quot;&quot;&quot;</span>
 
@@ -158,7 +166,10 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;SHA256 checksum of this RPM in hex string form, if available.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="ErratumPackageCollection"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackageCollection">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ErratumPackageCollection">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackageCollection">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumPackageCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of packages found within an :meth:`~ErratumPushItem.pkglist`.</span>
 
@@ -234,6 +245,7 @@
         <span class="p">)</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">errata_type_converter</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="c1"># For &#39;type&#39; field, ancient versions of Errata Tool produced values</span>
     <span class="c1"># like RHBA, RHEA, RHSA, so these can be found in the wild; but all</span>
@@ -243,7 +255,9 @@
     <span class="k">return</span> <span class="n">typemap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ErratumPushItem"><a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPushItem">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<div class="viewcode-block" id="ErratumPushItem">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ErratumPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a single erratum (also known as &quot;advisory&quot;).</span>
 
@@ -459,6 +473,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
+
 <span class="c1"># Apply from vs from_ workarounds.</span>
 <span class="n">fixup_erratum_class</span><span class="p">(</span><span class="n">ErratumPushItem</span><span class="p">)</span>
 </pre></div>
@@ -555,7 +570,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

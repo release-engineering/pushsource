@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
     <title>Push items: errata &#8212; pushsource  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=1fc5d657" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Push items: containers" href="containers.html" />
@@ -32,10 +32,10 @@
           <div class="body" role="main">
             
   <section id="push-items-errata">
-<h1>Push items: errata<a class="headerlink" href="#push-items-errata" title="Permalink to this heading">¶</a></h1>
+<h1>Push items: errata<a class="headerlink" href="#push-items-errata" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Link to this definition">¶</a></dt>
 <dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a single erratum (also known as “advisory”).</p>
 <p>Note that many fields on erratum objects which appear to be numeric
 are instead represented as strings (‘release’ and ‘pushcount’ being two
@@ -74,7 +74,7 @@ examples).</p>
 </ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.type">
-<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.type" title="Link to this definition">¶</a></dt>
 <dd><p>‘bugfix’, ‘security’ or ‘enhancement’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -85,7 +85,7 @@ examples).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.release">
-<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.release" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.release" title="Link to this definition">¶</a></dt>
 <dd><p>Release number. Typically an integer-string, initially ‘0’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -96,7 +96,7 @@ examples).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.status">
-<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.status" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.status" title="Link to this definition">¶</a></dt>
 <dd><p>Status, typically ‘final’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -107,7 +107,7 @@ examples).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.pushcount">
-<span class="sig-name descname"><span class="pre">pushcount</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pushcount" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pushcount</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pushcount" title="Link to this definition">¶</a></dt>
 <dd><p>Number of times advisory has been revised and published (starting at ‘1’).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -118,7 +118,7 @@ examples).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.reboot_suggested">
-<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.reboot_suggested" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.reboot_suggested" title="Link to this definition">¶</a></dt>
 <dd><p>True if rebooting host machine is recommended after installing this advisory.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -135,7 +135,7 @@ from <a class="reference internal" href="#pushsource.ErratumPackage" title="push
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.references">
-<span class="sig-name descname"><span class="pre">references</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.references" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">references</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.references" title="Link to this definition">¶</a></dt>
 <dd><p>A list of references associated with the advisory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -146,7 +146,7 @@ from <a class="reference internal" href="#pushsource.ErratumPackage" title="push
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.pkglist">
-<span class="sig-name descname"><span class="pre">pkglist</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pkglist" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pkglist</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pkglist" title="Link to this definition">¶</a></dt>
 <dd><p>A list of package collections associated with the advisory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -157,7 +157,7 @@ from <a class="reference internal" href="#pushsource.ErratumPackage" title="push
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.container_list">
-<span class="sig-name descname"><span class="pre">container_list</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.container_list" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">container_list</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.container_list" title="Link to this definition">¶</a></dt>
 <dd><p>A list of container images associated with the advisory.</p>
 <p>Example of the list:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;container_list&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -188,7 +188,7 @@ from <a class="reference internal" href="#pushsource.ErratumPackage" title="push
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.from_">
-<span class="sig-name descname"><span class="pre">from_</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.from_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">from_</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.from_" title="Link to this definition">¶</a></dt>
 <dd><p>Contact email address for the owner of the advisory.</p>
 <p>Note that the canonical name for this attribute is <code class="docutils literal notranslate"><span class="pre">from</span></code>. As this clashes
 with a Python keyword, in most contexts the attribute is also available as an
@@ -202,7 +202,7 @@ alias, <code class="docutils literal notranslate"><span class="pre">from_</span>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.rights">
-<span class="sig-name descname"><span class="pre">rights</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.rights" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">rights</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.rights" title="Link to this definition">¶</a></dt>
 <dd><p>Copyright message.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -213,7 +213,7 @@ alias, <code class="docutils literal notranslate"><span class="pre">from_</span>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.title">
-<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.title" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.title" title="Link to this definition">¶</a></dt>
 <dd><p>Title of the advisory (e.g. ‘bash bugfix and enhancement’).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -224,7 +224,7 @@ alias, <code class="docutils literal notranslate"><span class="pre">from_</span>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.description">
-<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.description" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.description" title="Link to this definition">¶</a></dt>
 <dd><p>Full human-readable description of the advisory, usually multiple lines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -235,7 +235,7 @@ alias, <code class="docutils literal notranslate"><span class="pre">from_</span>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.version">
-<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.version" title="Link to this definition">¶</a></dt>
 <dd><p>Advisory version. Starts counting at “1”, and some systems require updating
 the version whenever an advisory is modified.</p>
 <dl class="field-list simple">
@@ -247,7 +247,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.updated">
-<span class="sig-name descname"><span class="pre">updated</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.updated" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">updated</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.updated" title="Link to this definition">¶</a></dt>
 <dd><p>Timestamp of the last update to this advisory.</p>
 <p>Typically of the form ‘2019-12-31 06:54:41 UTC’, but this is not enforced.</p>
 <dl class="field-list simple">
@@ -259,7 +259,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.issued">
-<span class="sig-name descname"><span class="pre">issued</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.issued" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">issued</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.issued" title="Link to this definition">¶</a></dt>
 <dd><p>Timestamp of the initial release of this advisory.</p>
 <p>Uses the same format as <a class="reference internal" href="#pushsource.ErratumPushItem.updated" title="pushsource.ErratumPushItem.updated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updated()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -271,7 +271,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.severity">
-<span class="sig-name descname"><span class="pre">severity</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.severity" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">severity</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.severity" title="Link to this definition">¶</a></dt>
 <dd><p>Severity of the advisory, e.g. “low”, “moderate”, “important” or “critical”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -282,7 +282,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.summary">
-<span class="sig-name descname"><span class="pre">summary</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.summary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">summary</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.summary" title="Link to this definition">¶</a></dt>
 <dd><p>Typically a single sentence briefly describing the advisory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -293,7 +293,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.solution">
-<span class="sig-name descname"><span class="pre">solution</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.solution" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">solution</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.solution" title="Link to this definition">¶</a></dt>
 <dd><p>Text explaining how to apply the advisory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -304,7 +304,7 @@ the version whenever an advisory is modified.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPushItem.content_types">
-<span class="sig-name descname"><span class="pre">content_types</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.content_types" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">content_types</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.content_types" title="Link to this definition">¶</a></dt>
 <dd><p>A list of content types associated with the advisory.</p>
 <p>For example, “docker” may be found in this list if the advisory deals
 with container images.</p>
@@ -319,7 +319,7 @@ with container images.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErratumReference">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumReference</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumReference" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumReference</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumReference" title="Link to this definition">¶</a></dt>
 <dd><p>A reference within a <a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a> list.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
@@ -330,7 +330,7 @@ with container images.</p>
 </ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumReference.href">
-<span class="sig-name descname"><span class="pre">href</span></span><a class="headerlink" href="#pushsource.ErratumReference.href" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">href</span></span><a class="headerlink" href="#pushsource.ErratumReference.href" title="Link to this definition">¶</a></dt>
 <dd><p>A URL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -341,7 +341,7 @@ with container images.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumReference.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pushsource.ErratumReference.id" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pushsource.ErratumReference.id" title="Link to this definition">¶</a></dt>
 <dd><p>A short ID for the reference, unique within this erratum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -352,7 +352,7 @@ with container images.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumReference.title">
-<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumReference.title" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumReference.title" title="Link to this definition">¶</a></dt>
 <dd><p>A title for the reference; analogous to the ‘title’ attribute
 in HTML.</p>
 <dl class="field-list simple">
@@ -364,7 +364,7 @@ in HTML.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumReference.type">
-<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumReference.type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumReference.type" title="Link to this definition">¶</a></dt>
 <dd><p>Type of reference. This defines the expected target of the URL
 and includes at least:</p>
 <ul class="simple">
@@ -383,7 +383,7 @@ and includes at least:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackageCollection</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackageCollection</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Link to this definition">¶</a></dt>
 <dd><p>A collection of packages found within an <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
 <p>A non-modular advisory typically contains only a single collection, while modular
 advisories typically contain one collection per module.</p>
@@ -396,7 +396,7 @@ advisories typically contain one collection per module.</p>
 </ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.name" title="Link to this definition">¶</a></dt>
 <dd><p>A name for this collection. The collection name has no specific meaning,
 but must be unique within an advisory.</p>
 <dl class="field-list simple">
@@ -408,7 +408,7 @@ but must be unique within an advisory.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.packages">
-<span class="sig-name descname"><span class="pre">packages</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.packages" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">packages</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.packages" title="Link to this definition">¶</a></dt>
 <dd><p>List of packages within this collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -419,7 +419,7 @@ but must be unique within an advisory.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.short">
-<span class="sig-name descname"><span class="pre">short</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.short" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">short</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.short" title="Link to this definition">¶</a></dt>
 <dd><p>An alternative name for this collection. In practice, this field
 is typically blank.</p>
 <dl class="field-list simple">
@@ -431,7 +431,7 @@ is typically blank.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.module">
-<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.module" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.module" title="Link to this definition">¶</a></dt>
 <dd><p>An <a class="reference internal" href="#pushsource.ErratumModule" title="pushsource.ErratumModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumModule</span></code></a> defining the module this entry is associated
 with, if any.</p>
 <dl class="field-list simple">
@@ -445,7 +445,7 @@ with, if any.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErratumModule">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumModule</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumModule</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Link to this definition">¶</a></dt>
 <dd><p>A module entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
@@ -457,7 +457,7 @@ with, if any.</p>
 </ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumModule.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumModule.name" title="Link to this definition">¶</a></dt>
 <dd><p>Module name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -468,7 +468,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.stream">
-<span class="sig-name descname"><span class="pre">stream</span></span><a class="headerlink" href="#pushsource.ErratumModule.stream" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">stream</span></span><a class="headerlink" href="#pushsource.ErratumModule.stream" title="Link to this definition">¶</a></dt>
 <dd><p>Module stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -479,7 +479,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.version">
-<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumModule.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumModule.version" title="Link to this definition">¶</a></dt>
 <dd><p>Module version.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -490,7 +490,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.context">
-<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#pushsource.ErratumModule.context" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#pushsource.ErratumModule.context" title="Link to this definition">¶</a></dt>
 <dd><p>Module context.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -501,7 +501,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumModule.arch">
-<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Link to this definition">¶</a></dt>
 <dd><p>Module architecture.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -514,7 +514,7 @@ with, if any.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackage</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackage</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackage" title="Link to this definition">¶</a></dt>
 <dd><p>A package (RPM) entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
@@ -532,7 +532,7 @@ with, if any.</p>
 </ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.arch">
-<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.arch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.arch" title="Link to this definition">¶</a></dt>
 <dd><p>RPM architecture.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -543,7 +543,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.filename">
-<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#pushsource.ErratumPackage.filename" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#pushsource.ErratumPackage.filename" title="Link to this definition">¶</a></dt>
 <dd><p>RPM filename (basename).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -554,7 +554,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.epoch">
-<span class="sig-name descname"><span class="pre">epoch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.epoch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">epoch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.epoch" title="Link to this definition">¶</a></dt>
 <dd><p>RPM epoch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -565,7 +565,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackage.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackage.name" title="Link to this definition">¶</a></dt>
 <dd><p>RPM name (e.g. “bash-4.0.1-1.el7.x86_64.rpm” name is “bash”)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -576,7 +576,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.version">
-<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPackage.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPackage.version" title="Link to this definition">¶</a></dt>
 <dd><p>RPM version (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “4.0.1”)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -587,7 +587,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.release">
-<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPackage.release" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPackage.release" title="Link to this definition">¶</a></dt>
 <dd><p>RPM release (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “1.el7”)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -598,7 +598,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.src">
-<span class="sig-name descname"><span class="pre">src</span></span><a class="headerlink" href="#pushsource.ErratumPackage.src" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">src</span></span><a class="headerlink" href="#pushsource.ErratumPackage.src" title="Link to this definition">¶</a></dt>
 <dd><p>Filename of the source RPM from which this RPM was built; equal to
 <a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a> for the source RPM itself.</p>
 <dl class="field-list simple">
@@ -610,7 +610,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.reboot_suggested">
-<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPackage.reboot_suggested" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPackage.reboot_suggested" title="Link to this definition">¶</a></dt>
 <dd><p>True if rebooting host machine is recommended after installing this package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -621,7 +621,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.md5sum">
-<span class="sig-name descname"><span class="pre">md5sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.md5sum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">md5sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.md5sum" title="Link to this definition">¶</a></dt>
 <dd><p>MD5 checksum of this RPM in hex string form, if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -632,7 +632,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.sha1sum">
-<span class="sig-name descname"><span class="pre">sha1sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha1sum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sha1sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha1sum" title="Link to this definition">¶</a></dt>
 <dd><p>SHA1 checksum of this RPM in hex string form, if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -643,7 +643,7 @@ with, if any.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pushsource.ErratumPackage.sha256sum">
-<span class="sig-name descname"><span class="pre">sha256sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha256sum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sha256sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha256sum" title="Link to this definition">¶</a></dt>
 <dd><p>SHA256 checksum of this RPM in hex string form, if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -756,7 +756,7 @@ with, if any.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

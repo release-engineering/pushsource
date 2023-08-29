@@ -29,6 +29,7 @@ items:
     md5sum: null
     name: docker-image-sha256:05db9dc3ed76f6cf993f0dd35aa51892a38ba51afdf8ed564a236d53d8375a47.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
@@ -79,6 +80,7 @@ items:
     md5sum: null
     name: docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -129,6 +131,7 @@ items:
     md5sum: null
     name: docker-image-sha256:115387bd7efba2bdb7ee9f0d4fff88f03c1579859c6230cc67bb5c0b31263ba8.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
@@ -179,6 +182,7 @@ items:
     md5sum: null
     name: docker-image-sha256:176277a797bafa67823741efa319c2844758b2d5a4cb796b75a8b67580b54d56.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -229,6 +233,7 @@ items:
     md5sum: null
     name: docker-image-sha256:1dd3df4e8e532526b10155839caddef35cc731e586de169c60af9d72234e6640.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -279,6 +284,7 @@ items:
     md5sum: null
     name: docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -330,6 +336,7 @@ items:
     md5sum: null
     name: docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -380,6 +387,7 @@ items:
     md5sum: null
     name: docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -430,6 +438,7 @@ items:
     md5sum: null
     name: docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -480,6 +489,7 @@ items:
     md5sum: null
     name: docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -530,6 +540,7 @@ items:
     md5sum: null
     name: docker-image-sha256:39fa57800aaa583cce939c5d1f6b8b9cc47fd903b1f2e8776d5b1d7cbf9dee4b.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -580,6 +591,7 @@ items:
     md5sum: null
     name: docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -630,6 +642,7 @@ items:
     md5sum: null
     name: docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -680,6 +693,7 @@ items:
     md5sum: null
     name: docker-image-sha256:8aff8f23622971d84fea7892062731af8c8611b887cbad8a3ef488055fa4ed04.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -730,6 +744,7 @@ items:
     md5sum: null
     name: docker-image-sha256:9661ac2d9c97b5cffdf6bc41f1bc98020890a63918416d32e3fdead286229342.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -780,6 +795,7 @@ items:
     md5sum: null
     name: docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -831,6 +847,7 @@ items:
     md5sum: null
     name: docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -881,6 +898,7 @@ items:
     md5sum: null
     name: docker-image-sha256:b248b0d65ac239f8cacbe71d892ea7d829db0171abb922f1caf6e888fb8c1bcc.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -931,6 +949,7 @@ items:
     md5sum: null
     name: docker-image-sha256:bbb14d32c62f4303e16256fd8d3f5123e789da1b2aee81e82b316908fcf9e28b.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
@@ -981,6 +1000,7 @@ items:
     md5sum: null
     name: docker-image-sha256:bc6da6c39d2778a070d09c619927d0fc3890b71080b00c89412e2b55859a040a.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -1031,6 +1051,7 @@ items:
     md5sum: null
     name: docker-image-sha256:be2056f3f63c8391fe60f5a6043c4d1a718bf52fb49fba39c18628b930661baf.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:16a04fde191ebd8858fa7f97605a9783be570e37d329eec599cfecf03b5cd8f2
@@ -1081,6 +1102,7 @@ items:
     md5sum: null
     name: docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -1131,6 +1153,7 @@ items:
     md5sum: null
     name: docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -1181,6 +1204,7 @@ items:
     md5sum: null
     name: docker-image-sha256:d9ca1606333cc9badec48c4fe4895ae19b5ea5b29bb9601e17c7fb79cdd7ea19.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -1231,6 +1255,7 @@ items:
     md5sum: null
     name: docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -1281,6 +1306,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e395580a86026948eeed45d1ac406a5b3ce355aa0f48de23877ddfb61ca2cf62.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -1331,6 +1357,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -1381,6 +1408,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e437e702740efe93906c9b2e9e2a6e53863ccaa2aa49dfc6fa4a9047d37f0d2b.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -1432,6 +1460,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -1482,6 +1511,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -1532,6 +1562,7 @@ items:
     md5sum: null
     name: docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -1582,6 +1613,7 @@ items:
     md5sum: null
     name: docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -1632,6 +1664,7 @@ items:
     md5sum: null
     name: docker-image-sha256:f40245eeba63f6f1cd0b1b59a683a6ca6a5051194f55386e26e5fdd234433bb4.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -1682,6 +1715,7 @@ items:
     md5sum: null
     name: docker-image-sha256:f49167b645594fec8171bcffa2ba4c652d2fc6a8a39c8d04c8ac9891833429f6.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -1733,6 +1767,7 @@ items:
     md5sum: null
     name: docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -1783,6 +1818,7 @@ items:
     md5sum: null
     name: docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
     origin: RHBA-2020:2807
+    product_name: Red Hat OpenShift Enterprise
     pull_info:
       digest_specs:
       - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -1936,6 +1972,7 @@ items:
       md5sum: null
       name: docker-image-sha256:da1d6900c5f541a18295f66312cb8d0999aab6f425a6bbccdd2fd8bcc72300f1.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -1982,6 +2019,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e3f74d3b725d2f6f32d652e4c13854e789e283f8673514b0749f796f5367b46f.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -2028,6 +2066,7 @@ items:
       md5sum: null
       name: docker-image-sha256:2c6e2f845291914c4e9ecf2eff31be45379ba3ad8b42fc133df83219d5c6039d.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -2074,6 +2113,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e859f5623bde399f46690b91c5be657aaa1fe98943930e6f6a2848199b6a7b03.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:e38da0971a67c6b3d4261edd9bd679de1be15d0716d208cddf54b0478a73f0a2
@@ -2137,6 +2177,7 @@ items:
       md5sum: null
       name: docker-image-sha256:f49167b645594fec8171bcffa2ba4c652d2fc6a8a39c8d04c8ac9891833429f6.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -2183,6 +2224,7 @@ items:
       md5sum: null
       name: docker-image-sha256:bc6da6c39d2778a070d09c619927d0fc3890b71080b00c89412e2b55859a040a.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -2229,6 +2271,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e395580a86026948eeed45d1ac406a5b3ce355aa0f48de23877ddfb61ca2cf62.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -2275,6 +2318,7 @@ items:
       md5sum: null
       name: docker-image-sha256:d9ca1606333cc9badec48c4fe4895ae19b5ea5b29bb9601e17c7fb79cdd7ea19.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:625ed0e36cff8819aabaadfc67e983ba4486c3ab2c73286fe7bc1726ae08e2c4
@@ -2338,6 +2382,7 @@ items:
       md5sum: null
       name: docker-image-sha256:21d47ff01a369d38611df7d513636bd1eaf2787b4424620fa2297093cb7efd87.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -2384,6 +2429,7 @@ items:
       md5sum: null
       name: docker-image-sha256:6f1e0eb900873d800ec3cfc2c07405067679a935b4986e4dddb53037b78276ed.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -2430,6 +2476,7 @@ items:
       md5sum: null
       name: docker-image-sha256:30c942b23500e7d289671ebfa3f5a840a264620bae2c470fcf6f8b2928f066a0.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -2476,6 +2523,7 @@ items:
       md5sum: null
       name: docker-image-sha256:088c14ddcc989815bb38871fe9e0d3387a762c07a2ca23c9fd375ce42e3e53d6.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:a595bff056e37d4d61cc9225504bf7f969adcdd53f8f5180176b612c17ceaedc
@@ -2539,6 +2587,7 @@ items:
       md5sum: null
       name: docker-image-sha256:cc201958cbe1eb7f5282c1df2a1d1baf8f7c0ab0d2783a4cb1d4e1aa88ba6543.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -2585,6 +2634,7 @@ items:
       md5sum: null
       name: docker-image-sha256:497acb6ab8035229e662283a4fed020835ff92831ea0300864ae428874181df8.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -2631,6 +2681,7 @@ items:
       md5sum: null
       name: docker-image-sha256:f01dbc59e3d0c08d9df77852cefcd8f8bc4bd66587cd4afbb399853f38b1085c.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -2677,6 +2728,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e86f4ab4555a4acf8dcb6f2349b0a8fd8ed16ac9d3df039c50014b36a7a8b181.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:440f56c49b3a3b7490716e5370eacf684529f950f79527016bb265073ffd5332
@@ -2740,6 +2792,7 @@ items:
       md5sum: null
       name: docker-image-sha256:24d0f51bd83a274c584a2aef98e6e504e71399c1cd536c3891a70d3ae3627278.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -2786,6 +2839,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e507f8aae9b8b13573e39ffded36375daeed686c0953bc1fd6af601713e0d191.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -2832,6 +2886,7 @@ items:
       md5sum: null
       name: docker-image-sha256:f5b69a6fd18b7c6189824dff60f834ee4405b338579f5e37b7e6316f70460ac8.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -2878,6 +2933,7 @@ items:
       md5sum: null
       name: docker-image-sha256:ac3482bc646895faea206cae1af0ab7fbe5a5e8e323f7fdcd01bda47e33d569f.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:c87692a65005472766fc95effc7e4e0f049e3cd6c244f8e07b8da0604c6c7540
@@ -2941,6 +2997,7 @@ items:
       md5sum: null
       name: docker-image-sha256:8aff8f23622971d84fea7892062731af8c8611b887cbad8a3ef488055fa4ed04.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -2987,6 +3044,7 @@ items:
       md5sum: null
       name: docker-image-sha256:39fa57800aaa583cce939c5d1f6b8b9cc47fd903b1f2e8776d5b1d7cbf9dee4b.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -3033,6 +3091,7 @@ items:
       md5sum: null
       name: docker-image-sha256:f40245eeba63f6f1cd0b1b59a683a6ca6a5051194f55386e26e5fdd234433bb4.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -3079,6 +3138,7 @@ items:
       md5sum: null
       name: docker-image-sha256:9661ac2d9c97b5cffdf6bc41f1bc98020890a63918416d32e3fdead286229342.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:2e3b45e6ca30acddd1058a026b1a3fd47fbb02120e7e48b207954307dac53535
@@ -3142,6 +3202,7 @@ items:
       md5sum: null
       name: docker-image-sha256:176277a797bafa67823741efa319c2844758b2d5a4cb796b75a8b67580b54d56.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -3188,6 +3249,7 @@ items:
       md5sum: null
       name: docker-image-sha256:b248b0d65ac239f8cacbe71d892ea7d829db0171abb922f1caf6e888fb8c1bcc.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -3234,6 +3296,7 @@ items:
       md5sum: null
       name: docker-image-sha256:1dd3df4e8e532526b10155839caddef35cc731e586de169c60af9d72234e6640.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -3280,6 +3343,7 @@ items:
       md5sum: null
       name: docker-image-sha256:e437e702740efe93906c9b2e9e2a6e53863ccaa2aa49dfc6fa4a9047d37f0d2b.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:5c27155eaec4c610bc8389f7068c4713fcf6148097479f8e1fa8a12d5f3cad75
@@ -3343,6 +3407,7 @@ items:
       md5sum: null
       name: docker-image-sha256:fe0511050968b1355e91c143eea7937e6b96e50e41f1c07d09af3c344c53df65.aarch64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -3389,6 +3454,7 @@ items:
       md5sum: null
       name: docker-image-sha256:d55b1d209c064dc8fd17952f2b0fdaccedf3905bce5701910302a2cd08b3a2a7.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -3435,6 +3501,7 @@ items:
       md5sum: null
       name: docker-image-sha256:28b65974f88b0bc2c39b1e8f4aba6b5554f72b1650f69e63aeb5449bb48f58ee.s390x.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643
@@ -3481,6 +3548,7 @@ items:
       md5sum: null
       name: docker-image-sha256:96b0fc687f7eac12b7773dfc568cab1f39a005378108a057408cfb184c7b25c5.ppc64le.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:9e7f37ad9893d218c9998e53bdb847505c103999200a36afa9fd0875facd7643

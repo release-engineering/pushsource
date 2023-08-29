@@ -6,6 +6,7 @@ from urllib import parse
 from more_executors import Executors
 
 from .errata_client import ErrataClient
+from .errata_http_client import ErrataHTTPClient
 
 from ... import compat_attr as attr
 from ...source import Source
@@ -37,6 +38,8 @@ class ErrataSource(Source):
         koji_source=None,
         rpm_filter_arch=None,
         legacy_container_repos=False,
+        keytab_path=None,
+        principal=None,
         threads=4,
         timeout=60 * 60 * 4,
     ):
@@ -67,6 +70,12 @@ class ErrataSource(Source):
                 This is intended to better support certain legacy code and will be
                 removed when no longer needed. Only use this if you know that you
                 need it.
+            
+            keytab_path (str):
+                Kerberos keytab path for authenticating with Errata HTTP API.
+            
+            principal (str):
+                Kerberos principal for authenticating with Errata HTTP API.
 
             threads (int)
                 Number of threads used for concurrent queries to Errata Tool
@@ -79,6 +88,9 @@ class ErrataSource(Source):
         self._url = force_https(url)
         self._errata = list_argument(errata)
         self._client = ErrataClient(threads=threads, url=self._errata_service_url)
+        self._http_client = ErrataHTTPClient(self._url, keytab_path, principal)
+        # Get TGT only once
+        self._http_client.create_kerberos_ticket()
 
         self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
 
@@ -225,6 +237,12 @@ class ErrataSource(Source):
         # }
         #
 
+        # Get product name from Errata. Enrich Container push items with this info
+        advisory_data = self._http_client.get_advisory_data(erratum.name)
+        # This dictionary key is different based on erratum type
+        erratum_type = list(advisory_data["errata"].keys())[0]
+        product_name = advisory_data["errata"][erratum_type]["product"]["name"]
+
         # We'll be getting container metadata from these builds.
         with self._koji_source(
             container_build=list(docker_file_list.keys())
@@ -234,7 +252,7 @@ class ErrataSource(Source):
             for item in koji_source:
                 if isinstance(item, ContainerImagePushItem):
                     item = self._enrich_container_push_item(
-                        erratum, docker_file_list, item
+                        erratum, docker_file_list, item, product_name
                     )
                 elif isinstance(item, OperatorManifestPushItem):
                     # Accept this item but nothing special to do
@@ -267,7 +285,7 @@ class ErrataSource(Source):
 
         return out
 
-    def _enrich_container_push_item(self, erratum, docker_file_list, item):
+    def _enrich_container_push_item(self, erratum, docker_file_list, item, product_name):
         # metadata from koji doesn't contain info about where the image should be
         # pushed and a few other things - enrich it now
         errata_meta = docker_file_list.get(item.build) or {}
@@ -313,7 +331,9 @@ class ErrataSource(Source):
 
         # koji source provided basic info on container image, ET provides policy on
         # where/how it should be pushed, combine them both to get final push item
-        return attr.evolve(item, dest=dest, dest_signing_key=dest_signing_key)
+        return attr.evolve(
+            item, dest=dest, dest_signing_key=dest_signing_key, product_name=product_name
+        )
 
     def _push_items_from_rpms(self, erratum, rpm_list):
         out = []

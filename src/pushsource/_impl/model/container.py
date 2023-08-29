@@ -291,6 +291,14 @@ class ContainerImagePushItem(PushItem):
     )
     """Metadata for pulling this image from a registry."""
 
+    product_name = attr.ib(type=str, default=None)
+    """Name of the product of this image.
+
+    Brew doesn't provide this information, so it may not be set if the push
+    items are only generated from brew. This information will be included in the
+    "container security manifests" (formerly known as SBOMs).
+    """
+
 
 @attr.s()
 class SourceContainerImagePushItem(ContainerImagePushItem):

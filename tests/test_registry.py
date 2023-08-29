@@ -145,6 +145,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
             "registry.redhat.io/openshift/serverless-1-net-istio-controller-rhel8:1.1",
         ],
         dest_signing_key="1234abcde",
+        product_name="test-product",
     )
     # Eagerly fetch
     with source:
@@ -156,6 +157,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     assert items[0].dest_signing_key == "1234abcde"
     assert items[0].source_tags == ["latest"]
     assert items[0].dest == ["repo1", "repo2"]
+    assert items[0].product_name == "test-product"
 
     assert (
         items[1].name
@@ -168,6 +170,7 @@ def test_registry_push_items(mocked_inspect, mocked_get_manifest):
     assert items[1].dest_signing_key == "1234abcde"
     assert items[1].source_tags == ["1.1"]
     assert items[1].dest == ["repo1", "repo2"]
+    assert items[1].product_name == "test-product"
 
 
 @patch("pushsource._impl.backend.registry_source.get_manifest")

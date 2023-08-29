@@ -21,3 +21,4 @@ alabaster
 pidiff
 importlib-resources
 bandit
+pytest-mock

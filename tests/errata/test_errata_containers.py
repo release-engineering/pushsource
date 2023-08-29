@@ -1,10 +1,20 @@
 import os
 from mock import patch
+import json
 
 import pytest
 
 from pushsource import Source, ContainerImagePushItem, OperatorManifestPushItem
 
+@pytest.fixture(autouse=True)
+def baseline_errata_requests_mock(errata_requests_mock):
+    yield
+
+@pytest.fixture(autouse=True)
+def fake_kerberos_auth(mocker):
+    mocker.patch("gssapi.Name")
+    mocker.patch("gssapi.Credentials.acquire")
+    mocker.patch("requests_gssapi.HTTPSPNEGOAuth", return_value=None)
 
 @pytest.fixture
 def source_factory(fake_errata_tool, fake_koji, koji_dir):

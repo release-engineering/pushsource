@@ -22,6 +22,7 @@ from ..model import (
     VMIPushItem,
     AmiPushItem,
     VHDPushItem,
+    BootMode,
 )
 from ..helpers import (
     list_argument,
@@ -569,6 +570,9 @@ class KojiSource(Source):
             extra = archive.get("extra") or {}
             image = extra.get("image") or {}
             arch = image.get("arch")
+            boot_mode = image.get("boot_mode")
+            if boot_mode is not None:
+                boot_mode = BootMode(boot_mode)
 
             klass = cloud_types.get(archive["type_name"]) or VMIPushItem
 
@@ -602,6 +606,7 @@ class KojiSource(Source):
                     description="",
                     dest=self._dest,
                     src=item_src,
+                    boot_mode=boot_mode,
                     build=nvr,
                     build_info=KojiBuildInfo(
                         id=int(build_id),

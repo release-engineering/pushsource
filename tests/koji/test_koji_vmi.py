@@ -1,12 +1,13 @@
 import os
 
-from pytest import raises
+from pytest import raises, mark
 
 from pushsource import (
     Source,
     AmiPushItem,
     VHDPushItem,
     VMIPushItem,
+    BootMode,
     AmiRelease,
     VMIRelease,
     KojiBuildInfo,
@@ -75,13 +76,15 @@ def test_koji_not_vmi_container(fake_koji, koji_dir):
     assert "The build foobuild-1.0-1 is for container images." in str(exc_info.value)
 
 
-def test_koji_vmis(fake_koji, koji_dir):
+@mark.parametrize("boot_mode", [None, "legacy", "uefi", "hybrid"])
+def test_koji_vmis(boot_mode, fake_koji, koji_dir):
     """Koji source yields requested Virtual Machine Images."""
 
     name = "foobuild"
     version = "1.0"
     release = "20230110.sp.22"
     nvr = "%s-%s-%s" % (name, version, release)
+    boot_mode_enum = BootMode(boot_mode) if boot_mode else None
 
     source = Source.get(
         "koji:https://koji.example.com/?vmi_build=%s" % nvr, basedir=koji_dir
@@ -115,7 +118,7 @@ def test_koji_vmis(fake_koji, koji_dir):
                 "btype": "image",
                 "filename": fname,
                 "checksum": "00000000000000000000000000000000",
-                "extra": {"image": {"arch": "x86_64"}},
+                "extra": {"image": {"arch": "x86_64", "boot_mode": boot_mode}},
                 "type_name": tname,
                 "build_id": 1234,
                 "nvr": nvr,
@@ -155,6 +158,7 @@ def test_koji_vmis(fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir, "packages/foobuild/1.0/20230110.sp.22/images/%s" % fname
             ),
+            boot_mode=boot_mode_enum,
             dest=[],
             description="",
             md5sum="00000000000000000000000000000000",
@@ -221,6 +225,7 @@ def test_koji_vmi_compound_product_name(fake_koji, koji_dir):
         src=os.path.join(
             koji_dir, "packages/foobuild-azure/1.0/1/images/foo-azure-1.0-1.raw.xz"
         ),
+        boot_mode=None,
         dest=[],
         description="",
         md5sum="00000000000000000000000000000000",

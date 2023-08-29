@@ -24,4 +24,4 @@ from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem
 from .ami import AmiPushItem, AmiRelease, AmiBillingCodes, AmiSecurityGroup
 from .azure import VHDPushItem
-from .vms import VMIPushItem, VMIRelease
+from .vms import BootMode, VMIPushItem, VMIRelease

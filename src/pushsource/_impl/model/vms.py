@@ -1,8 +1,22 @@
 import datetime
+import enum
 
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import datestr, instance_of_str, instance_of, optional_str, optional, in_
+
+
+class BootMode(enum.Enum):
+    """Represent the possible boot modes for VM images."""
+
+    hybrid = "hybrid"
+    """Supports both UEFI and BIOS mode."""
+
+    uefi = "uefi"
+    """Supports only UEFI mode."""
+
+    legacy = "legacy"
+    """Supports only BIOS mode."""
 
 
 @attr.s()
@@ -57,10 +71,8 @@ class VMIPushItem(PushItem):
     description = attr.ib(type=str, default=None, validator=instance_of_str)
     """A brief human-readable description of the image."""
 
-    boot_mode = attr.ib(
-        type=str, default=None, validator=optional(in_(["hybrid", "uefi", "legacy"]))
-    )
-    """hybrid, uefi, legacy or missing value which means cloud provider's default"""
+    boot_mode = attr.ib(type=BootMode, default=None, validator=optional(in_(BootMode)))
+    """Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy)."""
 
     @release.validator
     def __validate_release(self, attribute, value):  # pylint: disable=unused-argument

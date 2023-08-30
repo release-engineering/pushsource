@@ -2,7 +2,7 @@ import datetime
 
 from .base import PushItem
 from .. import compat_attr as attr
-from .conv import datestr, instance_of_str, instance_of, optional_str
+from .conv import datestr, instance_of_str, instance_of, optional_str, optional, in_
 
 
 @attr.s()
@@ -56,6 +56,11 @@ class VMIPushItem(PushItem):
 
     description = attr.ib(type=str, default=None, validator=instance_of_str)
     """A brief human-readable description of the image."""
+
+    boot_mode = attr.ib(
+        type=str, default=None, validator=optional(in_(["hybrid", "uefi", "legacy"]))
+    )
+    """hybrid, uefi, legacy or missing value which means cloud provider's default"""
 
     @release.validator
     def __validate_release(self, attribute, value):  # pylint: disable=unused-argument

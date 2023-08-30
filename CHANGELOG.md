@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.35.0] - 2023-08-16
 
+- container_image_items attribute for OperatorManifestPushItem model
+- Include labels which match any prefix in INCLUDE_LABELS constant
+
+## [2.35.0] - 2023-08-16
+
 ### Added
 
 - Introduced `AmiPushItem.uefi_support` attribute
@@ -433,7 +438,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.35.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.36.0...HEAD
+[2.36.0]: https://github.com/release-engineering/pushsource/compare/v2.35.0...v2.36.0
 [2.35.0]: https://github.com/release-engineering/pushsource/compare/v2.34.0...v2.35.0
 [2.34.0]: https://github.com/release-engineering/pushsource/compare/v2.33.0...v2.34.0
 [2.33.0]: https://github.com/release-engineering/pushsource/compare/v2.32.0...v2.33.0

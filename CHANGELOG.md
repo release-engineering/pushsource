@@ -9,10 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
-## [2.35.0] - 2023-08-16
+## [2.37.0] - 2023-09-05
+
+### Added
+
+- Introduced `VMIPushItem.boot_mode` and associated `BootMode` enum
+
+## [2.36.0] - 2023-08-30
+
+### Added
 
 - container_image_items attribute for OperatorManifestPushItem model
-- Include labels which match any prefix in INCLUDE_LABELS constant
+- More labels available on container images
 
 ## [2.35.0] - 2023-08-16
 
@@ -438,7 +446,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.36.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.37.0...HEAD
+[2.37.0]: https://github.com/release-engineering/pushsource/compare/v2.36.0...v2.37.0
 [2.36.0]: https://github.com/release-engineering/pushsource/compare/v2.35.0...v2.36.0
 [2.35.0]: https://github.com/release-engineering/pushsource/compare/v2.34.0...v2.35.0
 [2.34.0]: https://github.com/release-engineering/pushsource/compare/v2.33.0...v2.34.0

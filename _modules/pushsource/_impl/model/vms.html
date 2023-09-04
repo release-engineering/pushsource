@@ -30,10 +30,27 @@
             
   <h1>Source code for pushsource._impl.model.vms</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">enum</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
-<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">datestr</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">datestr</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">optional</span><span class="p">,</span> <span class="n">in_</span>
+
+
+<div class="viewcode-block" id="BootMode">
+<a class="viewcode-back" href="../../../../model/vmi.html#pushsource.BootMode">[docs]</a>
+<span class="k">class</span> <span class="nc">BootMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent the possible boot modes for VM images.&quot;&quot;&quot;</span>
+
+    <span class="n">hybrid</span> <span class="o">=</span> <span class="s2">&quot;hybrid&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports both UEFI and BIOS mode.&quot;&quot;&quot;</span>
+
+    <span class="n">uefi</span> <span class="o">=</span> <span class="s2">&quot;uefi&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports only UEFI mode.&quot;&quot;&quot;</span>
+
+    <span class="n">legacy</span> <span class="o">=</span> <span class="s2">&quot;legacy&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports only BIOS mode.&quot;&quot;&quot;</span></div>
+
 
 
 <div class="viewcode-block" id="VMIRelease">
@@ -92,6 +109,9 @@
 
     <span class="n">description</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A brief human-readable description of the image.&quot;&quot;&quot;</span>
+
+    <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">BootMode</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">BootMode</span><span class="p">)))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy).&quot;&quot;&quot;</span>
 
     <span class="nd">@release</span><span class="o">.</span><span class="n">validator</span>
     <span class="k">def</span> <span class="nf">__validate_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>

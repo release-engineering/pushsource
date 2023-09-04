@@ -50,6 +50,7 @@
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.boot_mode" title="pushsource.VMIPushItem.boot_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">boot_mode()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.description" title="pushsource.VMIPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.release" title="pushsource.VMIPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
 </ul>
@@ -66,6 +67,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.boot_mode">
+<span class="sig-name descname"><span class="pre">boot_mode</span></span><a class="headerlink" href="#pushsource.VMIPushItem.boot_mode" title="Link to this definition">¶</a></dt>
+<dd><p>uefi, legacy, or hybrid (uefi + legacy).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Boot mode supported by the image (if known)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -193,6 +205,30 @@ each rebuild.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.BootMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">BootMode</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#BootMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.BootMode" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the possible boot modes for VM images.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.hybrid">
+<span class="sig-name descname"><span class="pre">hybrid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hybrid'</span></em><a class="headerlink" href="#pushsource.BootMode.hybrid" title="Link to this definition">¶</a></dt>
+<dd><p>Supports both UEFI and BIOS mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.uefi">
+<span class="sig-name descname"><span class="pre">uefi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'uefi'</span></em><a class="headerlink" href="#pushsource.BootMode.uefi" title="Link to this definition">¶</a></dt>
+<dd><p>Supports only UEFI mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.legacy">
+<span class="sig-name descname"><span class="pre">legacy</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'legacy'</span></em><a class="headerlink" href="#pushsource.BootMode.legacy" title="Link to this definition">¶</a></dt>
+<dd><p>Supports only BIOS mode.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -238,6 +274,7 @@ each rebuild.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: VMI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIPushItem"><code class="docutils literal notranslate"><span class="pre">VMIPushItem</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIRelease"><code class="docutils literal notranslate"><span class="pre">VMIRelease</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.BootMode"><code class="docutils literal notranslate"><span class="pre">BootMode</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>

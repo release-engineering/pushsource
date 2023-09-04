@@ -14,6 +14,7 @@ items:
       - bp-1234
       - bp-abcd
       name: FakeBcName
+    boot_mode: null
     build: null
     build_info: null
     description: A sample image for testing

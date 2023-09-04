@@ -24,6 +24,7 @@ from pushsource._impl.model import (
     AmiBillingCodes,
     AmiSecurityGroup,
     VHDPushItem,
+    BootMode,
     ErratumPushItem,
     ErratumReference,
     ErratumModule,

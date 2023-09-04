@@ -6,3 +6,6 @@ Push items: VMI
 
 .. autoclass:: pushsource.VMIRelease()
    :members:
+
+.. autoclass:: pushsource.BootMode()
+   :members:

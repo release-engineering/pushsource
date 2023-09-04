@@ -10,6 +10,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_ami"
 items:
 - AmiPushItem:
     billing_codes: null
+    boot_mode: null
     build: null
     build_info: null
     description: A sample image for testing

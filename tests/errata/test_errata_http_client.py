@@ -12,7 +12,10 @@ from pushsource._impl.backend.errata_source.errata_http_client import ErrataHTTP
 @pytest.fixture(autouse=True)
 def fake_temporary_file(mocker):
     mock_file = mocker.patch("tempfile.NamedTemporaryFile")
-    mock_file.return_value.__enter__.return_value.name = "/temp/ccache_pushsource_errata_1234"
+    mock_file.return_value.__enter__.return_value.name = (
+        "/temp/ccache_pushsource_errata_1234"
+    )
+
 
 def test_init():
     client = ErrataHTTPClient(
@@ -51,7 +54,11 @@ def test_create_kerberos_ticket_already_exists(mock_run):
 
     client.create_kerberos_ticket()
     mock_run.assert_called_once_with(
-        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False
+        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
     )
 
 
@@ -74,7 +81,11 @@ def test_create_kerberos_ticket_not_found(mock_run, caplog):
     client.create_kerberos_ticket()
     assert mock_run.call_count == 2
     assert mock_run.call_args_list[0] == mock.call(
-        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False
+        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
     )
     assert mock_run.call_args_list[1] == mock.call(
         [
@@ -86,12 +97,15 @@ def test_create_kerberos_ticket_not_found(mock_run, caplog):
             "-c",
             "FILE:/temp/ccache_pushsource_errata_1234",
         ],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True,
-        check=False
+        check=False,
     )
-    assert caplog.messages == ["Errata TGT doesn't exist, running kinit "
-                               "for principal pub-errata@IPA.REDHAT.COM"]
+    assert caplog.messages == [
+        "Errata TGT doesn't exist, running kinit "
+        "for principal pub-errata@IPA.REDHAT.COM"
+    ]
 
 
 @mock.patch("subprocess.run")
@@ -113,7 +127,11 @@ def test_create_kerberos_ticket_kinit_failed(mock_run, caplog):
     client.create_kerberos_ticket()
     assert mock_run.call_count == 2
     assert mock_run.call_args_list[0] == mock.call(
-        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False
+        ["klist", "-c", "FILE:/temp/ccache_pushsource_errata_1234"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
     )
     assert mock_run.call_args_list[1] == mock.call(
         [
@@ -125,13 +143,16 @@ def test_create_kerberos_ticket_kinit_failed(mock_run, caplog):
             "-c",
             "FILE:/temp/ccache_pushsource_errata_1234",
         ],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True,
-        check=False
+        check=False,
     )
-    assert caplog.messages == ["Errata TGT doesn't exist, running kinit "
-                               "for principal pub-errata@IPA.REDHAT.COM",
-                               "kinit has failed: 'kinit failed'"]
+    assert caplog.messages == [
+        "Errata TGT doesn't exist, running kinit "
+        "for principal pub-errata@IPA.REDHAT.COM",
+        "kinit has failed: 'kinit failed'",
+    ]
 
 
 @mock.patch("subprocess.run")
@@ -163,7 +184,9 @@ def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
 
     mock_name.assert_called_once()
     mock_acquire.assert_called_once_with(
-        name=mock_name.return_value, usage="initiate", store={"ccache": "FILE:/temp/ccache_pushsource_errata_1234"}
+        name=mock_name.return_value,
+        usage="initiate",
+        store={"ccache": "FILE:/temp/ccache_pushsource_errata_1234"},
     )
     mock_session.assert_called_once_with()
     mock_auth.assert_called_once_with(creds=mock_acquire.return_value.creds)
@@ -173,11 +196,14 @@ def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
 
     assert caplog.messages == ["Creating Errata requests session"]
 
+
 @mock.patch("gssapi.Name")
 @mock.patch("gssapi.Credentials.acquire")
 @mock.patch("requests.Session")
 @mock.patch("requests_gssapi.HTTPSPNEGOAuth")
-def test_get_session_already_exists(mock_auth, mock_session, mock_acquire, mock_name, caplog):
+def test_get_session_already_exists(
+    mock_auth, mock_session, mock_acquire, mock_name, caplog
+):
     caplog.set_level(logging.DEBUG)
 
     client = ErrataHTTPClient(

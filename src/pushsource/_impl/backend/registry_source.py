@@ -56,9 +56,9 @@ class RegistrySource(Source):
                 argument can affect the number of generated push items. For example,
                 providing two keys would produce double the amount of push items as providing
                 a single key.
-            
+
             product_name (str)
-                If provided, this value will be used to populate 
+                If provided, this value will be used to populate
                 :meth:`~pushsource.ContainerImagePushItem.product_name` on generated push items.
         """
         self._images = ["https://%s" % x for x in list_argument(image)]

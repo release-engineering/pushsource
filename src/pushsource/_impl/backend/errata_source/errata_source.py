@@ -70,10 +70,10 @@ class ErrataSource(Source):
                 This is intended to better support certain legacy code and will be
                 removed when no longer needed. Only use this if you know that you
                 need it.
-            
+
             keytab_path (str):
                 Kerberos keytab path for authenticating with Errata HTTP API.
-            
+
             principal (str):
                 Kerberos principal for authenticating with Errata HTTP API.
 
@@ -285,7 +285,9 @@ class ErrataSource(Source):
 
         return out
 
-    def _enrich_container_push_item(self, erratum, docker_file_list, item, product_name):
+    def _enrich_container_push_item(
+        self, erratum, docker_file_list, item, product_name
+    ):
         # metadata from koji doesn't contain info about where the image should be
         # pushed and a few other things - enrich it now
         errata_meta = docker_file_list.get(item.build) or {}
@@ -332,7 +334,10 @@ class ErrataSource(Source):
         # koji source provided basic info on container image, ET provides policy on
         # where/how it should be pushed, combine them both to get final push item
         return attr.evolve(
-            item, dest=dest, dest_signing_key=dest_signing_key, product_name=product_name
+            item,
+            dest=dest,
+            dest_signing_key=dest_signing_key,
+            product_name=product_name,
         )
 
     def _push_items_from_rpms(self, erratum, rpm_list):

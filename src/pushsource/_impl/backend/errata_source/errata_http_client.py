@@ -12,6 +12,7 @@ import requests_gssapi
 
 LOG = logging.getLogger("pushsource.errata_http_client")
 
+
 class ErrataHTTPClient:
     """Class for performing HTTP API queries with Errata."""
 
@@ -31,7 +32,9 @@ class ErrataHTTPClient:
         """
         self.hostname = hostname
         # Generate a random filename for ccache
-        with tempfile.NamedTemporaryFile(prefix="ccache_pushsource_errata_", delete=False) as file:
+        with tempfile.NamedTemporaryFile(
+            prefix="ccache_pushsource_errata_", delete=False
+        ) as file:
             self.ccache_filename = file.name
 
         if keytab_path:
@@ -54,17 +57,26 @@ class ErrataHTTPClient:
         This method is expected to be called before any HTTP queries to errata are made.
         """
         if not self.keytab_path or not self.principal:
-            LOG.warning("Errata principal or keytab path is not specified. Skipping creating TGT")
+            LOG.warning(
+                "Errata principal or keytab path is not specified. Skipping creating TGT"
+            )
             return
 
         result = subprocess.run(
-            ["klist", "-c", f"FILE:{self.ccache_filename}"],  stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False
+            ["klist", "-c", f"FILE:{self.ccache_filename}"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=False,
         )
         regex_res = re.search(r"Default principal: (.*)\n", result.stdout)
 
         # if Kerberos ticket is not found, or the principal is incorrect
         if result.returncode or not regex_res or regex_res.group(1) != self.principal:
-            LOG.info("Errata TGT doesn't exist, running kinit for principal %s", self.principal)
+            LOG.info(
+                "Errata TGT doesn't exist, running kinit for principal %s",
+                self.principal,
+            )
             result = subprocess.run(
                 [
                     "kinit",
@@ -75,8 +87,10 @@ class ErrataHTTPClient:
                     "-c",
                     f"FILE:{self.ccache_filename}",
                 ],
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True, check=False
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=False,
             )
             if result.returncode:
                 LOG.warning("kinit has failed: '%s'", result.stdout)
@@ -98,13 +112,15 @@ class ErrataHTTPClient:
             LOG.debug("Creating Errata requests session")
             name = gssapi.Name(self.principal, gssapi.NameType.user)
             creds = gssapi.Credentials.acquire(
-                name=name, usage="initiate", store={"ccache": f"FILE:{self.ccache_filename}"}
+                name=name,
+                usage="initiate",
+                store={"ccache": f"FILE:{self.ccache_filename}"},
             ).creds
 
             session = requests.Session()
             session.auth = requests_gssapi.HTTPSPNEGOAuth(creds=creds)
             self._thread_local.session = session
-        
+
         return self._thread_local.session
 
     def get_advisory_data(self, advisory: str) -> dict:

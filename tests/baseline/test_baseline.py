@@ -78,6 +78,7 @@ def koji_test_backend(fake_koji, koji_dir):
 
     Source.reset()
 
+
 @pytest.fixture(autouse=True)
 def fake_kerberos_auth(mocker):
     mocker.patch("gssapi.Name")
@@ -93,7 +94,9 @@ def baseline_errata_requests_mock(errata_requests_mock):
 @pytest.fixture(scope="module", autouse=True)
 def errata_test_backend(fake_errata_tool, koji_test_backend):
     # erratatest backend is errata backend pointing at kojitest and our errata testdata
-    bound = Source.get_partial("errata:https://errata.example.com/", koji_source="kojitest:")
+    bound = Source.get_partial(
+        "errata:https://errata.example.com/", koji_source="kojitest:"
+    )
     Source.register_backend("erratatest", bound)
 
     yield

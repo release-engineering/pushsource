@@ -29,6 +29,7 @@ def run(server_url, advisory_id):
         yaml.dump(data, fh)
     print("Wrote to", data_file)
 
+
 def run_http_api(server_url, advisory_id, ca_path):
     # This function expects a Kerberos ticket to be present
     session = requests.Session()

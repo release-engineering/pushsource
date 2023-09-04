@@ -18,6 +18,7 @@ from pushsource._impl.model import (
 THIS_DIR = os.path.dirname(__file__)
 ERRATA_DATA_DIR = os.path.abspath(os.path.join(THIS_DIR, "./errata/data"))
 
+
 @fixture
 def fake_errata_tool():
     controller = FakeErrataToolController()
@@ -105,6 +106,7 @@ def fake_koji():
 def koji_dir(tmpdir):
     yield str(tmpdir.mkdir("koji"))
 
+
 @fixture()
 def errata_requests_mock(requests_mock):
     for root, _, files in os.walk(ERRATA_DATA_DIR):
@@ -113,9 +115,12 @@ def errata_requests_mock(requests_mock):
                 path = os.path.join(root, filename)
                 with open(path) as fh:
                     data = json.load(fh)
-                requests_mock.get(f"/api/v1/erratum/{filename.rstrip('.json')}", json=data)  # nosec B113
+                requests_mock.get(
+                    f"/api/v1/erratum/{filename.rstrip('.json')}", json=data
+                )  # nosec B113
 
     yield
+
 
 @fixture(autouse=True)
 def clean_backends():

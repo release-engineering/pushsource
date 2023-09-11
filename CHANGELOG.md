@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.38.0] - 2023-09-11
+
+### Added
+
+- Introduced `ContainerImagePushItem.product_name` attribute
+
 ## [2.37.0] - 2023-09-05
 
 ### Added
@@ -446,7 +452,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.37.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.38.0...HEAD
+[2.38.0]: https://github.com/release-engineering/pushsource/compare/v2.37.0...v2.38.0
 [2.37.0]: https://github.com/release-engineering/pushsource/compare/v2.36.0...v2.37.0
 [2.36.0]: https://github.com/release-engineering/pushsource/compare/v2.35.0...v2.36.0
 [2.35.0]: https://github.com/release-engineering/pushsource/compare/v2.34.0...v2.35.0

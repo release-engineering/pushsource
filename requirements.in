@@ -8,3 +8,4 @@ frozenlist2
 python-dateutil
 kobo
 pytz; python_version < '3.9'
+requests

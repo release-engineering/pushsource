@@ -4,6 +4,7 @@ import functools
 import logging
 import difflib
 import threading
+import json
 
 import yaml
 import attr
@@ -26,6 +27,7 @@ THIS_DIR = os.path.dirname(__file__)
 CASE_DIR = os.path.join(THIS_DIR, "cases")
 CASE_TEMPLATE_FILE = os.path.join(THIS_DIR, "template.yml.j2")
 SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
+DATA_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
 
 
 def asdict(value):
@@ -75,6 +77,18 @@ def koji_test_backend(fake_koji, koji_dir):
     yield
 
     Source.reset()
+
+
+@pytest.fixture(autouse=True)
+def fake_kerberos_auth(mocker):
+    mocker.patch("gssapi.Name")
+    mocker.patch("gssapi.Credentials.acquire")
+    mocker.patch("requests_gssapi.HTTPSPNEGOAuth", return_value=None)
+
+
+@pytest.fixture(autouse=True)
+def baseline_errata_requests_mock(errata_requests_mock):
+    yield
 
 
 @pytest.fixture(scope="module", autouse=True)

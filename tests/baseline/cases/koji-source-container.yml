@@ -22,6 +22,7 @@ items:
     md5sum: null
     name: docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
     origin: null
+    product_name: null
     pull_info:
       digest_specs:
       - digest: sha256:9ab2d821d9cd40e2483582d418191d2548e2b839ac26c4bfd1a9996dca773f0f

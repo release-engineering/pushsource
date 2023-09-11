@@ -4,6 +4,11 @@ import xmlrpc.client
 import json
 import sys
 import yaml
+from urllib.parse import urljoin
+
+import requests
+import gssapi
+from requests_gssapi import HTTPSPNEGOAuth
 
 DATADIR = os.path.dirname(__file__)
 
@@ -25,5 +30,21 @@ def run(server_url, advisory_id):
     print("Wrote to", data_file)
 
 
+def run_http_api(server_url, advisory_id, ca_path):
+    # This function expects a Kerberos ticket to be present
+    session = requests.Session()
+    session.auth = HTTPSPNEGOAuth()
+    session.verify = ca_path
+
+    res = session.get(urljoin(server_url, f"/api/v1/erratum/{advisory_id}"))
+    res.raise_for_status()
+
+    data_file = os.path.join(DATADIR, "%s.json" % advisory_id)
+    with open(data_file, "w") as fh:
+        json.dump(res.json(), fh, indent=4)
+    print("Wrote to", data_file)
+
+
 if __name__ == "__main__":
     run(*sys.argv[1:])
+    # run_http_api(*sys.argv[1:])

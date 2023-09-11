@@ -33,6 +33,7 @@ items:
     md5sum: null
     name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
     origin: null
+    product_name: null
     pull_info:
       digest_specs:
       - digest: sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a
@@ -94,6 +95,7 @@ items:
       md5sum: null
       name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
       origin: null
+      product_name: null
       pull_info:
         digest_specs:
         - digest: sha256:4df4eec0343cc8ed7327eae7d69eb106e3e2b7697a99eb7e762d2d376002213a

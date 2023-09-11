@@ -30,7 +30,7 @@ IMAGE_URI_REGEX = re.compile("https://([^:@]*):(.+)(([^:]:)+)*")
 class RegistrySource(Source):
     """Uses a container image registry as a source of push items."""
 
-    def __init__(self, image, dest=None, dest_signing_key=None):
+    def __init__(self, image, dest=None, dest_signing_key=None, product_name=None):
         """Create a new source.
 
         Parameters:
@@ -56,6 +56,10 @@ class RegistrySource(Source):
                 argument can affect the number of generated push items. For example,
                 providing two keys would produce double the amount of push items as providing
                 a single key.
+
+            product_name (str)
+                If provided, this value will be used to populate
+                :meth:`~pushsource.ContainerImagePushItem.product_name` on generated push items.
         """
         self._images = ["https://%s" % x for x in list_argument(image)]
         if dest:
@@ -65,6 +69,7 @@ class RegistrySource(Source):
         self._signing_keys = list_argument(dest_signing_key)
         self._inspected = {}
         self._manifests = {}
+        self._product_name = product_name
 
     def __enter__(self):
         return self
@@ -175,6 +180,7 @@ class RegistrySource(Source):
             labels=labels,
             arch=arch,
             pull_info=pull_info,
+            product_name=self._product_name,
         )
 
     def __iter__(self):

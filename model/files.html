@@ -33,74 +33,6 @@
             
   <section id="push-items-file">
 <h1>Push items: file<a class="headerlink" href="#push-items-file" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="pushsource.FilePushItem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">FilePushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/file.html#FilePushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.FilePushItem" title="Link to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a single generic file.</p>
-<p><strong>Attributes:</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
-<li><p><a class="reference internal" href="#pushsource.FilePushItem.description" title="pushsource.FilePushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.FilePushItem.display_order" title="pushsource.FilePushItem.display_order"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display_order()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pushsource.FilePushItem.version" title="pushsource.FilePushItem.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
-</ul>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.FilePushItem.description">
-<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.FilePushItem.description" title="Link to this definition">¶</a></dt>
-<dd><p>A human-readable brief description of the file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.FilePushItem.version">
-<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.FilePushItem.version" title="Link to this definition">¶</a></dt>
-<dd><p>A version string associated with the file.</p>
-<p>This string is intended for display purposes only.
-It may denote a product version associated with this file.
-For example, a push item for <code class="docutils literal notranslate"><span class="pre">oc-4.2.33-linux.tar.gz</span></code> may
-use a version of <code class="docutils literal notranslate"><span class="pre">&quot;4.2.33&quot;</span></code> to denote that the file relates
-to OpenShift version 4.2.33.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pushsource.FilePushItem.display_order">
-<span class="sig-name descname"><span class="pre">display_order</span></span><a class="headerlink" href="#pushsource.FilePushItem.display_order" title="Link to this definition">¶</a></dt>
-<dd><p>A display order hint associated with the file.</p>
-<p>This value is intended for display purposes only.
-In a UI presenting a file list, it is suggested that the default order
-of files should be set by an ascending sort using this value.
-This provides a method of keeping related files grouped together and
-presented to users in a logical order.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 2.14.0.</span></p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
 
@@ -134,10 +66,7 @@ presented to users in a logical order.</p>
 <li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/pub.html">Source: pub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Push items</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: file</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pushsource.FilePushItem"><code class="docutils literal notranslate"><span class="pre">FilePushItem</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cgw.html">Push items: cgw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
@@ -199,7 +128,7 @@ presented to users in a logical order.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

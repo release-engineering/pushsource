@@ -177,9 +177,9 @@ jsonschema-specifications==2023.7.1 \
     --hash=sha256:05adf340b659828a004220a9613be00fa3f223f2b82002e273dee62fd50524b1 \
     --hash=sha256:c91a50404e88a1f6ba40636778e2ee08f6e24c5613fe4c53ac24578a5a7f72bb
     # via jsonschema
-kobo==0.30.0 \
-    --hash=sha256:6caaf50362777b3b30bb9c0d500c9685c0aaa3115935dba993aa9f9fc5d855d3 \
-    --hash=sha256:f5e03ebd9f93cd67dfab1ec76340fe93646d26a8ff8485d73490e1a7ac715d7f
+kobo==0.30.1 \
+    --hash=sha256:0abc8d492d12f0a449e9493d5f37d1223464b8f3df9c6496f5836e80d222770f \
+    --hash=sha256:b64cc5c8f779a45659ee7ccdd9ce651735af7ac71e6234c8838a0c631a713e24
     # via -r requirements.in
 koji==1.33.1 \
     --hash=sha256:16493a182e7194f7a5be3426a48dafb5982a450ad4cf79d14f36eb5c8a2c863d \

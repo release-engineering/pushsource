@@ -1,0 +1,53 @@
+# A pushsource library testcase.
+#
+# This file was generated from a template.
+# To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
+
+# URL of Source to test.
+url: "staged:{{ src_dir }}/tests/staged/data/simple_ami_with_bootmode"
+
+# Push items generated from above.
+items:
+- AmiPushItem:
+    billing_codes: null
+    boot_mode: uefi
+    build: null
+    build_info: null
+    description: A sample image for testing
+    dest:
+    - dest1
+    ena_support: true
+    image_id: null
+    marketplace_entity_type: null
+    md5sum: null
+    name: fake-image.raw
+    origin: {{ src_dir }}/tests/staged/data/simple_ami_with_bootmode
+    public_image: true
+    recommended_instance_type: null
+    region: cn-north-1
+    release:
+      arch: x86_64
+      base_product: null
+      base_version: null
+      date: 2020-05-11
+      product: Fake-Product
+      respin: 1
+      type: ga
+      variant: Fake-Variant
+      version: Fake-Version
+    release_notes: null
+    root_device: /dev/sda1
+    scanning_port: null
+    security_groups: []
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_ami_with_bootmode/dest1/AWS_IMAGES/fake-image.raw
+    sriov_net_support: simple
+    state: PENDING
+    type: access
+    uefi_support: null
+    usage_instructions: null
+    user_name: null
+    version_title: null
+    virtualization: hvm
+    volume: gp2

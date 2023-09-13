@@ -12,6 +12,7 @@ import jinja2
 import pytest
 from mock import patch
 from collections.abc import Mapping
+from enum import Enum
 
 from ..errata.fake_errata_tool import FakeErrataToolController
 
@@ -38,6 +39,10 @@ def asdict(value):
         recurse=True,
         value_serializer=lambda _self, _field, value: unfreeze(value),
     )
+    # yaml dump can't handle enums, so export their value instead.
+    for k, v in ret.items():
+        if isinstance(v, Enum):
+            ret[k] = v.value
     return ret
 
 
@@ -153,7 +158,6 @@ class CaseHelper(object):
         item_dicts = []
         for item in items:
             item_dicts.append({type(item).__name__: asdict(item)})
-
         out_yaml = self.case_template.render(url=url, items=item_dicts)
         out_yaml = self.unrender(out_yaml)
 

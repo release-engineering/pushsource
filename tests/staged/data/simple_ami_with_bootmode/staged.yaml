@@ -1,0 +1,27 @@
+header:
+  version: "0.2"
+
+payload:
+  files:
+  - relative_path: dest1/AWS_IMAGES/fake-image.raw
+    attributes:
+      description: "A sample image for testing"
+      boot_mode: uefi
+      ena_support: true
+      region: cn-north-1
+      release:
+        arch: x86_64
+        base_product: null
+        base_version: null
+        date: "20200511"
+        product: Fake-Product
+        respin: 1
+        type: ga
+        variant: Fake-Variant
+        version: Fake-Version
+      root_device: /dev/sda1
+      sriov_net_support: simple
+      type: access
+      virtualization: hvm
+      volume: gp2
+      public_image: true

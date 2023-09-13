@@ -2,7 +2,7 @@ from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
 from .conv import instance_of_str, instance_of, optional_str, optional
-from .vms import VMIRelease, VMIPushItem
+from .vms import VMIRelease, VMIPushItem, BootMode
 
 
 class AmiRelease(VMIRelease):
@@ -205,6 +205,9 @@ class AmiPushItem(VMIPushItem):
             "sriov_net_support": data["sriov_net_support"],
             "ena_support": data.get("ena_support"),
             "uefi_support": data.get("uefi_support"),
+            "boot_mode": BootMode(data.get("boot_mode"))
+            if data.get("boot_mode")
+            else None,
             "billing_codes": AmiBillingCodes._from_data(
                 data.get("billing_codes") or {}
             ),

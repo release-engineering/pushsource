@@ -145,6 +145,9 @@ definitions:
             billing_codes:
                 $ref: &quot;#/definitions/ami_billing_codes&quot;
 
+            boot_mode:
+                enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+
             public_image:
                 type:
                 - boolean

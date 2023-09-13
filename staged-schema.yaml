@@ -105,6 +105,9 @@ definitions:
             billing_codes:
                 $ref: "#/definitions/ami_billing_codes"
 
+            boot_mode:
+                enum: [ 'hybrid', 'uefi', 'legacy', null ]
+
             public_image:
                 type:
                 - boolean

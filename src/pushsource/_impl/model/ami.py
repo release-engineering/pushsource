@@ -5,7 +5,6 @@ from .conv import instance_of_str, instance_of, optional_str, optional
 from .vms import VMIRelease, VMIPushItem, BootMode
 
 
-
 class AmiRelease(VMIRelease):
     """
     Release metadata associated with an AMI.
@@ -207,7 +206,8 @@ class AmiPushItem(VMIPushItem):
             "ena_support": data.get("ena_support"),
             "uefi_support": data.get("uefi_support"),
             "boot_mode": BootMode(data.get("boot_mode"))
-            if data.get("boot_mode") else None,
+            if data.get("boot_mode")
+            else None,
             "billing_codes": AmiBillingCodes._from_data(
                 data.get("billing_codes") or {}
             ),

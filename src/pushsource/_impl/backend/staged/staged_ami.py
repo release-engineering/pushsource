@@ -47,9 +47,13 @@ class StagedAmiMixin(StagedBaseMixin):
             billing_codes = AmiBillingCodes(**billing_codes_kwargs)
             image_kwargs.update({"billing_codes": billing_codes})
 
-        image_kwargs.update({"boot_mode":
-                                 BootMode(attributes.get("boot_mode"))
-                                 if attributes.get("boot_mode") else None})
+        image_kwargs.update(
+            {
+                "boot_mode": BootMode(attributes.get("boot_mode"))
+                if attributes.get("boot_mode")
+                else None
+            }
+        )
 
         image_attrs = [
             "type",

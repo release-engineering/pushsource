@@ -5,8 +5,7 @@ from concurrent import futures
 from urllib import parse
 from more_executors import Executors
 
-from .errata_client import ErrataClient
-from .errata_http_client import ErrataHTTPClient
+from .errata_client import get_errata_client
 
 from ... import compat_attr as attr
 from ...source import Source
@@ -87,10 +86,8 @@ class ErrataSource(Source):
         """
         self._url = force_https(url)
         self._errata = list_argument(errata)
-        self._client = ErrataClient(threads=threads, url=self._errata_service_url)
-        self._http_client = ErrataHTTPClient(self._url, keytab_path, principal)
-        # Get TGT only once
-        self._http_client.create_kerberos_ticket()
+        self._client = get_errata_client(threads=threads, url=self._errata_service_url,  keytab_path=keytab_path, principal=principal)
+        self._client.authenticate()
 
         self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
 
@@ -238,11 +235,12 @@ class ErrataSource(Source):
         #
 
         # Get product name from Errata. Enrich Container push items with this info
-        advisory_data = self._http_client.get_advisory_data(erratum.name)
+        advisory_data = self._client.get_advisory_data(erratum.name)
         if advisory_data:
             # This dictionary key is different based on erratum type
             erratum_type = list(advisory_data["errata"].keys())[0]
-            product_name = advisory_data["errata"][erratum_type]["product"]["name"]
+            product_name = advisory_data["errata"][erratum_type]["product"][
+                "name"]
         else:
             product_name = None
 

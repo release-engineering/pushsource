@@ -49,11 +49,16 @@ def asdict(value):
 @pytest.fixture(scope="module")
 def fake_errata_tool():
     controller = FakeErrataToolController()
+
     with patch(
-        "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
-    ) as mock_proxy:
-        mock_proxy.side_effect = controller.proxy
-        yield controller
+        "pushsource._impl.backend.errata_source.errata_client.requests.Session"
+    ) as mock_http_proxy:
+        with patch(
+                "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
+        ) as mock_xmlrpc_client:
+            mock_http_proxy.side_effect = controller.proxy
+            mock_xmlrpc_client.side_effect = controller.proxy
+            yield controller
 
 
 @pytest.fixture(scope="module")
@@ -88,7 +93,7 @@ def koji_test_backend(fake_koji, koji_dir):
 def fake_kerberos_auth(mocker):
     mocker.patch(
         "pushsource._impl.backend.errata_source."
-        "errata_http_client.ErrataHTTPClient.create_kerberos_ticket"
+        "errata_client.ErrataHTTPClient.authenticate"
     )
     mocker.patch("gssapi.Name")
     mocker.patch("gssapi.Credentials.acquire")

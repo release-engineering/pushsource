@@ -15,18 +15,30 @@ from pushsource._impl.model import (
     ContainerImageDigestPullSpec,
 )
 
+import pytest
+
 THIS_DIR = os.path.dirname(__file__)
 ERRATA_DATA_DIR = os.path.abspath(os.path.join(THIS_DIR, "./errata/data"))
 
 
+@pytest.fixture(autouse=True)
+def fake_kerberos_auth(mocker):
+    mocker.patch("gssapi.Name")
+    mocker.patch("gssapi.Credentials.acquire")
+    mocker.patch("requests_gssapi.HTTPSPNEGOAuth", return_value=None)
+
 @fixture
-def fake_errata_tool():
+def fake_errata_tool(fake_kerberos_auth):
     controller = FakeErrataToolController()
     with patch(
-        "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
-    ) as mock_proxy:
-        mock_proxy.side_effect = controller.proxy
-        yield controller
+            "pushsource._impl.backend.errata_source.errata_client.requests.Session"
+    ) as mock_http_proxy:
+        with patch(
+                "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
+        ) as mock_xmlrpc_client:
+            mock_http_proxy.side_effect = controller.proxy
+            mock_xmlrpc_client.side_effect = controller.proxy
+            yield controller
 
 
 @fixture

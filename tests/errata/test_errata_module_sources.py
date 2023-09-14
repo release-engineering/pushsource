@@ -5,6 +5,7 @@ import pytest
 from pushsource import Source, ModuleMdSourcePushItem
 
 
+
 @pytest.fixture
 def source_factory(fake_errata_tool, fake_koji, koji_dir):
     ctor = Source.get_partial(

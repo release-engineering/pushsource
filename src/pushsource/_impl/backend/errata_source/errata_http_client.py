@@ -13,6 +13,7 @@ import requests_gssapi
 
 LOG = logging.getLogger("pushsource.errata_http_client")
 
+
 def return_none_if_unauthenticated(func):
     @wraps(func)
     def wrapper_return_none_if_unauthenticated(self, *args, **kwargs):
@@ -21,6 +22,7 @@ def return_none_if_unauthenticated(func):
         return func(self, *args, **kwargs)
 
     return wrapper_return_none_if_unauthenticated
+
 
 class ErrataHTTPClient:
     """Class for performing HTTP API queries with Errata."""

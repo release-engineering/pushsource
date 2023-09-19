@@ -239,9 +239,12 @@ class ErrataSource(Source):
 
         # Get product name from Errata. Enrich Container push items with this info
         advisory_data = self._http_client.get_advisory_data(erratum.name)
-        # This dictionary key is different based on erratum type
-        erratum_type = list(advisory_data["errata"].keys())[0]
-        product_name = advisory_data["errata"][erratum_type]["product"]["name"]
+        if advisory_data:
+            # This dictionary key is different based on erratum type
+            erratum_type = list(advisory_data["errata"].keys())[0]
+            product_name = advisory_data["errata"][erratum_type]["product"]["name"]
+        else:
+            product_name = None
 
         # We'll be getting container metadata from these builds.
         with self._koji_source(

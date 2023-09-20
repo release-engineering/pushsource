@@ -43,8 +43,8 @@ for the library is in the creation of content publishing tools.</p>
 <li><p>RPMs and generic files obtained from a local directory.</p></li>
 <li><p>Advisories and RPMs obtained from Errata Tool.</p></li>
 </ul>
-<p>Typical usage of the library involves obtaining a <code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code>
-instance and iterating over <code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code> objects discovered
+<p>Typical usage of the library involves obtaining a <a class="reference internal" href="sources/base.html#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a>
+instance and iterating over <a class="reference internal" href="model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> objects discovered
 by the source.</p>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
@@ -62,8 +62,8 @@ by the source.</p>
 </nav>
 <section id="obtaining-a-source-by-url">
 <span id="urls"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Obtaining a source by URL</a><a class="headerlink" href="#obtaining-a-source-by-url" title="Link to this heading">¶</a></h2>
-<p>In most cases, the recommended method of obtaining a <code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code>
-is to provide a URL to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method.
+<p>In most cases, the recommended method of obtaining a <a class="reference internal" href="sources/base.html#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a>
+is to provide a URL to the <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.
 URLs are used to select a backend and provide parameters.</p>
 <p>URLs use one of the following syntaxes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>backend:remote_url?arg1=val1&amp;arg2=val2&amp;...
@@ -112,24 +112,24 @@ For detailed information, see the API reference of the associated class.</p>
 <tbody>
 <tr class="row-even"><td><p>koji</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org?rpm=python3-3.7.5-2.fc31.x86_64.rpm</span></code></p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">KojiSource</span></code></p></td>
+<td><p><a class="reference internal" href="sources/koji.html#pushsource.KojiSource" title="pushsource.KojiSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">KojiSource</span></code></a></p></td>
 <td><p>Obtain RPMs, container images and other content
 from a koji server</p></td>
 </tr>
 <tr class="row-odd"><td><p>staged</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">staged:/mnt/vol/my/staged/content</span></code></p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">StagedSource</span></code></p></td>
+<td><p><a class="reference internal" href="sources/staged.html#pushsource.StagedSource" title="pushsource.StagedSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">StagedSource</span></code></a></p></td>
 <td><p>Obtain RPMs, files, AMIs and other content from
 locally mounted filesystem</p></td>
 </tr>
 <tr class="row-even"><td><p>registry</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">registry:image=registry.access.redhat.com/ubi8/ubi:latest</span></code></p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RegistrySource</span></code></p></td>
+<td><p><a class="reference internal" href="sources/registry.html#pushsource.RegistrySource" title="pushsource.RegistrySource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegistrySource</span></code></a></p></td>
 <td><p>Obtain images from a container image registry</p></td>
 </tr>
 <tr class="row-odd"><td><p>errata</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">errata:https://errata.example.com?errata=RHBA-2020:1234</span></code></p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrataSource</span></code></p></td>
+<td><p><a class="reference internal" href="sources/errata.html#pushsource.ErrataSource" title="pushsource.ErrataSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrataSource</span></code></a></p></td>
 <td><p>Obtain RPMs, container images and advisory
 metadata from Errata Tool</p></td>
 </tr>
@@ -139,7 +139,7 @@ metadata from Errata Tool</p></td>
 <td rowspan="8"><p>Obtain a single file-backed item of various types.</p>
 <p>Each backend of this type accepts any arguments
 of string type documented on the corresponding
-<code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code> subclass.
+<a class="reference internal" href="model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> subclass.
 Arguments of more complex types cannot be used.</p>
 </td>
 </tr>
@@ -166,7 +166,7 @@ Arguments of more complex types cannot be used.</p>
 </tr>
 <tr class="row-even"><td><p>pub</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pub:https://pub.example.com?task_id=1234</span></code></p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PubSource</span></code></p></td>
+<td><p><a class="reference internal" href="sources/pub.html#pushsource.PubSource" title="pushsource.PubSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">PubSource</span></code></a></p></td>
 <td><p>Obtain AMIs from Pub task metadata</p></td>
 </tr>
 </tbody>
@@ -175,11 +175,11 @@ Arguments of more complex types cannot be used.</p>
 <section id="processing-push-items">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Processing push items</a><a class="headerlink" href="#processing-push-items" title="Link to this heading">¶</a></h2>
 <p>Once a <code class="docutils literal notranslate"><span class="pre">Source</span></code> instance has been obtained, it can be iterated over to obtain
-instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code>.</p>
+instances of <a class="reference internal" href="model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a>.</p>
 <p>Each object yielded by the source may be an instance of any <code class="docutils literal notranslate"><span class="pre">PushItem</span></code> subclass,
 depending on the type of content loaded by the source.  For example, RPMs will be
-yielded as instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code> and errata will be yielded
-as instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code>.</p>
+yielded as instances of <a class="reference internal" href="model/rpm.html#pushsource.RpmPushItem" title="pushsource.RpmPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a> and errata will be yielded
+as instances of <a class="reference internal" href="model/errata.html#pushsource.ErratumPushItem" title="pushsource.ErratumPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a>.</p>
 <p>Commonly, different kinds of processing will be needed for different kinds of push items.
 In this case, it’s recommended to use <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> checks to dispatch each push
 item appropriately.</p>
@@ -205,7 +205,7 @@ of push items to existing sources.</p>
 <p>New backends can be registered with the library, making them accessible via URL.
 To implement a backend, follow these steps:</p>
 <ul>
-<li><p>Create a class inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code>.</p></li>
+<li><p>Create a class inheriting from <a class="reference internal" href="sources/base.html#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a>.</p></li>
 <li><p>In your constructor, add any arguments you’d like to be usable in URLs for your backend,
 while following these conventions:</p>
 <blockquote>
@@ -231,15 +231,15 @@ into a list.</p></li>
 </li>
 <li><p>If your class allocates any resources which should be cleaned up when no longer needed,
 implement <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> methods to manage them.</p></li>
-<li><p>Call the <code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code> method providing your backend’s name
+<li><p>Call the <a class="reference internal" href="sources/base.html#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code></a> method providing your backend’s name
 and class as arguments.</p></li>
 </ul>
 <p>After following the above steps, instances of your source can be obtained by
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code>, in the same manner as backends built-in to the library.</p>
-<p>If you’re unsure how to arrange for your call to <code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code>
-to occur prior to the usage of <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code>, you may declare entry points
+<a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>, in the same manner as backends built-in to the library.</p>
+<p>If you’re unsure how to arrange for your call to <a class="reference internal" href="sources/base.html#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_backend</span></code></a>
+to occur prior to the usage of <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>, you may declare entry points
 in the <code class="docutils literal notranslate"><span class="pre">pushsource</span></code> group; the library will enforce that all modules in this group are
-imported when <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> is called. This functionality requires
+imported when <a class="reference internal" href="sources/base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> is called. This functionality requires
 pushsource 2.17.0 or later.</p>
 <p>For example, in setup.py, one may declare:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
@@ -377,7 +377,7 @@ pre-filled.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

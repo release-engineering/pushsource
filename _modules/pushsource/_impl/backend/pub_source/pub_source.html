@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.backend.pub_source.pub_source &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.backend.pub_source.pub_source</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
+
+<span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
+
+<span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">as_completed_with_timeout_reset</span><span class="p">,</span>
+    <span class="n">force_https</span><span class="p">,</span>
+    <span class="n">list_argument</span><span class="p">,</span>
+    <span class="n">try_int</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="n">AmiPushItem</span>
+<span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">.pub_client</span> <span class="kn">import</span> <span class="n">PubClient</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PubSource">
+<a class="viewcode-back" href="../../../../../sources/pub.html#pushsource.PubSource">[docs]</a>
+<span class="k">class</span> <span class="nc">PubSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses push item list from Pub as the source of push items.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PubSource.__init__">
+<a class="viewcode-back" href="../../../../../sources/pub.html#pushsource.PubSource.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">,</span>
+        <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new source.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            url (src)</span>
+<span class="sd">                Base URL of Pub Tool, e.g. &quot;http://pub.example.com&quot;,</span>
+<span class="sd">                &quot;https://pub.example.com:8123&quot;.</span>
+
+<span class="sd">            task_id (int, str, list[str], list[int])</span>
+<span class="sd">                Task ID(s) to be used as push item source.</span>
+<span class="sd">                If a single string is given, multiple IDs may be</span>
+<span class="sd">                comma-separated.</span>
+
+<span class="sd">            threads (int)</span>
+<span class="sd">                Number of threads used for concurrent queries to Pub.</span>
+
+<span class="sd">            timeout (int)</span>
+<span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
+<span class="sd">                made during queries to Pub.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">force_https</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_task_ids</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">task_id</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">PubClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="c1"># This executor doesn&#39;t use retry because pub-client executor already does that.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-pub&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_validate_task_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_ids</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">task_id</span> <span class="ow">in</span> <span class="n">task_ids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Invalid Pub task ID: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_ami_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_obj</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">push_items</span> <span class="o">=</span> <span class="n">AmiPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">list_argument</span><span class="p">(</span><span class="n">push_items</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot parse AMI push item/s: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get json Pub responses for all task ids</span>
+        <span class="n">json_fs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_ami_json_f</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_ids</span><span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="n">push_items_fs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">json_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">):</span>
+            <span class="n">push_items_fs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_ami_json</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+            <span class="p">)</span>
+
+        <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">as_completed_with_timeout_reset</span><span class="p">(</span>
+            <span class="n">push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">completed_fs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pushitem</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+                <span class="k">yield</span> <span class="n">pushitem</span></div>
+
+
+
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;pub&quot;</span><span class="p">,</span> <span class="n">PubSource</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

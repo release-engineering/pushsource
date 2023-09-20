@@ -41,6 +41,275 @@ documented here.</p>
 <li><p>instances are immutable; use helper functions such as <a class="reference external" href="https://www.attrs.org/en/stable/api-attr.html#attr.evolve" title="(in attrs v23.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">attr.evolve()</span></code></a>
 to obtain a modified push item.</p></li>
 </ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.PushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">PushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.PushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A PushItem represents a single piece of content to be published.
+This may be an RPM, an advisory, a generic file, and so on.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.PushItem.name" title="Link to this definition">¶</a></dt>
+<dd><p>A name for this push item.</p>
+<p>A push item’s name may be any short identifying string which is meaningful
+to end-users.</p>
+<p>In the common case of a regular file, a push item name will simply be a filename,
+optionally including leading path components.</p>
+<p>In all cases, a non-empty name must be provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pushsource.PushItem.state" title="Link to this definition">¶</a></dt>
+<dd><p>The state of this push item.</p>
+<p>In the majority of cases, push sources will produce push items with
+a state of <code class="docutils literal notranslate"><span class="pre">PENDING</span></code>, with the caller expected to later evolve the state.</p>
+<p>In rare cases, push sources may produce push items with other states, such
+as <code class="docutils literal notranslate"><span class="pre">INVALIDFILE</span></code> to indicate that the source located invalid content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.src">
+<span class="sig-name descname"><span class="pre">src</span></span><a class="headerlink" href="#pushsource.PushItem.src" title="Link to this definition">¶</a></dt>
+<dd><p>The source of this push item.</p>
+<p>If the push item is a file, this will be the full path to the file.
+If the push item does not represent a file, this will generally be omitted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.dest">
+<span class="sig-name descname"><span class="pre">dest</span></span><a class="headerlink" href="#pushsource.PushItem.dest" title="Link to this definition">¶</a></dt>
+<dd><p>Destination of this push item.</p>
+<p>The meaning of “dest” differs depending on the source used and its configuration.</p>
+<p>Examples for possible uses of “dest” include:</p>
+<ul class="simple">
+<li><p>a path to a directory (for items pushed using rsync)</p></li>
+<li><p>a Pulp repository name (for items pushed using Pulp)</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.md5sum">
+<span class="sig-name descname"><span class="pre">md5sum</span></span><a class="headerlink" href="#pushsource.PushItem.md5sum" title="Link to this definition">¶</a></dt>
+<dd><p>Hex digest of MD5 checksum for this push item, if available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.sha256sum">
+<span class="sig-name descname"><span class="pre">sha256sum</span></span><a class="headerlink" href="#pushsource.PushItem.sha256sum" title="Link to this definition">¶</a></dt>
+<dd><p>Hex digest of SHA256 checksum for this push item, if available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pushsource.PushItem.with_checksums" title="pushsource.PushItem.with_checksums"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_checksums()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><a class="headerlink" href="#pushsource.PushItem.origin" title="Link to this definition">¶</a></dt>
+<dd><p>A string representing the origin of this push item.</p>
+<p>The “origin” field is expected to record some info on how this push item
+was discovered. The exact semantics depend on the specific source backend
+in use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.build">
+<span class="sig-name descname"><span class="pre">build</span></span><a class="headerlink" href="#pushsource.PushItem.build" title="Link to this definition">¶</a></dt>
+<dd><p>NVR for the koji build from which this push item was extracted, if any.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a>, which provides the same info in parsed form.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.build_info">
+<span class="sig-name descname"><span class="pre">build_info</span></span><a class="headerlink" href="#pushsource.PushItem.build_info" title="Link to this definition">¶</a></dt>
+<dd><p>Basic info on the koji build from which this push item was extracted, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pushsource.KojiBuildInfo" title="pushsource.KojiBuildInfo">KojiBuildInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.PushItem.signing_key">
+<span class="sig-name descname"><span class="pre">signing_key</span></span><a class="headerlink" href="#pushsource.PushItem.signing_key" title="Link to this definition">¶</a></dt>
+<dd><p>If this push item was GPG signed, this should be an identifier for the
+signing key used.</p>
+<p>Generally a short key ID such as “F21541EB” is used, though the library
+doesn’t enforce this.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.PushItem.with_checksums">
+<span class="sig-name descname"><span class="pre">with_checksums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem.with_checksums"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.PushItem.with_checksums" title="Link to this definition">¶</a></dt>
+<dd><p>Return a copy of this push item with checksums present.</p>
+<p>Many pushsource backends will produce push items with empty checksum attributes,
+since checksum calculation may be expensive and may not be required in all cases.</p>
+<p>The rule of thumb is that a pushsource will only provide checksums if they were
+available in metadata, so that reading the push item’s file was unnecessary.
+For example:</p>
+<ul class="simple">
+<li><p>with <code class="docutils literal notranslate"><span class="pre">errata</span></code> push source, checksums are generally available by default, because
+Errata Tool itself provides checksums on the files contained in an advisory.</p></li>
+<li><p>with <code class="docutils literal notranslate"><span class="pre">staged</span></code> push source, checksums are unavailable by default, because the
+sums can only be calculated by reading file content from the staging area.</p></li>
+</ul>
+<p>Where checksums are needed, this utility method may be used to ensure they are present
+regardless of the push source used.</p>
+<p>This method entails reading the entire content of the file referenced
+by this push item, and may be:</p>
+<ul class="simple">
+<li><p>slow: may need to read a large file from a remote system, e.g. from an NFS volume.</p></li>
+<li><p>error-prone: reads from a remote system might fail.</p></li>
+</ul>
+<p>As such, when dealing with a large number of push items, you may want to consider
+using multiple threads to parallelize calls to <code class="docutils literal notranslate"><span class="pre">with_checksums</span></code>, and retrying
+failing operations.</p>
+<p>If checksums are already present or if this item does not reference a file, this
+method is a no-op and returns the current push item, unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt><a class="reference internal" href="#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a></dt><dd><p>A copy of this item, guaranteed either to have non-empty <a class="reference internal" href="#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> and
+<a class="reference internal" href="#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> attributes, or an empty <a class="reference internal" href="#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> attribute (denoting that
+the item does not reference a file).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiBuildInfo</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#KojiBuildInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiBuildInfo" title="Link to this definition">¶</a></dt>
+<dd><p>A representation of a koji build.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.id" title="pushsource.KojiBuildInfo.id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">id()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.name" title="pushsource.KojiBuildInfo.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.release" title="pushsource.KojiBuildInfo.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.KojiBuildInfo.version" title="pushsource.KojiBuildInfo.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.KojiBuildInfo.name" title="Link to this definition">¶</a></dt>
+<dd><p>‘name’ component of build’s NVR.</p>
+<p>Example: in “kf5-kio-5.83.0-2.el8.next”, the name is “kf5-kio”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.KojiBuildInfo.version" title="Link to this definition">¶</a></dt>
+<dd><p>‘version’ component of build’s NVR.</p>
+<p>Example: in “kf5-kio-5.83.0-2.el8.next”, the version is “5.83.0”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo.release">
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.KojiBuildInfo.release" title="Link to this definition">¶</a></dt>
+<dd><p>‘release’ component of build’s NVR.</p>
+<p>Example: in “kf5-kio-5.83.0-2.el8.next”, the release is “2.el8.next”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.KojiBuildInfo.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pushsource.KojiBuildInfo.id" title="Link to this definition">¶</a></dt>
+<dd><p>Optional attribute to store the ‘build_id’ from Koji.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -73,7 +342,11 @@ to obtain a modified push item.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">Source: registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/pub.html">Source: pub</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.PushItem"><code class="docutils literal notranslate"><span class="pre">PushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.KojiBuildInfo"><code class="docutils literal notranslate"><span class="pre">KojiBuildInfo</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="files.html">Push items: file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cgw.html">Push items: cgw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="directory.html">Push items: directory</a></li>
@@ -136,7 +409,7 @@ to obtain a modified push item.</p></li>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

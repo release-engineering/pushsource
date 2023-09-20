@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.source &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.source</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+
+<span class="kn">from</span> <span class="nn">pushsource._impl.helpers</span> <span class="kn">import</span> <span class="n">wait_exist</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SourceUrlError">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.SourceUrlError">[docs]</a>
+<span class="k">class</span> <span class="nc">SourceUrlError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Errors of this type are raised when an invalid URL is provided</span>
+<span class="sd">    to :meth:`~pushsource.Source.get` and related methods.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">SourceWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># Internal class to ensure that all source instances support enter/exit</span>
+    <span class="c1"># for with statements even if underlying instance doesn&#39;t implement it</span>
+    <span class="c1"># (since it originally was not mandatory).</span>
+    <span class="c1"># This class also ensures that all source instances support polling</span>
+    <span class="c1"># for the existence of source file before returning the push item.</span>
+    <span class="c1"># This feature is disabled by default and can be enabled with</span>
+    <span class="c1"># environment variables</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delegate</span><span class="p">,</span> <span class="n">SourceWrapper</span><span class="p">):</span>
+            <span class="c1"># It is common for multiple layers of Source to be constructed,</span>
+            <span class="c1"># but we don&#39;t want multiple layers of SourceWrapper since it</span>
+            <span class="c1"># would double up the src polling logic while achieving nothing</span>
+            <span class="c1"># useful. So, if we are being asked to wrap a SourceWrapper,</span>
+            <span class="c1"># we&#39;ll pick out the underlying delegate instead and wrap that.</span>
+            <span class="n">delegate</span> <span class="o">=</span> <span class="n">delegate</span><span class="o">.</span><span class="n">__delegate</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span> <span class="o">=</span> <span class="n">delegate</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Poll until a source file is present before yielding an item.</span>
+
+<span class="sd">        This is necessary due to a limitation, where file changes may</span>
+<span class="sd">        not immediately propagate to NFS. If timeout is reached,</span>
+<span class="sd">        yield the item and display a warning.</span>
+
+<span class="sd">        Timeout and poll rate are controlled with environment variables.</span>
+<span class="sd">        PUSHSOURCE_SRC_POLL_TIMEOUT - Maximum number of seconds to poll for</span>
+<span class="sd">        PUSHSOURCE_SRC_POLL_RATE - How frequently to poll (in seconds)</span>
+
+<span class="sd">        The polling feature is disabled by default</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            PushItem:</span>
+<span class="sd">                Created push item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_RATE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;30&quot;</span><span class="p">)</span>
+
+        <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">src</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wait_exist</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="p">,</span> <span class="s2">&quot;__exit__&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Source">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a>
+<span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A source of push items.</span>
+
+<span class="sd">    This base class defines the interface for all pushsource backends.</span>
+<span class="sd">    Instances of a specific backend can be obtained using</span>
+<span class="sd">    the :meth:`~pushsource.Source.get` method.</span>
+
+<span class="sd">    Though not mandatory, instances of ``Source`` are preferably used</span>
+<span class="sd">    via ``with`` statements to ensure that all resources are cleaned up</span>
+<span class="sd">    when no longer needed, as in example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        with Source.get(&#39;some-url&#39;) as source:</span>
+<span class="sd">            for item in source:</span>
+<span class="sd">                do_something(item)</span>
+
+<span class="sd">    Note that the items produced by a source are not bound to the lifecycle</span>
+<span class="sd">    of a source instance, so it&#39;s safe to store them and continue using</span>
+<span class="sd">    them beyond the end of the ``with`` statement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_BACKENDS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_BACKENDS_RESET</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_INIT_LOCK</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Source.__iter__">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.__iter__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over the push items contained within this source.</span>
+
+<span class="sd">        Yields a series of :class:`~pushsource.PushItem` instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__ensure_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="c1"># ensures backends are initialized; this is a one-time operation</span>
+        <span class="c1"># the first time get() is called.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_INIT_LOCK</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">__load_entrypoints</span><span class="p">()</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__load_entrypoints</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">iter_entry_points</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">):</span>
+            <span class="c1"># Note we&#39;re just trying to import the entry point&#39;s module, not</span>
+            <span class="c1"># call any method.</span>
+            <span class="c1"># resolve vs load is for different versions of pkg_resources.</span>
+            <span class="c1"># Result is assigned to a var to avoid a pylint warning.</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">ep</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;resolve&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">require</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Source.get">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Obtain a push source from the given URL.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            source_url (str)</span>
+<span class="sd">                Specifies a push source backend and associated arguments.</span>
+<span class="sd">                For information about push source URLs, see</span>
+<span class="sd">                :ref:`urls`.</span>
+
+<span class="sd">            kwargs (dict)</span>
+<span class="sd">                Any additional keyword arguments to be passed into</span>
+<span class="sd">                the backend.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SourceUrlError</span>
+<span class="sd">                If ``source_url`` is not a valid push source URL.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`~pushsource.Source`</span>
+<span class="sd">                A new Source instance initialized with the given arguments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span><span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)()</span></div>
+
+
+<div class="viewcode-block" id="Source.get_partial">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get_partial">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_partial</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Obtain a push source constructor from the given URL and arguments.</span>
+
+<span class="sd">        This method returns a constructor for a push source (rather than a push source</span>
+<span class="sd">        instance directly) so that additional arguments may be provided later.</span>
+
+<span class="sd">        One of the primary uses of this method is to provide your own preconfigured</span>
+<span class="sd">        aliases for existing backends, as described in :ref:`binding`.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            source_url (str)</span>
+<span class="sd">                Specifies a push source backend and associated arguments.</span>
+<span class="sd">                For information about push source URLs, see</span>
+<span class="sd">                :ref:`urls`.</span>
+
+<span class="sd">            kwargs (dict)</span>
+<span class="sd">                Any additional keyword arguments to be passed into</span>
+<span class="sd">                the backend.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SourceUrlError</span>
+<span class="sd">                If ``source_url`` is not a valid push source URL.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            callable</span>
+<span class="sd">                A callable which accepts any number of keyword arguments</span>
+<span class="sd">                and returns a :class:`~pushsource.Source`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__ensure_init</span><span class="p">()</span>
+
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">source_url</span><span class="p">)</span>
+        <span class="n">scheme</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scheme</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SourceUrlError</span><span class="p">(</span><span class="s2">&quot;Not a valid source URL: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">source_url</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">scheme</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SourceUrlError</span><span class="p">(</span>
+                <span class="s2">&quot;Requested source &#39;</span><span class="si">%s</span><span class="s2">&#39; but there is no registered backend &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">source_url</span><span class="p">,</span> <span class="n">scheme</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">klass</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">scheme</span><span class="p">]</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">query</span>
+
+        <span class="c1"># To make simple URLs less ugly, we&#39;ll allow the &#39;?&#39; to be omitted if needed.</span>
+        <span class="c1"># Example: if &quot;fedkoji&quot; is a source pointing at fedora koji,</span>
+        <span class="c1"># allow the caller to pass: fedkoji:rpm=python3-3.7.5-2.fc31.x86_64.rpm</span>
+        <span class="c1"># instead of requiring:     fedkoji:?rpm=python3-3.7.5-2.fc31.x86_64.rpm</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">and</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span>
+
+        <span class="n">url_kwargs</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">parse_qs</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># parse_qs forces everything into lists even if only a single term was given.</span>
+        <span class="c1">#</span>
+        <span class="c1"># e.g. arg1=foo&amp;arg1=bar&amp;arg2=baz =&gt; {&#39;arg1&#39;: [&#39;foo&#39;, &#39;bar&#39;], &#39;arg2&#39;: [&#39;baz&#39;]}</span>
+        <span class="c1">#</span>
+        <span class="c1"># This is annoying to deal with in source backends, so we&#39;ll unwrap anything</span>
+        <span class="c1"># which had only a single element.</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">url_kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+
+        <span class="c1"># We need to know whether the source backend accepts a &#39;url&#39; argument,</span>
+        <span class="c1"># in which case the next block should kick in. If the backend is a partial</span>
+        <span class="c1"># created by us, this info may be available in __pushsource_accepts_url.</span>
+        <span class="c1"># See commentary a bit later where this is set.</span>
+        <span class="n">accepts_url</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="s2">&quot;__pushsource_accepts_url&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">accepts_url</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
+            <span class="c1"># If the source accepts a url argument, then the &#39;path&#39; part</span>
+            <span class="c1"># of the URL we were provided is itself required to be a URL.</span>
+            <span class="c1">#</span>
+            <span class="c1"># For example:</span>
+            <span class="c1">#</span>
+            <span class="c1">#  errata:https://errata.example.com/foo/bar?arg1=val&amp;arg2=val...</span>
+            <span class="c1">#</span>
+            <span class="c1"># The &quot;https://errata.example.com/foo/bar&quot; part was parsed as &#39;path&#39;</span>
+            <span class="c1"># above, and is now provided to the source as a URL.</span>
+            <span class="n">url_kwargs</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span>
+
+        <span class="c1"># Coerce some standard arguments to the right type.</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">converter</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;threads&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">url_kwargs</span><span class="p">:</span>
+                <span class="n">url_kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">converter</span><span class="p">(</span><span class="n">url_kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="c1"># TODO: check for some common mistakes here?</span>
+
+        <span class="n">url_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">partial_source</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">inner_kwargs</span><span class="p">):</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">SourceWrapper</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+        <span class="c1"># If the source accepts a &#39;url&#39; argument, that affects how source</span>
+        <span class="c1"># URLs are parsed, as described in the &quot;Implementing a backend&quot;</span>
+        <span class="c1"># docs. This must be carried through when partially binding a source.</span>
+        <span class="c1"># Stash it in this attribute which we can read back later.</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: please drop this when python2 goes away.</span>
+        <span class="c1"># In modern versions of python, functools.wraps already propagates</span>
+        <span class="c1"># the signature of the wrapped function, so it is likely possible</span>
+        <span class="c1"># to drop this and slightly change above code to use inspect.signature,</span>
+        <span class="c1"># then it will &quot;just work&quot;.</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">partial_source</span><span class="p">,</span> <span class="s2">&quot;__pushsource_accepts_url&quot;</span><span class="p">,</span> <span class="n">accepts_url</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">partial_source</span></div>
+
+
+<div class="viewcode-block" id="Source.register_backend">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.register_backend">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register_backend</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a new pushsource backend.</span>
+
+<span class="sd">        This method allows registering additional backends beyond those</span>
+<span class="sd">        shipped with the pushsource library. See :ref:`implementing` for</span>
+<span class="sd">        more information.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            name (str)</span>
+<span class="sd">                The name of a backend. This should be a brief unique identifying</span>
+<span class="sd">                string.</span>
+
+<span class="sd">                If a backend of the given name is already registered, it will be</span>
+<span class="sd">                overwritten.</span>
+
+<span class="sd">            factory (callable)</span>
+<span class="sd">                A callable used to create new instances of the backend.</span>
+<span class="sd">                When invoked, this callable must return an object which implements</span>
+<span class="sd">                the :class:`~pushsource.Source` interface.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError</span>
+<span class="sd">                If ``factory`` is not callable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected callable, got: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">factory</span><span class="p">))</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div>
+
+
+<div class="viewcode-block" id="Source.reset">
+<a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.reset">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the library to the default configuration.</span>
+
+<span class="sd">        This method will undo the effect of any prior calls to</span>
+<span class="sd">        :meth:`~pushsource.Source.register_backend`, restoring only the</span>
+<span class="sd">        default backends provided by the pushsource library.</span>
+
+<span class="sd">        This may be used from within tests to ensure a known state.</span>
+
+<span class="sd">        .. versionadded:: 2.6.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__ensure_init</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_RESET</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

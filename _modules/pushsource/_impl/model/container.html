@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.model.container &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.model.container</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+<span class="kn">from</span> <span class="nn">frozendict.core</span> <span class="kn">import</span> <span class="n">frozendict</span>  <span class="c1"># pylint: disable=no-name-in-module</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span>
+
+
+<span class="n">MEDIA_TYPE_ORDER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;application/vnd.docker.distribution.manifest.v2+json&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s2">&quot;application/vnd.docker.distribution.manifest.v1+json&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="ContainerImagePullSpec">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImagePullSpec">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ContainerImagePullSpec</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container image pull spec in parsed form.</span>
+
+<span class="sd">    Pull spec refers to a ``&quot;NAME[:TAG|@DIGEST]&quot;`` string used to pull</span>
+<span class="sd">    a container image. This class provides a pull spec both in raw</span>
+<span class="sd">    string form and parsed into various components, along with information</span>
+<span class="sd">    on the available media type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Registry component of pull spec.</span>
+
+<span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
+<span class="sd">    the registry is ``&quot;registry.access.redhat.com&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Repository component of pull spec.</span>
+
+<span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
+<span class="sd">    the repository is ``&quot;ubi8/ubi-minimal&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pull_spec</span><span class="p">):</span>
+        <span class="c1"># Regex explanation</span>
+        <span class="c1"># &lt;registry&gt;: Get everything not &quot;/&quot; until the first &quot;/&quot;</span>
+        <span class="c1"># &lt;repository&gt;: Get everything not &quot;@&quot; or &quot;:&quot;</span>
+        <span class="c1"># &lt;type&gt;: Either &#39;@&#39; or &#39;:&#39;</span>
+        <span class="c1"># &lt;digest_or_tag&gt;: Get the rest of the characters until end of word</span>
+        <span class="n">url_pattern</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^(?P&lt;registry&gt;[^\/]+)\/(?P&lt;repository&gt;[^:@]+)&quot;</span>
+            <span class="sa">r</span><span class="s2">&quot;(?P&lt;type&gt;[:@])(?P&lt;digest_or_tag&gt;.+)$&quot;</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url_pattern</span><span class="p">,</span> <span class="n">pull_spec</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid container image pull spec &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">pull_spec</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;registry&quot;</span><span class="p">:</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;registry&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;repository&quot;</span><span class="p">:</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;repository&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;@&quot;</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;digest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;digest_or_tag&quot;</span><span class="p">)</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImageDigestPullSpec</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;digest_or_tag&quot;</span><span class="p">)</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImageTagPullSpec</span>
+
+        <span class="k">return</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ContainerImageTagPullSpec">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImageTagPullSpec">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ContainerImageTagPullSpec</span><span class="p">(</span><span class="n">ContainerImagePullSpec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container image pull spec using a tag.&quot;&quot;&quot;</span>
+
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tag component of pull spec.</span>
+
+<span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;``,</span>
+<span class="sd">    the tag is ``&quot;latest&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">media_types</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media type(s) expected to be reachable via this tag, or empty</span>
+<span class="sd">    if unknown.</span>
+
+<span class="sd">    Generally, the media types are only known for manifest lists obtained</span>
+<span class="sd">    from a koji build.</span>
+
+<span class="sd">    Example: ``[&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;]``</span>
+
+<span class="sd">    :type: List[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ContainerImageDigestPullSpec">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImageDigestPullSpec">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ContainerImageDigestPullSpec</span><span class="p">(</span><span class="n">ContainerImagePullSpec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container image pull spec using a manifest digest.&quot;&quot;&quot;</span>
+
+    <span class="n">digest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Digest component of pull spec.</span>
+
+<span class="sd">    Example: in ``&quot;registry.access.redhat.com/ubi8/ubi-minimal@sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;``,</span>
+<span class="sd">    the digest is ``&quot;sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">media_type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media type of the manifest obtained by this pull spec, if known.</span>
+
+<span class="sd">    Generally, the media type is known for all digest pull specs obtained</span>
+<span class="sd">    via koji. It can be checked to determine whether a pull spec refers to</span>
+<span class="sd">    a manifest list or an image manifest.</span>
+
+<span class="sd">    Example: ``&quot;application/vnd.docker.distribution.manifest.v2+json&quot;``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="p">,</span> <span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">digest</span><span class="p">])</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">specs_converter</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">expected_class</span><span class="p">):</span>
+    <span class="c1"># a converter for pull specs, ensures every spec is an</span>
+    <span class="c1"># instance of the expected class while de-duplicating</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">out_strs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">expected_class</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">%s</span><span class="s2">, got: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expected_class</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">spec</span><span class="p">)))</span>
+
+        <span class="c1"># de-duplicate specs</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out_strs</span><span class="p">:</span>
+            <span class="n">out_strs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">frozenlist</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">tag_specs_converter</span><span class="p">(</span><span class="n">specs</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">specs_converter</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">ContainerImageTagPullSpec</span><span class="p">)</span>
+
+    <span class="c1"># Require at least one</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A container image must have at least one pull spec&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span> <span class="nf">digest_specs_converter</span><span class="p">(</span><span class="n">specs</span><span class="p">):</span>
+    <span class="c1"># Do the generic handling</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">specs_converter</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">ContainerImageDigestPullSpec</span><span class="p">)</span>
+
+    <span class="c1"># Then also sort them by preferred media types</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">spec</span><span class="p">:</span> <span class="o">-</span><span class="n">MEDIA_TYPE_ORDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">media_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">frozenlist</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ContainerImagePullInfo">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImagePullInfo">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ContainerImagePullInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information needed to access a container image from a registry.&quot;&quot;&quot;</span>
+
+    <span class="n">tag_specs</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">tag_specs_converter</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pull specs to access this image by tag.</span>
+
+<span class="sd">    This may include specs which refer to a *manifest list* referencing this</span>
+<span class="sd">    image, and also specs which refer directly to the *image manifest* for</span>
+<span class="sd">    this image.</span>
+
+<span class="sd">    This field always contains at least one pull spec. If you don&#39;t care</span>
+<span class="sd">    which tag you use, it&#39;s reasonable to use ``item.pull_info.tag_specs[0]``.</span>
+
+<span class="sd">    Note that, as all tags are mutable, it&#39;s possible for this information to</span>
+<span class="sd">    be outdated. It is recommended to pull by digest or at least</span>
+<span class="sd">    cross-reference with digests.</span>
+
+<span class="sd">    :type: List[ContainerImageTagPullSpec]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">digest_specs</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">digest_specs_converter</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pull specs to access this image by manifest digest.</span>
+
+<span class="sd">    This may include specs which refer to a *manifest list* referencing this</span>
+<span class="sd">    image, and also specs which refer directly to the *image manifest* for</span>
+<span class="sd">    this image.</span>
+
+<span class="sd">    These specs are always ordered from most to least preferred manifest type,</span>
+<span class="sd">    which means:</span>
+
+<span class="sd">    - manifest list if available, else:</span>
+<span class="sd">    - schema2 image manifest if available, else:</span>
+<span class="sd">    - schema1 image manifest</span>
+
+<span class="sd">    :type: List[ContainerImageDigestPullSpec]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">media_types</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All media types for which a manifest is reachable in :meth:`digest_specs`.</span>
+
+<span class="sd">    For information on these types see the `image manifest spec`_.</span>
+
+<span class="sd">    :type: List[str]</span>
+
+<span class="sd">    .. _image manifest spec: http://web.archive.org/web/20210614172014/https://docs.docker.com/registry/spec/manifest-v2-2/#media-types</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@media_types</span><span class="o">.</span><span class="n">default</span>
+    <span class="k">def</span> <span class="nf">_default_media_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">frozenlist</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">media_type</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">digest_specs</span> <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">media_type</span><span class="p">]</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="ContainerImagePullInfo.digest_spec_for_type">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImagePullInfo.digest_spec_for_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">digest_spec_for_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">media_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the digest spec for a specific media type, if available.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            media_type (str)</span>
+<span class="sd">                a MIME type string identifying a type of image manifest or</span>
+<span class="sd">                manifest list, e.g. &quot;application/vnd.docker.distribution.manifest.v2+json&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`ContainerImageDigestPullSpec`</span>
+<span class="sd">                if a digest of the requested type is available</span>
+<span class="sd">            ``None``</span>
+<span class="sd">                if a digest of the requested type is not available</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">digest_specs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">media_type</span> <span class="o">==</span> <span class="n">media_type</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">spec</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ContainerImagePushItem">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.ContainerImagePushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ContainerImagePushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a container image.</span>
+
+<span class="sd">    This item represents any kind of image which can be pulled</span>
+<span class="sd">    from a container image registry (i.e. an object identified by a</span>
+<span class="sd">    ``NAME[:TAG|@DIGEST]`` string).</span>
+
+<span class="sd">    In the case of a multi-arch image, one ContainerImagePushItem represents</span>
+<span class="sd">    an image for a single architecture only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dest_signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Desired signing key for this container image.</span>
+
+<span class="sd">    Typically a 16-character identifier for a signing key, such</span>
+<span class="sd">    as ``&quot;199e2f91fd431d51&quot;``, though the format is not enforced</span>
+<span class="sd">    by this library.</span>
+
+<span class="sd">    A non-empty value for this attribute should be interpreted as a request to</span>
+<span class="sd">    use the specified key to generate signatures for this image&#39;s manifest(s).</span>
+<span class="sd">    See `container-signature`_ docs for information on signatures.</span>
+
+<span class="sd">    .. _container-signature: https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">source_tags</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tags placed onto this image when it was built, if known.</span>
+
+<span class="sd">    :type: List[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozendict</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozendict</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Labels of this image, if known.</span>
+
+<span class="sd">    This field is not guaranteed to include all labels associated with the image.</span>
+
+<span class="sd">    :type: Dict[str, str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Architecture of this image, if known.</span>
+
+<span class="sd">    This field uses the conventional architecture strings used throughout the</span>
+<span class="sd">    container ecosystem, such as ``&quot;amd64&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pull_info</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">ContainerImagePullInfo</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="n">ContainerImagePullInfo</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metadata for pulling this image from a registry.&quot;&quot;&quot;</span>
+
+    <span class="n">product_name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of the product of this image.</span>
+
+<span class="sd">    Brew doesn&#39;t provide this information, so it may not be set if the push</span>
+<span class="sd">    items are only generated from brew. This information will be included in the</span>
+<span class="sd">    &quot;container security manifests&quot; (formerly known as SBOMs).</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SourceContainerImagePushItem">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.SourceContainerImagePushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">SourceContainerImagePushItem</span><span class="p">(</span><span class="n">ContainerImagePushItem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a source container image.</span>
+
+<span class="sd">    Source container images are a special type of image which are not runnable</span>
+<span class="sd">    but instead contain the packaged source code of a related binary image.</span>
+
+<span class="sd">    See `this article &lt;https://access.redhat.com/articles/3410171&gt;`_ for more</span>
+<span class="sd">    information on source container images.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="OperatorManifestPushItem">
+<a class="viewcode-back" href="../../../../model/containers.html#pushsource.OperatorManifestPushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">OperatorManifestPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing an operator manifests archive</span>
+<span class="sd">    (typically named ``operator_manifests.zip``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">related_images</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Operator related images obtained from a koji build.</span>
+
+<span class="sd">    :type: List[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">container_image_items</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of related container image push items.</span>
+
+<span class="sd">    :type: List[ContainerImagePushItem]</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

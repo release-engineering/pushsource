@@ -33,6 +33,395 @@
             
   <section id="push-items-containers">
 <h1>Push items: containers<a class="headerlink" href="#push-items-containers" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImagePushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a container image.</p>
+<p>This item represents any kind of image which can be pulled
+from a container image registry (i.e. an object identified by a
+<code class="docutils literal notranslate"><span class="pre">NAME[:TAG|&#64;DIGEST]</span></code> string).</p>
+<p>In the case of a multi-arch image, one ContainerImagePushItem represents
+an image for a single architecture only.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.arch" title="pushsource.ContainerImagePushItem.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.dest_signing_key" title="pushsource.ContainerImagePushItem.dest_signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest_signing_key()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.labels" title="pushsource.ContainerImagePushItem.labels"><code class="xref py py-meth docutils literal notranslate"><span class="pre">labels()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.product_name" title="pushsource.ContainerImagePushItem.product_name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">product_name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.pull_info" title="pushsource.ContainerImagePushItem.pull_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pull_info()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.source_tags" title="pushsource.ContainerImagePushItem.source_tags"><code class="xref py py-meth docutils literal notranslate"><span class="pre">source_tags()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.dest_signing_key">
+<span class="sig-name descname"><span class="pre">dest_signing_key</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.dest_signing_key" title="Link to this definition">¶</a></dt>
+<dd><p>Desired signing key for this container image.</p>
+<p>Typically a 16-character identifier for a signing key, such
+as <code class="docutils literal notranslate"><span class="pre">&quot;199e2f91fd431d51&quot;</span></code>, though the format is not enforced
+by this library.</p>
+<p>A non-empty value for this attribute should be interpreted as a request to
+use the specified key to generate signatures for this image’s manifest(s).
+See <a class="reference external" href="https://github.com/containers/image/blob/33bcba75bb181318608f989e18e086f0d83d254c/docs/containers-signature.5.md">container-signature</a> docs for information on signatures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.source_tags">
+<span class="sig-name descname"><span class="pre">source_tags</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.source_tags" title="Link to this definition">¶</a></dt>
+<dd><p>Tags placed onto this image when it was built, if known.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.labels" title="Link to this definition">¶</a></dt>
+<dd><p>Labels of this image, if known.</p>
+<p>This field is not guaranteed to include all labels associated with the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.arch">
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.arch" title="Link to this definition">¶</a></dt>
+<dd><p>Architecture of this image, if known.</p>
+<p>This field uses the conventional architecture strings used throughout the
+container ecosystem, such as <code class="docutils literal notranslate"><span class="pre">&quot;amd64&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.pull_info">
+<span class="sig-name descname"><span class="pre">pull_info</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.pull_info" title="Link to this definition">¶</a></dt>
+<dd><p>Metadata for pulling this image from a registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pushsource.ContainerImagePullInfo" title="pushsource.ContainerImagePullInfo">ContainerImagePullInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePushItem.product_name">
+<span class="sig-name descname"><span class="pre">product_name</span></span><a class="headerlink" href="#pushsource.ContainerImagePushItem.product_name" title="Link to this definition">¶</a></dt>
+<dd><p>Name of the product of this image.</p>
+<p>Brew doesn’t provide this information, so it may not be set if the push
+items are only generated from brew. This information will be included in the
+“container security manifests” (formerly known as SBOMs).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.SourceContainerImagePushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">SourceContainerImagePushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#SourceContainerImagePushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.SourceContainerImagePushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a source container image.</p>
+<p>Source container images are a special type of image which are not runnable
+but instead contain the packaged source code of a related binary image.</p>
+<p>See <a class="reference external" href="https://access.redhat.com/articles/3410171">this article</a> for more
+information on source container images.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.arch" title="pushsource.ContainerImagePushItem.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.dest_signing_key" title="pushsource.ContainerImagePushItem.dest_signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest_signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.labels" title="pushsource.ContainerImagePushItem.labels"><code class="xref py py-meth docutils literal notranslate"><span class="pre">labels()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.product_name" title="pushsource.ContainerImagePushItem.product_name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">product_name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.pull_info" title="pushsource.ContainerImagePushItem.pull_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pull_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePushItem.source_tags" title="pushsource.ContainerImagePushItem.source_tags"><code class="xref py py-meth docutils literal notranslate"><span class="pre">source_tags()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImagePullInfo</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePullInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePullInfo" title="Link to this definition">¶</a></dt>
+<dd><p>Information needed to access a container image from a registry.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullInfo.digest_specs" title="pushsource.ContainerImagePullInfo.digest_specs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest_specs()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullInfo.media_types" title="pushsource.ContainerImagePullInfo.media_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">media_types()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullInfo.tag_specs" title="pushsource.ContainerImagePullInfo.tag_specs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tag_specs()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullInfo.tag_specs">
+<span class="sig-name descname"><span class="pre">tag_specs</span></span><a class="headerlink" href="#pushsource.ContainerImagePullInfo.tag_specs" title="Link to this definition">¶</a></dt>
+<dd><p>Pull specs to access this image by tag.</p>
+<p>This may include specs which refer to a <em>manifest list</em> referencing this
+image, and also specs which refer directly to the <em>image manifest</em> for
+this image.</p>
+<p>This field always contains at least one pull spec. If you don’t care
+which tag you use, it’s reasonable to use <code class="docutils literal notranslate"><span class="pre">item.pull_info.tag_specs[0]</span></code>.</p>
+<p>Note that, as all tags are mutable, it’s possible for this information to
+be outdated. It is recommended to pull by digest or at least
+cross-reference with digests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImageTagPullSpec" title="pushsource.ContainerImageTagPullSpec">ContainerImageTagPullSpec</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullInfo.digest_specs">
+<span class="sig-name descname"><span class="pre">digest_specs</span></span><a class="headerlink" href="#pushsource.ContainerImagePullInfo.digest_specs" title="Link to this definition">¶</a></dt>
+<dd><p>Pull specs to access this image by manifest digest.</p>
+<p>This may include specs which refer to a <em>manifest list</em> referencing this
+image, and also specs which refer directly to the <em>image manifest</em> for
+this image.</p>
+<p>These specs are always ordered from most to least preferred manifest type,
+which means:</p>
+<ul class="simple">
+<li><p>manifest list if available, else:</p></li>
+<li><p>schema2 image manifest if available, else:</p></li>
+<li><p>schema1 image manifest</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec" title="pushsource.ContainerImageDigestPullSpec">ContainerImageDigestPullSpec</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullInfo.media_types">
+<span class="sig-name descname"><span class="pre">media_types</span></span><a class="headerlink" href="#pushsource.ContainerImagePullInfo.media_types" title="Link to this definition">¶</a></dt>
+<dd><p>All media types for which a manifest is reachable in <a class="reference internal" href="#pushsource.ContainerImagePullInfo.digest_specs" title="pushsource.ContainerImagePullInfo.digest_specs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest_specs()</span></code></a>.</p>
+<p>For information on these types see the <a class="reference external" href="http://web.archive.org/web/20210614172014/https://docs.docker.com/registry/spec/manifest-v2-2/#media-types">image manifest spec</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullInfo.digest_spec_for_type">
+<span class="sig-name descname"><span class="pre">digest_spec_for_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">media_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePullInfo.digest_spec_for_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePullInfo.digest_spec_for_type" title="Link to this definition">¶</a></dt>
+<dd><p>Get the digest spec for a specific media type, if available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>media_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – a MIME type string identifying a type of image manifest or
+manifest list, e.g. “application/vnd.docker.distribution.manifest.v2+json”</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt><a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec" title="pushsource.ContainerImageDigestPullSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerImageDigestPullSpec</span></code></a></dt><dd><p>if a digest of the requested type is available</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>if a digest of the requested type is not available</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImagePullSpec</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImagePullSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImagePullSpec" title="Link to this definition">¶</a></dt>
+<dd><p>A container image pull spec in parsed form.</p>
+<p>Pull spec refers to a <code class="docutils literal notranslate"><span class="pre">&quot;NAME[:TAG|&#64;DIGEST]&quot;</span></code> string used to pull
+a container image. This class provides a pull spec both in raw
+string form and parsed into various components, along with information
+on the available media type.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.registry" title="pushsource.ContainerImagePullSpec.registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.repository" title="pushsource.ContainerImagePullSpec.repository"><code class="xref py py-meth docutils literal notranslate"><span class="pre">repository()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullSpec.registry">
+<span class="sig-name descname"><span class="pre">registry</span></span><a class="headerlink" href="#pushsource.ContainerImagePullSpec.registry" title="Link to this definition">¶</a></dt>
+<dd><p>Registry component of pull spec.</p>
+<p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
+the registry is <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImagePullSpec.repository">
+<span class="sig-name descname"><span class="pre">repository</span></span><a class="headerlink" href="#pushsource.ContainerImagePullSpec.repository" title="Link to this definition">¶</a></dt>
+<dd><p>Repository component of pull spec.</p>
+<p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
+the repository is <code class="docutils literal notranslate"><span class="pre">&quot;ubi8/ubi-minimal&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ContainerImageDigestPullSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImageDigestPullSpec</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImageDigestPullSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImageDigestPullSpec" title="Link to this definition">¶</a></dt>
+<dd><p>A container image pull spec using a manifest digest.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.registry" title="pushsource.ContainerImagePullSpec.registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.repository" title="pushsource.ContainerImagePullSpec.repository"><code class="xref py py-meth docutils literal notranslate"><span class="pre">repository()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec.digest" title="pushsource.ContainerImageDigestPullSpec.digest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec.media_type" title="pushsource.ContainerImageDigestPullSpec.media_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">media_type()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImageDigestPullSpec.digest">
+<span class="sig-name descname"><span class="pre">digest</span></span><a class="headerlink" href="#pushsource.ContainerImageDigestPullSpec.digest" title="Link to this definition">¶</a></dt>
+<dd><p>Digest component of pull spec.</p>
+<p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal&#64;sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;</span></code>,
+the digest is <code class="docutils literal notranslate"><span class="pre">&quot;sha256:0ccb9988abbc72d383258d58a7f519a10b637d472f28fbca6eb5fab79ba82a6b&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImageDigestPullSpec.media_type">
+<span class="sig-name descname"><span class="pre">media_type</span></span><a class="headerlink" href="#pushsource.ContainerImageDigestPullSpec.media_type" title="Link to this definition">¶</a></dt>
+<dd><p>Media type of the manifest obtained by this pull spec, if known.</p>
+<p>Generally, the media type is known for all digest pull specs obtained
+via koji. It can be checked to determine whether a pull spec refers to
+a manifest list or an image manifest.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">&quot;application/vnd.docker.distribution.manifest.v2+json&quot;</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ContainerImageTagPullSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ContainerImageTagPullSpec</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#ContainerImageTagPullSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ContainerImageTagPullSpec" title="Link to this definition">¶</a></dt>
+<dd><p>A container image pull spec using a tag.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.registry" title="pushsource.ContainerImagePullSpec.registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImagePullSpec.repository" title="pushsource.ContainerImagePullSpec.repository"><code class="xref py py-meth docutils literal notranslate"><span class="pre">repository()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImageTagPullSpec.media_types" title="pushsource.ContainerImageTagPullSpec.media_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">media_types()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ContainerImageTagPullSpec.tag" title="pushsource.ContainerImageTagPullSpec.tag"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tag()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImageTagPullSpec.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><a class="headerlink" href="#pushsource.ContainerImageTagPullSpec.tag" title="Link to this definition">¶</a></dt>
+<dd><p>Tag component of pull spec.</p>
+<p>Example: in <code class="docutils literal notranslate"><span class="pre">&quot;registry.access.redhat.com/ubi8/ubi-minimal:latest&quot;</span></code>,
+the tag is <code class="docutils literal notranslate"><span class="pre">&quot;latest&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ContainerImageTagPullSpec.media_types">
+<span class="sig-name descname"><span class="pre">media_types</span></span><a class="headerlink" href="#pushsource.ContainerImageTagPullSpec.media_types" title="Link to this definition">¶</a></dt>
+<dd><p>Media type(s) expected to be reachable via this tag, or empty
+if unknown.</p>
+<p>Generally, the media types are only known for manifest lists obtained
+from a koji build.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">[&quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;]</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.OperatorManifestPushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">OperatorManifestPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/container.html#OperatorManifestPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.OperatorManifestPushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing an operator manifests archive
+(typically named <code class="docutils literal notranslate"><span class="pre">operator_manifests.zip</span></code>).</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.OperatorManifestPushItem.container_image_items" title="pushsource.OperatorManifestPushItem.container_image_items"><code class="xref py py-meth docutils literal notranslate"><span class="pre">container_image_items()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.OperatorManifestPushItem.related_images" title="pushsource.OperatorManifestPushItem.related_images"><code class="xref py py-meth docutils literal notranslate"><span class="pre">related_images()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.OperatorManifestPushItem.related_images">
+<span class="sig-name descname"><span class="pre">related_images</span></span><a class="headerlink" href="#pushsource.OperatorManifestPushItem.related_images" title="Link to this definition">¶</a></dt>
+<dd><p>Operator related images obtained from a koji build.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.OperatorManifestPushItem.container_image_items">
+<span class="sig-name descname"><span class="pre">container_image_items</span></span><a class="headerlink" href="#pushsource.OperatorManifestPushItem.container_image_items" title="Link to this definition">¶</a></dt>
+<dd><p>List of related container image push items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#pushsource.ContainerImagePushItem" title="pushsource.ContainerImagePushItem">ContainerImagePushItem</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -72,7 +461,16 @@
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Push items: errata</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ContainerImagePushItem"><code class="docutils literal notranslate"><span class="pre">ContainerImagePushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.SourceContainerImagePushItem"><code class="docutils literal notranslate"><span class="pre">SourceContainerImagePushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ContainerImagePullInfo"><code class="docutils literal notranslate"><span class="pre">ContainerImagePullInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ContainerImagePullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImagePullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ContainerImageDigestPullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImageDigestPullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ContainerImageTagPullSpec"><code class="docutils literal notranslate"><span class="pre">ContainerImageTagPullSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.OperatorManifestPushItem"><code class="docutils literal notranslate"><span class="pre">OperatorManifestPushItem</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="azure.html">Push items: VHD</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmi.html">Push items: VMI</a></li>
@@ -128,7 +526,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

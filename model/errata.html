@@ -33,6 +33,627 @@
             
   <section id="push-items-errata">
 <h1>Push items: errata<a class="headerlink" href="#push-items-errata" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a single erratum (also known as “advisory”).</p>
+<p>Note that many fields on erratum objects which appear to be numeric
+are instead represented as strings (‘release’ and ‘pushcount’ being two
+examples).</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.container_list" title="pushsource.ErratumPushItem.container_list"><code class="xref py py-meth docutils literal notranslate"><span class="pre">container_list()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.content_types" title="pushsource.ErratumPushItem.content_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">content_types()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.description" title="pushsource.ErratumPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">from()</span></code></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.issued" title="pushsource.ErratumPushItem.issued"><code class="xref py py-meth docutils literal notranslate"><span class="pre">issued()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.pushcount" title="pushsource.ErratumPushItem.pushcount"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pushcount()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.reboot_suggested" title="pushsource.ErratumPushItem.reboot_suggested"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reboot_suggested()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.release" title="pushsource.ErratumPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.rights" title="pushsource.ErratumPushItem.rights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rights()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.severity" title="pushsource.ErratumPushItem.severity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">severity()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.solution" title="pushsource.ErratumPushItem.solution"><code class="xref py py-meth docutils literal notranslate"><span class="pre">solution()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.status" title="pushsource.ErratumPushItem.status"><code class="xref py py-meth docutils literal notranslate"><span class="pre">status()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.summary" title="pushsource.ErratumPushItem.summary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">summary()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.title" title="pushsource.ErratumPushItem.title"><code class="xref py py-meth docutils literal notranslate"><span class="pre">title()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.type" title="pushsource.ErratumPushItem.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.updated" title="pushsource.ErratumPushItem.updated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updated()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPushItem.version" title="pushsource.ErratumPushItem.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.type" title="Link to this definition">¶</a></dt>
+<dd><p>‘bugfix’, ‘security’ or ‘enhancement’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.release">
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.release" title="Link to this definition">¶</a></dt>
+<dd><p>Release number. Typically an integer-string, initially ‘0’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.status" title="Link to this definition">¶</a></dt>
+<dd><p>Status, typically ‘final’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.pushcount">
+<span class="sig-name descname"><span class="pre">pushcount</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pushcount" title="Link to this definition">¶</a></dt>
+<dd><p>Number of times advisory has been revised and published (starting at ‘1’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.reboot_suggested">
+<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.reboot_suggested" title="Link to this definition">¶</a></dt>
+<dd><p>True if rebooting host machine is recommended after installing this advisory.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The intended usage of this field is unclear.</p>
+<p>In practice, tools such as yum are instead consuming the <code class="docutils literal notranslate"><span class="pre">reboot_suggested</span></code> field
+from <a class="reference internal" href="#pushsource.ErratumPackage" title="pushsource.ErratumPackage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPackage</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.references">
+<span class="sig-name descname"><span class="pre">references</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.references" title="Link to this definition">¶</a></dt>
+<dd><p>A list of references associated with the advisory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#pushsource.ErratumReference" title="pushsource.ErratumReference">ErratumReference</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.pkglist">
+<span class="sig-name descname"><span class="pre">pkglist</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.pkglist" title="Link to this definition">¶</a></dt>
+<dd><p>A list of package collections associated with the advisory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#pushsource.ErratumPackageCollection" title="pushsource.ErratumPackageCollection">ErratumPackageCollection</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.container_list">
+<span class="sig-name descname"><span class="pre">container_list</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.container_list" title="Link to this definition">¶</a></dt>
+<dd><p>A list of container images associated with the advisory.</p>
+<p>Example of the list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;container_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;openshift4/ose-local-storage-rhel7-operator-metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;s390x&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:05649a19718fde131372c761d359302ccbe81f9744d2893ac4c826b05d670206&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;ppc64le&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;x86_64&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:c2e3030306f71b94cbffe2d16fcebe6e14f2842ae26789926bcf1afeeecb5859&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]]]]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.from_">
+<span class="sig-name descname"><span class="pre">from_</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.from_" title="Link to this definition">¶</a></dt>
+<dd><p>Contact email address for the owner of the advisory.</p>
+<p>Note that the canonical name for this attribute is <code class="docutils literal notranslate"><span class="pre">from</span></code>. As this clashes
+with a Python keyword, in most contexts the attribute is also available as an
+alias, <code class="docutils literal notranslate"><span class="pre">from_</span></code>. Where possible, the canonical name <code class="docutils literal notranslate"><span class="pre">from</span></code> should be preferred.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.rights">
+<span class="sig-name descname"><span class="pre">rights</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.rights" title="Link to this definition">¶</a></dt>
+<dd><p>Copyright message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.title" title="Link to this definition">¶</a></dt>
+<dd><p>Title of the advisory (e.g. ‘bash bugfix and enhancement’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.description" title="Link to this definition">¶</a></dt>
+<dd><p>Full human-readable description of the advisory, usually multiple lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.version" title="Link to this definition">¶</a></dt>
+<dd><p>Advisory version. Starts counting at “1”, and some systems require updating
+the version whenever an advisory is modified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.updated" title="Link to this definition">¶</a></dt>
+<dd><p>Timestamp of the last update to this advisory.</p>
+<p>Typically of the form ‘2019-12-31 06:54:41 UTC’, but this is not enforced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.issued">
+<span class="sig-name descname"><span class="pre">issued</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.issued" title="Link to this definition">¶</a></dt>
+<dd><p>Timestamp of the initial release of this advisory.</p>
+<p>Uses the same format as <a class="reference internal" href="#pushsource.ErratumPushItem.updated" title="pushsource.ErratumPushItem.updated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updated()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.severity">
+<span class="sig-name descname"><span class="pre">severity</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.severity" title="Link to this definition">¶</a></dt>
+<dd><p>Severity of the advisory, e.g. “low”, “moderate”, “important” or “critical”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.summary" title="Link to this definition">¶</a></dt>
+<dd><p>Typically a single sentence briefly describing the advisory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.solution">
+<span class="sig-name descname"><span class="pre">solution</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.solution" title="Link to this definition">¶</a></dt>
+<dd><p>Text explaining how to apply the advisory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPushItem.content_types">
+<span class="sig-name descname"><span class="pre">content_types</span></span><a class="headerlink" href="#pushsource.ErratumPushItem.content_types" title="Link to this definition">¶</a></dt>
+<dd><p>A list of content types associated with the advisory.</p>
+<p>For example, “docker” may be found in this list if the advisory deals
+with container images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ErratumReference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumReference</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumReference" title="Link to this definition">¶</a></dt>
+<dd><p>A reference within a <a class="reference internal" href="#pushsource.ErratumPushItem.references" title="pushsource.ErratumPushItem.references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">references()</span></code></a> list.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.href" title="pushsource.ErratumReference.href"><code class="xref py py-meth docutils literal notranslate"><span class="pre">href()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.id" title="pushsource.ErratumReference.id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">id()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.title" title="pushsource.ErratumReference.title"><code class="xref py py-meth docutils literal notranslate"><span class="pre">title()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumReference.type" title="pushsource.ErratumReference.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumReference.href">
+<span class="sig-name descname"><span class="pre">href</span></span><a class="headerlink" href="#pushsource.ErratumReference.href" title="Link to this definition">¶</a></dt>
+<dd><p>A URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumReference.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pushsource.ErratumReference.id" title="Link to this definition">¶</a></dt>
+<dd><p>A short ID for the reference, unique within this erratum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumReference.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#pushsource.ErratumReference.title" title="Link to this definition">¶</a></dt>
+<dd><p>A title for the reference; analogous to the ‘title’ attribute
+in HTML.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumReference.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.ErratumReference.type" title="Link to this definition">¶</a></dt>
+<dd><p>Type of reference. This defines the expected target of the URL
+and includes at least:</p>
+<ul class="simple">
+<li><p>“self”: reference to a page for this advisory</p></li>
+<li><p>“bugzilla”: reference to a bug</p></li>
+<li><p>“other”: any other kind of reference</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ErratumPackageCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackageCollection</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackageCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackageCollection" title="Link to this definition">¶</a></dt>
+<dd><p>A collection of packages found within an <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p>A non-modular advisory typically contains only a single collection, while modular
+advisories typically contain one collection per module.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.module" title="pushsource.ErratumPackageCollection.module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">module()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.name" title="pushsource.ErratumPackageCollection.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.packages" title="pushsource.ErratumPackageCollection.packages"><code class="xref py py-meth docutils literal notranslate"><span class="pre">packages()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackageCollection.short" title="pushsource.ErratumPackageCollection.short"><code class="xref py py-meth docutils literal notranslate"><span class="pre">short()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.name" title="Link to this definition">¶</a></dt>
+<dd><p>A name for this collection. The collection name has no specific meaning,
+but must be unique within an advisory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.packages">
+<span class="sig-name descname"><span class="pre">packages</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.packages" title="Link to this definition">¶</a></dt>
+<dd><p>List of packages within this collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#pushsource.ErratumPackage" title="pushsource.ErratumPackage">ErratumPackage</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.short">
+<span class="sig-name descname"><span class="pre">short</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.short" title="Link to this definition">¶</a></dt>
+<dd><p>An alternative name for this collection. In practice, this field
+is typically blank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackageCollection.module">
+<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#pushsource.ErratumPackageCollection.module" title="Link to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#pushsource.ErratumModule" title="pushsource.ErratumModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumModule</span></code></a> defining the module this entry is associated
+with, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pushsource.ErratumModule" title="pushsource.ErratumModule">ErratumModule</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ErratumModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumModule</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumModule" title="Link to this definition">¶</a></dt>
+<dd><p>A module entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.arch" title="pushsource.ErratumModule.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.context" title="pushsource.ErratumModule.context"><code class="xref py py-meth docutils literal notranslate"><span class="pre">context()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.name" title="pushsource.ErratumModule.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.stream" title="pushsource.ErratumModule.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumModule.version" title="pushsource.ErratumModule.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumModule.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumModule.name" title="Link to this definition">¶</a></dt>
+<dd><p>Module name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumModule.stream">
+<span class="sig-name descname"><span class="pre">stream</span></span><a class="headerlink" href="#pushsource.ErratumModule.stream" title="Link to this definition">¶</a></dt>
+<dd><p>Module stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumModule.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumModule.version" title="Link to this definition">¶</a></dt>
+<dd><p>Module version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumModule.context">
+<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#pushsource.ErratumModule.context" title="Link to this definition">¶</a></dt>
+<dd><p>Module context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumModule.arch">
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumModule.arch" title="Link to this definition">¶</a></dt>
+<dd><p>Module architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">ErratumPackage</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/erratum.html#ErratumPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.ErratumPackage" title="Link to this definition">¶</a></dt>
+<dd><p>A package (RPM) entry within a <a class="reference internal" href="#pushsource.ErratumPushItem.pkglist" title="pushsource.ErratumPushItem.pkglist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pkglist()</span></code></a>.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.arch" title="pushsource.ErratumPackage.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.epoch" title="pushsource.ErratumPackage.epoch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">epoch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.md5sum" title="pushsource.ErratumPackage.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.name" title="pushsource.ErratumPackage.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.reboot_suggested" title="pushsource.ErratumPackage.reboot_suggested"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reboot_suggested()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.release" title="pushsource.ErratumPackage.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.sha1sum" title="pushsource.ErratumPackage.sha1sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha1sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.sha256sum" title="pushsource.ErratumPackage.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.src" title="pushsource.ErratumPackage.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.ErratumPackage.version" title="pushsource.ErratumPackage.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.arch">
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.arch" title="Link to this definition">¶</a></dt>
+<dd><p>RPM architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#pushsource.ErratumPackage.filename" title="Link to this definition">¶</a></dt>
+<dd><p>RPM filename (basename).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.epoch">
+<span class="sig-name descname"><span class="pre">epoch</span></span><a class="headerlink" href="#pushsource.ErratumPackage.epoch" title="Link to this definition">¶</a></dt>
+<dd><p>RPM epoch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pushsource.ErratumPackage.name" title="Link to this definition">¶</a></dt>
+<dd><p>RPM name (e.g. “bash-4.0.1-1.el7.x86_64.rpm” name is “bash”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.ErratumPackage.version" title="Link to this definition">¶</a></dt>
+<dd><p>RPM version (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “4.0.1”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.release">
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.ErratumPackage.release" title="Link to this definition">¶</a></dt>
+<dd><p>RPM release (e.g. “bash-4.0.1-1.el7.x86_64.rpm” version is “1.el7”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.src">
+<span class="sig-name descname"><span class="pre">src</span></span><a class="headerlink" href="#pushsource.ErratumPackage.src" title="Link to this definition">¶</a></dt>
+<dd><p>Filename of the source RPM from which this RPM was built; equal to
+<a class="reference internal" href="#pushsource.ErratumPackage.filename" title="pushsource.ErratumPackage.filename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filename()</span></code></a> for the source RPM itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.reboot_suggested">
+<span class="sig-name descname"><span class="pre">reboot_suggested</span></span><a class="headerlink" href="#pushsource.ErratumPackage.reboot_suggested" title="Link to this definition">¶</a></dt>
+<dd><p>True if rebooting host machine is recommended after installing this package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.md5sum">
+<span class="sig-name descname"><span class="pre">md5sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.md5sum" title="Link to this definition">¶</a></dt>
+<dd><p>MD5 checksum of this RPM in hex string form, if available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.sha1sum">
+<span class="sig-name descname"><span class="pre">sha1sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha1sum" title="Link to this definition">¶</a></dt>
+<dd><p>SHA1 checksum of this RPM in hex string form, if available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.ErratumPackage.sha256sum">
+<span class="sig-name descname"><span class="pre">sha256sum</span></span><a class="headerlink" href="#pushsource.ErratumPackage.sha256sum" title="Link to this definition">¶</a></dt>
+<dd><p>SHA256 checksum of this RPM in hex string form, if available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -71,7 +692,14 @@
 <li class="toctree-l1"><a class="reference internal" href="directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: errata</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: errata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ErratumPushItem"><code class="docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ErratumReference"><code class="docutils literal notranslate"><span class="pre">ErratumReference</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ErratumPackageCollection"><code class="docutils literal notranslate"><span class="pre">ErratumPackageCollection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ErratumModule"><code class="docutils literal notranslate"><span class="pre">ErratumModule</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.ErratumPackage"><code class="docutils literal notranslate"><span class="pre">ErratumPackage</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="containers.html">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="azure.html">Push items: VHD</a></li>
@@ -128,7 +756,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

@@ -33,6 +33,202 @@
             
   <section id="push-items-vmi">
 <h1>Push items: VMI<a class="headerlink" href="#push-items-vmi" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">VMIPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#VMIPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.VMIPushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a generic VM image.</p>
+<p>This class is used as a parent class for different types of VM images.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.boot_mode" title="pushsource.VMIPushItem.boot_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">boot_mode()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.description" title="pushsource.VMIPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.release" title="pushsource.VMIPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.release">
+<span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#pushsource.VMIPushItem.release" title="Link to this definition">¶</a></dt>
+<dd><p>Release metadata associated with this image.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#pushsource.VMIPushItem.description" title="Link to this definition">¶</a></dt>
+<dd><p>A brief human-readable description of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.boot_mode">
+<span class="sig-name descname"><span class="pre">boot_mode</span></span><a class="headerlink" href="#pushsource.VMIPushItem.boot_mode" title="Link to this definition">¶</a></dt>
+<dd><p>uefi, legacy, or hybrid (uefi + legacy).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Boot mode supported by the image (if known)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.VMIRelease">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">VMIRelease</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#VMIRelease"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.VMIRelease" title="Link to this definition">¶</a></dt>
+<dd><p>Release metadata associated with a VM image.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.arch" title="pushsource.VMIRelease.arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">arch()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.base_product" title="pushsource.VMIRelease.base_product"><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_product()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.base_version" title="pushsource.VMIRelease.base_version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">base_version()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.date" title="pushsource.VMIRelease.date"><code class="xref py py-meth docutils literal notranslate"><span class="pre">date()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.product" title="pushsource.VMIRelease.product"><code class="xref py py-meth docutils literal notranslate"><span class="pre">product()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.respin" title="pushsource.VMIRelease.respin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">respin()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.type" title="pushsource.VMIRelease.type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">type()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.variant" title="pushsource.VMIRelease.variant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">variant()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIRelease.version" title="pushsource.VMIRelease.version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">version()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.product">
+<span class="sig-name descname"><span class="pre">product</span></span><a class="headerlink" href="#pushsource.VMIRelease.product" title="Link to this definition">¶</a></dt>
+<dd><p>A short product name, for example “RHEL” if this is an image for Red Hat
+Enterprise Linux.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#pushsource.VMIRelease.date" title="Link to this definition">¶</a></dt>
+<dd><p>Date at which this image was generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>date</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.arch">
+<span class="sig-name descname"><span class="pre">arch</span></span><a class="headerlink" href="#pushsource.VMIRelease.arch" title="Link to this definition">¶</a></dt>
+<dd><p>Architecture of the image, for example “x86_64”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.respin">
+<span class="sig-name descname"><span class="pre">respin</span></span><a class="headerlink" href="#pushsource.VMIRelease.respin" title="Link to this definition">¶</a></dt>
+<dd><p>Respin count. 0 for original build of an image, incremented by one for
+each rebuild.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#pushsource.VMIRelease.version" title="Link to this definition">¶</a></dt>
+<dd><p>A &lt;major&gt;.&lt;minor&gt; version string for the image’s product version, for example
+“7.9” if this is an image for Red Hat Enterprise Linux 7.9.x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.base_product">
+<span class="sig-name descname"><span class="pre">base_product</span></span><a class="headerlink" href="#pushsource.VMIRelease.base_product" title="Link to this definition">¶</a></dt>
+<dd><p>For layered products, name of the base product for which the image should be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.base_version">
+<span class="sig-name descname"><span class="pre">base_version</span></span><a class="headerlink" href="#pushsource.VMIRelease.base_version" title="Link to this definition">¶</a></dt>
+<dd><p>For layered products, version of the base product for which the image should be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.variant">
+<span class="sig-name descname"><span class="pre">variant</span></span><a class="headerlink" href="#pushsource.VMIRelease.variant" title="Link to this definition">¶</a></dt>
+<dd><p>Variant of this image’s product (only for products which have variants).  For example,
+“Server”, for Red Hat Enterprise Linux Server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIRelease.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#pushsource.VMIRelease.type" title="Link to this definition">¶</a></dt>
+<dd><p>Release type, typically “ga” or “beta”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.BootMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">BootMode</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#BootMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.BootMode" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the possible boot modes for VM images.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.hybrid">
+<span class="sig-name descname"><span class="pre">hybrid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hybrid'</span></em><a class="headerlink" href="#pushsource.BootMode.hybrid" title="Link to this definition">¶</a></dt>
+<dd><p>Supports both UEFI and BIOS mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.uefi">
+<span class="sig-name descname"><span class="pre">uefi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'uefi'</span></em><a class="headerlink" href="#pushsource.BootMode.uefi" title="Link to this definition">¶</a></dt>
+<dd><p>Supports only UEFI mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.BootMode.legacy">
+<span class="sig-name descname"><span class="pre">legacy</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'legacy'</span></em><a class="headerlink" href="#pushsource.BootMode.legacy" title="Link to this definition">¶</a></dt>
+<dd><p>Supports only BIOS mode.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -75,7 +271,12 @@
 <li class="toctree-l1"><a class="reference internal" href="containers.html">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="azure.html">Push items: VHD</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: VMI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: VMI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIPushItem"><code class="docutils literal notranslate"><span class="pre">VMIPushItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIRelease"><code class="docutils literal notranslate"><span class="pre">VMIRelease</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.BootMode"><code class="docutils literal notranslate"><span class="pre">BootMode</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comps.html">Push items: comps.xml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/staged.html">Schema: staged</a></li>
@@ -128,7 +329,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.model.vms &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.model.vms</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">datestr</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">optional</span><span class="p">,</span> <span class="n">in_</span>
+
+
+<div class="viewcode-block" id="BootMode">
+<a class="viewcode-back" href="../../../../model/vmi.html#pushsource.BootMode">[docs]</a>
+<span class="k">class</span> <span class="nc">BootMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent the possible boot modes for VM images.&quot;&quot;&quot;</span>
+
+    <span class="n">hybrid</span> <span class="o">=</span> <span class="s2">&quot;hybrid&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports both UEFI and BIOS mode.&quot;&quot;&quot;</span>
+
+    <span class="n">uefi</span> <span class="o">=</span> <span class="s2">&quot;uefi&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports only UEFI mode.&quot;&quot;&quot;</span>
+
+    <span class="n">legacy</span> <span class="o">=</span> <span class="s2">&quot;legacy&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supports only BIOS mode.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="VMIRelease">
+<a class="viewcode-back" href="../../../../model/vmi.html#pushsource.VMIRelease">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">VMIRelease</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Release metadata associated with a VM image.&quot;&quot;&quot;</span>
+
+    <span class="n">product</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A short product name, for example &quot;RHEL&quot; if this is an image for Red Hat</span>
+<span class="sd">    Enterprise Linux.&quot;&quot;&quot;</span>
+
+    <span class="n">date</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">datestr</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Date at which this image was generated.&quot;&quot;&quot;</span>
+
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Architecture of the image, for example &quot;x86_64&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">respin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Respin count. 0 for original build of an image, incremented by one for</span>
+<span class="sd">    each rebuild.&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A &lt;major&gt;.&lt;minor&gt; version string for the image&#39;s product version, for example</span>
+<span class="sd">    &quot;7.9&quot; if this is an image for Red Hat Enterprise Linux 7.9.x.&quot;&quot;&quot;</span>
+
+    <span class="n">base_product</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For layered products, name of the base product for which the image should be used.&quot;&quot;&quot;</span>
+
+    <span class="n">base_version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For layered products, version of the base product for which the image should be used.&quot;&quot;&quot;</span>
+
+    <span class="n">variant</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Variant of this image&#39;s product (only for products which have variants).  For example,</span>
+<span class="sd">    &quot;Server&quot;, for Red Hat Enterprise Linux Server.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Release type, typically &quot;ga&quot; or &quot;beta&quot;.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="VMIPushItem">
+<a class="viewcode-back" href="../../../../model/vmi.html#pushsource.VMIPushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">VMIPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a generic VM image.</span>
+
+<span class="sd">    This class is used as a parent class for different types of VM images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_RELEASE_TYPE</span> <span class="o">=</span> <span class="n">VMIRelease</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The expected release type for this class.&quot;&quot;&quot;</span>
+
+    <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Release metadata associated with this image.&quot;&quot;&quot;</span>
+
+    <span class="n">description</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A brief human-readable description of the image.&quot;&quot;&quot;</span>
+
+    <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">BootMode</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">BootMode</span><span class="p">)))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy).&quot;&quot;&quot;</span>
+
+    <span class="nd">@release</span><span class="o">.</span><span class="n">validator</span>
+    <span class="k">def</span> <span class="nf">__validate_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>
+        <span class="c1"># Strict (unidiomatic) type check ensures that subclasses</span>
+        <span class="c1"># of VMIRelease can not be associated with VHDPushItem</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">value</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
+        <span class="p">):</span>  <span class="c1"># pylint: disable=unidiomatic-typecheck</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;The release type must be &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

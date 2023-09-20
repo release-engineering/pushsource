@@ -81,9 +81,9 @@ more builds. Builds can be specified by NVR. Builds should be produced by
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?container_build=grafana-7-1</span></code></p>
 <p>Push items produced in this case may include:</p>
 <ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerImagePushItem</span></code> - one for each available image</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceContainerImagePushItem</span></code> - for source container images</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorManifestPushItem</span></code> - if images have attached operator
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.ContainerImagePushItem" title="pushsource.ContainerImagePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerImagePushItem</span></code></a> - one for each available image</p></li>
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.SourceContainerImagePushItem" title="pushsource.SourceContainerImagePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceContainerImagePushItem</span></code></a> - for source container images</p></li>
+<li><p><a class="reference internal" href="../model/containers.html#pushsource.OperatorManifestPushItem" title="pushsource.OperatorManifestPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorManifestPushItem</span></code></a> - if images have attached operator
 manifest archives</p></li>
 </ul>
 </section>
@@ -95,9 +95,9 @@ more builds. Builds can be specified by NVR. Builds should be produced by
 <p><code class="docutils literal notranslate"><span class="pre">koji:https://koji.fedoraproject.org/kojihub?vmi_build=fedora-azure-37-1.7</span></code></p>
 <p>Push items produced in this case may include:</p>
 <ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VMIPushItem</span></code> - one for each available image</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VHDPushItem</span></code> - for Azure VHD images.</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code> - for AMI raw images.</p></li>
+<li><p><a class="reference internal" href="../model/vmi.html#pushsource.VMIPushItem" title="pushsource.VMIPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">VMIPushItem</span></code></a> - one for each available image</p></li>
+<li><p><a class="reference internal" href="../model/azure.html#pushsource.VHDPushItem" title="pushsource.VHDPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">VHDPushItem</span></code></a> - for Azure VHD images.</p></li>
+<li><p><a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a> - for AMI raw images.</p></li>
 </ul>
 </section>
 <section id="setting-the-destination-for-push-items">
@@ -118,6 +118,66 @@ The top-level path by default is provided by the <code class="docutils literal n
 </section>
 <section id="python-api-reference">
 <h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.KojiSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource" title="Link to this definition">¶</a></dt>
+<dd><p>Uses koji artifacts as the source of push items.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.KojiSource.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filter_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmi_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signing_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/koji_source.html#KojiSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiSource.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – URL of the XML-RPC endpoint for koji hub.</p></li>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – The destination(s) to fill in for push items created by this
+source. If omitted, all push items have empty destinations.</p></li>
+<li><p><strong>rpm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – RPM identifier(s). Can be koji IDs (integers) or filenames.
+The source will yield all RPMs identified by this list.</p></li>
+<li><p><strong>module_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+The source will yield modulemd files belonging to these
+build(s), filtered by <code class="docutils literal notranslate"><span class="pre">module_filter_filename</span></code> (if given).</p></li>
+<li><p><strong>module_filter_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – <p>Filename(s) of modulemd archives to include in output.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">module_build</span></code> is given, modulemd files are located as
+koji archives with names of the form <code class="docutils literal notranslate"><span class="pre">modulemd.&lt;arch&gt;.txt</span></code>.
+By default, all of these archives will be processed.</p>
+<p>Providing a non-empty list for <code class="docutils literal notranslate"><span class="pre">module_filter_filename</span></code> will
+instead only process modulemd files with those filenames. This
+can be used to select only certain arches.</p>
+<p>Has no effect if <code class="docutils literal notranslate"><span class="pre">module_build</span></code> is not provided.</p>
+</p></li>
+<li><p><strong>container_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – Build identifier(s). Can be koji IDs (integers) or build NVRs.
+The source will yield all container images produced by these
+build(s), along with associated artifacts such as operator manifest
+bundles.</p></li>
+<li><p><strong>vmi_build</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – Virtual Machine Image identifier(s). Can be koji build IDs (integers)
+or build NVRs.
+The source will yield all VMIs identified by this list.</p></li>
+<li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
+using one of the provided keys. Include <code class="docutils literal notranslate"><span class="pre">None</span></code> if unsigned
+should also be permitted.</p>
+<p>Keys should be listed in the order of preference.</p>
+</p></li>
+<li><p><strong>basedir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Base directory of koji content (e.g. /mnt/koji).
+This directory must be readable locally.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of threads used for concurrent queries to koji.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+made during queries to koji.</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – <p>A cache used to retain the results of XML-RPC calls, to avoid
+repeated calls.</p>
+<p>Providing a cache only gives a benefit if the current process
+will create more than a single instance of KojiSource. In this
+case, some calls may be avoided by passing the same cache
+to each instance.</p>
+</p></li>
+<li><p><strong>executor</strong> (<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor" title="(in Python v3.11)"><em>concurrent.futures.Executor</em></a>) – A custom executor used to submit calls to koji.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -218,7 +278,7 @@ The top-level path by default is provided by the <code class="docutils literal n
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

@@ -133,14 +133,14 @@ are often used for this to avoid duplication.</p>
 <h3>root/destination/COMPS/*.xml<a class="headerlink" href="#root-destination-comps-xml" title="Link to this heading">¶</a></h3>
 <p>Each file in <code class="docutils literal notranslate"><span class="pre">COMPS</span></code> should be a comps XML file in the yum repo metadata format,
 defining package groups.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">CompsXmlPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/comps.html#pushsource.CompsXmlPushItem" title="pushsource.CompsXmlPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompsXmlPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-errata">
 <h3>root/destination/ERRATA/*<a class="headerlink" href="#root-destination-errata" title="Link to this heading">¶</a></h3>
 <p>Each file in <code class="docutils literal notranslate"><span class="pre">ERRATA</span></code> should be a YAML or JSON dump containing advisory metadata.</p>
 <p>The format is essentially the same as that produced by Errata Tool’s XML-RPC APIs.
 <a class="reference internal" href="../schema/errata.html#errata-schema"><span class="std std-ref">Schema: errata</span></a> formally documents the schema.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/errata.html#pushsource.ErratumPushItem" title="pushsource.ErratumPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-files">
 <h3>root/destination/FILES/*<a class="headerlink" href="#root-destination-files" title="Link to this heading">¶</a></h3>
@@ -149,24 +149,24 @@ In practice, this is often used for binary files such as ISO disc images or
 installers.</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
 <p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">ISOS</span></code>.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">FilePushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/files.html#pushsource.FilePushItem" title="pushsource.FilePushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilePushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-cgw">
 <h3>root/destination/CGW/*<a class="headerlink" href="#root-destination-cgw" title="Link to this heading">¶</a></h3>
 <p>Each file in CGW should be a valid YAML containing a list of definitions for objects in Content Gateway.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">CGWPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/cgw.html#pushsource.CGWPushItem" title="pushsource.CGWPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">CGWPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-productid">
 <h3>root/destination/PRODUCTID/*<a class="headerlink" href="#root-destination-productid" title="Link to this heading">¶</a></h3>
 <p>Each file in <code class="docutils literal notranslate"><span class="pre">PRODUCTID</span></code> should be a PEM-formatted product certificate,
 as used by Satellite 6 / RHSM.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">ProductIdPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/productid.html#pushsource.ProductIdPushItem" title="pushsource.ProductIdPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProductIdPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-modulemd">
 <h3>root/destination/MODULEMD/*<a class="headerlink" href="#root-destination-modulemd" title="Link to this heading">¶</a></h3>
 <p>Each file in <code class="docutils literal notranslate"><span class="pre">MODULEMD</span></code> should be a valid YAML stream containing modulemd
 and/or modulemd-defaults documents.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleMdPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/modulemd.html#pushsource.ModuleMdPushItem" title="pushsource.ModuleMdPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleMdPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-rpms-rpm">
 <h3>root/destination/RPMS/*.rpm<a class="headerlink" href="#root-destination-rpms-rpm" title="Link to this heading">¶</a></h3>
@@ -174,14 +174,14 @@ and/or modulemd-defaults documents.</p>
 RPM headers.</p>
 <p>For historical reasons, this directory may also be named <code class="docutils literal notranslate"><span class="pre">SRPMS</span></code>. It is not
 required that source RPMs are placed in the <code class="docutils literal notranslate"><span class="pre">SRPMS</span></code> directory.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/rpm.html#pushsource.RpmPushItem" title="pushsource.RpmPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-aws-images">
 <h3>root/destination/AWS_IMAGES/*<a class="headerlink" href="#root-destination-aws-images" title="Link to this heading">¶</a></h3>
 <p>Each file in <code class="docutils literal notranslate"><span class="pre">AWS_IMAGES</span></code> should be an EBS snapshot for use as an
 Amazon Machine Image (AMI).</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a>.</p>
 </section>
 <section id="root-destination-raw">
 <h3>root/destination/RAW/*<a class="headerlink" href="#root-destination-raw" title="Link to this heading">¶</a></h3>
@@ -189,11 +189,37 @@ Amazon Machine Image (AMI).</p>
 entire directory tree as-is. Each file in <code class="docutils literal notranslate"><span class="pre">RAW</span></code> can be any type of file, to be
 published verbatim. In practice, <code class="docutils literal notranslate"><span class="pre">RAW</span></code> is used for kickstart trees, ostrees, and
 origin-only content.</p>
-<p>Will yield instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">DirectoryPushItem</span></code>.</p>
+<p>Will yield instances of <a class="reference internal" href="../model/directory.html#pushsource.DirectoryPushItem" title="pushsource.DirectoryPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DirectoryPushItem</span></code></a>.</p>
 </section>
 </section>
 <section id="python-api-reference">
 <h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.StagedSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">StagedSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/staged/staged_source.html#StagedSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.StagedSource" title="Link to this definition">¶</a></dt>
+<dd><p>Uses a directory with a predefined layout (a “staging directory”) as
+the source of push items.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.StagedSource.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/staged/staged_source.html#StagedSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.StagedSource.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – <p>URL(s) of locally accessible staging directories, e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;/mnt/staging/my-content-for-push&quot;</span></code>.</p>
+<p>These directories must follow the documented layout for staging areas.</p>
+</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of threads used for concurrent loading of files.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+made during each step.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -295,7 +321,7 @@ origin-only content.</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

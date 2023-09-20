@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.backend.errata_source.errata_source &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.backend.errata_source.errata_source</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
+
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
+
+<span class="kn">from</span> <span class="nn">.errata_client</span> <span class="kn">import</span> <span class="n">ErrataClient</span>
+<span class="kn">from</span> <span class="nn">.errata_http_client</span> <span class="kn">import</span> <span class="n">ErrataHTTPClient</span>
+
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">...model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ErratumPushItem</span><span class="p">,</span>
+    <span class="n">ContainerImagePushItem</span><span class="p">,</span>
+    <span class="n">ModuleMdSourcePushItem</span><span class="p">,</span>
+    <span class="n">RpmPushItem</span><span class="p">,</span>
+    <span class="n">OperatorManifestPushItem</span><span class="p">,</span>
+    <span class="n">conv</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">...helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">list_argument</span><span class="p">,</span>
+    <span class="n">try_bool</span><span class="p">,</span>
+    <span class="n">force_https</span><span class="p">,</span>
+    <span class="n">as_completed_with_timeout_reset</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ErrataSource">
+<a class="viewcode-back" href="../../../../../sources/errata.html#pushsource.ErrataSource">[docs]</a>
+<span class="k">class</span> <span class="nc">ErrataSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses an advisory from Errata Tool as the source of push items.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ErrataSource.__init__">
+<a class="viewcode-back" href="../../../../../sources/errata.html#pushsource.ErrataSource.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">errata</span><span class="p">,</span>
+        <span class="n">koji_source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rpm_filter_arch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">legacy_container_repos</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">keytab_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">principal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new source.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            url (src)</span>
+<span class="sd">                Base URL of Errata Tool, e.g. &quot;http://errata.example.com&quot;,</span>
+<span class="sd">                &quot;https://errata.example.com:8123&quot;.</span>
+
+<span class="sd">            errata (str, list[str])</span>
+<span class="sd">                Advisory ID(s) to be used as push item source.</span>
+<span class="sd">                If a single string is given, multiple IDs may be</span>
+<span class="sd">                comma-separated.</span>
+
+<span class="sd">            koji_source (str)</span>
+<span class="sd">                URL of a koji source associated with this Errata Tool</span>
+<span class="sd">                instance.</span>
+
+<span class="sd">            rpm_filter_arch (str, list[str])</span>
+<span class="sd">                If provided, only RPMs for these given arch(es) will be produced;</span>
+<span class="sd">                e.g. &quot;x86_64&quot;, &quot;src&quot; and &quot;noarch&quot;.</span>
+
+<span class="sd">            legacy_container_repos (bool)</span>
+<span class="sd">                If ``True``, any container push items generated by this source will</span>
+<span class="sd">                use a legacy format for repository IDs.</span>
+
+<span class="sd">                This is intended to better support certain legacy code and will be</span>
+<span class="sd">                removed when no longer needed. Only use this if you know that you</span>
+<span class="sd">                need it.</span>
+
+<span class="sd">            keytab_path (str):</span>
+<span class="sd">                Kerberos keytab path for authenticating with Errata HTTP API.</span>
+
+<span class="sd">            principal (str):</span>
+<span class="sd">                Kerberos principal for authenticating with Errata HTTP API.</span>
+
+<span class="sd">            threads (int)</span>
+<span class="sd">                Number of threads used for concurrent queries to Errata Tool</span>
+<span class="sd">                and koji.</span>
+
+<span class="sd">            timeout (int)</span>
+<span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
+<span class="sd">                made during queries to Errata Tool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">force_https</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">errata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ErrataClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span> <span class="o">=</span> <span class="n">ErrataHTTPClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="n">keytab_path</span><span class="p">,</span> <span class="n">principal</span><span class="p">)</span>
+        <span class="c1"># Get TGT only once</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span><span class="o">.</span><span class="n">create_kerberos_ticket</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm_filter_arch</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># This executor doesn&#39;t use retry because koji &amp; ET executors already do that.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-errata&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
+
+        <span class="c1"># We set aside a separate thread pool for koji so that there are separate</span>
+        <span class="c1"># queues for ET and koji calls, yet we avoid creating a new thread pool for</span>
+        <span class="c1"># each koji source.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-errata-koji&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">with_retry</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span> <span class="o">=</span> <span class="n">koji_source</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_container_repos</span> <span class="o">=</span> <span class="n">try_bool</span><span class="p">(</span><span class="n">legacy_container_repos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_errata_service_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># URL for the errata_service XML-RPC endpoint provided by ET.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Note the odd handling of scheme here. The reason is that</span>
+        <span class="c1"># ET oddly provides different APIs over http and https.</span>
+        <span class="c1">#</span>
+        <span class="c1"># This XML-RPC API is available anonymously over *https* only,</span>
+        <span class="c1"># but for compatibility the caller is allowed to provide http</span>
+        <span class="c1"># or https scheme and we&#39;ll apply the scheme we know is actually</span>
+        <span class="c1"># needed.</span>
+        <span class="c1">#</span>
+        <span class="c1"># The XML-RPC endpoint is no longer available over http as of</span>
+        <span class="c1"># 11 Oct 2021. This class&#39;s constructor will still accept either</span>
+        <span class="c1"># http or https, but will force the given url to use https going</span>
+        <span class="c1"># forward.</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0.scheme}</span><span class="s2">://</span><span class="si">{0.netloc}{0.path}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span>
+
+        <span class="c1"># Note: os.path.join will join these components with a &#39;\&#39; on Windows</span>
+        <span class="c1"># systems, which is not intended. The tradeoff is that os.path.join</span>
+        <span class="c1"># handles cases where path components end with trailing path separators</span>
+        <span class="c1"># and doesn&#39;t doesn&#39;t duplicate them i.e. prevents something like</span>
+        <span class="c1"># https://errata.example.com/some/path//errata/errata_service</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;errata/errata_service&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_koji_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A Koji source is required but none is specified&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source_url</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_cache</span><span class="p">,</span>
+            <span class="n">executor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_executor</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_advisory_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: other cases (comma-separated; plain string)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw</span><span class="p">):</span>
+        <span class="n">raw_metadata</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_list&quot;</span><span class="p">):</span>
+            <span class="n">new_container_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># for every item in container list replace build with external repos</span>
+            <span class="k">for</span> <span class="n">clistitem</span> <span class="ow">in</span> <span class="n">raw_metadata</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">][:]:</span>
+                <span class="n">new_clistitem</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">clistitem</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">build_repos</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_docker_file_list</span><span class="p">[</span><span class="n">build</span><span class="p">][</span><span class="s2">&quot;docker&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;target&quot;</span>
+                    <span class="p">][</span><span class="s2">&quot;external_repos&quot;</span><span class="p">]</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">clistitem</span><span class="p">[</span><span class="n">build</span><span class="p">]</span>
+                    <span class="n">new_val</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">[</span><span class="s2">&quot;digest&quot;</span><span class="p">],</span> <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+                    <span class="c1"># for instead of images we want to store only its architecture</span>
+                    <span class="c1"># which is part of the image archive, example:</span>
+                    <span class="c1"># docker-image-sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1.s390x.tar.gz</span>
+                    <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">digest_dict</span> <span class="ow">in</span> <span class="n">val</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+                        <span class="n">new_val</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">][</span><span class="n">arch</span><span class="p">]</span> <span class="o">=</span> <span class="n">digest_dict</span>
+                    <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="n">build_repos</span><span class="p">:</span>
+                        <span class="n">new_clistitem</span><span class="p">[</span><span class="n">repo</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_val</span>
+
+                <span class="n">new_container_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_clistitem</span><span class="p">)</span>
+            <span class="n">raw_metadata</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_container_list</span>
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">ErratumPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">raw_metadata</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rpms</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_file_list</span><span class="p">)</span>
+
+        <span class="c1"># The erratum should go to all the same destinations as the rpms,</span>
+        <span class="c1"># before FTP paths are added.</span>
+        <span class="n">erratum_dest</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">dest</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
+                <span class="n">erratum_dest</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">erratum_dest</span><span class="p">))</span>
+
+        <span class="c1"># Adjust push item destinations according to FTP paths from ET, if any.</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_ftp_paths</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="n">items</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_container_manifests</span><span class="p">(</span>
+            <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_docker_file_list</span>
+        <span class="p">)</span>
+
+        <span class="n">appliance_image_list</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;appliance_image_list&quot;</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="n">items</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_appliance_image_list</span><span class="p">(</span>
+            <span class="n">erratum</span><span class="p">,</span> <span class="n">appliance_image_list</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">erratum</span><span class="p">]</span> <span class="o">+</span> <span class="n">items</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_container_manifests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">docker_file_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">docker_file_list</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Example of container list for one item to one repo:</span>
+        <span class="c1">#</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;dotnet-21-container-2.1-77.1621419388&quot;: {</span>
+        <span class="c1">#         &quot;docker&quot;: {</span>
+        <span class="c1">#             &quot;target&quot;: {</span>
+        <span class="c1">#                 &quot;external_repos&quot;: {</span>
+        <span class="c1">#                     &quot;rhel8/dotnet-21&quot;: {</span>
+        <span class="c1">#                         &quot;container_full_sig_key&quot;: &quot;199e2f91fd431d51&quot;,</span>
+        <span class="c1">#                         &quot;container_sig_key&quot;: &quot;fd431d51&quot;,</span>
+        <span class="c1">#                         &quot;tags&quot;: [&quot;2.1&quot;, &quot;2.1-77.1621419388&quot;, &quot;latest&quot;],</span>
+        <span class="c1">#                     },</span>
+        <span class="c1">#                 },</span>
+        <span class="c1">#                 &quot;repos&quot;: /* like external_repos but uses pulp repo IDs */,</span>
+        <span class="c1">#             }</span>
+        <span class="c1">#         }</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># }</span>
+        <span class="c1">#</span>
+
+        <span class="c1"># Get product name from Errata. Enrich Container push items with this info</span>
+        <span class="n">advisory_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span><span class="o">.</span><span class="n">get_advisory_data</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">advisory_data</span><span class="p">:</span>
+            <span class="c1"># This dictionary key is different based on erratum type</span>
+            <span class="n">erratum_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">advisory_data</span><span class="p">[</span><span class="s2">&quot;errata&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">product_name</span> <span class="o">=</span> <span class="n">advisory_data</span><span class="p">[</span><span class="s2">&quot;errata&quot;</span><span class="p">][</span><span class="n">erratum_type</span><span class="p">][</span><span class="s2">&quot;product&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">product_name</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># We&#39;ll be getting container metadata from these builds.</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
+            <span class="n">container_build</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">docker_file_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ContainerImagePushItem</span><span class="p">):</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enrich_container_push_item</span><span class="p">(</span>
+                        <span class="n">erratum</span><span class="p">,</span> <span class="n">docker_file_list</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">product_name</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">OperatorManifestPushItem</span><span class="p">):</span>
+                    <span class="c1"># Accept this item but nothing special to do</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If build contained anything else, ignore it</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: ignored unexpected item from koji source: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">item</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_appliance_image_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">appliance_image_list</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">appliance_image_list</span><span class="p">:</span>
+            <span class="n">nvr_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">appliance_image_list</span><span class="p">:</span>
+                <span class="n">nvr_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">nvr</span> <span class="k">for</span> <span class="n">nvr</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">vmi_build</span><span class="o">=</span><span class="n">nvr_list</span><span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+                    <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">push_item</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_enrich_container_push_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">docker_file_list</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">product_name</span>
+    <span class="p">):</span>
+        <span class="c1"># metadata from koji doesn&#39;t contain info about where the image should be</span>
+        <span class="c1"># pushed and a few other things - enrich it now</span>
+        <span class="n">errata_meta</span> <span class="o">=</span> <span class="n">docker_file_list</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="p">(</span><span class="n">errata_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;docker&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="n">repos</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_repos&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_container_repos</span><span class="p">:</span>
+            <span class="n">repos</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repos&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="n">sig_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">repo_data</span> <span class="ow">in</span> <span class="n">repos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">repo_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+                <span class="n">dest</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">))</span>
+
+            <span class="n">sig_key</span> <span class="o">=</span> <span class="n">repo_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_full_sig_key&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sig_key</span><span class="p">:</span>
+                <span class="n">sig_keys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sig_key</span><span class="p">)</span>
+
+        <span class="n">dest</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dest</span><span class="p">))</span>
+
+        <span class="c1"># If ET is not requesting to push this to any repos or tags at all,</span>
+        <span class="c1"># it&#39;s considered an error.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dest</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2"> requests container build </span><span class="si">%s</span><span class="s2"> but provides no repositories&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># The API structure in Errata Tool would theoretically allow for multiple</span>
+            <span class="c1"># signing keys on a single image. However, it&#39;s unclear if there&#39;s any use-case</span>
+            <span class="c1"># for it, and all existing code in Pub for dealing with container images does not</span>
+            <span class="c1"># even come close to handling it correctly, so we&#39;re going to flag this as</span>
+            <span class="c1"># unsupported for now.</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Unsupported: erratum </span><span class="si">%s</span><span class="s2"> requests multiple signing keys (</span><span class="si">%s</span><span class="s2">) on build </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)),</span> <span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">dest_signing_key</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sig_keys</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig_keys</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># koji source provided basic info on container image, ET provides policy on</span>
+        <span class="c1"># where/how it should be pushed, combine them both to get final push item</span>
+        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+            <span class="n">item</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span>
+            <span class="n">dest_signing_key</span><span class="o">=</span><span class="n">dest_signing_key</span><span class="p">,</span>
+            <span class="n">product_name</span><span class="o">=</span><span class="n">product_name</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_rpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_list</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span> <span class="ow">in</span> <span class="n">rpm_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rpm_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_module_push_items_from_build</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_module_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">module_filenames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># We always request the modulemd.src.txt because we might need it later</span>
+        <span class="c1"># depending on the ftp_paths response.</span>
+        <span class="n">module_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Get a koji source which will yield all modules from the build</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span>
+            <span class="n">module_build</span><span class="o">=</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">],</span> <span class="n">module_filter_filename</span><span class="o">=</span><span class="n">module_filenames</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">koji_source</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+                <span class="c1"># ET uses filenames to identify the modules here, we must do the same.</span>
+                <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+                <span class="n">dest</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="p">[])</span>
+
+                <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
+                <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">push_item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
+
+        <span class="c1"># Were there any requested modules we couldn&#39;t find?</span>
+        <span class="n">missing_modules</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">missing_modules</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;koji build </span><span class="si">{nvr}</span><span class="s2"> does not contain </span><span class="si">{missing}</span><span class="s2"> (requested by advisory </span><span class="si">{erratum}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">nvr</span><span class="o">=</span><span class="n">build_nvr</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="n">missing_modules</span><span class="p">,</span> <span class="n">erratum</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_filter_rpms_by_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">rpm_filenames</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rpm_filenames</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ok_arches</span> <span class="o">=</span> <span class="p">[</span><span class="n">conv</span><span class="o">.</span><span class="n">archstr</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">rpm_filenames</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rpm&quot;</span><span class="p">:</span>
+                <span class="n">arch</span> <span class="o">=</span> <span class="n">components</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">conv</span><span class="o">.</span><span class="n">archstr</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ok_arches</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: RPM removed by arch filter: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_rpm_push_items_from_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_info</span><span class="p">):</span>
+        <span class="n">rpms</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">signing_key</span> <span class="o">=</span> <span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="n">sha256sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">md5sums</span> <span class="o">=</span> <span class="p">(</span><span class="n">build_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="n">rpm_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_rpms_by_arch</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">rpms</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+        <span class="c1"># Get a koji source which will yield all desired push items from this build.</span>
+        <span class="n">koji_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_source</span><span class="p">(</span><span class="n">rpm</span><span class="o">=</span><span class="n">rpm_filenames</span><span class="p">,</span> <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">push_item</span> <span class="ow">in</span> <span class="n">koji_source</span><span class="p">:</span>
+            <span class="c1"># Do not allow to proceed if RPM was absent</span>
+            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;NOTFOUND&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Advisory refers to </span><span class="si">%s</span><span class="s2"> but RPM was not found in koji&quot;</span>
+                    <span class="o">%</span> <span class="n">push_item</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Note, we can&#39;t sanity check here that the push item&#39;s build</span>
+            <span class="c1"># equals ET&#39;s NVR, because it&#39;s not always the case.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Example:</span>
+            <span class="c1">#  RPM: pgaudit-debuginfo-1.4.0-4.module+el8.1.1+4794+c82b6e09.x86_64.rpm</span>
+            <span class="c1">#  belongs to build: 1015162 (pgaudit-1.4.0-4.module+el8.1.1+4794+c82b6e09)</span>
+            <span class="c1">#  but ET refers instead to module build: postgresql-12-8010120191120141335.e4e244f9.</span>
+            <span class="c1">#</span>
+            <span class="c1"># We also make use of this to fill in the module_build attribute on items when</span>
+            <span class="c1"># available.</span>
+            <span class="c1">#</span>
+            <span class="c1"># (This is not ideal because we don&#39;t really &quot;know&quot; that a non-matching NVR here is</span>
+            <span class="c1"># the module build NVR, we are relying on the ET implementation detail that this is</span>
+            <span class="c1"># the only reason they should not match; though legacy code already depended on this</span>
+            <span class="c1"># for years, so maybe it&#39;s fine. We also have the heuristic of scanning for &#39;module&#39;</span>
+            <span class="c1"># in the NVR to make exceptions less likely.)</span>
+            <span class="n">module_build</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span> <span class="o">!=</span> <span class="n">build_nvr</span> <span class="ow">and</span> <span class="s2">&quot;.module&quot;</span> <span class="ow">in</span> <span class="n">push_item</span><span class="o">.</span><span class="n">build</span><span class="p">:</span>
+                <span class="n">module_build</span> <span class="o">=</span> <span class="n">build_nvr</span>
+
+            <span class="c1"># Fill in more push item details based on the info provided by ET.</span>
+            <span class="n">push_item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+                <span class="n">push_item</span><span class="p">,</span>
+                <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">md5sum</span><span class="o">=</span><span class="n">md5sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">dest</span><span class="o">=</span><span class="n">rpms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">push_item</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">origin</span><span class="o">=</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">module_build</span><span class="o">=</span><span class="n">module_build</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">push_item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_add_ftp_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">erratum</span><span class="p">,</span> <span class="n">raw</span><span class="p">):</span>
+        <span class="n">ftp_paths</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">ftp_paths</span>
+
+        <span class="c1"># ftp_paths structure is like this:</span>
+        <span class="c1">#</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;xorg-x11-server-1.20.4-16.el7_9&quot;: {</span>
+        <span class="c1">#         &quot;rpms&quot;: {</span>
+        <span class="c1">#             &quot;xorg-x11-server-1.20.4-16.el7_9.src.rpm&quot;: [</span>
+        <span class="c1">#                 &quot;/ftp/pub/redhat/linux/enterprise/7Client/en/os/SRPMS/&quot;,</span>
+        <span class="c1">#                 &quot;/ftp/pub/redhat/linux/enterprise/7ComputeNode/en/os/SRPMS/&quot;,</span>
+        <span class="c1">#                 &quot;/ftp/pub/redhat/linux/enterprise/7Server/en/os/SRPMS/&quot;,</span>
+        <span class="c1">#                 &quot;/ftp/pub/redhat/linux/enterprise/7Workstation/en/os/SRPMS/&quot;,</span>
+        <span class="c1">#             ]</span>
+        <span class="c1">#         },</span>
+        <span class="c1">#         &quot;modules&quot;: [</span>
+        <span class="c1">#            &quot;/ftp/pub/redhat/linux/enterprise/AppStream-8.0.0.Z/en/os/modules/&quot;</span>
+        <span class="c1">#         ],</span>
+        <span class="c1">#         &quot;sig_key&quot;: &quot;fd431d51&quot;,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># }</span>
+        <span class="c1">#</span>
+        <span class="c1"># We use the (rpm, module) =&gt; ftp path mappings, which should be added onto</span>
+        <span class="c1"># our existing push items if they match.</span>
+        <span class="c1">#</span>
+        <span class="n">rpm_to_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">build_to_module_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">builds_need_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">builds_have_modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_map</span> <span class="ow">in</span> <span class="n">ftp_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">rpm_name</span><span class="p">,</span> <span class="n">paths</span> <span class="ow">in</span> <span class="p">(</span><span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rpms&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">rpm_to_paths</span><span class="p">[</span><span class="n">rpm_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span>
+
+            <span class="n">modules</span> <span class="o">=</span> <span class="n">build_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="n">build_to_module_paths</span><span class="p">[</span><span class="n">build_nvr</span><span class="p">]</span> <span class="o">=</span> <span class="n">modules</span>
+            <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
+                <span class="n">builds_need_modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">build_nvr</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">RpmPushItem</span><span class="p">):</span>
+                <span class="c1"># RPMs have dest updated with FTP paths.</span>
+                <span class="n">paths</span> <span class="o">=</span> <span class="n">rpm_to_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">dest</span> <span class="o">+</span> <span class="n">paths</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ModuleMdSourcePushItem</span><span class="p">):</span>
+                <span class="c1"># modulemd sources have dest updated with FTP paths and will</span>
+                <span class="c1"># also be filtered out if there are no matches at all (because</span>
+                <span class="c1"># modulemd sources aren&#39;t delivered in any other manner)</span>
+                <span class="n">paths</span> <span class="o">=</span> <span class="n">build_to_module_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">paths</span><span class="p">:</span>
+                    <span class="n">builds_have_modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">dest</span> <span class="o">+</span> <span class="n">paths</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">dest</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># modulemd sources are filtered out altogether if ET did</span>
+                    <span class="c1"># not provide any destinations.</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: modulemd source skipped due to no destinations: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">item</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Other types of items are unaffected by ftp_paths.</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="n">builds_missing_modules</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">builds_need_modules</span> <span class="o">-</span> <span class="n">builds_have_modules</span><span class="p">)</span>
+        <span class="n">builds_missing_et</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">builds_missing_koji</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nvr</span> <span class="ow">in</span> <span class="n">builds_missing_modules</span><span class="p">:</span>
+            <span class="c1"># If ET requests that modules should be pushed for any builds and we&#39;re</span>
+            <span class="c1"># missing a modulemd.src.txt for those, there are two possible reasons for</span>
+            <span class="c1"># that:</span>
+            <span class="c1">#</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">advisory_cdn_file_list</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">):</span>
+                <span class="c1">#</span>
+                <span class="c1"># (1) The same modules were not present in get_advisory_cdn_file_list.</span>
+                <span class="c1">#</span>
+                <span class="n">builds_missing_et</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#</span>
+                <span class="c1"># (2) modulemd.src.txt is genuinely missing from koji.</span>
+                <span class="c1">#</span>
+                <span class="n">builds_missing_koji</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nvr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">builds_missing_et</span><span class="p">:</span>
+            <span class="c1"># Builds missing in ET are tolerated with just a warning.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Although this probably *should* not happen, due to lack of any specification</span>
+            <span class="c1"># for how these APIs are meant to work, it&#39;s a bit risky to treat it as an error.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Note also that we *could* try to proceed here anyway, and now look up information</span>
+            <span class="c1"># for this module from koji. The reason we don&#39;t do that is because the destination</span>
+            <span class="c1"># for source modules (&amp; RPMs) has been historically calculated by combining *both*</span>
+            <span class="c1"># the FTP paths and repo IDs and passing them through alt-src config. If we only</span>
+            <span class="c1"># have one of these sources of info and we proceed anyway, then we might push to</span>
+            <span class="c1"># incorrect destinations while giving the false impression that everything is working</span>
+            <span class="c1"># OK. Safer to not touch the item.</span>
+            <span class="c1">#</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: ignoring module(s) from ftp_paths due to absence &quot;</span>
+                <span class="s2">&quot;in cdn_file_list: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_et</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">builds_missing_koji</span><span class="p">:</span>
+            <span class="c1"># Builds missing in koji are fatal as there is no reason this should happen; the</span>
+            <span class="c1"># koji build might be malformed, incomplete or there have been some</span>
+            <span class="c1"># backwards-incompatible changes in the structure of module builds.</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Erratum </span><span class="si">%s</span><span class="s2">: missing modulemd sources on koji build(s): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builds_missing_koji</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get raw ET responses for all errata.</span>
+        <span class="n">raw_fs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_raw_f</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advisory_ids</span><span class="p">]</span>
+
+        <span class="c1"># Convert them to lists of push items</span>
+        <span class="n">push_items_fs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">raw_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">):</span>
+            <span class="n">push_items_fs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_raw</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+            <span class="p">)</span>
+
+        <span class="n">completed_fs</span> <span class="o">=</span> <span class="n">as_completed_with_timeout_reset</span><span class="p">(</span>
+            <span class="n">push_items_fs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">completed_fs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pushitem</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+                <span class="k">yield</span> <span class="n">pushitem</span></div>
+
+
+
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;errata&quot;</span><span class="p">,</span> <span class="n">ErrataSource</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

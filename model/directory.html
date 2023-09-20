@@ -33,6 +33,28 @@
             
   <section id="push-items-directory">
 <h1>Push items: directory<a class="headerlink" href="#push-items-directory" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.DirectoryPushItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">DirectoryPushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/directory.html#DirectoryPushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.DirectoryPushItem" title="Link to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> representing a directory.</p>
+<p>On a directory push item, the src attribute contains the full path to a directory tree.
+It should generally be interpreted as a request to recursively publish that entire directory
+tree as-is.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build" title="pushsource.PushItem.build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.build_info" title="pushsource.PushItem.build_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_info()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.md5sum" title="pushsource.PushItem.md5sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">md5sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.name" title="pushsource.PushItem.name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.origin" title="pushsource.PushItem.origin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">origin()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.sha256sum" title="pushsource.PushItem.sha256sum"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sha256sum()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+</ul>
+</dd></dl>
+
 </section>
 
 
@@ -68,7 +90,10 @@
 <li class="toctree-l1"><a class="reference internal" href="base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="files.html">Push items: file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cgw.html">Push items: cgw</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: directory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: directory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.DirectoryPushItem"><code class="docutils literal notranslate"><span class="pre">DirectoryPushItem</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Push items: errata</a></li>
@@ -128,7 +153,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

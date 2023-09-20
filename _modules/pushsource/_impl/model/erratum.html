@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.model.erratum &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=1fc5d657" />
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.model.erratum</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">in_</span><span class="p">,</span>
+    <span class="n">int2str</span><span class="p">,</span>
+    <span class="n">md5str</span><span class="p">,</span>
+    <span class="n">sha1str</span><span class="p">,</span>
+    <span class="n">sha256str</span><span class="p">,</span>
+    <span class="n">instance_of</span><span class="p">,</span>
+    <span class="n">instance_of_str</span><span class="p">,</span>
+    <span class="n">optional</span><span class="p">,</span>
+    <span class="n">optional_str</span><span class="p">,</span>
+    <span class="n">freeze</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.erratum_fixup</span> <span class="kn">import</span> <span class="n">fixup_erratum_class</span>
+
+
+<div class="viewcode-block" id="ErratumReference">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumReference">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ErratumReference</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference within a :meth:`~ErratumPushItem.references` list.&quot;&quot;&quot;</span>
+
+    <span class="n">href</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A URL.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">int2str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A short ID for the reference, unique within this erratum.&quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A title for the reference; analogous to the &#39;title&#39; attribute</span>
+<span class="sd">    in HTML.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type of reference. This defines the expected target of the URL</span>
+<span class="sd">    and includes at least:</span>
+
+<span class="sd">    - &quot;self&quot;: reference to a page for this advisory</span>
+<span class="sd">    - &quot;bugzilla&quot;: reference to a bug</span>
+<span class="sd">    - &quot;other&quot;: any other kind of reference</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Convert from raw list/dict as provided in ET APIs into model</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">href</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ErratumModule">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumModule">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ErratumModule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A module entry within a :meth:`~ErratumPushItem.pkglist`.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module name.&quot;&quot;&quot;</span>
+
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module stream.&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module version.&quot;&quot;&quot;</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module context.&quot;&quot;&quot;</span>
+
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module architecture.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">])</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">arch</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">],</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;context&quot;</span><span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">stream</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">],</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ErratumPackage">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackage">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ErratumPackage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A package (RPM) entry within a :meth:`~ErratumPushItem.pkglist`.&quot;&quot;&quot;</span>
+
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM architecture.&quot;&quot;&quot;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM filename (basename).&quot;&quot;&quot;</span>
+
+    <span class="n">epoch</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">int2str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM epoch.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM name (e.g. &quot;bash-4.0.1-1.el7.x86_64.rpm&quot; name is &quot;bash&quot;)&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM version (e.g. &quot;bash-4.0.1-1.el7.x86_64.rpm&quot; version is &quot;4.0.1&quot;)&quot;&quot;&quot;</span>
+
+    <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RPM release (e.g. &quot;bash-4.0.1-1.el7.x86_64.rpm&quot; version is &quot;1.el7&quot;)&quot;&quot;&quot;</span>
+
+    <span class="n">src</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filename of the source RPM from which this RPM was built; equal to</span>
+<span class="sd">    :meth:`filename` for the source RPM itself.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reboot_suggested</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if rebooting host machine is recommended after installing this package.&quot;&quot;&quot;</span>
+
+    <span class="n">md5sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">md5str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;MD5 checksum of this RPM in hex string form, if available.&quot;&quot;&quot;</span>
+
+    <span class="n">sha1sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sha1str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SHA1 checksum of this RPM in hex string form, if available.&quot;&quot;&quot;</span>
+
+    <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sha256str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SHA256 checksum of this RPM in hex string form, if available.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ErratumPackageCollection">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPackageCollection">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ErratumPackageCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of packages found within an :meth:`~ErratumPushItem.pkglist`.</span>
+
+<span class="sd">    A non-modular advisory typically contains only a single collection, while modular</span>
+<span class="sd">    advisories typically contain one collection per module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A name for this collection. The collection name has no specific meaning,</span>
+<span class="sd">    but must be unique within an advisory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">packages</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of packages within this collection.</span>
+
+<span class="sd">    :type: list[ErratumPackage]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">short</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An alternative name for this collection. In practice, this field</span>
+<span class="sd">    is typically blank.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">ErratumModule</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="n">ErratumModule</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An :class:`~ErratumModule` defining the module this entry is associated</span>
+<span class="sd">    with, if any.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Convert from raw list/dict as provided in ET APIs into model.</span>
+        <span class="c1"># Data is expected to be &#39;pkglist&#39; object.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+            <span class="c1"># only include non-empty collections</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">out</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">packages</span><span class="p">]</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">raw_pkg</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;packages&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="c1"># parse the odd &#39;sum&#39; structure, which is a list of form:</span>
+            <span class="c1"># [&lt;algo&gt;, &lt;hexdigest&gt;, &lt;algo&gt;, &lt;hexdigest&gt;, ...]</span>
+            <span class="n">sums</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_pkg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">while</span> <span class="n">raw_sum</span><span class="p">:</span>
+                <span class="n">sums</span><span class="p">[</span><span class="n">raw_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">raw_sum</span> <span class="o">=</span> <span class="n">raw_sum</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+            <span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ErratumPackage</span><span class="p">(</span>
+                    <span class="n">arch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">],</span>
+                    <span class="n">epoch</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;epoch&quot;</span><span class="p">],</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                    <span class="n">version</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                    <span class="n">release</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">raw_pkg</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
+                    <span class="n">reboot_suggested</span><span class="o">=</span><span class="n">raw_pkg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reboot_suggested&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="n">md5sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span>
+                    <span class="n">sha1sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">),</span>
+                    <span class="n">sha256sum</span><span class="o">=</span><span class="n">sums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">short</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;short&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">packages</span><span class="o">=</span><span class="n">packages</span><span class="p">,</span>
+            <span class="n">module</span><span class="o">=</span><span class="n">ErratumModule</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;module&quot;</span><span class="p">)),</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">errata_type_converter</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="c1"># For &#39;type&#39; field, ancient versions of Errata Tool produced values</span>
+    <span class="c1"># like RHBA, RHEA, RHSA, so these can be found in the wild; but all</span>
+    <span class="c1"># other sources (including our own model) prefer strings like &quot;bugfix&quot;.</span>
+    <span class="c1"># We&#39;ll convert up from legacy values automatically.</span>
+    <span class="n">typemap</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RHBA&quot;</span><span class="p">:</span> <span class="s2">&quot;bugfix&quot;</span><span class="p">,</span> <span class="s2">&quot;RHEA&quot;</span><span class="p">:</span> <span class="s2">&quot;enhancement&quot;</span><span class="p">,</span> <span class="s2">&quot;RHSA&quot;</span><span class="p">:</span> <span class="s2">&quot;security&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">typemap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ErratumPushItem">
+<a class="viewcode-back" href="../../../../model/errata.html#pushsource.ErratumPushItem">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ErratumPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a single erratum (also known as &quot;advisory&quot;).</span>
+
+<span class="sd">    Note that many fields on erratum objects which appear to be numeric</span>
+<span class="sd">    are instead represented as strings (&#39;release&#39; and &#39;pushcount&#39; being two</span>
+<span class="sd">    examples).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;bugfix&quot;</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">in_</span><span class="p">([</span><span class="s2">&quot;bugfix&quot;</span><span class="p">,</span> <span class="s2">&quot;security&quot;</span><span class="p">,</span> <span class="s2">&quot;enhancement&quot;</span><span class="p">]),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">errata_type_converter</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;bugfix&#39;, &#39;security&#39; or &#39;enhancement&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">int2str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Release number. Typically an integer-string, initially &#39;0&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status, typically &#39;final&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">pushcount</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">int2str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of times advisory has been revised and published (starting at &#39;1&#39;).&quot;&quot;&quot;</span>
+
+    <span class="n">reboot_suggested</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if rebooting host machine is recommended after installing this advisory.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        The intended usage of this field is unclear.</span>
+
+<span class="sd">        In practice, tools such as yum are instead consuming the ``reboot_suggested`` field</span>
+<span class="sd">        from :class:`ErratumPackage`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">references</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of references associated with the advisory.</span>
+
+<span class="sd">    :type: list[ErratumReference]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pkglist</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of package collections associated with the advisory.</span>
+
+<span class="sd">    :type: list[ErratumPackageCollection]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">container_list</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of container images associated with the advisory.</span>
+
+<span class="sd">    Example of the list:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &quot;container_list&quot;: [</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;openshift4/ose-local-storage-rhel7-operator-metadata&quot;: {</span>
+<span class="sd">                    &quot;digest&quot;: &quot;sha256:2321a7d13d9fa53f05437663cf2dc217d15f3cda4b67076c941b10f0491cf9d7&quot;,</span>
+<span class="sd">                    &quot;images&quot;: {</span>
+<span class="sd">                        &quot;s390x&quot;: {</span>
+<span class="sd">                            &quot;digest&quot;: &quot;sha256:05649a19718fde131372c761d359302ccbe81f9744d2893ac4c826b05d670206&quot;</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &quot;ppc64le&quot;: {</span>
+<span class="sd">                            &quot;digest&quot;: &quot;sha256:06d1c5e4fa6a5d1ff868388f3feadf193d04128b62d1181e37fe4ab8ecda27e1&quot;</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &quot;x86_64&quot;: {</span>
+<span class="sd">                            &quot;digest&quot;: &quot;sha256:c2e3030306f71b94cbffe2d16fcebe6e14f2842ae26789926bcf1afeeecb5859&quot;</span>
+<span class="sd">                        }</span>
+<span class="sd">                    }</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+
+<span class="sd">    :type: list[Dict[str, Dict[str, Union[str, Dict[str, Optional[str]]]]]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">from_</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contact email address for the owner of the advisory.</span>
+
+<span class="sd">    Note that the canonical name for this attribute is ``from``. As this clashes</span>
+<span class="sd">    with a Python keyword, in most contexts the attribute is also available as an</span>
+<span class="sd">    alias, ``from_``. Where possible, the canonical name ``from`` should be preferred.</span>
+
+<span class="sd">    :type: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rights</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copyright message.&quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Title of the advisory (e.g. &#39;bash bugfix and enhancement&#39;).&quot;&quot;&quot;</span>
+
+    <span class="n">description</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Full human-readable description of the advisory, usually multiple lines.&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">int2str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advisory version. Starts counting at &quot;1&quot;, and some systems require updating</span>
+<span class="sd">    the version whenever an advisory is modified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Timestamp of the last update to this advisory.</span>
+
+<span class="sd">    Typically of the form &#39;2019-12-31 06:54:41 UTC&#39;, but this is not enforced.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">issued</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Timestamp of the initial release of this advisory.</span>
+
+<span class="sd">    Uses the same format as :meth:`updated`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">severity</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Severity of the advisory, e.g. &quot;low&quot;, &quot;moderate&quot;, &quot;important&quot; or &quot;critical&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Typically a single sentence briefly describing the advisory.&quot;&quot;&quot;</span>
+
+    <span class="n">solution</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Text explaining how to apply the advisory.&quot;&quot;&quot;</span>
+
+    <span class="n">content_types</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of content types associated with the advisory.</span>
+
+<span class="sd">    For example, &quot;docker&quot; may be found in this list if the advisory deals</span>
+<span class="sd">    with container images.</span>
+
+<span class="sd">    :type: list[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;&lt;untitled advisory&gt;&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Helper to load an instance from the raw dicts used in various places:</span>
+        <span class="c1">#</span>
+        <span class="c1"># - json/yaml files in staging area</span>
+        <span class="c1"># - output of get_advisory_cdn_metadata method in ET</span>
+        <span class="c1"># - erratum unit metadata in Pulp2&#39;s API</span>
+        <span class="c1">#</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Fill in the base push item attributes first.</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PENDING&quot;</span>
+
+        <span class="c1"># Now the erratum-specific fields.</span>
+        <span class="c1"># Many are accepted verbatim from raw input; these are mandatory</span>
+        <span class="c1"># (i.e. we&#39;ll crash if the field is missing from input).</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;release&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pushcount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;reboot_suggested&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rights&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;from&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;issued&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;severity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+
+        <span class="c1"># If the metadata has a cdn_repo field, this sets the destinations for the</span>
+        <span class="c1"># push item; used for text-only errata.</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;dest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If source of data is ET/staging directory, try to get container_list directly</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_list&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freeze</span><span class="p">(</span>
+                <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="p">)</span>
+
+        <span class="c1"># If there are content type hints, copy those while dropping the</span>
+        <span class="c1"># pulp-specific terminology</span>
+        <span class="n">pulp_user_metadata</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pulp_user_metadata&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_types&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;content_types&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If source of data is pulp, try to get container_list from pulp_user_metadata</span>
+        <span class="k">if</span> <span class="n">pulp_user_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_list&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freeze</span><span class="p">(</span>
+                <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="n">pulp_user_metadata</span><span class="p">[</span><span class="s2">&quot;container_list&quot;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErratumReference</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;references&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pkglist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErratumPackageCollection</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pkglist&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Apply from vs from_ workarounds.</span>
+<span class="n">fixup_erratum_class</span><span class="p">(</span><span class="n">ErratumPushItem</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

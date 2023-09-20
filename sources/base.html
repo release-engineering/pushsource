@@ -34,6 +34,138 @@
   <section id="source">
 <h1>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">Source</span></code> class is the base from which all pushsource backends derive.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.Source">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source" title="Link to this definition">¶</a></dt>
+<dd><p>A source of push items.</p>
+<p>This base class defines the interface for all pushsource backends.
+Instances of a specific backend can be obtained using
+the <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.</p>
+<p>Though not mandatory, instances of <code class="docutils literal notranslate"><span class="pre">Source</span></code> are preferably used
+via <code class="docutils literal notranslate"><span class="pre">with</span></code> statements to ensure that all resources are cleaned up
+when no longer needed, as in example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;some-url&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+        <span class="n">do_something</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the items produced by a source are not bound to the lifecycle
+of a source instance, so it’s safe to store them and continue using
+them beyond the end of the <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.__iter__" title="Link to this definition">¶</a></dt>
+<dd><p>Iterate over the push items contained within this source.</p>
+<p>Yields a series of <a class="reference internal" href="../model/base.html#pushsource.PushItem" title="pushsource.PushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.get">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain a push source from the given URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Specifies a push source backend and associated arguments.
+For information about push source URLs, see
+<a class="reference internal" href="../userguide.html#urls"><span class="std std-ref">Obtaining a source by URL</span></a>.</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Any additional keyword arguments to be passed into
+the backend.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pushsource.SourceUrlError" title="pushsource.SourceUrlError"><strong>SourceUrlError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">source_url</span></code> is not a valid push source URL.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt><a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a></dt><dd><p>A new Source instance initialized with the given arguments.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.get_partial">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.get_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.get_partial" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain a push source constructor from the given URL and arguments.</p>
+<p>This method returns a constructor for a push source (rather than a push source
+instance directly) so that additional arguments may be provided later.</p>
+<p>One of the primary uses of this method is to provide your own preconfigured
+aliases for existing backends, as described in <a class="reference internal" href="../userguide.html#binding"><span class="std std-ref">Binding partially-configured backends</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Specifies a push source backend and associated arguments.
+For information about push source URLs, see
+<a class="reference internal" href="../userguide.html#urls"><span class="std std-ref">Obtaining a source by URL</span></a>.</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Any additional keyword arguments to be passed into
+the backend.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pushsource.SourceUrlError" title="pushsource.SourceUrlError"><strong>SourceUrlError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">source_url</span></code> is not a valid push source URL.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>callable</dt><dd><p>A callable which accepts any number of keyword arguments
+and returns a <a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.register_backend">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.register_backend" title="Link to this definition">¶</a></dt>
+<dd><p>Register a new pushsource backend.</p>
+<p>This method allows registering additional backends beyond those
+shipped with the pushsource library. See <a class="reference internal" href="../userguide.html#implementing"><span class="std std-ref">Implementing a backend</span></a> for
+more information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – <p>The name of a backend. This should be a brief unique identifying
+string.</p>
+<p>If a backend of the given name is already registered, it will be
+overwritten.</p>
+</p></li>
+<li><p><strong>factory</strong> (<em>callable</em>) – A callable used to create new instances of the backend.
+When invoked, this callable must return an object which implements
+the <a class="reference internal" href="#pushsource.Source" title="pushsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a> interface.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">factory</span></code> is not callable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pushsource.Source.reset">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#Source.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.Source.reset" title="Link to this definition">¶</a></dt>
+<dd><p>Reset the library to the default configuration.</p>
+<p>This method will undo the effect of any prior calls to
+<a class="reference internal" href="#pushsource.Source.register_backend" title="pushsource.Source.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a>, restoring only the
+default backends provided by the pushsource library.</p>
+<p>This may be used from within tests to ensure a known state.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.0.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.SourceUrlError">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">SourceUrlError</span></span><a class="reference internal" href="../_modules/pushsource/_impl/source.html#SourceUrlError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.SourceUrlError" title="Link to this definition">¶</a></dt>
+<dd><p>Errors of this type are raised when an invalid URL is provided
+to <a class="reference internal" href="#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> and related methods.</p>
+</dd></dl>
+
 </section>
 
 
@@ -60,7 +192,11 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Source</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.Source"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.SourceUrlError"><code class="docutils literal notranslate"><span class="pre">SourceUrlError</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="koji.html">Source: koji</a></li>
 <li class="toctree-l1"><a class="reference internal" href="registry.html">Source: registry</a></li>
@@ -129,7 +265,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

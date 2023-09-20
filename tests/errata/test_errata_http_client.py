@@ -243,3 +243,14 @@ def test_get_advisory_data(caplog):
         "Queried Errata HTTP API for RHSA-123456789",
         "GET https://errata.example.com/api/v1/erratum/RHSA-123456789 200",
     ]
+
+
+def test_get_advisory_data_no_credentials(caplog):
+    caplog.set_level(logging.DEBUG)
+
+    client = ErrataHTTPClient("https://errata.example.com/")
+
+    data = client.get_advisory_data("RHSA-123456789")
+
+    assert data == None
+    assert caplog.messages == []

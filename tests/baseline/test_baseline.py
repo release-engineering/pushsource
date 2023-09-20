@@ -86,9 +86,21 @@ def koji_test_backend(fake_koji, koji_dir):
 
 @pytest.fixture(autouse=True)
 def fake_kerberos_auth(mocker):
+    mocker.patch(
+        "pushsource._impl.backend.errata_source."
+        "errata_http_client.ErrataHTTPClient.create_kerberos_ticket"
+    )
     mocker.patch("gssapi.Name")
     mocker.patch("gssapi.Credentials.acquire")
     mocker.patch("requests_gssapi.HTTPSPNEGOAuth", return_value=None)
+    with patch.dict(
+        "os.environ",
+        {
+            "PUSHSOURCE_ERRATA_KEYTAB_PATH": "/path/to/keytab",
+            "PUSHSOURCE_ERRATA_PRINCIPAL": "pub-errata@IPA.REDHAT.COM",
+        },
+    ):
+        yield
 
 
 @pytest.fixture(autouse=True)

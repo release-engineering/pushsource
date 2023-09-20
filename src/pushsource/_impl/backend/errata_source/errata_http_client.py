@@ -5,12 +5,23 @@ import re
 import logging
 import tempfile
 from urllib.parse import urljoin
+from functools import wraps
 
 import requests
 import gssapi
 import requests_gssapi
 
 LOG = logging.getLogger("pushsource.errata_http_client")
+
+
+def return_none_if_unauthenticated(func):
+    @wraps(func)
+    def wrapper_return_none_if_unauthenticated(self, *args, **kwargs):
+        if not self.keytab_path or not self.principal:
+            return None
+        return func(self, *args, **kwargs)
+
+    return wrapper_return_none_if_unauthenticated
 
 
 class ErrataHTTPClient:
@@ -123,6 +134,7 @@ class ErrataHTTPClient:
 
         return self._thread_local.session
 
+    @return_none_if_unauthenticated
     def get_advisory_data(self, advisory: str) -> dict:
         """
         Get advisory data.

@@ -9,6 +9,7 @@ import requests
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
+
 class FakeErrataToolController(object):
     def __init__(self):
         self._data = self._load()
@@ -28,7 +29,7 @@ class FakeErrataToolController(object):
                 if filename.endswith(".json"):
                     path = os.path.join(root, filename)
                     with open(path) as fh:
-                        out[filename.rstrip('.json')] = json.load(fh)
+                        out[filename.rstrip(".json")] = json.load(fh)
         return out
 
     @classmethod
@@ -39,8 +40,7 @@ class FakeErrataToolController(object):
                 if filename.endswith(".yaml"):
                     path = os.path.join(root, filename)
                     with open(path) as fh:
-                        data = yaml.load(fh,
-                                         Loader=yaml.FullLoader)  # nosec B506
+                        data = yaml.load(fh, Loader=yaml.FullLoader)  # nosec B506
                     advisory_id = data["advisory_id"]
                     if advisory_id in out:
                         raise ValueError(
@@ -56,14 +56,19 @@ class FakeErrataToolProxy(object):
         self.auth = None
         self.url_map = [
             (".*/api/v1/erratum/(.*)", self.get_advisory_data),
-            (".*/api/v1/push_metadata/cdn_metadata/(.*).json",
-             self.get_advisory_cdn_metadata),
-            (".*/api/v1/push_metadata/cdn_file_list/(.*).json",
-             self.get_advisory_cdn_file_list),
-            (".*/api/v1/push_metadata/cdn_docker_file_list/(.*).json",
-             self.get_advisory_cdn_docker_file_list),
-            (".*/api/v1/push_metadata/ftp_paths/(.*).json",
-             self.get_ftp_paths)
+            (
+                ".*/api/v1/push_metadata/cdn_metadata/(.*).json",
+                self.get_advisory_cdn_metadata,
+            ),
+            (
+                ".*/api/v1/push_metadata/cdn_file_list/(.*).json",
+                self.get_advisory_cdn_file_list,
+            ),
+            (
+                ".*/api/v1/push_metadata/cdn_docker_file_list/(.*).json",
+                self.get_advisory_cdn_docker_file_list,
+            ),
+            (".*/api/v1/push_metadata/ftp_paths/(.*).json", self.get_ftp_paths),
         ]
 
     def _get_data(self, advisory_id, key):
@@ -97,8 +102,8 @@ class FakeErrataToolProxy(object):
                     response_object.status_code = 200
                 except Fault:
                     response_object.json.return_value = {
-                        "error": "Bad errata id given: %s".format(
-                            match.group(1))}
+                        "error": "Bad errata id given: %s".format(match.group(1))
+                    }
                     response_object.status_code = 404
                     response_object.raise_for_status.side_effect = requests.HTTPError()
                 return response_object

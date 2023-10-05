@@ -54,7 +54,7 @@ def fake_errata_tool():
         "pushsource._impl.backend.errata_source.errata_client.requests.Session"
     ) as mock_http_proxy:
         with patch(
-                "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
+            "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
         ) as mock_xmlrpc_client:
             mock_http_proxy.side_effect = controller.proxy
             mock_xmlrpc_client.side_effect = controller.proxy

@@ -6,6 +6,7 @@ import pytest
 
 from pushsource._impl.backend.errata_source.errata_client import ErrataHTTPClient
 
+
 @pytest.fixture(autouse=True)
 def fake_temporary_file(mocker):
     mock_file = mocker.patch("tempfile.NamedTemporaryFile")
@@ -16,8 +17,8 @@ def fake_temporary_file(mocker):
 
 @mock.patch("subprocess.run")
 def test_authenticate_already_exists(mock_run):
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
 
     mock_run.return_value.stdout = "Default principal: pub-errata@IPA.REDHAT.COM\n"
@@ -37,8 +38,8 @@ def test_authenticate_already_exists(mock_run):
 def test_authenticate_not_found(mock_run, caplog):
     caplog.set_level(logging.INFO)
 
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
 
     ret1 = mock.MagicMock()
@@ -83,8 +84,8 @@ def test_authenticate_not_found(mock_run, caplog):
 def test_authenticate_kinit_failed(mock_run, caplog):
     caplog.set_level(logging.INFO)
 
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
 
     ret1 = mock.MagicMock()
@@ -124,5 +125,3 @@ def test_authenticate_kinit_failed(mock_run, caplog):
         "for principal pub-errata@IPA.REDHAT.COM",
         "kinit has failed: 'kinit failed'",
     ]
-
-

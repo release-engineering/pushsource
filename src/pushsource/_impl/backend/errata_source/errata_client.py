@@ -22,15 +22,24 @@ LOG = logging.getLogger("pushsource.errata_client")
 USE_XMLRPC_CLIENT = os.environ.get("PUSHSOURCE_ERRATA_USE_XMLRPC_API") == "1"
 
 
-def get_errata_client(threads, url, keytab_path=None, principal=None,
-                      force_xmlrpc=USE_XMLRPC_CLIENT, **retry_kwargs):
-    keytab_path = os.environ.get("PUSHSOURCE_ERRATA_KEYTAB_PATH") \
-        if not keytab_path else keytab_path
-    principal = os.environ.get("PUSHSOURCE_ERRATA_PRINCIPAL") \
-        if not principal else principal
+def get_errata_client(
+    threads,
+    url,
+    keytab_path=None,
+    principal=None,
+    force_xmlrpc=USE_XMLRPC_CLIENT,
+    **retry_kwargs,
+):
+    keytab_path = (
+        os.environ.get("PUSHSOURCE_ERRATA_KEYTAB_PATH")
+        if not keytab_path
+        else keytab_path
+    )
+    principal = (
+        os.environ.get("PUSHSOURCE_ERRATA_PRINCIPAL") if not principal else principal
+    )
     if keytab_path and principal and not force_xmlrpc:
-        return ErrataHTTPClient(threads, url, keytab_path, principal,
-                                **retry_kwargs)
+        return ErrataHTTPClient(threads, url, keytab_path, principal, **retry_kwargs)
     return ErrataClient(threads, url, **retry_kwargs)
 
 
@@ -47,10 +56,9 @@ class ErrataRaw(object):
 class ErrataClientBase(object):
     def __init__(self, threads, url, **retry_args):
         self._executor = (
-            Executors.thread_pool(name="pushsource-errata-client",
-                                  max_workers=threads)
-                .with_retry(**retry_args)
-                .with_cancel_on_shutdown()
+            Executors.thread_pool(name="pushsource-errata-client", max_workers=threads)
+            .with_retry(**retry_args)
+            .with_cancel_on_shutdown()
         )
         self._url = url
         self._tls = threading.local()
@@ -93,17 +101,13 @@ class ErrataClientBase(object):
     def get_raw_f(self, advisory_id):
         """Returns Future[ErrataRaw] holding all ET responses for a particular advisory."""
         all_responses = f_zip(
-            self._executor.submit(self._get_advisory_cdn_metadata,
-                                  advisory_id),
-            self._executor.submit(self._get_advisory_cdn_file_list,
-                                  advisory_id),
-            self._executor.submit(self._get_advisory_cdn_docker_file_list,
-                                  advisory_id),
+            self._executor.submit(self._get_advisory_cdn_metadata, advisory_id),
+            self._executor.submit(self._get_advisory_cdn_file_list, advisory_id),
+            self._executor.submit(self._get_advisory_cdn_docker_file_list, advisory_id),
             self._executor.submit(self._get_ftp_paths, advisory_id),
         )
         all_responses = f_map(
-            all_responses,
-            partial(self._log_queried_et, advisory_id=advisory_id)
+            all_responses, partial(self._log_queried_et, advisory_id=advisory_id)
         )
         return f_map(all_responses, lambda tup: ErrataRaw(*tup))
 
@@ -156,7 +160,6 @@ class ErrataClientBase(object):
 
 
 class ErrataClient(ErrataClientBase):
-
     def __init__(self, threads, url, **retry_args):
         deprecation_notice = (
             "The XMLRPC Errata Client has been deprecated and will be removed. "
@@ -197,17 +200,13 @@ class ErrataClient(ErrataClientBase):
 
 
 class ErrataHTTPClient(ErrataClientBase):
-    def __init__(self, threads, url, keytab_path: str, principal: str,
-                 **retry_args):
-
+    def __init__(self, threads, url, keytab_path: str, principal: str, **retry_args):
         super().__init__(threads, url, **retry_args)
 
         self.keytab_path = keytab_path
         self.principal = principal
 
-        self.get_advisory_data = partial(
-            self._call_et, "/api/v1/erratum/{id}"
-        )
+        self.get_advisory_data = partial(self._call_et, "/api/v1/erratum/{id}")
         self._get_advisory_cdn_metadata = partial(
             self._call_et, "/api/v1/push_metadata/cdn_metadata/{id}.json"
         )
@@ -215,14 +214,15 @@ class ErrataHTTPClient(ErrataClientBase):
             self._call_et, "/api/v1/push_metadata/cdn_file_list/{id}.json"
         )
         self._get_advisory_cdn_docker_file_list = partial(
-            self._call_et,
-            "/api/v1/push_metadata/cdn_docker_file_list/{id}.json"
+            self._call_et, "/api/v1/push_metadata/cdn_docker_file_list/{id}.json"
         )
         self._get_ftp_paths = partial(
-            self._call_et, "/api/v1/push_metadata/ftp_paths/{id}.json")
+            self._call_et, "/api/v1/push_metadata/ftp_paths/{id}.json"
+        )
 
-        with tempfile.NamedTemporaryFile(prefix="ccache_pushsource_errata_",
-                                         delete=False) as file:
+        with tempfile.NamedTemporaryFile(
+            prefix="ccache_pushsource_errata_", delete=False
+        ) as file:
             self.ccache_filename = file.name
 
     def authenticate(self):
@@ -234,17 +234,19 @@ class ErrataHTTPClient(ErrataClientBase):
 
         result = subprocess.run(
             ["klist", "-c", f"FILE:{self.ccache_filename}"],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
-            check=False
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=False,
         )
         regex_res = re.search(r"Default principal: (.*)\n", result.stdout)
 
         # if Kerberos ticket is not found, or the principal is incorrect
-        if result.returncode or not regex_res or regex_res.group(
-                1) != self.principal:
+        if result.returncode or not regex_res or regex_res.group(1) != self.principal:
             LOG.info(
                 "Errata TGT doesn't exist, running kinit for principal %s",
-                self.principal)
+                self.principal,
+            )
             result = subprocess.run(
                 [
                     "kinit",
@@ -255,8 +257,10 @@ class ErrataHTTPClient(ErrataClientBase):
                     "-c",
                     f"FILE:{self.ccache_filename}",
                 ],
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True, check=False
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=False,
             )
             if result.returncode:
                 LOG.warning("kinit has failed: '%s'", result.stdout)
@@ -278,8 +282,9 @@ class ErrataHTTPClient(ErrataClientBase):
             LOG.debug("Creating HTTP client for Errata Tool: %s", self._url)
             name = gssapi.Name(self.principal, gssapi.NameType.user)
             creds = gssapi.Credentials.acquire(
-                name=name, usage="initiate",
-                store={"ccache": f"FILE:{self.ccache_filename}"}
+                name=name,
+                usage="initiate",
+                store={"ccache": f"FILE:{self.ccache_filename}"},
             ).creds
 
             session = requests.Session()

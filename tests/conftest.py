@@ -27,14 +27,15 @@ def fake_kerberos_auth(mocker):
     mocker.patch("gssapi.Credentials.acquire")
     mocker.patch("requests_gssapi.HTTPSPNEGOAuth", return_value=None)
 
+
 @fixture
 def fake_errata_tool(fake_kerberos_auth):
     controller = FakeErrataToolController()
     with patch(
-            "pushsource._impl.backend.errata_source.errata_client.requests.Session"
+        "pushsource._impl.backend.errata_source.errata_client.requests.Session"
     ) as mock_http_proxy:
         with patch(
-                "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
+            "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
         ) as mock_xmlrpc_client:
             mock_http_proxy.side_effect = controller.proxy
             mock_xmlrpc_client.side_effect = controller.proxy

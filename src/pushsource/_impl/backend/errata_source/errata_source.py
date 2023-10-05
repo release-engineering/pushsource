@@ -86,7 +86,12 @@ class ErrataSource(Source):
         """
         self._url = force_https(url)
         self._errata = list_argument(errata)
-        self._client = get_errata_client(threads=threads, url=self._errata_service_url,  keytab_path=keytab_path, principal=principal)
+        self._client = get_errata_client(
+            threads=threads,
+            url=self._errata_service_url,
+            keytab_path=keytab_path,
+            principal=principal,
+        )
         self._client.authenticate()
 
         self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
@@ -239,8 +244,7 @@ class ErrataSource(Source):
         if advisory_data:
             # This dictionary key is different based on erratum type
             erratum_type = list(advisory_data["errata"].keys())[0]
-            product_name = advisory_data["errata"][erratum_type]["product"][
-                "name"]
+            product_name = advisory_data["errata"][erratum_type]["product"]["name"]
         else:
             product_name = None
 

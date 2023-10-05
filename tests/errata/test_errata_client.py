@@ -6,7 +6,10 @@ import requests_mock
 import pytest
 import requests
 
-from pushsource._impl.backend.errata_source.errata_client import ErrataHTTPClient, get_errata_client
+from pushsource._impl.backend.errata_source.errata_client import (
+    ErrataHTTPClient,
+    get_errata_client,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -15,7 +18,6 @@ def fake_temporary_file(mocker):
     mock_file.return_value.__enter__.return_value.name = (
         "/temp/ccache_pushsource_errata_1234"
     )
-
 
 
 @mock.patch.dict(
@@ -40,8 +42,8 @@ def test_init_env_vars():
 def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
     caplog.set_level(logging.DEBUG)
 
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
     assert not hasattr(client._tls, "session")
 
@@ -59,8 +61,9 @@ def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
     assert session == mock_session.return_value
     assert client._tls.session == mock_session.return_value
 
-    assert caplog.messages == ["Creating HTTP client for Errata Tool: "
-                               "https://errata.example.com/"]
+    assert caplog.messages == [
+        "Creating HTTP client for Errata Tool: " "https://errata.example.com/"
+    ]
 
 
 @mock.patch("gssapi.Name")
@@ -72,8 +75,8 @@ def test_get_session_already_exists(
 ):
     caplog.set_level(logging.DEBUG)
 
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
     assert not hasattr(client._tls, "session")
     session_mock = client._tls.session = mock.MagicMock()
@@ -91,8 +94,8 @@ def test_get_session_already_exists(
 def test_get_advisory_data(caplog):
     caplog.set_level(logging.DEBUG)
 
-    client = ErrataHTTPClient(1,
-        "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
     client._tls.session = requests.Session()
     with requests_mock.Mocker() as m:
@@ -108,4 +111,5 @@ def test_get_advisory_data(caplog):
     assert caplog.messages == [
         "Calling Errata Tool /api/v1/erratum/{id}(RHSA-123456789)",
         "GET https://errata.example.com/api/v1/erratum/RHSA-123456789 200",
-        "Errata Tool completed call /api/v1/erratum/{id}(RHSA-123456789)"]
+        "Errata Tool completed call /api/v1/erratum/{id}(RHSA-123456789)",
+    ]

@@ -36,8 +36,7 @@
 <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
 <span class="kn">from</span> <span class="nn">more_executors</span> <span class="kn">import</span> <span class="n">Executors</span>
 
-<span class="kn">from</span> <span class="nn">.errata_client</span> <span class="kn">import</span> <span class="n">ErrataClient</span>
-<span class="kn">from</span> <span class="nn">.errata_http_client</span> <span class="kn">import</span> <span class="n">ErrataHTTPClient</span>
+<span class="kn">from</span> <span class="nn">.errata_client</span> <span class="kn">import</span> <span class="n">get_errata_client</span>
 
 <span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">...source</span> <span class="kn">import</span> <span class="n">Source</span>
@@ -122,10 +121,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">force_https</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_errata</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">errata</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ErrataClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span> <span class="o">=</span> <span class="n">ErrataHTTPClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="n">keytab_path</span><span class="p">,</span> <span class="n">principal</span><span class="p">)</span>
-        <span class="c1"># Get TGT only once</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span><span class="o">.</span><span class="n">create_kerberos_ticket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">get_errata_client</span><span class="p">(</span>
+            <span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errata_service_url</span><span class="p">,</span>
+            <span class="n">keytab_path</span><span class="o">=</span><span class="n">keytab_path</span><span class="p">,</span>
+            <span class="n">principal</span><span class="o">=</span><span class="n">principal</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm_filter_arch</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm_filter_arch</span><span class="p">,</span> <span class="n">retain_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -274,7 +276,7 @@
         <span class="c1">#</span>
 
         <span class="c1"># Get product name from Errata. Enrich Container push items with this info</span>
-        <span class="n">advisory_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http_client</span><span class="o">.</span><span class="n">get_advisory_data</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">advisory_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_advisory_data</span><span class="p">(</span><span class="n">erratum</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">advisory_data</span><span class="p">:</span>
             <span class="c1"># This dictionary key is different based on erratum type</span>
             <span class="n">erratum_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">advisory_data</span><span class="p">[</span><span class="s2">&quot;errata&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>

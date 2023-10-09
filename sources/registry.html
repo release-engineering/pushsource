@@ -72,15 +72,15 @@ as consumed by <code class="docutils literal notranslate"><span class="pre">dock
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – <p>Pull spec(s) of container images, as a list or a comma-separated string.</p>
+<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – <p>Pull spec(s) of container images, as a list or a comma-separated string.</p>
 <p>Each pull spec must include a hostname and a tag; referencing images by digest
 is currently not supported.</p>
 <p><code class="docutils literal notranslate"><span class="pre">registry.access.redhat.com/ubi8/ubi:8.4-211</span></code> is an example of a valid pull
 spec.</p>
 </p></li>
-<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – If provided, this value will be used to populate <a class="reference internal" href="../model/base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – If provided, this value will be used to populate <a class="reference internal" href="../model/base.html#pushsource.PushItem.dest" title="pushsource.PushItem.dest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest()</span></code></a>
 on generated push items.</p></li>
-<li><p><strong>dest_signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – <p>If provided, this value will be used to populate
+<li><p><strong>dest_signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – <p>If provided, this value will be used to populate
 <a class="reference internal" href="../model/containers.html#pushsource.ContainerImagePushItem.dest_signing_key" title="pushsource.ContainerImagePushItem.dest_signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dest_signing_key()</span></code></a> on generated
 push items.</p>
 <p>Note that, as each item holds only a single <code class="docutils literal notranslate"><span class="pre">dest_signing_key</span></code>, using this
@@ -88,7 +88,7 @@ argument can affect the number of generated push items. For example,
 providing two keys would produce double the amount of push items as providing
 a single key.</p>
 </p></li>
-<li><p><strong>product_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – If provided, this value will be used to populate
+<li><p><strong>product_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – If provided, this value will be used to populate
 <a class="reference internal" href="../model/containers.html#pushsource.ContainerImagePushItem.product_name" title="pushsource.ContainerImagePushItem.product_name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">product_name()</span></code></a> on generated push items.</p></li>
 </ul>
 </dd>

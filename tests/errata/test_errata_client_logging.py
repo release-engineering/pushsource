@@ -1,8 +1,10 @@
 import logging
 
+import mock
 from mock import patch
 
 from pushsource._impl.backend.errata_source import errata_client
+import requests
 
 
 def test_errata_client_info_logs(caplog):
@@ -10,10 +12,14 @@ def test_errata_client_info_logs(caplog):
 
     caplog.set_level(logging.INFO)
 
-    client = errata_client.ErrataClient(threads=1, url="https://errata.example.com/")
-
+    client = errata_client.ErrataHTTPClient(
+        threads=1,
+        url="https://errata.example.com/",
+        keytab_path="/path/to/keytab",
+        principal="pub@IPA.REDHAT.COM",
+    )
     with patch(
-        "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"
+        "pushsource._impl.backend.errata_source.errata_client.requests.Session"
     ) as mock_proxy:
         client.get_raw_f("advisory-1").result()
         client.get_raw_f("advisory-2").result()

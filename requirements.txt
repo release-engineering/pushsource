@@ -192,9 +192,9 @@ jsonschema-specifications==2023.7.1 \
     --hash=sha256:05adf340b659828a004220a9613be00fa3f223f2b82002e273dee62fd50524b1 \
     --hash=sha256:c91a50404e88a1f6ba40636778e2ee08f6e24c5613fe4c53ac24578a5a7f72bb
     # via jsonschema
-kobo==0.32.0 \
-    --hash=sha256:df68cec9f5412c4c9e8aeab15b13105b9f3611ea9054b0b2ca9dc5565ef91a86 \
-    --hash=sha256:fc74f56d823633203330aa19e4a8be4478c194968b19c0d6272082f17cd9ae62
+kobo==0.33.0 \
+    --hash=sha256:34711f4ad0f38600bf7aafe6039b24d94458212de8b2b67c4b0c3144d47ef617 \
+    --hash=sha256:50f2eef41d1e528eba0bcdc04e6d88073353e6815abb86bf4fe3b1a7be449039
     # via -r requirements.in
 koji==1.33.1 \
     --hash=sha256:16493a182e7194f7a5be3426a48dafb5982a450ad4cf79d14f36eb5c8a2c863d \

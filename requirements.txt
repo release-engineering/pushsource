@@ -188,9 +188,9 @@ jsonschema==4.19.2 \
     --hash=sha256:c9ff4d7447eed9592c23a12ccee508baf0dd0d59650615e847feb6cdca74f392 \
     --hash=sha256:eee9e502c788e89cb166d4d37f43084e3b64ab405c795c03d343a4dbc2c810fc
     # via pushcollector
-jsonschema-specifications==2023.7.1 \
-    --hash=sha256:05adf340b659828a004220a9613be00fa3f223f2b82002e273dee62fd50524b1 \
-    --hash=sha256:c91a50404e88a1f6ba40636778e2ee08f6e24c5613fe4c53ac24578a5a7f72bb
+jsonschema-specifications==2023.11.1 \
+    --hash=sha256:c9b234904ffe02f079bf91b14d79987faa685fd4b39c377a0996954c0090b9ca \
+    --hash=sha256:f596778ab612b3fd29f72ea0d990393d0540a5aab18bf0407a46632eab540779
     # via jsonschema
 kobo==0.33.0 \
     --hash=sha256:34711f4ad0f38600bf7aafe6039b24d94458212de8b2b67c4b0c3144d47ef617 \
@@ -271,9 +271,9 @@ pyyaml==6.0.1 \
     # via
     #   -r requirements.in
     #   pushcollector
-referencing==0.30.2 \
-    --hash=sha256:449b6669b6121a9e96a7f9e410b245d471e8d48964c67113ce9afe50c8dd7bdf \
-    --hash=sha256:794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0
+referencing==0.31.0 \
+    --hash=sha256:381b11e53dd93babb55696c71cf42aef2d36b8a150c49bf0bc301e36d536c882 \
+    --hash=sha256:cc28f2c88fbe7b961a7817a0abc034c09a1e36358f82fedb4ffdf29a25398863
     # via
     #   jsonschema
     #   jsonschema-specifications

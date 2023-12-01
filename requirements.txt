@@ -188,9 +188,9 @@ jsonschema==4.20.0 \
     --hash=sha256:4f614fd46d8d61258610998997743ec5492a648b33cf478c1ddc23ed4598a5fa \
     --hash=sha256:ed6231f0429ecf966f5bc8dfef245998220549cbbcf140f913b7464c52c3b6b3
     # via pushcollector
-jsonschema-specifications==2023.11.1 \
-    --hash=sha256:c9b234904ffe02f079bf91b14d79987faa685fd4b39c377a0996954c0090b9ca \
-    --hash=sha256:f596778ab612b3fd29f72ea0d990393d0540a5aab18bf0407a46632eab540779
+jsonschema-specifications==2023.11.2 \
+    --hash=sha256:9472fc4fea474cd74bea4a2b190daeccb5a9e4db2ea80efcf7a1b582fc9a81b8 \
+    --hash=sha256:e74ba7c0a65e8cb49dc26837d6cfe576557084a8b423ed16a420984228104f93
     # via jsonschema
 kobo==0.34.0 \
     --hash=sha256:49a3704277ec045cbc20f424bf4e82abc3e56a9e22eb15f18a4db26f51450e39 \

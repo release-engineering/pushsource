@@ -3,7 +3,7 @@ import re
 from mock import Mock
 import yaml
 import json
-from xmlrpc.client import Fault #nosec B411
+from xmlrpc.client import Fault  # nosec B411
 
 import requests
 

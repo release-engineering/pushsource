@@ -5,7 +5,7 @@ import re
 import subprocess
 import tempfile
 import threading
-import xmlrpc.client as xmlrpc_client #nosec B411
+import xmlrpc.client as xmlrpc_client  # nosec B411
 from urllib.parse import urljoin
 import warnings
 

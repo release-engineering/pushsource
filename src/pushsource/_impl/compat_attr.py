@@ -1,9 +1,10 @@
+from importlib.metadata import version
 import attr
 
 # Wrappers for attr module to deal with some incompatibilities between versions
 
 
-ATTR_VERSION = tuple(int(x) for x in attr.__version__.split(".")[0:2])
+ATTR_VERSION = tuple(int(x) for x in (version("attrs")).split(".")[0:2])
 
 
 def s():

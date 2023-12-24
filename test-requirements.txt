@@ -362,9 +362,9 @@ imagesize==1.4.1 \
     --hash=sha256:0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b \
     --hash=sha256:69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a
     # via sphinx
-importlib-metadata==7.0.0 \
-    --hash=sha256:7fc841f8b8332803464e5dc1c63a2e59121f46ca186c0e2e182e80bf8c1319f7 \
-    --hash=sha256:d97503976bb81f40a193d41ee6570868479c69d5068651eb039c40d850c59d67
+importlib-metadata==7.0.1 \
+    --hash=sha256:4805911c3a4ec7c3966410053e9ec6a1fecd629117df5adee56dfc9432a1081e \
+    --hash=sha256:f238736bb06590ae52ac1fab06a3a9ef1d8dce2b7a35b5ab329371d6c8f5d2cc
     # via sphinx
 importlib-resources==6.1.1 \
     --hash=sha256:3893a00122eafde6894c59914446a512f728a0c1a45f9bb9b63721b6bacf0b4a \
@@ -394,9 +394,9 @@ jsonschema-specifications==2023.11.2 \
     --hash=sha256:9472fc4fea474cd74bea4a2b190daeccb5a9e4db2ea80efcf7a1b582fc9a81b8 \
     --hash=sha256:e74ba7c0a65e8cb49dc26837d6cfe576557084a8b423ed16a420984228104f93
     # via jsonschema
-kobo==0.35.0 \
-    --hash=sha256:5f886ab03ef74cf5edef907f401a1b1b23070f4ff51b60d19a062009672e5c08 \
-    --hash=sha256:9f86d79be6e825bcb6af2facb2730eb38e48e871a57631f3acf012e56bcee544
+kobo==0.35.1 \
+    --hash=sha256:0820cb659672690e2a404b149763c676b0b04e21e71abd8d1808cc422b9a420a \
+    --hash=sha256:bbdff14eb23a3eeff12b0984e64703e70432443fcab3d9aad74b304c238f3a46
     # via
     #   -r requirements.in
     #   -r test-requirements.in

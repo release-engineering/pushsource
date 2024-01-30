@@ -205,9 +205,9 @@ class AmiPushItem(VMIPushItem):
             "sriov_net_support": data["sriov_net_support"],
             "ena_support": data.get("ena_support"),
             "uefi_support": data.get("uefi_support"),
-            "boot_mode": BootMode(data.get("boot_mode"))
-            if data.get("boot_mode")
-            else None,
+            "boot_mode": (
+                BootMode(data.get("boot_mode")) if data.get("boot_mode") else None
+            ),
             "billing_codes": AmiBillingCodes._from_data(
                 data.get("billing_codes") or {}
             ),

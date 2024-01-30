@@ -1,4 +1,5 @@
 """Tests for special handling of "from" field on errata."""
+
 from pytest import raises
 import attr
 

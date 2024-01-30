@@ -49,9 +49,11 @@ class StagedAmiMixin(StagedBaseMixin):
 
         image_kwargs.update(
             {
-                "boot_mode": BootMode(attributes.get("boot_mode"))
-                if attributes.get("boot_mode")
-                else None
+                "boot_mode": (
+                    BootMode(attributes.get("boot_mode"))
+                    if attributes.get("boot_mode")
+                    else None
+                )
             }
         )
 

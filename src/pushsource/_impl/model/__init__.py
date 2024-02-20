@@ -27,7 +27,7 @@ from .ami import (
     AmiRelease,
     AmiAccessEndpointUrl,
     AmiBillingCodes,
-    AmiSecurityGroup
+    AmiSecurityGroup,
 )
 from .azure import VHDPushItem
 from .vms import BootMode, VMIPushItem, VMIRelease

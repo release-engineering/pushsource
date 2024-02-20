@@ -104,7 +104,7 @@ class AmiAccessEndpointUrl(object):
 
     @classmethod
     def _from_data(cls, data):
-        """Instantiate SecurityGroup from raw dict"""
+        """Instantiate AccessEndpointUrl from raw dict"""
 
         kwargs = {
             "port": data["port"],
@@ -206,7 +206,7 @@ class AmiPushItem(VMIPushItem):
         default=None,
         validator=optional(instance_of(AmiAccessEndpointUrl)),
     )
-    """Billing codes associated with this image."""
+    """Access endpoint url associated with this image."""
 
     @classmethod
     def _from_data(cls, data):
@@ -254,7 +254,9 @@ class AmiPushItem(VMIPushItem):
             ],
             "access_endpoint_url": (
                 AmiAccessEndpointUrl._from_data(data.get("access_endpoint_url"))
-                                    if data.get("access_endpoint_url") else None),
+                if data.get("access_endpoint_url")
+                else None
+            ),
         }
 
         return cls(**kwargs)

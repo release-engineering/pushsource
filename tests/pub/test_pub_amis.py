@@ -6,6 +6,7 @@ import pytest
 import requests
 
 from pushsource import (
+    AmiAccessEndpointUrl,
     AmiBillingCodes,
     AmiPushItem,
     AmiRelease,
@@ -90,6 +91,7 @@ def test_get_ami_push_items_single_task(requests_mock):
                     from_port=11, ip_protocol="tcp", ip_ranges=["8.2.8.8"], to_port=91
                 ),
             ],
+            access_endpoint_url=AmiAccessEndpointUrl(port=10, protocol="http"),
         )
     ]
 
@@ -148,6 +150,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             ena_support=True,
             billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
             image_id="ami-fake-100",
+            access_endpoint_url=None,
         ),
         AmiPushItem(
             name="RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2",
@@ -196,6 +199,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
                     from_port=11, ip_protocol="tcp", ip_ranges=["8.2.8.8"], to_port=91
                 ),
             ],
+            access_endpoint_url=AmiAccessEndpointUrl(port=10, protocol="http"),
         ),
         AmiPushItem(
             name="RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2",
@@ -237,6 +241,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
                     to_port=255,
                 )
             ],
+            access_endpoint_url=AmiAccessEndpointUrl(port=10, protocol="https"),
         ),
         AmiPushItem(
             name="RHEL-SAP-8.4.0_HVM-20230109-x86_64-0-Hourly2-GP2",
@@ -275,6 +280,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
                     from_port=1, ip_protocol="icmp", ip_ranges=["1.1.1.1"], to_port=10
                 )
             ],
+            access_endpoint_url=AmiAccessEndpointUrl(port=10, protocol="http"),
         ),
     ]
 

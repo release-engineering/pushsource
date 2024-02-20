@@ -93,6 +93,27 @@ class AmiSecurityGroup(object):
 
 
 @attr.s()
+class AmiAccessEndpointUrl(object):
+    """Access Endpoint URL to be associated with a Marketplace VM."""
+
+    port = attr.ib(type=int, validator=instance_of(int))
+    """Port to access the endpoint URL."""
+
+    protocol = attr.ib(type=str, validator=instance_of_str)
+    """Protocol to access the endpoint URL (http, https)."""
+
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate SecurityGroup from raw dict"""
+
+        kwargs = {
+            "port": data["port"],
+            "protocol": data["protocol"],
+        }
+        return cls(**kwargs)
+
+
+@attr.s()
 class AmiPushItem(VMIPushItem):
     """A :class:`~pushsource.PushItem` representing an Amazon Machine Image (or "AMI").
 
@@ -180,6 +201,13 @@ class AmiPushItem(VMIPushItem):
     )
     """Automatically created security groups for the product. """
 
+    access_endpoint_url = attr.ib(
+        type=AmiAccessEndpointUrl,
+        default=None,
+        validator=optional(instance_of(AmiAccessEndpointUrl)),
+    )
+    """Billing codes associated with this image."""
+
     @classmethod
     def _from_data(cls, data):
         """Instantiate AmiPushItem from raw list or dict"""
@@ -224,6 +252,9 @@ class AmiPushItem(VMIPushItem):
                 AmiSecurityGroup._from_data(security_group)
                 for security_group in (data.get("security_groups") or [])
             ],
+            "access_endpoint_url": (
+                AmiAccessEndpointUrl._from_data(data.get("access_endpoint_url"))
+                                    if data.get("access_endpoint_url") else None),
         }
 
         return cls(**kwargs)

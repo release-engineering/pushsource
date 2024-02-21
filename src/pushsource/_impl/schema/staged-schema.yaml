@@ -135,6 +135,8 @@ definitions:
                 $ref: "#/definitions/optional_string"
             version_title:
                 $ref: "#/definitions/optional_string"
+            marketplace_title_template:
+                $ref: "#/definitions/optional_string"
             security_groups:
                 type:
                     - array

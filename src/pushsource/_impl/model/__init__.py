@@ -22,6 +22,12 @@ from .container import (
 from .modulemd import ModuleMdPushItem, ModuleMdSourcePushItem
 from .comps import CompsXmlPushItem
 from .productid import ProductIdPushItem
-from .ami import AmiPushItem, AmiRelease, AmiBillingCodes, AmiSecurityGroup
+from .ami import (
+    AmiPushItem,
+    AmiRelease,
+    AmiAccessEndpointUrl,
+    AmiBillingCodes,
+    AmiSecurityGroup,
+)
 from .azure import VHDPushItem
 from .vms import BootMode, VMIPushItem, VMIRelease

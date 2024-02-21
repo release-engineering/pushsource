@@ -33,7 +33,11 @@
     "type": "hourly", 
     "virtualization": "hvm", 
     "volume": "gp2",
-    "security_groups": [{"from_port":-1, "ip_protocol": "icmpv6", "ip_ranges":["255.255.255.255"], "to_port":255}]
+    "security_groups": [{"from_port":-1, "ip_protocol": "icmpv6", "ip_ranges":["255.255.255.255"], "to_port":255}],
+    "access_endpoint_url": {
+      "port": 10,
+      "protocol": "https"
+    }
 
   }, 
   {
@@ -70,7 +74,11 @@
     "type": "hourly", 
     "virtualization": "hvm", 
     "volume": "gp2",
-    "security_groups": [{"from_port":1, "ip_protocol": "icmp", "ip_ranges":["1.1.1.1"], "to_port":10}]
+    "security_groups": [{"from_port":1, "ip_protocol": "icmp", "ip_ranges":["1.1.1.1"], "to_port":10}],
+    "access_endpoint_url": {
+      "port": 10,
+      "protocol": "http"
+    }
 
   }
 ]

@@ -21,6 +21,7 @@ from pushsource._impl.model import (
     VMIRelease,
     AmiPushItem,
     AmiRelease,
+    AmiAccessEndpointUrl,
     AmiBillingCodes,
     AmiSecurityGroup,
     VHDPushItem,

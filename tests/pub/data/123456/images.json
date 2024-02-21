@@ -43,7 +43,11 @@
       "security_groups": [
         {"from_port":10, "ip_protocol": "udp", "ip_ranges":["8.1.8.8"], "to_port":90},
         {"from_port":11, "ip_protocol": "tcp", "ip_ranges":["8.2.8.8"], "to_port":91}
-      ]
+      ],
+      "access_endpoint_url": {
+        "port": 10,
+        "protocol": "http"
+      }
 
     }
 ]

@@ -9,6 +9,7 @@ url: "staged:{{ src_dir }}/tests/staged/data/simple_ami_with_bc"
 # Push items generated from above.
 items:
 - AmiPushItem:
+    access_endpoint_url: null
     billing_codes:
       codes:
       - bp-1234

@@ -12,3 +12,6 @@ Push items: AMI
 
 .. autoclass:: pushsource.AmiSecurityGroup()
    :members:
+
+.. autoclass:: pushsource.AmiAccessEndpointUrl()
+   :members:

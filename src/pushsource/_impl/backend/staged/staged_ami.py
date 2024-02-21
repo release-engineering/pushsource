@@ -77,6 +77,7 @@ class StagedAmiMixin(StagedBaseMixin):
             "user_name",
             "version_title",
             "security_groups",
+            "access_endpoint_url",
         ]
 
         for key in image_attrs:

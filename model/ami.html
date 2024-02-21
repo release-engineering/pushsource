@@ -58,6 +58,7 @@ snapshot.</p>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.signing_key" title="pushsource.PushItem.signing_key"><code class="xref py py-meth docutils literal notranslate"><span class="pre">signing_key()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
+<li><p><a class="reference internal" href="#pushsource.AmiPushItem.access_endpoint_url" title="pushsource.AmiPushItem.access_endpoint_url"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_endpoint_url()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.billing_codes" title="pushsource.AmiPushItem.billing_codes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">billing_codes()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.ena_support" title="pushsource.AmiPushItem.ena_support"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ena_support()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.AmiPushItem.image_id" title="pushsource.AmiPushItem.image_id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">image_id()</span></code></a></p></li>
@@ -288,6 +289,17 @@ snapshot.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.AmiPushItem.access_endpoint_url">
+<span class="sig-name descname"><span class="pre">access_endpoint_url</span></span><a class="headerlink" href="#pushsource.AmiPushItem.access_endpoint_url" title="Link to this definition">¶</a></dt>
+<dd><p>Access endpoint url associated with this image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pushsource.AmiAccessEndpointUrl" title="pushsource.AmiAccessEndpointUrl">AmiAccessEndpointUrl</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -405,6 +417,39 @@ If you specify all ICMP/ICMPv6 types, you must specify all ICMP/ICMPv6 codes..</
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pushsource.AmiAccessEndpointUrl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">AmiAccessEndpointUrl</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/ami.html#AmiAccessEndpointUrl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.AmiAccessEndpointUrl" title="Link to this definition">¶</a></dt>
+<dd><p>Access Endpoint URL to be associated with a Marketplace VM.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.AmiAccessEndpointUrl.port" title="pushsource.AmiAccessEndpointUrl.port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">port()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.AmiAccessEndpointUrl.protocol" title="pushsource.AmiAccessEndpointUrl.protocol"><code class="xref py py-meth docutils literal notranslate"><span class="pre">protocol()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.AmiAccessEndpointUrl.port">
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#pushsource.AmiAccessEndpointUrl.port" title="Link to this definition">¶</a></dt>
+<dd><p>Port to access the endpoint URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.AmiAccessEndpointUrl.protocol">
+<span class="sig-name descname"><span class="pre">protocol</span></span><a class="headerlink" href="#pushsource.AmiAccessEndpointUrl.protocol" title="Link to this definition">¶</a></dt>
+<dd><p>Protocol to access the endpoint URL (http, https).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -450,6 +495,7 @@ If you specify all ICMP/ICMPv6 types, you must specify all ICMP/ICMPv6 codes..</
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.AmiRelease"><code class="docutils literal notranslate"><span class="pre">AmiRelease</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.AmiBillingCodes"><code class="docutils literal notranslate"><span class="pre">AmiBillingCodes</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.AmiSecurityGroup"><code class="docutils literal notranslate"><span class="pre">AmiSecurityGroup</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.AmiAccessEndpointUrl"><code class="docutils literal notranslate"><span class="pre">AmiAccessEndpointUrl</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="azure.html">Push items: VHD</a></li>

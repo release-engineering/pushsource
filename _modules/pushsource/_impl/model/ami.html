@@ -133,6 +133,30 @@
 
 
 
+<div class="viewcode-block" id="AmiAccessEndpointUrl">
+<a class="viewcode-back" href="../../../../model/ami.html#pushsource.AmiAccessEndpointUrl">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AmiAccessEndpointUrl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Access Endpoint URL to be associated with a Marketplace VM.&quot;&quot;&quot;</span>
+
+    <span class="n">port</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Port to access the endpoint URL.&quot;&quot;&quot;</span>
+
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol to access the endpoint URL (http, https).&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate AccessEndpointUrl from raw dict&quot;&quot;&quot;</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;protocol&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="AmiPushItem">
 <a class="viewcode-back" href="../../../../model/ami.html#pushsource.AmiPushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -223,6 +247,13 @@
     <span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Automatically created security groups for the product. &quot;&quot;&quot;</span>
 
+    <span class="n">access_endpoint_url</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">AmiAccessEndpointUrl</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="n">AmiAccessEndpointUrl</span><span class="p">)),</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Access endpoint url associated with this image.&quot;&quot;&quot;</span>
+
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate AmiPushItem from raw list or dict&quot;&quot;&quot;</span>
@@ -267,6 +298,11 @@
                 <span class="n">AmiSecurityGroup</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">security_group</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">security_group</span> <span class="ow">in</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;security_groups&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
             <span class="p">],</span>
+            <span class="s2">&quot;access_endpoint_url&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">AmiAccessEndpointUrl</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_endpoint_url&quot;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_endpoint_url&quot;</span><span class="p">)</span>
+                <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>

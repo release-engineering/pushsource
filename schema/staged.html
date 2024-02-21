@@ -214,6 +214,18 @@ definitions:
                                 minimum: 0
                                 maximum: 65536
 
+            access_endpoint_url:
+                type:
+                - object
+                - &quot;null&quot;
+                properties:
+                    port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+                    protocol:
+                        enum: [&quot;http&quot;, &quot;https&quot;]
+
         required:
         - release
         - region

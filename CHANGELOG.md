@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.42.0] - 2024-02-22
+
+### Added
+
+- Introduced `AmiPushItem.access_endpoint_url`
+
 ## [2.41.0] - 2023-11-29
 
 ### Added
@@ -471,7 +477,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.41.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.42.0...HEAD
+[2.42.0]: https://github.com/release-engineering/pushsource/compare/v2.41.0...v2.42.0
 [2.41.0]: https://github.com/release-engineering/pushsource/compare/v2.40.0...v2.41.0
 [2.40.0]: https://github.com/release-engineering/pushsource/compare/v2.39.0...v2.40.0
 [2.39.0]: https://github.com/release-engineering/pushsource/compare/v2.38.0...v2.39.0

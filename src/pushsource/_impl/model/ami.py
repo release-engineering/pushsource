@@ -248,6 +248,8 @@ class AmiPushItem(VMIPushItem):
             "scanning_port": data.get("scanning_port") or None,
             "user_name": data.get("user_name") or None,
             "version_title": data.get("version_title") or None,
+            "marketplace_title_template": data.get("marketplace_title_template")
+            or None,
             "security_groups": [
                 AmiSecurityGroup._from_data(security_group)
                 for security_group in (data.get("security_groups") or [])

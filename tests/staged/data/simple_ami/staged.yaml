@@ -25,3 +25,4 @@ payload:
       virtualization: hvm
       volume: gp2
       public_image: true
+      marketplace_title_template: "Test {product} - {date}"

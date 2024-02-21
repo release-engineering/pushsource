@@ -3,6 +3,7 @@ import enum
 
 from .base import PushItem
 from .. import compat_attr as attr
+from attr import asdict
 from .conv import datestr, instance_of_str, instance_of, optional_str, optional, in_
 
 
@@ -73,6 +74,22 @@ class VMIPushItem(PushItem):
 
     boot_mode = attr.ib(type=BootMode, default=None, validator=optional(in_(BootMode)))
     """Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy)."""
+
+    marketplace_title_template = attr.ib(type=str, default=None, validator=optional_str)
+    """The template is of the form used by ``str.format``, with available keywords being all of
+    the documented fields on ``VMIRelease`` and ``AMIRelease`` classes.
+    
+    It's used by the property `marketplace_title` to format it as the marketplace title."""
+
+    @property
+    def marketplace_title(self) -> str:
+        """The marketplace title which is used for some certain layared products.
+
+        It's built from the `marketplace_title_template` by formatting it with the proper values.
+        """
+        if not self.marketplace_title_template or not self.release:
+            return ""
+        return self.marketplace_title_template.format(**asdict(self.release))
 
     @release.validator
     def __validate_release(self, attribute, value):  # pylint: disable=unused-argument

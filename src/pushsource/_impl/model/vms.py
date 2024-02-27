@@ -83,7 +83,7 @@ class VMIPushItem(PushItem):
 
     @property
     def marketplace_title(self) -> str:
-        """The marketplace title which is used for some certain layared products.
+        """The marketplace title which is used for some certain layered products.
 
         It's built from the `marketplace_title_template` by formatting it with the proper values.
         """

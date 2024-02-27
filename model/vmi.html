@@ -53,6 +53,7 @@
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.boot_mode" title="pushsource.VMIPushItem.boot_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">boot_mode()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.description" title="pushsource.VMIPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.marketplace_title_template" title="pushsource.VMIPushItem.marketplace_title_template"><code class="xref py py-meth docutils literal notranslate"><span class="pre">marketplace_title_template()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.release" title="pushsource.VMIPushItem.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
 </ul>
 <dl class="py attribute">
@@ -81,6 +82,26 @@
 <dd class="field-odd"><p>Boot mode supported by the image (if known)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.marketplace_title_template">
+<span class="sig-name descname"><span class="pre">marketplace_title_template</span></span><a class="headerlink" href="#pushsource.VMIPushItem.marketplace_title_template" title="Link to this definition">¶</a></dt>
+<dd><p>The template is of the form used by <code class="docutils literal notranslate"><span class="pre">str.format</span></code>, with available keywords being all of
+the documented fields on <code class="docutils literal notranslate"><span class="pre">VMIRelease</span></code> and <code class="docutils literal notranslate"><span class="pre">AMIRelease</span></code> classes.</p>
+<p>It’s used by the property <cite>marketplace_title</cite> to format it as the marketplace title.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.marketplace_title">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">marketplace_title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#pushsource.VMIPushItem.marketplace_title" title="Link to this definition">¶</a></dt>
+<dd><p>The marketplace title which is used for some certain layered products.</p>
+<p>It’s built from the <cite>marketplace_title_template</cite> by formatting it with the proper values.</p>
 </dd></dl>
 
 </dd></dl>

@@ -35,6 +35,7 @@
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">attr</span> <span class="kn">import</span> <span class="n">asdict</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">datestr</span><span class="p">,</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">optional</span><span class="p">,</span> <span class="n">in_</span>
 
 
@@ -113,6 +114,22 @@
 
     <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">BootMode</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">BootMode</span><span class="p">)))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy).&quot;&quot;&quot;</span>
+
+    <span class="n">marketplace_title_template</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The template is of the form used by ``str.format``, with available keywords being all of</span>
+<span class="sd">    the documented fields on ``VMIRelease`` and ``AMIRelease`` classes.</span>
+<span class="sd">    </span>
+<span class="sd">    It&#39;s used by the property `marketplace_title` to format it as the marketplace title.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">marketplace_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The marketplace title which is used for some certain layered products.</span>
+
+<span class="sd">        It&#39;s built from the `marketplace_title_template` by formatting it with the proper values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">marketplace_title_template</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">marketplace_title_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">))</span>
 
     <span class="nd">@release</span><span class="o">.</span><span class="n">validator</span>
     <span class="k">def</span> <span class="nf">__validate_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>

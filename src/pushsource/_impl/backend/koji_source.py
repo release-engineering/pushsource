@@ -2,6 +2,7 @@ import os
 import threading
 import logging
 from functools import partial
+import json
 
 from queue import Queue, Empty
 from threading import Thread
@@ -519,7 +520,7 @@ class KojiSource(Source):
             message = "Virtual machine image build not found in koji: %s" % nvr
             LOG.debug(message)
             raise ValueError(message)
-
+        
         # VMI has the {'typeinfo': {'image':{}}} on extra
         extra = meta.get("extra") or {}
         typeinfo = extra.get("typeinfo") or {}
@@ -536,10 +537,12 @@ class KojiSource(Source):
             message = "Build %s not recognized as a virtual machine image build" % nvr
             LOG.debug(message)
             raise ValueError(message)
-
+        
         build_id = meta["id"]
-
         archives = self._get_archives(build_id)
+        for archive in archives:
+            if archive["filename"] == "meta.json":
+                return self._push_items_from_rhcos_build(nvr, meta)
 
         # Supported types of VMI archives
         ami_types = ["raw", "raw-xz"]
@@ -551,7 +554,7 @@ class KojiSource(Source):
 
         for k in azure_types:
             cloud_types.setdefault(k, VHDPushItem)
-
+        
         # Collect all known VM image archives
         vmi_archives = [
             elem
@@ -559,9 +562,7 @@ class KojiSource(Source):
             if elem.get("btype") == "image"
             and elem.get("type_name") in cloud_types.keys()
         ]
-
         out = []
-
         # Generate the respective PushItem type for each archive
         for archive in vmi_archives:
             path = self._pathinfo.typedir(meta, archive["btype"])
@@ -616,6 +617,104 @@ class KojiSource(Source):
                     ),
                     md5sum=archive.get("checksum"),
                     release=release,
+                )
+            )
+
+        return out
+    
+    def _push_items_from_rhcos_build(self, nvr, meta, archives=None):
+
+        LOG.debug("Looking for core os assembler build on %s, %s", nvr, meta)
+
+        build_id = meta["id"]
+        archives = archives or self._get_archives(build_id)
+
+        for archive in archives:
+            if archive.get("filename") == "meta.json":
+                path = self._pathinfo.typedir(meta, archive["btype"])
+                item_src = os.path.join(path, archive["filename"])
+                with open(item_src) as archive_file:
+                    rhcos_meta_data = json.loads(archive_file.read())
+
+        extra = meta.get("extra") or {}
+        image = extra.get("typeinfo").get("image") or {}
+
+        arch = image.get("arch") 
+
+        boot_mode = image.get("boot_mode")
+        if boot_mode is not None:
+            boot_mode = BootMode(boot_mode)
+
+        rhcos_container_config = rhcos_meta_data.get("coreos-assembler.container-config-git") or {}
+        branch = rhcos_container_config.get("branch") or ""
+        version = branch.split("-")[-1] or ""
+
+
+
+        # Try to get the resping version from release, if available
+        respin = try_int(meta["release"])
+        respin = 0 if not isinstance(respin, int) else respin
+
+        vms_with_custom_meta_data = []
+        # add aws ami
+        for ami in rhcos_meta_data["amis"]:
+            vms_with_custom_meta_data.append(
+                {
+                    "marketplace_name": "aws",
+                    "push_item_class": AmiPushItem,
+                    "custom_meta_data": {
+                        "region": ami.get("name"),
+                        "src": ami.get("hvm"),
+
+                    }
+
+                }
+            )
+
+        # add vm for azure
+        vms_with_custom_meta_data.append(
+            {
+                "marketplace_name": "azure",
+                "push_item_class": VHDPushItem,
+                "custom_meta_data": {
+                    "src": rhcos_meta_data["azure"]["url"],
+
+                }
+
+            }
+        )
+
+        out = []
+        for vm_item in vms_with_custom_meta_data:
+            klass = vm_item.get("push_item_class")
+            rel_klass = klass._RELEASE_TYPE
+            release = rel_klass(
+                arch=arch,
+                date=(meta.get("completion_time") or "").split(" ")[0],
+                product=meta.get("name").split("-")[0].upper(),
+                version=version,
+                respin=respin,
+            )
+            images = rhcos_meta_data.get("images") or {}
+            vm_target = images.get(vm_item["marketplace_name"]) or {}
+            sha256sum = vm_target.get("sha256")
+
+            out.append(
+                klass(
+                    name=rhcos_meta_data.get("name"),
+                    description=rhcos_meta_data.get("summary"),
+                    **vm_item["custom_meta_data"],
+                    boot_mode=boot_mode,
+                    build=nvr,
+                    build_info=KojiBuildInfo(
+                        id=int(build_id),
+                        name=meta["name"],
+                        version=version,
+                        release=meta["release"],
+                    ),
+                    sha256sum = sha256sum,
+                    release=release,
+                    marketplace_name=vm_item["marketplace_name"]
                 )
             )
 

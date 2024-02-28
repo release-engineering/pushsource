@@ -81,6 +81,9 @@ class VMIPushItem(PushItem):
     
     It's used by the property `marketplace_title` to format it as the marketplace title."""
 
+    marketplace_name = attr.ib(type=str, default=None, validator=optional_str)
+    """Name of the marketplace where the Image is expected to be shipped."""
+    
     @property
     def marketplace_title(self) -> str:
         """The marketplace title which is used for some certain layered products.

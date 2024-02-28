@@ -20,6 +20,7 @@ items:
     ena_support: true
     image_id: null
     marketplace_entity_type: null
+    marketplace_name: null
     marketplace_title_template: null
     md5sum: null
     name: fake-image.raw

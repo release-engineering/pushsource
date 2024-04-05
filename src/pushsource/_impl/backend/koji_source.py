@@ -520,7 +520,7 @@ class KojiSource(Source):
             message = "Virtual machine image build not found in koji: %s" % nvr
             LOG.debug(message)
             raise ValueError(message)
-        
+
         # VMI has the {'typeinfo': {'image':{}}} on extra
         extra = meta.get("extra") or {}
         typeinfo = extra.get("typeinfo") or {}
@@ -537,7 +537,7 @@ class KojiSource(Source):
             message = "Build %s not recognized as a virtual machine image build" % nvr
             LOG.debug(message)
             raise ValueError(message)
-        
+
         build_id = meta["id"]
         archives = self._get_archives(build_id)
         for archive in archives:
@@ -554,7 +554,7 @@ class KojiSource(Source):
 
         for k in azure_types:
             cloud_types.setdefault(k, VHDPushItem)
-        
+
         # Collect all known VM image archives
         vmi_archives = [
             elem
@@ -621,7 +621,7 @@ class KojiSource(Source):
             )
 
         return out
-    
+
     def _push_items_from_rhcos_build(self, nvr, meta, archives=None):
 
         LOG.debug("Looking for core os assembler build on %s, %s", nvr, meta)
@@ -639,17 +639,17 @@ class KojiSource(Source):
         extra = meta.get("extra") or {}
         image = extra.get("typeinfo").get("image") or {}
 
-        arch = image.get("arch") 
+        arch = image.get("arch")
 
         boot_mode = image.get("boot_mode")
         if boot_mode is not None:
             boot_mode = BootMode(boot_mode)
 
-        rhcos_container_config = rhcos_meta_data.get("coreos-assembler.container-config-git") or {}
+        rhcos_container_config = (
+            rhcos_meta_data.get("coreos-assembler.container-config-git") or {}
+        )
         branch = rhcos_container_config.get("branch") or ""
         version = branch.split("-")[-1] or ""
-
-
 
         # Try to get the resping version from release, if available
         respin = try_int(meta["release"])
@@ -665,9 +665,7 @@ class KojiSource(Source):
                     "custom_meta_data": {
                         "region": ami.get("name"),
                         "src": ami.get("hvm"),
-
-                    }
-
+                    },
                 }
             )
 
@@ -678,9 +676,7 @@ class KojiSource(Source):
                 "push_item_class": VHDPushItem,
                 "custom_meta_data": {
                     "src": rhcos_meta_data["azure"]["url"],
-
-                }
-
+                },
             }
         )
 
@@ -712,7 +708,7 @@ class KojiSource(Source):
                         version=version,
                         release=meta["release"],
                     ),
-                    sha256sum = sha256sum,
+                    sha256sum=sha256sum,
                     release=release,
                     marketplace_name=vm_item["marketplace_name"]
                 )

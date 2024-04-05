@@ -239,35 +239,36 @@ def test_koji_vmi_compound_product_name(fake_koji, koji_dir):
         release=rel_obj,
     )
 
+
 @mark.parametrize("boot_mode", [None, "legacy", "uefi", "hybrid"])
-def test_coreos_assembler_image(boot_mode,fake_koji, koji_dir):
+def test_coreos_assembler_image(boot_mode, fake_koji, koji_dir):
     boot_mode_enum = BootMode(boot_mode) if boot_mode else None
 
     archives = []
     images = {
         "meta.json": "json",
         "commitmeta.json": "json",
-        "coreos-assembler-git.tar.gz": "tar"
-
+        "coreos-assembler-git.tar.gz": "tar",
     }
     for file_name, type_name in images.items():
         archives.append(
-            {'btype': 'image',
-             'btype_id': 4,
-             'build_id': 123456,
-             'buildroot_id': 1234567,
-             'checksum': 'dde60621880aa996c42e356a687744ef',
-             'checksum_type': 0,
-             'compression_type': None,
-             'filename': file_name,
-             'id': 234792,
-             'metadata_only': False,
-             'size': 16077,
-             'type_description': 'JSON data',
-             'type_extensions': 'json',
-             'type_id': 49,
-             'type_name': type_name
-             }
+            {
+                "btype": "image",
+                "btype_id": 4,
+                "build_id": 123456,
+                "buildroot_id": 1234567,
+                "checksum": "dde60621880aa996c42e356a687744ef",
+                "checksum_type": 0,
+                "compression_type": None,
+                "filename": file_name,
+                "id": 234792,
+                "metadata_only": False,
+                "size": 16077,
+                "type_description": "JSON data",
+                "type_extensions": "json",
+                "type_id": 49,
+                "type_name": type_name,
+            }
         )
 
     name = "rhcos"
@@ -287,14 +288,16 @@ def test_coreos_assembler_image(boot_mode,fake_koji, koji_dir):
         "release": release,
         "nvr": nvr,
         "completion_time": "2022-12-20 12:30:25",
-        "extra": {"typeinfo": {"image": {"arch": "x86_64","boot_mode": boot_mode}}}}
+        "extra": {"typeinfo": {"image": {"arch": "x86_64", "boot_mode": boot_mode}}},
+    }
 
     fake_koji.build_data[nvr] = fake_koji.build_data[1234]
 
     fake_koji.insert_archives(archives=archives, build_nvr=nvr)
 
     meta_data_directory = os.path.join(
-        koji_dir, "packages", name, version, release, "images")
+        koji_dir, "packages", name, version, release, "images"
+    )
     os.makedirs(meta_data_directory)
     meta_data_path = os.path.join(meta_data_directory, "meta.json")
 
@@ -329,12 +332,26 @@ def test_coreos_assembler_image(boot_mode,fake_koji, koji_dir):
     items = list(source)
 
     vms_with_custom_meta_data = [
-        {'marketplace_name': 'aws', 'push_item_class': AmiPushItem, 'custom_meta_data': {'region': 'us-gov-west-1',
-                                                                               'src': 'ami-01'}, "sha256": "4ef7806152bd89ce44326ff746c4f1883ad543885e980bce59821df2d946ea4c"},
-        {'marketplace_name': 'aws', 'push_item_class': AmiPushItem, 'custom_meta_data': {'region': 'us-east-1',
-                                                                               'src': 'ami-02'}, "sha256": "4ef7806152bd89ce44326ff746c4f1883ad543885e980bce59821df2d946ea4c"},
-        {'marketplace_name': 'azure', 'push_item_class': VHDPushItem, 'custom_meta_data': {
-            'src': 'https://example.windows.net/imagebucket/rhcos-4.11-0-azure.x86_64.vhd'}, "sha256": "2cd817331af29093e2eaa025139ebddd6008c193970b06b35afbbdbebae0ce3e"}
+        {
+            "marketplace_name": "aws",
+            "push_item_class": AmiPushItem,
+            "custom_meta_data": {"region": "us-gov-west-1", "src": "ami-01"},
+            "sha256": "4ef7806152bd89ce44326ff746c4f1883ad543885e980bce59821df2d946ea4c",
+        },
+        {
+            "marketplace_name": "aws",
+            "push_item_class": AmiPushItem,
+            "custom_meta_data": {"region": "us-east-1", "src": "ami-02"},
+            "sha256": "4ef7806152bd89ce44326ff746c4f1883ad543885e980bce59821df2d946ea4c",
+        },
+        {
+            "marketplace_name": "azure",
+            "push_item_class": VHDPushItem,
+            "custom_meta_data": {
+                "src": "https://example.windows.net/imagebucket/rhcos-4.11-0-azure.x86_64.vhd"
+            },
+            "sha256": "2cd817331af29093e2eaa025139ebddd6008c193970b06b35afbbdbebae0ce3e",
+        },
     ]
 
     out = []
@@ -364,7 +381,7 @@ def test_coreos_assembler_image(boot_mode,fake_koji, koji_dir):
                 ),
                 sha256sum=vm_item.get("sha256"),
                 release=release,
-                marketplace_name = vm_item["marketplace_name"]
+                marketplace_name=vm_item["marketplace_name"],
             )
         )
     items = sorted(items, key=lambda metadata: metadata.name)

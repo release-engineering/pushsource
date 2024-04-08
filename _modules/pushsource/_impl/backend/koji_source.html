@@ -34,6 +34,7 @@
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Empty</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
@@ -575,8 +576,10 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-
         <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">archives</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;meta.json&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rhcos_build</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
         <span class="c1"># Supported types of VMI archives</span>
         <span class="n">ami_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;raw-xz&quot;</span><span class="p">]</span>
@@ -596,9 +599,7 @@
             <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span>
             <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type_name&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="p">]</span>
-
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-
         <span class="c1"># Generate the respective PushItem type for each archive</span>
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">vmi_archives</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
@@ -653,6 +654,100 @@
                     <span class="p">),</span>
                     <span class="n">md5sum</span><span class="o">=</span><span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksum&quot;</span><span class="p">),</span>
                     <span class="n">release</span><span class="o">=</span><span class="n">release</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">_push_items_from_rhcos_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for core os assembler build on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">archives</span> <span class="o">=</span> <span class="n">archives</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">archives</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;meta.json&quot;</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
+                <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">item_src</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive_file</span><span class="p">:</span>
+                    <span class="n">rhcos_meta_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">archive_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arch&quot;</span><span class="p">)</span>
+
+        <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;boot_mode&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">boot_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">BootMode</span><span class="p">(</span><span class="n">boot_mode</span><span class="p">)</span>
+
+        <span class="n">rhcos_container_config</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;coreos-assembler.container-config-git&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="p">)</span>
+        <span class="n">branch</span> <span class="o">=</span> <span class="n">rhcos_container_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;branch&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Try to get the resping version from release, if available</span>
+        <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">])</span>
+        <span class="n">respin</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">respin</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">respin</span>
+
+        <span class="n">vms_with_custom_meta_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># add aws ami</span>
+        <span class="k">for</span> <span class="n">ami</span> <span class="ow">in</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">&quot;amis&quot;</span><span class="p">]:</span>
+            <span class="n">vms_with_custom_meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;marketplace_name&quot;</span><span class="p">:</span> <span class="s2">&quot;aws&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;push_item_class&quot;</span><span class="p">:</span> <span class="n">AmiPushItem</span><span class="p">,</span>
+                    <span class="s2">&quot;custom_meta_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hvm&quot;</span><span class="p">),</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="c1"># add vm for azure</span>
+        <span class="n">vms_with_custom_meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;marketplace_name&quot;</span><span class="p">:</span> <span class="s2">&quot;azure&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;push_item_class&quot;</span><span class="p">:</span> <span class="n">VHDPushItem</span><span class="p">,</span>
+                <span class="s2">&quot;custom_meta_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">&quot;azure&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">vm_item</span> <span class="ow">in</span> <span class="n">vms_with_custom_meta_data</span><span class="p">:</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">vm_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;push_item_class&quot;</span><span class="p">)</span>
+            <span class="n">rel_klass</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
+            <span class="n">release</span> <span class="o">=</span> <span class="n">rel_klass</span><span class="p">(</span>
+                <span class="n">arch</span><span class="o">=</span><span class="n">arch</span><span class="p">,</span>
+                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;completion_time&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">product</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+                <span class="n">respin</span><span class="o">=</span><span class="n">respin</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;images&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">vm_target</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;marketplace_name&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">vm_target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span>
+
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">klass</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;summary&quot;</span><span class="p">),</span>
+                    <span class="o">**</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;custom_meta_data&quot;</span><span class="p">],</span>
+                    <span class="n">boot_mode</span><span class="o">=</span><span class="n">boot_mode</span><span class="p">,</span>
+                    <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
+                    <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">build_id</span><span class="p">),</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sum</span><span class="p">,</span>
+                    <span class="n">release</span><span class="o">=</span><span class="n">release</span><span class="p">,</span>
+                    <span class="n">marketplace_name</span><span class="o">=</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;marketplace_name&quot;</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 

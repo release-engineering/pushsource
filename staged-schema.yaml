@@ -124,6 +124,7 @@ definitions:
             marketplace_entity_type:
                 $ref: "#/definitions/optional_string"
 
+
             scanning_port:
                 type:
                     - number
@@ -136,6 +137,8 @@ definitions:
             version_title:
                 $ref: "#/definitions/optional_string"
             marketplace_title_template:
+                $ref: "#/definitions/optional_string"
+            marketplace_name:
                 $ref: "#/definitions/optional_string"
             security_groups:
                 type:

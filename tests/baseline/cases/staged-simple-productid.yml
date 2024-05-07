@@ -16,6 +16,15 @@ items:
     md5sum: null
     name: some-cert
     origin: {{ src_dir }}/tests/staged/data/simple_productid
+    products:
+    - architecture:
+      - x86_64
+      id: 69
+      name: Red Hat Enterprise Linux Server
+      provided_tags:
+      - rhel-6
+      - rhel-6-server
+      version: '6.10'
     sha256sum: null
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_productid/dest1/PRODUCTID/some-cert

@@ -4,7 +4,7 @@
 # To regenerate, run test_baseline.py with PUSHSOURCE_UPDATE_BASELINE=1.
 
 # URL of Source to test.
-url: "productid:/dir/greatest-productid-of-all-time?dest=repo1,repo2,repo3"
+url: "productid:{{ src_dir }}/tests/staged/data/simple_productid/dest1/PRODUCTID/some-cert?dest=repo1,repo2,repo3"
 
 # Push items generated from above.
 items:
@@ -16,9 +16,18 @@ items:
     - repo2
     - repo3
     md5sum: null
-    name: greatest-productid-of-all-time
+    name: some-cert
     origin: direct
+    products:
+    - architecture:
+      - x86_64
+      id: 69
+      name: Red Hat Enterprise Linux Server
+      provided_tags:
+      - rhel-6
+      - rhel-6-server
+      version: '6.10'
     sha256sum: null
     signing_key: null
-    src: /dir/greatest-productid-of-all-time
+    src: {{ src_dir }}/tests/staged/data/simple_productid/dest1/PRODUCTID/some-cert
     state: PENDING

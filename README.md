@@ -4,12 +4,11 @@ pushsource
 A Python library for collecting content from various sources, used by
 [release-engineering](https://github.com/release-engineering) publishing tools.
 
-[![Build Status](https://travis-ci.org/release-engineering/pushsource.svg?branch=master)](https://travis-ci.org/release-engineering/pushsource)
-[![Coverage Status](https://coveralls.io/repos/github/release-engineering/pushsource/badge.svg?branch=master)](https://coveralls.io/github/release-engineering/pushsource?branch=master)
+[![PyPI](https://img.shields.io/pypi/v/pushsource)](https://pypi.org/project/pushsource/)
+![Build Status](https://github.com/release-engineering/pushsource/actions/workflows/tox-test.yml/badge.svg)
 
 - [Source](https://github.com/release-engineering/pushsource)
 - [Documentation](https://release-engineering.github.io/pushsource/)
-- [PyPI](https://pypi.org/project/pushsource)
 
 
 Installation

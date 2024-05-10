@@ -21,7 +21,7 @@ from .container import (
 )
 from .modulemd import ModuleMdPushItem, ModuleMdSourcePushItem
 from .comps import CompsXmlPushItem
-from .productid import ProductIdPushItem
+from .productid import ProductId, ProductIdPushItem
 from .ami import (
     AmiPushItem,
     AmiRelease,

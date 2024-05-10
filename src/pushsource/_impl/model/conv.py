@@ -21,7 +21,7 @@ def sloppylist(value, elem_converter=None):
     Optionally use elem_converter to convert each list element.
     """
     if isinstance(value, str):
-        value = value.split(",")
+        value = [v.strip() for v in value.split(",")]
     if elem_converter:
         value = [elem_converter(elem) for elem in value]
     return frozenlist(value)

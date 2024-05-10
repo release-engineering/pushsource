@@ -8,6 +8,7 @@ from pushsource._impl.model import (
     CompsXmlPushItem,
     ModuleMdPushItem,
     ModuleMdSourcePushItem,
+    ProductId,
     ProductIdPushItem,
     RpmPushItem,
     ContainerImagePushItem,

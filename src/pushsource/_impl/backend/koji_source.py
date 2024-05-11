@@ -248,7 +248,7 @@ class KojiSource(Source):
             tls = self._cache.setdefault("tls", threading.local())
             if not hasattr(tls, "koji_session"):
                 LOG.debug("Creating koji session: %s", self._url)
-                tls.koji_session = koji.ClientSession(self._url)
+                tls.koji_session = koji.ClientSession(self._url, {"anon_retry": True})
         return tls.koji_session
 
     def _koji_check(self):

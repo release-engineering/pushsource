@@ -26,7 +26,8 @@ def test_koji_empty(fake_koji):
     assert list(source) == []
 
 
-def test_koji_connect_error():
+@patch("time.sleep")
+def test_koji_connect_error(time_sleep):
     """Source raises a reasonable error if server can't be contacted"""
 
     # Note: fake_koji fixture not used here, so this will really try to connect

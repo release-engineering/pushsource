@@ -21,7 +21,7 @@ class FakeKojiController(object):
         self.last_url = None
         self.next_build_id = 80000
 
-    def session(self, url):
+    def session(self, url, opts=None):
         self.last_url = url
         return FakeKojiSession(self)
 

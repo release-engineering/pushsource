@@ -86,7 +86,7 @@ Here's an example to give an idea of the metadata controlled by this file:
    payload:
       files:
          # desired name, doesn't need to be same as staged filename
-         filename: "RHEL-6.7-20150429.0-Client-i386-boot.iso"
+       - filename: "RHEL-6.7-20150429.0-Client-i386-boot.iso"
 
          # path relative to staging directory
          relative_path: "rhel-6-desktop-beta-isos__6Client__i386/FILES/RHEL-6.7-20150429.0-Client-i386-boot.iso"

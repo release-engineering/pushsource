@@ -25,6 +25,7 @@ class PubSource(Source):
         task_id,
         threads=4,
         timeout=60 * 60 * 4,
+        filename="images.json",
     ):
         """Create a new source.
 
@@ -44,6 +45,10 @@ class PubSource(Source):
             timeout (int)
                 Number of seconds after which an error is raised, if no progress is
                 made during queries to Pub.
+
+            filename (str)
+                The name of the file that will be pulled from a pubtask. The default
+                is set to `images.json`.
         """
 
         self._url = force_https(url)
@@ -52,6 +57,7 @@ class PubSource(Source):
         )
         self._client = PubClient(threads=threads, url=self._url)
         self._timeout = timeout
+        self._filename = filename
         # This executor doesn't use retry because pub-client executor already does that.
         self._executor = Executors.thread_pool(
             name="pushsource-pub", max_workers=threads
@@ -86,7 +92,10 @@ class PubSource(Source):
 
     def __iter__(self):
         # Get json Pub responses for all task ids
-        json_fs = [self._client.get_ami_json_f(task_id) for task_id in self._task_ids]
+        json_fs = [
+            self._client.get_ami_json_f(task_id, self._filename)
+            for task_id in self._task_ids
+        ]
 
         # Convert them to lists of push items
         push_items_fs = []

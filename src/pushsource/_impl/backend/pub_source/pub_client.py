@@ -46,12 +46,12 @@ class PubClient(object):
     def _do_request(self, **kwargs):
         return self._session.request(**kwargs)
 
-    def get_ami_json_f(self, task_id):
+    def get_ami_json_f(self, task_id, filename):
         """
         Returns Future[dict|list] holding json obj with AMI push items returned from Pub for given task id.
         """
         endpoint = "pub/task"
-        url_ending = "log/images.json"
+        url_ending = f"log/{filename}"
         params = {"format": "raw"}
         url = os.path.join(self._url, endpoint, str(task_id), url_ending)
 

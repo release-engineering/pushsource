@@ -5,6 +5,8 @@ import os
 import pytest
 import requests
 
+from datetime import datetime
+
 from pushsource import (
     AmiAccessEndpointUrl,
     AmiBillingCodes,
@@ -17,8 +19,8 @@ from pushsource import (
 DATAPATH = os.path.join(os.path.dirname(__file__), "data")
 
 
-def make_response(task_id):
-    with open(os.path.join(DATAPATH, str(task_id), "images.json")) as f:
+def make_response(task_id, filename="images.json"):
+    with open(os.path.join(DATAPATH, str(task_id), filename)) as f:
         return json.load(f)
 
 
@@ -93,6 +95,181 @@ def test_get_ami_push_items_single_task(requests_mock):
             ],
             access_endpoint_url=AmiAccessEndpointUrl(port=10, protocol="http"),
         )
+    ]
+
+
+def test_get_ami_push_items_single_task_clouds(requests_mock):
+    """
+    Tests getting push item from one Stratosphere Pub task.
+    """
+    # test setup
+    task_id = 123456
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+
+    requests_mock.register_uri(
+        "GET", request_url, json=make_response(task_id, "clouds.json")
+    )
+
+    # request push items from source
+    with Source.get(
+        "pub:%s" % pub_url, task_id=task_id, filename="clouds.json"
+    ) as source:
+        push_items = [item for item in source]
+
+    # there should be exactly one  push item
+    assert len(push_items) == 1
+
+    # with following content
+    assert push_items == [
+        AmiPushItem(
+            name="rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            state="PENDING",
+            src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            dest=["test-dest"],
+            release=AmiRelease(
+                product="RHEL-SAP",
+                date="20240717",
+                arch="x86_64",
+                respin=2116,
+                version="8.8",
+            ),
+            description="Provided by Red Hat, Inc.",
+            virtualization="hvm",
+            volume="gp2",
+            root_device="/dev/sda1",
+            sriov_net_support="simple",
+            ena_support=True,
+            release_notes="Fake release notes",
+            usage_instructions="Fake use instructions",
+            recommended_instance_type="t2.micro",
+            marketplace_entity_type="AmiProduct",
+            scanning_port=22,
+            user_name="Fake-Username",
+            security_groups=[
+                AmiSecurityGroup(
+                    from_port=22, ip_protocol="tcp", ip_ranges=["0.0.0.0/0"], to_port=22
+                ),
+            ],
+        )
+    ]
+
+
+def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
+    """
+    Tests getting push item from one Stratosphere RHCOS Pub task.
+    """
+    # test setup
+    task_id = 200
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+
+    requests_mock.register_uri(
+        "GET", request_url, json=make_response(task_id, "clouds.json")
+    )
+
+    # request push items from source
+    with Source.get(
+        "pub:%s" % pub_url, task_id=task_id, filename="clouds.json"
+    ) as source:
+        push_items = [item for item in source]
+
+    # there should be exactly one  push item
+    assert len(push_items) == 3
+
+    # with following content
+    assert push_items == [
+        AmiPushItem(
+            name="rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            state="PENDING",
+            src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            dest=["test-dest"],
+            release=AmiRelease(
+                product="RHEL-SAP",
+                date="20240717",
+                arch="x86_64",
+                respin=2116,
+                version="8.8",
+            ),
+            description="Provided by Red Hat, Inc.",
+            virtualization="hvm",
+            volume="gp2",
+            root_device="/dev/sda1",
+            sriov_net_support="simple",
+            ena_support=True,
+            release_notes="Fake release notes",
+            usage_instructions="Fake use instructions",
+            recommended_instance_type="t2.micro",
+            marketplace_entity_type="AmiProduct",
+            scanning_port=22,
+            user_name="Fake-Username",
+            security_groups=[
+                AmiSecurityGroup(
+                    from_port=22, ip_protocol="tcp", ip_ranges=["0.0.0.0/0"], to_port=22
+                ),
+            ],
+        ),
+        AmiPushItem(
+            name="rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            state="PENDING",
+            src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+            dest=["test-dest2"],
+            release=AmiRelease(
+                product="RHEL-SAP",
+                date="20240717",
+                arch="x86_64",
+                respin=2116,
+                version="8.8",
+            ),
+            description="Provided by Red Hat, Inc.",
+            virtualization="hvm",
+            volume="gp2",
+            root_device="/dev/sda1",
+            sriov_net_support="simple",
+            ena_support=True,
+            release_notes="Fake release notes",
+            usage_instructions="Fake use instructions",
+            recommended_instance_type="t2.micro",
+            marketplace_entity_type="AmiProduct",
+            scanning_port=22,
+            user_name="Fake-Username",
+            security_groups=[
+                AmiSecurityGroup(
+                    from_port=22, ip_protocol="tcp", ip_ranges=["0.0.0.0/0"], to_port=22
+                ),
+            ],
+        ),
+        AmiPushItem(
+            name="rhel-ec2-8.8-2175.x86_64.raw.xz",
+            state="PENDING",
+            src="/test/path/packages/rhel-ec2/8.8/2175/images/rhel-ec2-8.8-2175.x86_64.raw.xz",
+            dest=["testb"],
+            release=AmiRelease(
+                product="RHEL",
+                date="20240717",
+                arch="x86_64",
+                variant="BaseOS",
+                respin=2175,
+                version="8.8",
+                type="ga",
+            ),
+            description="Provided by Red Hat, Inc.",
+            type="hourly",
+            region="cn-north-1",
+            virtualization="hvm",
+            volume="gp3",
+            root_device="/dev/sda1",
+            sriov_net_support="simple",
+            ena_support=True,
+            billing_codes=AmiBillingCodes(name="Hourly2", codes=["bp-fake"]),
+            marketplace_entity_type="ACN",
+            public_image=True,
+            security_groups=[],
+        ),
     ]
 
 

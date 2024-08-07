@@ -16,7 +16,7 @@ def test_client():
 
 def test_pub_client_successful_request(requests_mock, caplog, test_client):
     """
-    Test Pub client behavior for succesule response from service.
+    Test Pub client behavior for successful response from service.
     """
     # test setup
     caplog.set_level(logging.DEBUG)
@@ -29,7 +29,7 @@ def test_pub_client_successful_request(requests_mock, caplog, test_client):
 
     # do request to service
     client = test_client
-    json_ft = client.get_ami_json_f(100)
+    json_ft = client.get_ami_json_f(100, "images.json")
 
     # we should get proper json response
     assert json_ft.result() == {"test": "OK"}
@@ -56,7 +56,7 @@ def test_pub_client_corrupted_json(requests_mock, caplog, test_client):
 
     # do request to service
     client = test_client
-    json_ft = client.get_ami_json_f(100)
+    json_ft = client.get_ami_json_f(100, "images.json")
 
     # we get None as response because of no valid json content
     assert json_ft.result() == None
@@ -84,7 +84,7 @@ def test_pub_client_404_status(requests_mock, caplog, test_client):
     # do request to service - 404 raises exception
     with pytest.raises(requests.exceptions.HTTPError) as exc:
         client = test_client
-        json_ft = client.get_ami_json_f(100)
+        json_ft = client.get_ami_json_f(100, "images.json")
         json_ft.result()
 
     # following lines are captured in logs - more line due to retries
@@ -120,7 +120,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
     # do request to service - 505 raises exception
     with pytest.raises(requests.exceptions.HTTPError) as exc:
         client = test_client
-        json_ft = client.get_ami_json_f(100)
+        json_ft = client.get_ami_json_f(100, "images.json")
         json_ft.result()
 
     # following lines are captured in logs - more line due to retries
@@ -157,7 +157,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
     # do request to service - 505 raises exception
     with pytest.raises(requests.exceptions.HTTPError) as exc:
         client = test_client
-        json_ft = client.get_ami_json_f(100)
+        json_ft = client.get_ami_json_f(100, "images.json")
         json_ft.result()
 
     # following lines are captured in logs - more line due to retries
@@ -192,7 +192,7 @@ def test_pub_client_timeout_error(requests_mock, caplog, test_client):
     # do request to service - Timeout exception
     with pytest.raises(requests.exceptions.Timeout):
         client = test_client
-        json_ft = client.get_ami_json_f(100)
+        json_ft = client.get_ami_json_f(100, "images.json")
         json_ft.result()
 
     # following lines are captured in log.

@@ -224,8 +224,8 @@ class AmiPushItem(VMIPushItem):
             "origin": data.get("origin") or None,
             # ami push item fields
             "release": AmiRelease._from_data(data.get("release") or {}),
-            "type": data["type"],
-            "region": data["region"],
+            "type": data.get("type") or None,
+            "region": data.get("region") or None,
             "virtualization": data["virtualization"],
             "volume": data["volume"],
             "root_device": data["root_device"],
@@ -236,8 +236,10 @@ class AmiPushItem(VMIPushItem):
             "boot_mode": (
                 BootMode(data.get("boot_mode")) if data.get("boot_mode") else None
             ),
-            "billing_codes": AmiBillingCodes._from_data(
-                data.get("billing_codes") or {}
+            "billing_codes": (
+                AmiBillingCodes._from_data(data.get("billing_codes"))
+                if data.get("billing_codes")
+                else None
             ),
             "image_id": data.get("ami") or None,
             "public_image": data.get("public_image"),

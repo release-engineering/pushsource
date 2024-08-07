@@ -12,7 +12,7 @@ from more_executors import Executors
 
 from ...source import Source
 from ...model import DirectoryPushItem
-from ...helpers import list_argument, as_completed_with_timeout_reset
+from ...helpers import list_argument, as_completed_with_timeout_reset, wait_exist
 
 from .staged_utils import StagingMetadata, StagingLeafDir
 from .staged_ami import StagedAmiMixin
@@ -133,6 +133,11 @@ class StagedSource(
 
     def _push_items_for_topdir(self, topdir):
         LOG.info("Checking files in: %s", topdir)
+
+        # wait for path availability
+        timeout = int(os.getenv("PUSHSOURCE_SRC_POLL_TIMEOUT") or "0")
+        poll_rate = int(os.getenv("PUSHSOURCE_SRC_POLL_RATE") or "30")
+        wait_exist(topdir, timeout, poll_rate)
 
         metadata = self._load_metadata(topdir)
 

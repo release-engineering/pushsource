@@ -35,7 +35,7 @@ def test_pub_client_successful_request(requests_mock, caplog, test_client):
     assert json_ft.result() == {"test": "OK"}
     # following lines are captured in logs
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 200",
     ]
@@ -62,7 +62,7 @@ def test_pub_client_corrupted_json(requests_mock, caplog, test_client):
     assert json_ft.result() == None
     # following lines are captured in logs
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 200",
     ]
@@ -80,6 +80,10 @@ def test_pub_client_404_status(requests_mock, caplog, test_client):
         url, "pub/task", str(task_id), "log/images.json?format=raw"
     )
     requests_mock.register_uri("GET", request_url, text="Not Found", status_code=404)
+    request_url = os.path.join(
+        url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_url, text="Not Found", status_code=404)
 
     # do request to service - 404 raises exception
     with pytest.raises(requests.exceptions.HTTPError) as exc:
@@ -89,15 +93,18 @@ def test_pub_client_404_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 404",
+        "GET https://test.example.com/pub/task/100/log/clouds.json?format=raw 404",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 404",
+        "GET https://test.example.com/pub/task/100/log/clouds.json?format=raw 404",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 404",
+        "GET https://test.example.com/pub/task/100/log/clouds.json?format=raw 404",
     ]
     # check exception value
     assert (
-        "404 Client Error: None for url: https://test.example.com/pub/task/100/log/images.json?format=raw"
+        "404 Client Error: None for url: https://test.example.com/pub/task/100/log/clouds.json?format=raw"
         in str(exc.value)
     )
 
@@ -125,7 +132,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
@@ -162,7 +169,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
@@ -197,6 +204,6 @@ def test_pub_client_timeout_error(requests_mock, caplog, test_client):
 
     # following lines are captured in log.
     assert caplog.messages == [
-        "Requesting Pub service for log/images.json of task: 100",
+        "Fetching AMI details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
     ]

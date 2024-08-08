@@ -43,19 +43,25 @@ class PubClient(object):
             self._tls.session = requests.Session()
         return self._tls.session
 
-    def _do_request(self, **kwargs):
-        return self._session.request(**kwargs)
+    def _do_request(self, url, **kwargs):
+        kwargs["url"] = url.format(filename="images.json")
+        resp = self._session.request(**kwargs)
+        # if 404 lets try clouds.json
+        if resp.status_code == 404:
+            kwargs["url"] = url.format(filename="clouds.json")
+            resp = self._session.request(**kwargs)
+        return resp
 
     def get_ami_json_f(self, task_id):
         """
         Returns Future[dict|list] holding json obj with AMI push items returned from Pub for given task id.
         """
         endpoint = "pub/task"
-        url_ending = "log/images.json"
+        url_ending = "log/{filename}"
         params = {"format": "raw"}
         url = os.path.join(self._url, endpoint, str(task_id), url_ending)
 
-        LOG.info("Requesting Pub service for %s of task: %s", url_ending, str(task_id))
+        LOG.info("Fetching AMI details from Pub task: %s", str(task_id))
         ft = self._executor.submit(
             self._do_request, method="GET", url=url, params=params
         )

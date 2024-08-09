@@ -1,0 +1,139 @@
+[
+  {
+    "boot_mode": null,
+    "build": "rhel-sap-ec2-8.8-2116",
+    "build_info": {
+      "id": 3176889,
+      "name": "rhel-sap-ec2",
+      "release": "2116",
+      "version": "8.8"
+    },
+    "description": "Provided by Red Hat, Inc.",
+    "dest": [
+      "test-dest"
+    ],
+    "ena_support": true,
+    "image_id": "ami-test",
+    "marketplace_entity_type": "AmiProduct",
+    "md5sum": "0ef2038e599967f7074b6c52e5b2afae",
+    "name": "rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+    "recommended_instance_type": "t2.micro",
+    "release": {
+      "arch": "x86_64",
+      "base_product": null,
+      "base_version": null,
+      "date": "20240717",
+      "product": "RHEL-SAP",
+      "respin": 2116,
+      "type": null,
+      "variant": null,
+      "version": "8.8"
+    },
+    "release_notes": "Fake release notes",
+    "root_device": "/dev/sda1",
+    "scanning_port": 22,
+    "security_groups": [
+      {
+        "from_port": 22,
+        "ip_protocol": "tcp",
+        "ip_ranges": [
+          "0.0.0.0/0"
+        ],
+        "to_port": 22
+      }
+    ],
+    "src": "/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
+    "sriov_net_support": "simple",
+    "starmap_query": {
+      "clouds": {
+        "aws-emea": [
+          {
+            "architecture": "x86_64",
+            "destination": "test-dest",
+            "id": null,
+            "meta": {
+              "description": "Provided by Red Hat Limited.",
+              "ena_support": true,
+              "marketplace_entity_type": "AmiProduct",
+              "recommended_instance_type": "t2.micro",
+              "release_notes": "Fake release notes",
+              "root_device": "/dev/sda1",
+              "scanning_port": 22,
+              "security_groups": [
+                {
+                  "from_port": 22,
+                  "ip_protocol": "tcp",
+                  "ip_ranges": [
+                    "0.0.0.0/0"
+                  ],
+                  "to_port": 22
+                }
+              ],
+              "sharing_accounts": [
+                "tester"
+              ],
+              "sriov_net_support": "simple",
+              "usage_instructions": "Fake use instructions",
+              "user_name": "Fake-Username",
+              "virtualization": "hvm",
+              "volume": "gp2"
+            },
+            "overwrite": false,
+            "provider": null,
+            "restrict_major": null,
+            "restrict_minor": null,
+            "restrict_version": true,
+            "tags": {}
+          }
+        ],
+        "aws-na": [
+          {
+            "architecture": "x86_64",
+            "destination": "test-dest2",
+            "id": null,
+            "meta": {
+              "description": "Provided by Red Hat, Inc.",
+              "ena_support": true,
+              "marketplace_entity_type": "AmiProduct",
+              "recommended_instance_type": "t2.micro",
+              "release_notes": "Fake release notes",
+              "root_device": "/dev/sda1",
+              "scanning_port": 22,
+              "security_groups": [
+                {
+                  "from_port": 22,
+                  "ip_protocol": "tcp",
+                  "ip_ranges": [
+                    "0.0.0.0/0"
+                  ],
+                  "to_port": 22
+                }
+              ],
+              "sharing_accounts": [
+                "tester"
+              ],
+              "sriov_net_support": "simple",
+              "usage_instructions": "Fake use instructions",
+              "user_name": "Fake-Username",
+              "virtualization": "hvm",
+              "volume": "gp2"
+            },
+            "overwrite": false,
+            "provider": null,
+            "restrict_major": null,
+            "restrict_minor": null,
+            "restrict_version": true,
+            "tags": {}
+          }
+        ]
+      },
+      "name": "rhel-sap-ec2",
+      "workflow": "stratosphere"
+    },
+    "state": "PUSHED",
+    "usage_instructions": "Fake use instructions",
+    "user_name": "Fake-Username",
+    "virtualization": "hvm",
+    "volume": "gp2"
+  }
+]

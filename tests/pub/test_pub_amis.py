@@ -12,6 +12,7 @@ from pushsource import (
     AmiRelease,
     Source,
     AmiSecurityGroup,
+    KojiBuildInfo,
 )
 
 DATAPATH = os.path.join(os.path.dirname(__file__), "data")
@@ -131,6 +132,14 @@ def test_get_ami_push_items_single_task_clouds(requests_mock):
             state="PENDING",
             src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
             dest=["test-dest"],
+            image_id="ami-test",
+            build="rhel-sap-ec2-8.8-2116",
+            build_info=KojiBuildInfo(
+                name="rhel-sap-ec2",
+                version="8.8",
+                release="2116",
+                id=None,
+            ),
             release=AmiRelease(
                 product="RHEL-SAP",
                 date="20240717",
@@ -194,6 +203,14 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
             state="PENDING",
             src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
             dest=["test-dest"],
+            image_id="ami-test",
+            build="rhel-sap-ec2-8.8-2116",
+            build_info=KojiBuildInfo(
+                name="rhel-sap-ec2",
+                version="8.8",
+                release="2116",
+                id=None,
+            ),
             release=AmiRelease(
                 product="RHEL-SAP",
                 date="20240717",
@@ -224,6 +241,14 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
             state="PENDING",
             src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ec2-8.8-2116.x86_64.raw.xz",
             dest=["test-dest2"],
+            build="rhel-sap-ec2-8.8-2116",
+            build_info=KojiBuildInfo(
+                name="rhel-sap-ec2",
+                version="8.8",
+                release="2116",
+                id=None,
+            ),
+            image_id="ami-test",
             release=AmiRelease(
                 product="RHEL-SAP",
                 date="20240717",
@@ -254,6 +279,14 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
             state="PENDING",
             src="/test/path/packages/rhel-ec2/8.8/2175/images/rhel-ec2-8.8-2175.x86_64.raw.xz",
             dest=["testb"],
+            build="rhel-ec2-8.8-2175",
+            build_info=KojiBuildInfo(
+                name="rhel-ec2",
+                version="8.8",
+                release="2175",
+                id=None,
+            ),
+            image_id="ami-test",
             release=AmiRelease(
                 product="RHEL",
                 date="20240717",

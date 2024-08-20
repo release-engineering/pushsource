@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.47.1] - 2024-08-21
+
+### Fixed
+
+- Fixed handling of missing fields in `clouds.json`
+
 ## [2.47.0] - 2024-08-13
 
 ### Added
@@ -522,7 +528,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.47.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.47.1...HEAD
+[2.47.1]: https://github.com/release-engineering/pushsource/compare/v2.47.0...v2.47.1
 [2.47.0]: https://github.com/release-engineering/pushsource/compare/v2.46.1...v2.47.0
 [2.46.1]: https://github.com/release-engineering/pushsource/compare/v2.46.0...v2.46.1
 [2.46.0]: https://github.com/release-engineering/pushsource/compare/v2.45.0...v2.46.0

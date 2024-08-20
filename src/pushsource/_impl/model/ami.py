@@ -218,6 +218,7 @@ class AmiPushItem(VMIPushItem):
         kwargs = {
             # base push item fields
             "name": data["name"],
+            "build": data.get("build") or None,
             "state": "PENDING",
             "src": data.get("src") or None,
             "dest": data.get("dest") or [],
@@ -241,7 +242,7 @@ class AmiPushItem(VMIPushItem):
                 if data.get("billing_codes")
                 else None
             ),
-            "image_id": data.get("ami") or None,
+            "image_id": data.get("ami") or data.get("image_id") or None,
             "public_image": data.get("public_image"),
             "release_notes": data.get("release_notes") or None,
             "usage_instructions": data.get("usage_instructions") or None,

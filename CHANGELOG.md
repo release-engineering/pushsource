@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.47.2] - 2024-09-05
+
+### Fixed
+
+- Fixed certain `AmiPushItem` fields wrongly treated as mandatory by
+  `pub` and `staged` sources
+
 ## [2.47.1] - 2024-08-21
 
 ### Fixed
@@ -528,7 +535,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.47.1...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.47.2...HEAD
+[2.47.2]: https://github.com/release-engineering/pushsource/compare/v2.47.1...v2.47.2
 [2.47.1]: https://github.com/release-engineering/pushsource/compare/v2.47.0...v2.47.1
 [2.47.0]: https://github.com/release-engineering/pushsource/compare/v2.46.1...v2.47.0
 [2.46.1]: https://github.com/release-engineering/pushsource/compare/v2.46.0...v2.46.1

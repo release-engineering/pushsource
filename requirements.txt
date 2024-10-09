@@ -300,10 +300,10 @@ kobo==0.37.0 \
     --hash=sha256:05ee956fb40aff3eaa2abf2cdec931245f5d6fb6ba8ea6c19f6e26c7ea602fb9 \
     --hash=sha256:3a76e9748a1d218aa91e7ae6ffaed43dcd25984cb09a9c1db19a1f7648665141
     # via -r requirements.in
-koji==1.35.0 \
-    --hash=sha256:22d4b971d122b606d99160ca20dbddc97b6cb2f1b883699f84bac1e7bb18a5b8 \
-    --hash=sha256:56615a1af842bae2c151b78840ce75848bbb4143cd1851e7cf7430be2ee59179 \
-    --hash=sha256:72137a841d70dddc872091af5760b5236d4aeb956e88c5d33d80467cadfdc475
+koji==1.35.1 \
+    --hash=sha256:0302a5c12173938f88edc02dbd1fb55631454ccd3c6543446edc83befb89d3e1 \
+    --hash=sha256:8321c22920029ca2e8cf6f38eed087e2af947f40fece50aba7f0d52defd1636f \
+    --hash=sha256:916e7dd68e14980ed7245cbd700b74e79e913cfd4f250367307a8fce866381c6
     # via -r requirements.in
 more-executors==2.11.4 \
     --hash=sha256:a304139c6bece5be18aed7dcff4c48440412cb7cbe90f64ba4572772fcb0407f \

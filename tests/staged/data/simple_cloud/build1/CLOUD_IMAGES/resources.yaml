@@ -1,0 +1,14 @@
+api: v1
+resource: CloudImage
+images:
+   - path: something1.raw.xz
+     architecture: x86_64
+   - path: something2.raw.xz
+     architecture: arm64
+build:
+  name: rhel-ec2
+  version: "9.4"
+  respin: "1"
+description: "build1 sample"
+boot_mode: hybrid
+type: AMI

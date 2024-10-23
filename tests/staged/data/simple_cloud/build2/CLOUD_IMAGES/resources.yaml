@@ -11,4 +11,4 @@ build:
   respin: "1"
 description: "build2 sample"
 boot_mode: hybrid
-type: AMI
+type: VHD

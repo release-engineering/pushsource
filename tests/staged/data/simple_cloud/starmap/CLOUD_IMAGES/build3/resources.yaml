@@ -1,0 +1,22 @@
+api: v1
+resource: CloudImage
+images:
+   - path: something1.raw.xz
+     architecture: x86_64
+build:
+  name: rhel-ec2
+  version: "9.4"
+  respin: "1"
+release:
+  arch: x86_64
+  base_product: null
+  base_version: null
+  date: "20200511"
+  product: Fake-Product
+  respin: 1
+  type: ga
+  variant: Fake-Variant
+  version: Fake-Version
+description: "build3 sample"
+boot_mode: hybrid
+type: AMI

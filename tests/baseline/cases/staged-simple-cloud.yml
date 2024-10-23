@@ -18,86 +18,6 @@ items:
       name: rhel-ec2
       release: '1'
       version: '9.4'
-    description: build1 sample
-    dest: []
-    ena_support: null
-    image_id: null
-    marketplace_entity_type: null
-    marketplace_name: null
-    marketplace_title_template: null
-    md5sum: null
-    name: something1.raw.xz
-    origin: {{ src_dir }}/tests/staged/data/simple_cloud
-    public_image: null
-    recommended_instance_type: null
-    region: null
-    release: null
-    release_notes: null
-    root_device: null
-    scanning_port: null
-    security_groups: []
-    sha256sum: null
-    signing_key: null
-    src: {{ src_dir }}/tests/staged/data/simple_cloud/build1/CLOUD_IMAGES/something1.raw.xz
-    sriov_net_support: null
-    state: PENDING
-    type: AMI
-    uefi_support: null
-    usage_instructions: null
-    user_name: null
-    version_title: null
-    virtualization: null
-    volume: null
-- AmiPushItem:
-    access_endpoint_url: null
-    billing_codes: null
-    boot_mode: hybrid
-    build: null
-    build_info:
-      id: null
-      name: rhel-ec2
-      release: '1'
-      version: '9.4'
-    description: build1 sample
-    dest: []
-    ena_support: null
-    image_id: null
-    marketplace_entity_type: null
-    marketplace_name: null
-    marketplace_title_template: null
-    md5sum: null
-    name: something2.raw.xz
-    origin: {{ src_dir }}/tests/staged/data/simple_cloud
-    public_image: null
-    recommended_instance_type: null
-    region: null
-    release: null
-    release_notes: null
-    root_device: null
-    scanning_port: null
-    security_groups: []
-    sha256sum: null
-    signing_key: null
-    src: {{ src_dir }}/tests/staged/data/simple_cloud/build1/CLOUD_IMAGES/something2.raw.xz
-    sriov_net_support: null
-    state: PENDING
-    type: AMI
-    uefi_support: null
-    usage_instructions: null
-    user_name: null
-    version_title: null
-    virtualization: null
-    volume: null
-- AmiPushItem:
-    access_endpoint_url: null
-    billing_codes: null
-    boot_mode: hybrid
-    build: null
-    build_info:
-      id: null
-      name: rhel-ec2
-      release: '1'
-      version: '9.4'
     description: build2 sample
     dest: []
     ena_support: null
@@ -107,7 +27,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something1.raw.xz
-    origin: {{ src_dir }}/tests/staged/data/simple_cloud
+    origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2
     public_image: null
     recommended_instance_type: null
     region: null
@@ -118,7 +38,7 @@ items:
     security_groups: []
     sha256sum: null
     signing_key: null
-    src: {{ src_dir }}/tests/staged/data/simple_cloud/build2/CLOUD_IMAGES/something1.raw.xz
+    src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something1.raw.xz
     sriov_net_support: null
     state: PENDING
     type: AMI
@@ -147,7 +67,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something2.raw.xz
-    origin: {{ src_dir }}/tests/staged/data/simple_cloud
+    origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2
     public_image: null
     recommended_instance_type: null
     region: null
@@ -158,7 +78,7 @@ items:
     security_groups: []
     sha256sum: null
     signing_key: null
-    src: {{ src_dir }}/tests/staged/data/simple_cloud/build2/CLOUD_IMAGES/something2.raw.xz
+    src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something2.raw.xz
     sriov_net_support: null
     state: PENDING
     type: AMI
@@ -168,3 +88,106 @@ items:
     version_title: null
     virtualization: null
     volume: null
+- AmiPushItem:
+    access_endpoint_url: null
+    billing_codes: null
+    boot_mode: hybrid
+    build: null
+    build_info:
+      id: null
+      name: rhel-ec2
+      release: '1'
+      version: '9.4'
+    description: build3 sample
+    dest: []
+    ena_support: null
+    image_id: null
+    marketplace_entity_type: null
+    marketplace_name: null
+    marketplace_title_template: null
+    md5sum: null
+    name: something1.raw.xz
+    origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build3
+    public_image: null
+    recommended_instance_type: null
+    region: null
+    release:
+      arch: x86_64
+      base_product: null
+      base_version: null
+      date: 2020-05-11
+      product: Fake-Product
+      respin: 1
+      type: ga
+      variant: Fake-Variant
+      version: Fake-Version
+    release_notes: null
+    root_device: null
+    scanning_port: null
+    security_groups: []
+    sha256sum: null
+    signing_key: null
+    src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build3/something1.raw.xz
+    sriov_net_support: null
+    state: PENDING
+    type: AMI
+    uefi_support: null
+    usage_instructions: null
+    user_name: null
+    version_title: null
+    virtualization: null
+    volume: null
+- VHDPushItem:
+    boot_mode: null
+    build: null
+    build_info:
+      id: null
+      name: rhel-ec2
+      release: '1'
+      version: '9.4'
+    description: build1 sample
+    dest: []
+    disk_version: null
+    generation: V2
+    legacy_sku_id: null
+    marketplace_name: null
+    marketplace_title_template: null
+    md5sum: null
+    name: something1.raw.xz
+    origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
+    recommended_sizes: []
+    release: null
+    sas_uri: null
+    sha256sum: null
+    signing_key: null
+    sku_id: null
+    src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something1.raw.xz
+    state: PENDING
+    support_legacy: false
+- VHDPushItem:
+    boot_mode: null
+    build: null
+    build_info:
+      id: null
+      name: rhel-ec2
+      release: '1'
+      version: '9.4'
+    description: build1 sample
+    dest: []
+    disk_version: null
+    generation: V2
+    legacy_sku_id: null
+    marketplace_name: null
+    marketplace_title_template: null
+    md5sum: null
+    name: something2.raw.xz
+    origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
+    recommended_sizes: []
+    release: null
+    sas_uri: null
+    sha256sum: null
+    signing_key: null
+    sku_id: null
+    src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something2.raw.xz
+    state: PENDING
+    support_legacy: false

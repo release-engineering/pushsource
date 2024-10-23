@@ -1,0 +1,258 @@
+---
+# Schema for metadata file "resources.yaml" accompanying a 
+# cloud staged source.
+#
+# For general information about staging directories, see:
+# https://release-engineering.github.io/pushsource/sources/staged.html
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/cloud-schema.yaml
+
+
+###############################################################################
+#  Subschemas
+definitions:
+    ami_release:
+        # Release metadata for an AMI.
+        type: object
+        properties:
+            product:
+                type: string
+                minLength: 1
+            version:
+                $ref: "#/definitions/optional_string"
+            base_product:
+                $ref: "#/definitions/optional_string"
+            base_version:
+                $ref: "#/definitions/optional_string"
+            variant:
+                $ref: "#/definitions/optional_string"
+            arch:
+                type: string
+                enum:
+                - arm64
+                - x86_64
+            respin:
+                type: integer
+            type:
+                $ref: "#/definitions/optional_string"
+                enum: ['ga', 'beta', null]
+            date:
+                type: string
+                minLength: 1
+                pattern: "^[0-9]{8}$"
+        required:
+        - product
+        - date
+        - arch
+        - respin
+
+    optional_string:
+        # A field which may hold a non-empty string, or null.
+        type:
+        - string
+        - "null"
+        minLength: 1
+
+    ami_billing_codes:
+        # Billing codes for an AMI
+        type:
+        - object
+        - "null"
+        properties:
+            name:
+                type: string
+            codes:
+                type: array
+                items:
+                    type: string
+        required:
+        - name
+        - codes
+
+    image:
+      type: object
+      properties:
+        path:
+          type: string
+        architecture:
+          type: string
+
+type: object
+properties:
+    api:
+      type: string
+      enum: ["v1"]
+    resource:
+      type: string
+      enum: ["CloudImage"]
+    images:
+      type: array
+      items:
+        $ref: "#/definitions/image"
+    build:
+      type: object
+      properties:
+        name: string
+        version: string
+        respin: string
+    description:
+      type: string
+    boot_mode:
+      enum: [ 'hybrid', 'uefi', 'legacy', null ]
+    type:
+      enum: ['AMI', 'VHD', null]
+    release:
+      $ref: "#/definitions/ami_release"
+
+    region:
+        # AWS region to which this AMI should be pushed.
+        type: string
+        minLength: 1
+
+    type:
+        # Billing type for the image.
+        type: string
+        enum:
+        - hourly
+        - access
+        - marketplace
+
+    virtualization:
+        # Virtualization type.
+        type: string
+        enum:
+        - hvm
+
+    volume:
+        type: string
+        enum:
+        - standard
+        - gp2
+        - gp3
+        - io1
+        - io2
+        - st1
+        - sc1
+
+    root_device:
+        type: string
+        minLength: 1
+
+    description:
+        $ref: "#/definitions/optional_string"
+
+    sriov_net_support:
+        type:
+        - string
+        - "null"
+        enum:
+        - simple
+        - null
+
+    ena_support:
+        type:
+        - boolean
+        - "null"
+
+    uefi_support:
+        type:
+        - boolean
+        - "null"
+
+    billing_codes:
+        $ref: "#/definitions/ami_billing_codes"
+
+    boot_mode:
+        enum: [ 'hybrid', 'uefi', 'legacy', null ]
+
+    public_image:
+        type:
+        - boolean
+        - "null"
+    release_notes:
+        $ref: "#/definitions/optional_string"
+
+    usage_instructions:
+        $ref: "#/definitions/optional_string"
+
+    recommended_instance_type:
+        $ref: "#/definitions/optional_string"
+
+    marketplace_entity_type:
+        $ref: "#/definitions/optional_string"
+
+    scanning_port:
+        type:
+            - number
+            - "null"
+        minimum: 0
+        maximum: 65536
+
+    user_name:
+        $ref: "#/definitions/optional_string"
+    version_title:
+        $ref: "#/definitions/optional_string"
+    marketplace_title_template:
+        $ref: "#/definitions/optional_string"
+    marketplace_name:
+        $ref: "#/definitions/optional_string"
+    security_groups:
+        type:
+            - array
+            - "null"
+        items:
+            type: object
+            properties:
+                ip_protocol:
+                    type: string
+                ip_ranges:
+                    type: array
+                    items:
+                        type: string
+            if:
+                properties:
+                    ip_protocol:
+                        enum: ["icmp", "icmpv6"]
+            then:
+                properties:
+                    from_port:
+                        type: number
+                        minimum: -1
+                        maximum: 255
+                    to_port:
+                        type: number
+                        minimum: -1
+                        maximum: 255
+            else:
+                properties:
+                    from_port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+                    to_port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+
+    access_endpoint_url:
+        type:
+        - object
+        - "null"
+        properties:
+            port:
+                type: number
+                minimum: 0
+                maximum: 65536
+            protocol:
+                enum: ["http", "https"]
+
+required:
+- api
+- resource
+- images
+- build
+- description
+
+additionalProperties: false

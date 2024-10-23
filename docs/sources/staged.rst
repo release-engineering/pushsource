@@ -55,6 +55,7 @@ Here is a brief overview of the structure of a staging directory:
   root/destination/MODULEMD/*
   root/destination/RPMS/*.rpm
   root/destination/AWS_IMAGES/*
+  root/destination/CLOUD_IMAGES/*
   root/destination/RAW/*
 
 The staging directory consists of:
@@ -195,6 +196,19 @@ Amazon Machine Image (AMI).
 Files in this directory must have metadata included in ``staged.yaml``.
 
 Will yield instances of :class:`~pushsource.AmiPushItem`.
+
+root/destination/CLOUD_IMAGES/\*
+..............................
+
+The ``CLOUD_IMAGES`` should contain the VMI(s) plus a ``resources.yaml``.
+
+The ``resources.yaml`` contains all the information needed for the
+images in that folder.
+
+Files in this directory should not include the ``staged.yaml``.
+
+Will yield instances of either :class:`~pushsource.AmiPushItem` or
+:class:`~pushsource.VHDPushItem`.
 
 root/destination/RAW/\*
 .......................

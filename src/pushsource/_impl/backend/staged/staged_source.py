@@ -16,6 +16,7 @@ from ...helpers import list_argument, as_completed_with_timeout_reset, wait_exis
 
 from .staged_utils import StagingMetadata, StagingLeafDir
 from .staged_ami import StagedAmiMixin
+from .staged_cloud import StagedCloudMixin
 from .staged_files import StagedFilesMixin
 from .staged_errata import StagedErrataMixin
 from .staged_compsxml import StagedCompsXmlMixin
@@ -33,6 +34,7 @@ CACHE_LOCK = threading.RLock()
 class StagedSource(
     Source,
     StagedAmiMixin,
+    StagedCloudMixin,
     StagedFilesMixin,
     StagedErrataMixin,
     StagedCompsXmlMixin,
@@ -179,7 +181,11 @@ class StagedSource(
         )
         for f in completed_fs:
             for pushitem in f.result():
-                yield pushitem
+                if isinstance(pushitem, list):
+                    for p in pushitem:
+                        yield p
+                else:
+                    yield pushitem
 
 
 Source.register_backend("staged", StagedSource)

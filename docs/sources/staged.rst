@@ -200,15 +200,14 @@ Will yield instances of :class:`~pushsource.AmiPushItem`.
 root/destination/CLOUD_IMAGES/\*
 ................................
 
-The ``CLOUD_IMAGES`` directory should contain the VMI(s) plus a ``resources.yaml``.
+Each directory within ``CLOUD_IMAGES`` should contain one or more VMI(s) plus a
+``resources.yaml`` .
 
 The ``resources.yaml`` contains all the information needed for the
 images in that folder.
 
 :ref:`cloud_schema` provides a complete reference of the fields which can be set by this
 file.
-
-A blank ``staged.yaml`` must be included in the root directory.
 
 Will yield instances of either :class:`~pushsource.AmiPushItem` or
 :class:`~pushsource.VHDPushItem`.

@@ -19,7 +19,8 @@ items:
       release: '1'
       version: '9.4'
     description: build2 sample
-    dest: []
+    dest:
+    - starmap
     ena_support: null
     image_id: null
     marketplace_entity_type: null
@@ -59,7 +60,8 @@ items:
       release: '1'
       version: '9.4'
     description: build2 sample
-    dest: []
+    dest:
+    - starmap
     ena_support: null
     image_id: null
     marketplace_entity_type: null
@@ -99,7 +101,8 @@ items:
       release: '1'
       version: '9.4'
     description: build3 sample
-    dest: []
+    dest:
+    - starmap
     ena_support: null
     image_id: null
     marketplace_entity_type: null
@@ -146,7 +149,8 @@ items:
       release: '1'
       version: '9.4'
     description: build1 sample
-    dest: []
+    dest:
+    - starmap
     disk_version: null
     generation: V2
     legacy_sku_id: null
@@ -173,7 +177,8 @@ items:
       release: '1'
       version: '9.4'
     description: build1 sample
-    dest: []
+    dest:
+    - starmap
     disk_version: null
     generation: V2
     legacy_sku_id: null

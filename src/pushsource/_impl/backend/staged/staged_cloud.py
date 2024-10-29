@@ -9,9 +9,10 @@ LOG = logging.getLogger("pushsource")
 
 
 class StagedCloudMixin(StagedBaseMixin):
-    def __build_ami_push_item(self, resources, src, origin, name):
+    def __build_ami_push_item(self, resources, origin, name, dest):
         build_resources = resources.get("build")
-        release_resources = resources.get("release", {})
+        release_resources = resources.get("release") or {}
+        src = os.path.join(origin, name)
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
             version=build_resources.get("version"),
@@ -22,6 +23,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "src": src,
             "build_info": build_info,
             "origin": origin,
+            "dest": [dest],
         }
 
         image_kwargs.update(
@@ -54,7 +56,6 @@ class StagedCloudMixin(StagedBaseMixin):
             image_kwargs["release"] = AmiRelease(**release_kwargs)
 
         image_attrs = [
-            "dest",
             "type",
             "region",
             "virtualization",
@@ -83,8 +84,9 @@ class StagedCloudMixin(StagedBaseMixin):
 
         return AmiPushItem(**image_kwargs)
 
-    def __build_azure_push_item(self, resources, src, origin, name):
+    def __build_azure_push_item(self, resources, origin, name, dest):
         build_resources = resources.get("build")
+        src = os.path.join(origin, name)
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
             version=build_resources.get("version"),
@@ -96,46 +98,45 @@ class StagedCloudMixin(StagedBaseMixin):
             "description": resources.get("description"),
             "build_info": build_info,
             "origin": origin,
+            "dest": [dest],
         }
         return VHDPushItem(**image_kwargs)
-    
-    def __process_builds(self, build_dirs):
-        out = []
-        for bd in build_dirs:
-            yaml_path = os.path.join(bd, "resources.yaml")
-            try:
-                with open(yaml_path, "rt") as fh:
-                    raw = yaml.safe_load(fh)
-            except FileNotFoundError as e:
-                LOG.warning("No resources.yaml file found at %s (ignored)", yaml_path)
-                continue
-            if not raw:
-                continue
-            image_type = raw.get("type", "")
-            images_info = raw.get("images", [])
 
-            for image in images_info:
-                if "/" in image.get("path"):
-                    LOG.warning("Unexpected '/' in %s (ignored)", image_relative_path)
-                    continue
-                image_relative_path = os.path.join(bd, image.get("path"))
-                if image_type == "AMI":
-                    out.append(
-                        self.__build_ami_push_item(
-                            raw, image_relative_path, bd, image.get("path")
-                        )
+    def __process_builds(self, current_dir, leafdir):
+        yaml_path = os.path.join(current_dir, "resources.yaml")
+        try:
+            with open(yaml_path, "rt") as fh:
+                raw = yaml.safe_load(fh)
+        except FileNotFoundError:
+            LOG.warning("No resources.yaml file found at %s (ignored)", yaml_path)
+            return
+        if not raw:
+            LOG.warning("Resources.yaml file at %s is empty (ignored)", yaml_path)
+            return
+        image_type = raw.get("type") or ""
+        images_info = raw.get("images") or []
+        out = []
+        for image in images_info:
+            if "/" in image.get("path"):
+                LOG.warning("Unexpected '/' in %s (ignored)", image.get("path"))
+                return
+            if image_type == "AMI":
+                out.append(
+                    self.__build_ami_push_item(
+                        raw, current_dir, image.get("path"), leafdir.dest
                     )
-                elif image_type == "VHD":
-                    out.append(
-                        self.__build_azure_push_item(
-                            raw, image_relative_path, bd, image.get("path")
-                        )
+                )
+            elif image_type == "VHD":
+                out.append(
+                    self.__build_azure_push_item(
+                        raw, current_dir, image.get("path"), leafdir.dest
                     )
+                )
         return out
 
-    @handles_type("CLOUD_IMAGES")
-    def __cloud_push_item(self, leafdir, _, entry):
-        builds = [ f.path for f in os.scandir(leafdir.path) if f.is_dir() ]
-        out = self.__process_builds(builds)
+    @handles_type("CLOUD_IMAGES",
+                  accepts=lambda entry: entry.is_dir() and os.path.exists(os.path.join(entry.path, "resources.yaml")))
+    def __cloud_push_item(self, leafdir, metadata, entry):
+        out = self.__process_builds(entry.path, leafdir)
 
         return out

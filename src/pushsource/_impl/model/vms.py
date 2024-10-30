@@ -19,6 +19,10 @@ class BootMode(enum.Enum):
     legacy = "legacy"
     """Supports only BIOS mode."""
 
+    def __repr__(self):
+        cls_name = self.__class__.__name__
+        return f"{cls_name}.{self.name}"
+
 
 @attr.s()
 class VMIRelease(object):

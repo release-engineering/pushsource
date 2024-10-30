@@ -2,13 +2,24 @@ import logging
 import os
 import yaml
 
+from datetime import datetime, timezone
+
 from .staged_base import StagedBaseMixin, handles_type
-from ...model import VHDPushItem, AmiPushItem, AmiRelease, BootMode, KojiBuildInfo
+from ...model import VHDPushItem, VMIRelease, AmiPushItem, AmiRelease, BootMode, KojiBuildInfo
 
 LOG = logging.getLogger("pushsource")
 
 
 class StagedCloudMixin(StagedBaseMixin):
+    def __get_product_name(self, base_name):
+        splitted_name = base_name.split("-")
+        if len(splitted_name) > 1:
+            product = "-".join(splitted_name[:-1])
+        else:
+            product = splitted_name[0]
+        return product
+
+
     def __build_ami_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
         release_resources = resources.get("release") or {}
@@ -38,24 +49,23 @@ class StagedCloudMixin(StagedBaseMixin):
             }
         )
 
-        release_required = ["product", "date", "arch", "respin"]
-        if all(x in release_resources.keys() for x in release_required):
-            release_attrs = [
-                "product",
-                "date",
-                "arch",
-                "respin",
-                "version",
-                "base_product",
-                "base_version",
-                "variant",
-                "type",
-            ]
-            release_kwargs = {}
-            for key in release_attrs:
-                release_kwargs[key] = release_resources.get(key)
+        release_kwargs = {
+            "product": self.__get_product_name(build_resources.get("name")),
+            "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
+            "arch": image.get("architecture"),
+            "respin": int(build_resources.get("respin")) or 0
+        }
+        release_attrs = [
+            "version",
+            "base_product",
+            "base_version",
+            "variant",
+            "type",
+        ]
+        for key in release_attrs:
+            release_kwargs[key] = release_resources.get(key)
 
-            image_kwargs["release"] = AmiRelease(**release_kwargs)
+        image_kwargs["release"] = AmiRelease(**release_kwargs)
 
         image_attrs = [
             "type",
@@ -95,6 +105,14 @@ class StagedCloudMixin(StagedBaseMixin):
             version=build_resources.get("version"),
             release=build_resources.get("respin"),
         )
+
+        release_kwargs = {
+            "product": self.__get_product_name(build_resources.get("name")),
+            "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
+            "arch": image.get("architecture"),
+            "respin": int(build_resources.get("respin")) or 0
+        }
+
         image_kwargs = {
             "name": name,
             "src": src,
@@ -103,6 +121,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "origin": origin,
             "dest": [dest],
             "sha256sum": image.get("sha256sum"),
+            "release": VMIRelease(**release_kwargs)
         }
         return VHDPushItem(**image_kwargs)
 
@@ -127,14 +146,10 @@ class StagedCloudMixin(StagedBaseMixin):
                 return
             if image_type == "AMI":
                 out.append(
-                    self.__build_ami_push_item(
-                        raw, entry.path, image, leafdir.dest
-                    )
+                    self.__build_ami_push_item(raw, entry.path, image, leafdir.dest)
                 )
             elif image_type == "VHD":
                 out.append(
-                    self.__build_azure_push_item(
-                        raw, entry.path, image, leafdir.dest
-                    )
+                    self.__build_azure_push_item(raw, entry.path, image, leafdir.dest)
                 )
         return out

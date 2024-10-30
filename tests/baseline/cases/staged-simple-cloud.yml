@@ -32,7 +32,16 @@ items:
     public_image: null
     recommended_instance_type: null
     region: null
-    release: null
+    release:
+      arch: x86_64
+      base_product: null
+      base_version: null
+      date: 2024-10-31
+      product: rhel
+      respin: 1
+      type: null
+      variant: null
+      version: null
     release_notes: null
     root_device: null
     scanning_port: null
@@ -73,7 +82,16 @@ items:
     public_image: null
     recommended_instance_type: null
     region: null
-    release: null
+    release:
+      arch: arm64
+      base_product: null
+      base_version: null
+      date: 2024-10-31
+      product: rhel
+      respin: 1
+      type: null
+      variant: null
+      version: null
     release_notes: null
     root_device: null
     scanning_port: null
@@ -118,8 +136,8 @@ items:
       arch: x86_64
       base_product: null
       base_version: null
-      date: 2020-05-11
-      product: Fake-Product
+      date: 2024-10-31
+      product: rhel
       respin: 1
       type: ga
       variant: Fake-Variant
@@ -160,7 +178,16 @@ items:
     name: something1.raw.xz
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
     recommended_sizes: []
-    release: null
+    release:
+      arch: x86_64
+      base_product: null
+      base_version: null
+      date: 2024-10-31
+      product: rhel
+      respin: 1
+      type: null
+      variant: null
+      version: null
     sas_uri: null
     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
@@ -188,7 +215,16 @@ items:
     name: something2.raw.xz
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
     recommended_sizes: []
-    release: null
+    release:
+      arch: arm64
+      base_product: null
+      base_version: null
+      date: 2024-10-31
+      product: rhel
+      respin: 1
+      type: null
+      variant: null
+      version: null
     sas_uri: null
     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null

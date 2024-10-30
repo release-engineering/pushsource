@@ -9,9 +9,10 @@ LOG = logging.getLogger("pushsource")
 
 
 class StagedCloudMixin(StagedBaseMixin):
-    def __build_ami_push_item(self, resources, origin, name, dest):
+    def __build_ami_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
         release_resources = resources.get("release") or {}
+        name = image.get("path")
         src = os.path.join(origin, name)
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
@@ -24,6 +25,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "build_info": build_info,
             "origin": origin,
             "dest": [dest],
+            "sha256sum": image.get("sha256sum"),
         }
 
         image_kwargs.update(
@@ -84,8 +86,9 @@ class StagedCloudMixin(StagedBaseMixin):
 
         return AmiPushItem(**image_kwargs)
 
-    def __build_azure_push_item(self, resources, origin, name, dest):
+    def __build_azure_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
+        name = image.get("path")
         src = os.path.join(origin, name)
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
@@ -99,17 +102,19 @@ class StagedCloudMixin(StagedBaseMixin):
             "build_info": build_info,
             "origin": origin,
             "dest": [dest],
+            "sha256sum": image.get("sha256sum"),
         }
         return VHDPushItem(**image_kwargs)
 
-    def __process_builds(self, current_dir, leafdir):
-        yaml_path = os.path.join(current_dir, "resources.yaml")
-        try:
-            with open(yaml_path, "rt") as fh:
-                raw = yaml.safe_load(fh)
-        except FileNotFoundError:
-            LOG.warning("No resources.yaml file found at %s (ignored)", yaml_path)
-            return
+    @handles_type(
+        "CLOUD_IMAGES",
+        accepts=lambda entry: entry.is_dir()
+        and os.path.exists(os.path.join(entry.path, "resources.yaml")),
+    )
+    def __cloud_push_item(self, leafdir, _, entry):
+        yaml_path = os.path.join(entry.path, "resources.yaml")
+        with open(yaml_path, "rt") as fh:
+            raw = yaml.safe_load(fh)
         if not raw:
             LOG.warning("Resources.yaml file at %s is empty (ignored)", yaml_path)
             return
@@ -123,20 +128,13 @@ class StagedCloudMixin(StagedBaseMixin):
             if image_type == "AMI":
                 out.append(
                     self.__build_ami_push_item(
-                        raw, current_dir, image.get("path"), leafdir.dest
+                        raw, entry.path, image, leafdir.dest
                     )
                 )
             elif image_type == "VHD":
                 out.append(
                     self.__build_azure_push_item(
-                        raw, current_dir, image.get("path"), leafdir.dest
+                        raw, entry.path, image, leafdir.dest
                     )
                 )
-        return out
-
-    @handles_type("CLOUD_IMAGES",
-                  accepts=lambda entry: entry.is_dir() and os.path.exists(os.path.join(entry.path, "resources.yaml")))
-    def __cloud_push_item(self, leafdir, metadata, entry):
-        out = self.__process_builds(entry.path, leafdir)
-
         return out

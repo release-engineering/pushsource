@@ -37,7 +37,7 @@ items:
     root_device: null
     scanning_port: null
     security_groups: []
-    sha256sum: null
+    sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something1.raw.xz
     sriov_net_support: null
@@ -78,7 +78,7 @@ items:
     root_device: null
     scanning_port: null
     security_groups: []
-    sha256sum: null
+    sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something2.raw.xz
     sriov_net_support: null
@@ -128,7 +128,7 @@ items:
     root_device: null
     scanning_port: null
     security_groups: []
-    sha256sum: null
+    sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build3/something1.raw.xz
     sriov_net_support: null
@@ -162,7 +162,7 @@ items:
     recommended_sizes: []
     release: null
     sas_uri: null
-    sha256sum: null
+    sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
     sku_id: null
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something1.raw.xz
@@ -190,7 +190,7 @@ items:
     recommended_sizes: []
     release: null
     sas_uri: null
-    sha256sum: null
+    sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
     sku_id: null
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something2.raw.xz

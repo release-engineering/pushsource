@@ -3,8 +3,10 @@ resource: CloudImage
 images:
    - path: something1.raw.xz
      architecture: x86_64
+     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
    - path: something2.raw.xz
      architecture: arm64
+     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
 build:
   name: rhel-ec2
   version: "9.4"

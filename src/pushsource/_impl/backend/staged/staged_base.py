@@ -10,7 +10,7 @@ class TypeHandler(object):
     # Decorator for handling specific file directories (e.g. "FILES", "ISOS" etc)
     HANDLERS = {}
 
-    def __init__(self, type_name, accepts = lambda entry: entry.is_file()):
+    def __init__(self, type_name, accepts=lambda entry: entry.is_file()):
         self.type_name = type_name
         self.accepts = accepts
 
@@ -33,7 +33,8 @@ class StagedBaseMixin(object):
             fn, accepts = TypeHandler.HANDLERS[typename]
             bound_fn = partial(fn, self)
             self._FILE_TYPES[typename] = partial(
-                self.__mixin_push_items, delegate=bound_fn, accepts=accepts)
+                self.__mixin_push_items, delegate=bound_fn, accepts=accepts
+            )
 
     def __mixin_push_items(self, leafdir, metadata, delegate, accepts):
         out = []

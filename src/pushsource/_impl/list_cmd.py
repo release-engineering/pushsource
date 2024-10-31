@@ -25,13 +25,40 @@ import os
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import subprocess
 import sys
+import enum
 
 import attr
 import yaml
+from frozendict.core import frozendict
 
+import pushsource
 from pushsource import Source
 
 LOG = logging.getLogger("pushsource-ls")
+
+
+class ItemDumper(yaml.SafeDumper):
+    # Custom dumper adding support for any types appearing on pushitems
+    # which are not natively supported by pyyaml.
+
+    @classmethod
+    def represent_enum(cls, dumper: yaml.Dumper, value: enum.Enum):
+        # enums are unwrapped and represented using whatever's the underlying
+        # type, e.g. a string enum of value "foo" will be serialized the
+        # same as a plain string "foo".
+        return dumper.represent_data(value.value)
+
+    @classmethod
+    def add_enum_representers(cls):
+        # Register our enum representer for any enum classes in the API.
+        for attrname in dir(pushsource):
+            attrval = getattr(pushsource, attrname)
+            if isinstance(attrval, enum.EnumMeta):
+                cls.add_representer(attrval, cls.represent_enum)
+
+
+ItemDumper.add_enum_representers()
+ItemDumper.add_representer(frozendict, ItemDumper.represent_dict)
 
 
 def format_python(item):
@@ -51,7 +78,7 @@ def format_python_black(item):
 
 def format_yaml(item):
     data = {type(item).__name__: attr.asdict(item, recurse=True)}
-    return yaml.dump([data], Dumper=yaml.SafeDumper)
+    return yaml.dump([data], Dumper=ItemDumper)
 
 
 def default_format():

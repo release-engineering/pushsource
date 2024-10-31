@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 import textwrap
+import itertools
 
 import yaml
 import pytest
@@ -67,6 +68,35 @@ def test_typical(monkeypatch, capsys):
     (out, _) = capsys.readouterr()
     assert "FilePushItem(" in out
     assert "My wonderful ISO" in out
+
+
+@pytest.mark.parametrize(
+    "format,case",
+    itertools.product(
+        # The supported formats
+        ["yaml", "python", "python-black"],
+        # The staging areas.
+        # Note: limited to 'simple' because there are some staging areas
+        # intentionally set up to trigger errors, which will also cause
+        # pushsource-ls to fail.
+        [
+            e.name
+            for e in os.scandir(STAGED_DATA_DIR)
+            if e.is_dir() and "simple" in e.name
+        ],
+    ),
+)
+def test_staged(monkeypatch, format, case):
+    """pushsource-ls runs without crashing with all formats on staging areas
+    in the test data.
+    """
+
+    monkeypatch.setattr(
+        sys, "argv", ["", "--format", format, f"staged:{STAGED_DATA_DIR}/{case}"]
+    )
+
+    # It should run OK
+    list_main()
 
 
 def test_valid_yaml(monkeypatch, capsys):

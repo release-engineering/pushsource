@@ -15,7 +15,7 @@ items:
     build: null
     build_info:
       id: null
-      name: rhel-ec2
+      name: rhel
       release: '1'
       version: '9.4'
     description: build2 sample
@@ -65,7 +65,7 @@ items:
     build: null
     build_info:
       id: null
-      name: rhel-ec2
+      name: rhel
       release: '1'
       version: '9.4'
     description: build2 sample

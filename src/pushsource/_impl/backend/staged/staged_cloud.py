@@ -5,7 +5,14 @@ import yaml
 from datetime import datetime, timezone
 
 from .staged_base import StagedBaseMixin, handles_type
-from ...model import VHDPushItem, VMIRelease, AmiPushItem, AmiRelease, BootMode, KojiBuildInfo
+from ...model import (
+    VHDPushItem,
+    VMIRelease,
+    AmiPushItem,
+    AmiRelease,
+    BootMode,
+    KojiBuildInfo,
+)
 
 LOG = logging.getLogger("pushsource")
 
@@ -18,7 +25,6 @@ class StagedCloudMixin(StagedBaseMixin):
         else:
             product = splitted_name[0]
         return product
-
 
     def __build_ami_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
@@ -53,7 +59,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "product": self.__get_product_name(build_resources.get("name")),
             "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
             "arch": image.get("architecture"),
-            "respin": int(build_resources.get("respin")) or 0
+            "respin": int(build_resources.get("respin")) or 0,
         }
         release_attrs = [
             "version",
@@ -110,7 +116,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "product": self.__get_product_name(build_resources.get("name")),
             "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
             "arch": image.get("architecture"),
-            "respin": int(build_resources.get("respin")) or 0
+            "respin": int(build_resources.get("respin")) or 0,
         }
 
         image_kwargs = {
@@ -121,7 +127,7 @@ class StagedCloudMixin(StagedBaseMixin):
             "origin": origin,
             "dest": [dest],
             "sha256sum": image.get("sha256sum"),
-            "release": VMIRelease(**release_kwargs)
+            "release": VMIRelease(**release_kwargs),
         }
         return VHDPushItem(**image_kwargs)
 

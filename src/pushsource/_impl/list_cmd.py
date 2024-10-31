@@ -53,7 +53,7 @@ class ItemDumper(yaml.SafeDumper):
         # Register our enum representer for any enum classes in the API.
         for attrname in dir(pushsource):
             attrval = getattr(pushsource, attrname)
-            if isinstance(attrval, enum.EnumType):
+            if isinstance(attrval, enum.EnumMeta):
                 cls.add_representer(attrval, cls.represent_enum)
 
 

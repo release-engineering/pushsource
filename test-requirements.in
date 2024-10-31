@@ -8,6 +8,7 @@ koji>=1.18
 mock
 more-executors
 pre-commit
+black
 pushcollector
 pylint
 pytest

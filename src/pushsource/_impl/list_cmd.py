@@ -29,6 +29,7 @@ import enum
 
 import attr
 import yaml
+from frozendict.core import frozendict
 
 import pushsource
 from pushsource import Source
@@ -57,6 +58,7 @@ class ItemDumper(yaml.SafeDumper):
 
 
 ItemDumper.add_enum_representers()
+ItemDumper.add_representer(frozendict, ItemDumper.represent_dict)
 
 
 def format_python(item):

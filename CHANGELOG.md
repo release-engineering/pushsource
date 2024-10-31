@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.48.0] - 2024-11-01
+
+### Added
+
+- Introduced `CLOUD_IMAGES` support in `staged` source
+
+### Fixed
+
+- Fixed crashes on serializing some fields in `pushsource-ls` command
+
 ## [2.47.2] - 2024-09-05
 
 ### Fixed
@@ -535,7 +545,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.47.2...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.48.0...HEAD
+[2.48.0]: https://github.com/release-engineering/pushsource/compare/v2.47.2...v2.48.0
 [2.47.2]: https://github.com/release-engineering/pushsource/compare/v2.47.1...v2.47.2
 [2.47.1]: https://github.com/release-engineering/pushsource/compare/v2.47.0...v2.47.1
 [2.47.0]: https://github.com/release-engineering/pushsource/compare/v2.46.1...v2.47.0

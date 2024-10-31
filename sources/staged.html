@@ -76,6 +76,7 @@ Each staging directory must use the <a class="reference internal" href="#staging
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">MODULEMD</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/*.</span><span class="n">rpm</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">AWS_IMAGES</span><span class="o">/*</span>
+<span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">CLOUD_IMAGES</span><span class="o">/*</span>
 <span class="n">root</span><span class="o">/</span><span class="n">destination</span><span class="o">/</span><span class="n">RAW</span><span class="o">/*</span>
 </pre></div>
 </div>
@@ -184,6 +185,17 @@ Amazon Machine Image (AMI).</p>
 <p>Files in this directory must have metadata included in <code class="docutils literal notranslate"><span class="pre">staged.yaml</span></code>.</p>
 <p>Will yield instances of <a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a>.</p>
 </section>
+<section id="root-destination-cloud-images">
+<h3>root/destination/CLOUD_IMAGES/*<a class="headerlink" href="#root-destination-cloud-images" title="Link to this heading">¶</a></h3>
+<p>Each directory within <code class="docutils literal notranslate"><span class="pre">CLOUD_IMAGES</span></code> should contain one or more VMI(s) plus a
+<code class="docutils literal notranslate"><span class="pre">resources.yaml</span></code> .</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">resources.yaml</span></code> contains all the information needed for the
+images in that folder.</p>
+<p><a class="reference internal" href="../schema/cloud.html#cloud-schema"><span class="std std-ref">Schema: cloud</span></a> provides a complete reference of the fields which can be set by this
+file.</p>
+<p>Will yield instances of either <a class="reference internal" href="../model/ami.html#pushsource.AmiPushItem" title="pushsource.AmiPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmiPushItem</span></code></a> or
+<a class="reference internal" href="../model/azure.html#pushsource.VHDPushItem" title="pushsource.VHDPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">VHDPushItem</span></code></a>.</p>
+</section>
 <section id="root-destination-raw">
 <h3>root/destination/RAW/*<a class="headerlink" href="#root-destination-raw" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">RAW</span></code> should generally be interpreted as a request to recursively publish the
@@ -207,12 +219,12 @@ the source of push items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – <p>URL(s) of locally accessible staging directories, e.g.
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – <p>URL(s) of locally accessible staging directories, e.g.
 <code class="docutils literal notranslate"><span class="pre">&quot;/mnt/staging/my-content-for-push&quot;</span></code>.</p>
 <p>These directories must follow the documented layout for staging areas.</p>
 </p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of threads used for concurrent loading of files.</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of threads used for concurrent loading of files.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of seconds after which an error is raised, if no progress is
 made during each step.</p></li>
 </ul>
 </dd>

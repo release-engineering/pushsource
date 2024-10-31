@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Schema: cloud &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=32913b9a" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="schema-cloud">
+<span id="cloud-schema"></span><h1>Schema: cloud<a class="headerlink" href="#schema-cloud" title="Link to this heading">¶</a></h1>
+<p>This document shows the schema of cloud build YAML files
+supported by this library, in <a class="reference external" href="https://json-schema.org/">JSON schema</a> format.
+These files may be used within the <code class="docutils literal notranslate"><span class="pre">CLOUD_IMAGES</span></code> directory within
+a <a class="reference internal" href="../sources/staged.html#staging-structure"><span class="std std-ref">Staging structure</span></a>.</p>
+<p>The latest version of this schema is available in raw form at
+<a class="reference external" href="https://release-engineering.github.io/pushsource/cloud-schema.yaml">https://release-engineering.github.io/pushsource/cloud-schema.yaml</a>.</p>
+<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>---
+# Schema for metadata file &quot;resources.yaml&quot; accompanying a
+# cloud staged source.
+#
+# For general information about staging directories, see:
+# https://release-engineering.github.io/pushsource/sources/staged.html
+#
+
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://release-engineering.github.io/pushsource/cloud-schema.yaml
+
+
+###############################################################################
+#  Subschemas
+definitions:
+    ami_release:
+        # Release metadata for an AMI.
+        type: object
+        properties:
+            product:
+                type: string
+                minLength: 1
+            version:
+                $ref: &quot;#/definitions/optional_string&quot;
+            base_product:
+                $ref: &quot;#/definitions/optional_string&quot;
+            base_version:
+                $ref: &quot;#/definitions/optional_string&quot;
+            variant:
+                $ref: &quot;#/definitions/optional_string&quot;
+            arch:
+                type: string
+                enum:
+                - arm64
+                - x86_64
+            respin:
+                type: integer
+            type:
+                $ref: &quot;#/definitions/optional_string&quot;
+                enum: [&#39;ga&#39;, &#39;beta&#39;, null]
+            date:
+                type: string
+                minLength: 1
+                pattern: &quot;^[0-9]{8}$&quot;
+        required:
+        - product
+        - date
+        - arch
+        - respin
+
+    optional_string:
+        # A field which may hold a non-empty string, or null.
+        type:
+        - string
+        - &quot;null&quot;
+        minLength: 1
+
+    ami_billing_codes:
+        # Billing codes for an AMI
+        type:
+        - object
+        - &quot;null&quot;
+        properties:
+            name:
+                type: string
+            codes:
+                type: array
+                items:
+                    type: string
+        required:
+        - name
+        - codes
+
+    image:
+      type: object
+      properties:
+        path:
+          type: string
+        architecture:
+          type: string
+
+type: object
+properties:
+    api:
+      type: string
+      enum: [&quot;v1&quot;]
+    resource:
+      type: string
+      enum: [&quot;CloudImage&quot;]
+    images:
+      type: array
+      items:
+        $ref: &quot;#/definitions/image&quot;
+    build:
+      type: object
+      properties:
+        name: string
+        version: string
+        respin: string
+    description:
+      type: string
+    boot_mode:
+      enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+    type:
+      enum: [&#39;AMI&#39;, &#39;VHD&#39;, null]
+    release:
+      $ref: &quot;#/definitions/ami_release&quot;
+
+    region:
+        # AWS region to which this AMI should be pushed.
+        type: string
+        minLength: 1
+
+    type:
+        # Billing type for the image.
+        type: string
+        enum:
+        - hourly
+        - access
+        - marketplace
+
+    virtualization:
+        # Virtualization type.
+        type: string
+        enum:
+        - hvm
+
+    volume:
+        type: string
+        enum:
+        - standard
+        - gp2
+        - gp3
+        - io1
+        - io2
+        - st1
+        - sc1
+
+    root_device:
+        type: string
+        minLength: 1
+
+    description:
+        $ref: &quot;#/definitions/optional_string&quot;
+
+    sriov_net_support:
+        type:
+        - string
+        - &quot;null&quot;
+        enum:
+        - simple
+        - null
+
+    ena_support:
+        type:
+        - boolean
+        - &quot;null&quot;
+
+    uefi_support:
+        type:
+        - boolean
+        - &quot;null&quot;
+
+    billing_codes:
+        $ref: &quot;#/definitions/ami_billing_codes&quot;
+
+    boot_mode:
+        enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+
+    public_image:
+        type:
+        - boolean
+        - &quot;null&quot;
+    release_notes:
+        $ref: &quot;#/definitions/optional_string&quot;
+
+    usage_instructions:
+        $ref: &quot;#/definitions/optional_string&quot;
+
+    recommended_instance_type:
+        $ref: &quot;#/definitions/optional_string&quot;
+
+    marketplace_entity_type:
+        $ref: &quot;#/definitions/optional_string&quot;
+
+    scanning_port:
+        type:
+            - number
+            - &quot;null&quot;
+        minimum: 0
+        maximum: 65536
+
+    user_name:
+        $ref: &quot;#/definitions/optional_string&quot;
+    version_title:
+        $ref: &quot;#/definitions/optional_string&quot;
+    marketplace_title_template:
+        $ref: &quot;#/definitions/optional_string&quot;
+    marketplace_name:
+        $ref: &quot;#/definitions/optional_string&quot;
+    security_groups:
+        type:
+            - array
+            - &quot;null&quot;
+        items:
+            type: object
+            properties:
+                ip_protocol:
+                    type: string
+                ip_ranges:
+                    type: array
+                    items:
+                        type: string
+            if:
+                properties:
+                    ip_protocol:
+                        enum: [&quot;icmp&quot;, &quot;icmpv6&quot;]
+            then:
+                properties:
+                    from_port:
+                        type: number
+                        minimum: -1
+                        maximum: 255
+                    to_port:
+                        type: number
+                        minimum: -1
+                        maximum: 255
+            else:
+                properties:
+                    from_port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+                    to_port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+
+    access_endpoint_url:
+        type:
+        - object
+        - &quot;null&quot;
+        properties:
+            port:
+                type: number
+                minimum: 0
+                maximum: 65536
+            protocol:
+                enum: [&quot;http&quot;, &quot;https&quot;]
+
+required:
+- api
+- resource
+- images
+- build
+- description
+
+additionalProperties: false
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2020, Red Hat.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/schema/cloud.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

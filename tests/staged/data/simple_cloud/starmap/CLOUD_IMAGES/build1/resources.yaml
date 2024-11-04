@@ -11,6 +11,7 @@ build:
   name: rhel-ec2
   version: "9.4"
   respin: "1"
+# Added to set the date for tests
 release:
   date: "20200511"
 description: "build1 sample"

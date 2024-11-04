@@ -141,7 +141,7 @@ items:
       respin: 1
       type: ga
       variant: Fake-Variant
-      version: '9.4'
+      version: Fake-Version
     release_notes: null
     root_device: null
     scanning_port: null

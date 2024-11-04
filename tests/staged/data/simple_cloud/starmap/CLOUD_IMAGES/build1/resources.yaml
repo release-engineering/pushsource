@@ -11,6 +11,8 @@ build:
   name: rhel-ec2
   version: "9.4"
   respin: "1"
+release:
+  date: "20200511"
 description: "build1 sample"
 boot_mode: hybrid
 type: VHD

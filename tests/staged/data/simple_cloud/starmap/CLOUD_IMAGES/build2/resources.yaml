@@ -11,6 +11,8 @@ build:
   name: rhel
   version: "9.4"
   respin: "1"
+release:
+  date: "20200511"
 description: "build2 sample"
 boot_mode: hybrid
 type: AMI

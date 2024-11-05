@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.48.1] - 2024-11-06
+
+### Fixed
+
+- Fixed handling of date and version fields within `CLOUD_IMAGES`
+
 ## [2.48.0] - 2024-11-01
 
 ### Added
@@ -545,7 +551,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.48.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.48.1...HEAD
+[2.48.1]: https://github.com/release-engineering/pushsource/compare/v2.48.0...v2.48.1
 [2.48.0]: https://github.com/release-engineering/pushsource/compare/v2.47.2...v2.48.0
 [2.47.2]: https://github.com/release-engineering/pushsource/compare/v2.47.1...v2.47.2
 [2.47.1]: https://github.com/release-engineering/pushsource/compare/v2.47.0...v2.47.1

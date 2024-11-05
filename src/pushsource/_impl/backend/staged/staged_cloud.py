@@ -2,8 +2,6 @@ import logging
 import os
 import yaml
 
-from datetime import datetime, timezone
-
 from .staged_base import StagedBaseMixin, handles_type
 from ...model import (
     VHDPushItem,
@@ -57,12 +55,13 @@ class StagedCloudMixin(StagedBaseMixin):
 
         release_kwargs = {
             "product": self.__get_product_name(build_resources.get("name")),
-            "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
             "arch": image.get("architecture"),
             "respin": int(build_resources.get("respin")) or 0,
+            "version": release_resources.get("version")
+            or build_resources.get("version"),
         }
         release_attrs = [
-            "version",
+            "date",
             "base_product",
             "base_version",
             "variant",
@@ -104,6 +103,7 @@ class StagedCloudMixin(StagedBaseMixin):
 
     def __build_azure_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
+        release_resources = resources.get("release") or {}
         name = image.get("path")
         src = os.path.join(origin, name)
         build_info = KojiBuildInfo(
@@ -114,9 +114,11 @@ class StagedCloudMixin(StagedBaseMixin):
 
         release_kwargs = {
             "product": self.__get_product_name(build_resources.get("name")),
-            "date": datetime.now(timezone.utc).strftime("%Y%m%d"),
+            "date": release_resources.get("date"),
             "arch": image.get("architecture"),
             "respin": int(build_resources.get("respin")) or 0,
+            "version": release_resources.get("version")
+            or build_resources.get("version"),
         }
 
         image_kwargs = {

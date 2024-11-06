@@ -36,12 +36,12 @@ items:
       arch: x86_64
       base_product: null
       base_version: null
-      date: 2024-10-31
+      date: 2020-05-11
       product: rhel
       respin: 1
       type: null
       variant: null
-      version: null
+      version: '9.4'
     release_notes: null
     root_device: null
     scanning_port: null
@@ -86,12 +86,12 @@ items:
       arch: arm64
       base_product: null
       base_version: null
-      date: 2024-10-31
+      date: 2020-05-11
       product: rhel
       respin: 1
       type: null
       variant: null
-      version: null
+      version: '9.4'
     release_notes: null
     root_device: null
     scanning_port: null
@@ -136,7 +136,7 @@ items:
       arch: x86_64
       base_product: null
       base_version: null
-      date: 2024-10-31
+      date: 2020-05-11
       product: rhel
       respin: 1
       type: ga
@@ -182,12 +182,12 @@ items:
       arch: x86_64
       base_product: null
       base_version: null
-      date: 2024-10-31
+      date: 2020-05-11
       product: rhel
       respin: 1
       type: null
       variant: null
-      version: null
+      version: '9.4'
     sas_uri: null
     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null
@@ -219,12 +219,12 @@ items:
       arch: arm64
       base_product: null
       base_version: null
-      date: 2024-10-31
+      date: 2020-05-11
       product: rhel
       respin: 1
       type: null
       variant: null
-      version: null
+      version: '9.4'
     sas_uri: null
     sha256sum: 04db0c39efb31518ff79bf98d1c27256d46cdc72b967a5b2094a6efec3166df2
     signing_key: null

@@ -26,6 +26,7 @@ from pushsource._impl.model import (
     AmiBillingCodes,
     AmiSecurityGroup,
     VHDPushItem,
+    VMICloudInfo,
     BootMode,
     ErratumPushItem,
     ErratumReference,

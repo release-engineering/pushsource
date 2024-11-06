@@ -7,6 +7,10 @@
         ], 
         "name": "Hourly2"
       }, 
+      "cloud_info": {
+        "provider": "aws",
+        "account": "aws-emea"
+      },
       "description": "Provided by Red Hat, Inc.", 
       "dest": [
         "sa-east-1-hourly"

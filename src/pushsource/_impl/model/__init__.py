@@ -30,4 +30,4 @@ from .ami import (
     AmiSecurityGroup,
 )
 from .azure import VHDPushItem
-from .vms import BootMode, VMIPushItem, VMIRelease
+from .vms import BootMode, VMICloudInfo, VMIPushItem, VMIRelease

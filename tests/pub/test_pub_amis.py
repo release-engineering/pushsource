@@ -13,6 +13,7 @@ from pushsource import (
     Source,
     AmiSecurityGroup,
     KojiBuildInfo,
+    VMICloudInfo,
 )
 
 DATAPATH = os.path.join(os.path.dirname(__file__), "data")
@@ -55,6 +56,7 @@ def test_get_ami_push_items_single_task(requests_mock):
             origin="/fake/path/aws/",
             build=None,
             build_info=None,
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             signing_key=None,
             release=AmiRelease(
                 product="SAP",
@@ -140,6 +142,7 @@ def test_get_ami_push_items_single_task_clouds(requests_mock):
                 release="2116",
                 id=None,
             ),
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             release=AmiRelease(
                 product="RHEL-SAP",
                 date="20240717",
@@ -211,6 +214,7 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
                 release="2116",
                 id=None,
             ),
+            cloud_info=VMICloudInfo(provider="aws", account="aws-na"),
             release=AmiRelease(
                 product="RHEL-SAP",
                 date="20240717",
@@ -248,6 +252,7 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
                 release="2116",
                 id=None,
             ),
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             image_id="ami-test",
             release=AmiRelease(
                 product="RHEL-SAP",
@@ -286,6 +291,7 @@ def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
                 release="2175",
                 id=None,
             ),
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             image_id="ami-test",
             release=AmiRelease(
                 product="RHEL",
@@ -344,6 +350,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             origin="/fake/path/aws",
             build=None,
             build_info=None,
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             signing_key=None,
             release=AmiRelease(
                 product="SAP",
@@ -378,6 +385,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             origin="/fake/path/aws/",
             build=None,
             build_info=None,
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             signing_key=None,
             release=AmiRelease(
                 product="SAP",
@@ -427,6 +435,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             origin="/fake/path/aws/",
             build=None,
             build_info=None,
+            cloud_info=VMICloudInfo(provider="aws", account="aws-na"),
             signing_key=None,
             release=AmiRelease(
                 product="SAP",
@@ -469,6 +478,7 @@ def test_get_ami_push_items_multiple_tasks(requests_mock):
             origin="/fake/path/aws/",
             build=None,
             build_info=None,
+            cloud_info=VMICloudInfo(provider="aws", account="aws-emea"),
             signing_key=None,
             release=AmiRelease(
                 product="SAP",

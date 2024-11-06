@@ -18,6 +18,7 @@ items:
       name: rhel
       release: '1'
       version: '9.4'
+    cloud_info: null
     description: build2 sample
     dest:
     - starmap
@@ -68,6 +69,7 @@ items:
       name: rhel
       release: '1'
       version: '9.4'
+    cloud_info: null
     description: build2 sample
     dest:
     - starmap
@@ -118,6 +120,7 @@ items:
       name: rhel-ec2
       release: '1'
       version: '9.4'
+    cloud_info: null
     description: build3 sample
     dest:
     - starmap
@@ -166,6 +169,7 @@ items:
       name: rhel-ec2
       release: '1'
       version: '9.4'
+    cloud_info: null
     description: build1 sample
     dest:
     - starmap
@@ -203,6 +207,7 @@ items:
       name: rhel-ec2
       release: '1'
       version: '9.4'
+    cloud_info: null
     description: build1 sample
     dest:
     - starmap

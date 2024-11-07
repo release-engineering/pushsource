@@ -104,7 +104,7 @@ class VMIPushItem(PushItem):
         default=None,
         validator=optional((instance_of(VMICloudInfo))),
     )
-    """Cloud provider information , such as the provider's short name and account alias."""
+    """Cloud provider information, such as the provider's short name and account alias."""
 
     marketplace_title_template = attr.ib(type=str, default=None, validator=optional_str)
     """The template is of the form used by ``str.format``, with available keywords being all of

@@ -52,6 +52,7 @@
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.src" title="pushsource.PushItem.src"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="base.html#pushsource.PushItem.state" title="pushsource.PushItem.state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">state()</span></code></a> <em>[inherited]</em></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.boot_mode" title="pushsource.VMIPushItem.boot_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">boot_mode()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMIPushItem.cloud_info" title="pushsource.VMIPushItem.cloud_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cloud_info()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.description" title="pushsource.VMIPushItem.description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">description()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.marketplace_name" title="pushsource.VMIPushItem.marketplace_name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">marketplace_name()</span></code></a></p></li>
 <li><p><a class="reference internal" href="#pushsource.VMIPushItem.marketplace_title_template" title="pushsource.VMIPushItem.marketplace_title_template"><code class="xref py py-meth docutils literal notranslate"><span class="pre">marketplace_title_template()</span></code></a></p></li>
@@ -81,6 +82,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Boot mode supported by the image (if known)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMIPushItem.cloud_info">
+<span class="sig-name descname"><span class="pre">cloud_info</span></span><a class="headerlink" href="#pushsource.VMIPushItem.cloud_info" title="Link to this definition">¶</a></dt>
+<dd><p>Cloud provider information, such as the provider’s short name and account alias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pushsource.VMICloudInfo" title="pushsource.VMICloudInfo">VMICloudInfo</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,6 +252,45 @@ each rebuild.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pushsource.VMICloudInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">VMICloudInfo</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#VMICloudInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.VMICloudInfo" title="Link to this definition">¶</a></dt>
+<dd><p>Information on the cloud provider associated with a given push item.</p>
+<p>Cloud provider information is only available for VMIs which have previously
+been published to a cloud. It may be used to locate an existing VMI for
+manipulation, such as metadata updates or deletion.</p>
+<p>This library doesn’t define any specific cloud provider names or aliases.
+Generally, a user of this library is expected to use the information here
+to look up cloud access details from a configuration file or other source.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pushsource.VMICloudInfo.account" title="pushsource.VMICloudInfo.account"><code class="xref py py-meth docutils literal notranslate"><span class="pre">account()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pushsource.VMICloudInfo.provider" title="pushsource.VMICloudInfo.provider"><code class="xref py py-meth docutils literal notranslate"><span class="pre">provider()</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMICloudInfo.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><a class="headerlink" href="#pushsource.VMICloudInfo.provider" title="Link to this definition">¶</a></dt>
+<dd><p>“aws”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The cloud provider’s name, e.g.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pushsource.VMICloudInfo.account">
+<span class="sig-name descname"><span class="pre">account</span></span><a class="headerlink" href="#pushsource.VMICloudInfo.account" title="Link to this definition">¶</a></dt>
+<dd><p>“aws-na”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The cloud provider’s account alias, e.g.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pushsource.BootMode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">BootMode</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/vms.html#BootMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.BootMode" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the possible boot modes for VM images.</p>
@@ -308,6 +359,7 @@ each rebuild.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Push items: VMI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIPushItem"><code class="docutils literal notranslate"><span class="pre">VMIPushItem</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.VMIRelease"><code class="docutils literal notranslate"><span class="pre">VMIRelease</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pushsource.VMICloudInfo"><code class="docutils literal notranslate"><span class="pre">VMICloudInfo</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pushsource.BootMode"><code class="docutils literal notranslate"><span class="pre">BootMode</span></code></a></li>
 </ul>
 </li>

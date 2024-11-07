@@ -34,7 +34,7 @@
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="n">instance_of_str</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">optional</span>
-<span class="kn">from</span> <span class="nn">.vms</span> <span class="kn">import</span> <span class="n">VMIRelease</span><span class="p">,</span> <span class="n">VMIPushItem</span><span class="p">,</span> <span class="n">BootMode</span>
+<span class="kn">from</span> <span class="nn">.vms</span> <span class="kn">import</span> <span class="n">VMICloudInfo</span><span class="p">,</span> <span class="n">VMIRelease</span><span class="p">,</span> <span class="n">VMIPushItem</span><span class="p">,</span> <span class="n">BootMode</span>
 
 
 <div class="viewcode-block" id="AmiRelease">
@@ -265,6 +265,11 @@
             <span class="c1"># base push item fields</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
             <span class="s2">&quot;build&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;cloud_info&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">VMICloudInfo</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cloud_info&quot;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cloud_info&quot;</span><span class="p">)</span>
+                <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">),</span>
             <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;PENDING&quot;</span><span class="p">,</span>
             <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;dest&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dest&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>

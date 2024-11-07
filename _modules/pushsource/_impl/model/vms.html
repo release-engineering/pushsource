@@ -59,6 +59,29 @@
 
 
 
+<div class="viewcode-block" id="VMICloudInfo">
+<a class="viewcode-back" href="../../../../model/vmi.html#pushsource.VMICloudInfo">[docs]</a>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">VMICloudInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information on the cloud provider associated with a given push item.</span>
+
+<span class="sd">    Cloud provider information is only available for VMIs which have previously</span>
+<span class="sd">    been published to a cloud. It may be used to locate an existing VMI for</span>
+<span class="sd">    manipulation, such as metadata updates or deletion.</span>
+
+<span class="sd">    This library doesn&#39;t define any specific cloud provider names or aliases.</span>
+<span class="sd">    Generally, a user of this library is expected to use the information here</span>
+<span class="sd">    to look up cloud access details from a configuration file or other source.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">provider</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The cloud provider&#39;s name, e.g.: &quot;aws&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">account</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The cloud provider&#39;s account alias, e.g.: &quot;aws-na&quot;.&quot;&quot;&quot;</span></div>
+
+
+
 <div class="viewcode-block" id="VMIRelease">
 <a class="viewcode-back" href="../../../../model/vmi.html#pushsource.VMIRelease">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
@@ -118,6 +141,13 @@
 
     <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">BootMode</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">BootMode</span><span class="p">)))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy).&quot;&quot;&quot;</span>
+
+    <span class="n">cloud_info</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">VMICloudInfo</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">((</span><span class="n">instance_of</span><span class="p">(</span><span class="n">VMICloudInfo</span><span class="p">))),</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud provider information, such as the provider&#39;s short name and account alias.&quot;&quot;&quot;</span>
 
     <span class="n">marketplace_title_template</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The template is of the form used by ``str.format``, with available keywords being all of</span>

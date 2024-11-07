@@ -7,7 +7,7 @@ Push items: VMI
 .. autoclass:: pushsource.VMIRelease()
    :members:
 
-.. autoclass:: pushsource.VMICloudInformation()
+.. autoclass:: pushsource.VMICloudInfo()
    :members:
 
 .. autoclass:: pushsource.BootMode()

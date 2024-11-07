@@ -14,6 +14,7 @@ items:
     boot_mode: uefi
     build: null
     build_info: null
+    cloud_info: null
     description: A sample image for testing
     dest:
     - dest1

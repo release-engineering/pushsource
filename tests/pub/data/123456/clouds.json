@@ -8,6 +8,10 @@
       "release": "2116",
       "version": "8.8"
     },
+    "cloud_info": {
+      "provider": "aws",
+      "account": "aws-emea"
+    },
     "description": "Provided by Red Hat, Inc.",
     "dest": [
       "test-dest"

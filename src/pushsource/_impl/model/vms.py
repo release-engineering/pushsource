@@ -25,6 +25,26 @@ class BootMode(enum.Enum):
 
 
 @attr.s()
+class VMICloudInfo(object):
+    """Information on the cloud provider associated with a given push item.
+
+    Cloud provider information is only available for VMIs which have previously
+    been published to a cloud. It may be used to locate an existing VMI for
+    manipulation, such as metadata updates or deletion.
+
+    This library doesn't define any specific cloud provider names or aliases.
+    Generally, a user of this library is expected to use the information here
+    to look up cloud access details from a configuration file or other source.
+    """
+
+    provider = attr.ib(type=str, validator=instance_of_str)
+    """The cloud provider's name, e.g.: "aws"."""
+
+    account = attr.ib(type=str, validator=instance_of_str)
+    """The cloud provider's account alias, e.g.: "aws-na"."""
+
+
+@attr.s()
 class VMIRelease(object):
     """Release metadata associated with a VM image."""
 
@@ -78,6 +98,13 @@ class VMIPushItem(PushItem):
 
     boot_mode = attr.ib(type=BootMode, default=None, validator=optional(in_(BootMode)))
     """Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy)."""
+
+    cloud_info = attr.ib(
+        type=VMICloudInfo,
+        default=None,
+        validator=optional((instance_of(VMICloudInfo))),
+    )
+    """Cloud provider information, such as the provider's short name and account alias."""
 
     marketplace_title_template = attr.ib(type=str, default=None, validator=optional_str)
     """The template is of the form used by ``str.format``, with available keywords being all of

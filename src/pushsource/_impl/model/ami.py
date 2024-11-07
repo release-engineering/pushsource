@@ -2,7 +2,7 @@ from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
 from .conv import instance_of_str, instance_of, optional_str, optional
-from .vms import VMIRelease, VMIPushItem, BootMode
+from .vms import VMICloudInfo, VMIRelease, VMIPushItem, BootMode
 
 
 class AmiRelease(VMIRelease):
@@ -219,6 +219,11 @@ class AmiPushItem(VMIPushItem):
             # base push item fields
             "name": data["name"],
             "build": data.get("build") or None,
+            "cloud_info": (
+                VMICloudInfo(**data.get("cloud_info"))
+                if data.get("cloud_info")
+                else None
+            ),
             "state": "PENDING",
             "src": data.get("src") or None,
             "dest": data.get("dest") or [],

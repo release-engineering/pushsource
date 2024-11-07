@@ -8,6 +8,10 @@
       "release": "2116",
       "version": "8.8"
     },
+    "cloud_info": {
+      "provider": "aws",
+      "account": "aws-na"
+    },
     "description": "Provided by Red Hat, Inc.",
     "dest": [
       "test-dest"
@@ -145,6 +149,10 @@
       "release": "2116",
       "version": "8.8"
     },
+    "cloud_info": {
+      "provider": "aws",
+      "account": "aws-emea"
+    },
     "description": "Provided by Red Hat, Inc.",
     "dest": [
       "test-dest2"
@@ -279,6 +287,10 @@
         "bp-fake"
       ],
       "name": "Hourly2"
+    },
+    "cloud_info": {
+      "provider": "aws",
+      "account": "aws-emea"
     },
     "boot_mode": null,
     "build": "rhel-ec2-8.8-2175",

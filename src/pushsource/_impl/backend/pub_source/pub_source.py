@@ -77,18 +77,19 @@ class PubSource(Source):
         out = []
         first_obj = next(iter(json_obj or []), None)
         if first_obj:
-            if (first_obj.get("src").endswith("vhd")
-                or first_obj.get("src").endswith("vhd.xz")):
+            if first_obj.get("src").endswith("vhd") or first_obj.get("src").endswith(
+                "vhd.xz"
+            ):
                 try:
                     push_items = VHDPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
-                except KeyError:
+                except (KeyError, TypeError):
                     LOG.warning("Cannot parse VHD push item/s: %s", str(json_obj))
             else:
                 try:
                     push_items = AmiPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
-                except KeyError:
+                except (KeyError, TypeError):
                     LOG.warning("Cannot parse AMI push item/s: %s", str(json_obj))
         else:
             LOG.warning("Pub source returned empty: %s", str(json_obj))

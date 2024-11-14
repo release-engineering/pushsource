@@ -52,7 +52,7 @@ class PubClient(object):
             resp = self._session.request(**kwargs)
         return resp
 
-    def get_ami_json_f(self, task_id):
+    def get_json_f(self, task_id):
         """
         Returns Future[dict|list] holding json obj with AMI push items returned from Pub for given task id.
         """

@@ -665,7 +665,7 @@ def test_pub_source_bad_ami(requests_mock, caplog):
     request_url = os.path.join(
         pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
     )
-    json=make_response(task_id, "clouds.json")
+    json = make_response(task_id, "clouds.json")
     json[0]["name"] = None
 
     requests_mock.register_uri("GET", request_url, status_code=404)
@@ -682,10 +682,41 @@ def test_pub_source_bad_ami(requests_mock, caplog):
     assert len(push_items) == 0
 
     # with details captured in logged
-    assert caplog.messages == [f"Cannot parse AMI push item/s: {json}"]
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]
 
 
 def test_pub_source_bad_vhd(requests_mock, caplog):
+    """
+    Tests behavior when vhd is missing required info.
+    """
+    # test setup
+    caplog.set_level(logging.WARNING)
+    task_id = 100
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    json = make_response(task_id, "clouds.json")
+    json[0]["name"] = None
+
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    request_clouds_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_clouds_url, json=json)
+
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there are no push items returned
+    assert len(push_items) == 0
+
+    # with details captured in logged
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]
+
+
+def test_pub_source_bad_src(requests_mock, caplog):
     """
     Tests behavior when empty response is received from source.
     """
@@ -696,8 +727,8 @@ def test_pub_source_bad_vhd(requests_mock, caplog):
     request_url = os.path.join(
         pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
     )
-    json=make_response(task_id, "clouds.json")
-    json[0]["name"] = None
+    json = make_response(task_id, "clouds.json")
+    json[0]["src"] = 132456
 
     requests_mock.register_uri("GET", request_url, status_code=404)
 
@@ -713,4 +744,4 @@ def test_pub_source_bad_vhd(requests_mock, caplog):
     assert len(push_items) == 0
 
     # with details captured in logged
-    assert caplog.messages == [f"Cannot parse VHD push item/s: {json}"]
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]

@@ -54,14 +54,15 @@ class PubClient(object):
 
     def get_json_f(self, task_id):
         """
-        Returns Future[dict|list] holding json obj with AMI push items returned from Pub for given task id.
+        Returns Future[dict|list] holding json obj with AMI or VHD
+        push items returned from Pub for given task id.
         """
         endpoint = "pub/task"
         url_ending = "log/{filename}"
         params = {"format": "raw"}
         url = os.path.join(self._url, endpoint, str(task_id), url_ending)
 
-        LOG.info("Fetching AMI details from Pub task: %s", str(task_id))
+        LOG.info("Fetching AMI/VHD details from Pub task: %s", str(task_id))
         ft = self._executor.submit(
             self._do_request, method="GET", url=url, params=params
         )

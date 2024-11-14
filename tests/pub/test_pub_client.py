@@ -35,7 +35,7 @@ def test_pub_client_successful_request(requests_mock, caplog, test_client):
     assert json_ft.result() == {"test": "OK"}
     # following lines are captured in logs
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 200",
     ]
@@ -62,7 +62,7 @@ def test_pub_client_corrupted_json(requests_mock, caplog, test_client):
     assert json_ft.result() == None
     # following lines are captured in logs
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 200",
     ]
@@ -93,7 +93,7 @@ def test_pub_client_404_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 404",
         "GET https://test.example.com/pub/task/100/log/clouds.json?format=raw 404",
@@ -132,7 +132,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
@@ -169,7 +169,7 @@ def test_pub_client_500_status(requests_mock, caplog, test_client):
 
     # following lines are captured in logs - more line due to retries
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
         "GET https://test.example.com/pub/task/100/log/images.json?format=raw 500",
@@ -204,6 +204,6 @@ def test_pub_client_timeout_error(requests_mock, caplog, test_client):
 
     # following lines are captured in log.
     assert caplog.messages == [
-        "Fetching AMI details from Pub task: 100",
+        "Fetching AMI/VHD details from Pub task: 100",
         "Creating requests Session for client of Pub service: https://test.example.com/",
     ]

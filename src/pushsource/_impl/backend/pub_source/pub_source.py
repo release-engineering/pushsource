@@ -1,4 +1,5 @@
 import logging
+import re
 from concurrent import futures
 
 from more_executors import Executors
@@ -76,21 +77,22 @@ class PubSource(Source):
     def _push_items_from_json(self, json_obj):
         out = []
         first_obj = next(iter(json_obj or []), None)
+        vhd_file = r"\.(vhd|vhd\.xz)$"
         if first_obj:
-            if first_obj.get("src").endswith("vhd") or first_obj.get("src").endswith(
-                "vhd.xz"
-            ):
+            if re.search(vhd_file, str(first_obj.get("src"))):
                 try:
                     push_items = VHDPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
-                except (KeyError, TypeError):
-                    LOG.warning("Cannot parse VHD push item/s: %s", str(json_obj))
+                except (KeyError, TypeError) as e:
+                    LOG.warning("Cannot parse push item/s: %s, error: %s",
+                                str(json_obj), e)
             else:
                 try:
                     push_items = AmiPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
-                except (KeyError, TypeError):
-                    LOG.warning("Cannot parse AMI push item/s: %s", str(json_obj))
+                except (KeyError, TypeError) as e:
+                    LOG.warning("Cannot parse push item/s: %s, error: %s",
+                                str(json_obj), e)
         else:
             LOG.warning("Pub source returned empty: %s", str(json_obj))
 

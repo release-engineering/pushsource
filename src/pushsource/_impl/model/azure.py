@@ -68,7 +68,7 @@ class VHDPushItem(VMIPushItem):
 
     @classmethod
     def _from_data(cls, data):
-        """Instantiate AmiPushItem from raw list or dict"""
+        """Instantiate VHDPushItem from raw list or dict"""
 
         if isinstance(data, list):
             return [cls._from_data(elem) for elem in data]

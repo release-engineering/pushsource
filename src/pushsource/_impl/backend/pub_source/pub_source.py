@@ -84,15 +84,17 @@ class PubSource(Source):
                     push_items = VHDPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
                 except (KeyError, TypeError) as e:
-                    LOG.warning("Cannot parse push item/s: %s, error: %s",
-                                str(json_obj), e)
+                    LOG.warning(
+                        "Cannot parse push item/s: %s, error: %s", str(json_obj), e
+                    )
             else:
                 try:
                     push_items = AmiPushItem._from_data(json_obj)
                     out.extend(list_argument(push_items))
                 except (KeyError, TypeError) as e:
-                    LOG.warning("Cannot parse push item/s: %s, error: %s",
-                                str(json_obj), e)
+                    LOG.warning(
+                        "Cannot parse push item/s: %s, error: %s", str(json_obj), e
+                    )
         else:
             LOG.warning("Pub source returned empty: %s", str(json_obj))
 

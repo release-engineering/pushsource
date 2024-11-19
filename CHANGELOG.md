@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.50.0] - 2024-11-19
+
+### Added
+
+- `pub` source can now generate `VHDPushItem`
+
 ## [2.49.0] - 2024-11-08
 
 ### Added
@@ -557,7 +563,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.49.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.50.0...HEAD
+[2.50.0]: https://github.com/release-engineering/pushsource/compare/v2.49.0...v2.50.0
 [2.49.0]: https://github.com/release-engineering/pushsource/compare/v2.48.1...v2.49.0
 [2.48.1]: https://github.com/release-engineering/pushsource/compare/v2.48.0...v2.48.1
 [2.48.0]: https://github.com/release-engineering/pushsource/compare/v2.47.2...v2.48.0

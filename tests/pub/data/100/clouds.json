@@ -1,0 +1,74 @@
+[
+    {
+      "boot_mode": null,
+      "build": "rhel-sap-ha-azure-9.4-20240717.0",
+      "build_info": {
+        "id": 3250604,
+        "name": "rhel-sap-ha-azure",
+        "release": "2116",
+        "version": "9.4"
+      },
+      "description": "Provided by Red Hat, Inc.",
+      "dest": [
+        "test-dest"
+      ],
+      "generation": "V2",
+      "name": "rhel-sap-ha-azure.vhd.xz",
+      "recommended_sizes": [],
+      "release": {
+        "arch": "x86_64",
+        "base_product": null,
+        "base_version": null,
+        "date": "20240717",
+        "product": "RHEL-SAP-HA",
+        "respin": 2116,
+        "type": null,
+        "variant": null,
+        "version": "9.4"
+      },
+      "sas_uri": "https://tesing/rhel-sap-ha-azure.vhd",
+      "src": "/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ha-azure.vhd.xz",
+      "starmap_query": {
+        "clouds": {
+          "azure-emea": [
+            {
+              "architecture": "x86_64",
+              "destination": "test-dest-emea",
+              "id": null,
+              "meta": {
+                "generation": "V2",
+                "support_legacy": true
+              },
+              "overwrite": false,
+              "provider": null,
+              "restrict_major": null,
+              "restrict_minor": null,
+              "restrict_version": false,
+              "tags": {}
+            }
+          ],
+          "azure-na": [
+            {
+              "architecture": "x86_64",
+              "destination": "test-dest-na",
+              "id": null,
+              "meta": {
+                "generation": "V2",
+                "support_legacy": true
+              },
+              "overwrite": false,
+              "provider": null,
+              "restrict_major": null,
+              "restrict_minor": null,
+              "restrict_version": false,
+              "tags": {}
+            }
+          ]
+        },
+        "name": "rhel-sap-ha-azure",
+        "workflow": "testing"
+      },
+      "state": "PENDING",
+      "support_legacy": true
+    }
+  ]

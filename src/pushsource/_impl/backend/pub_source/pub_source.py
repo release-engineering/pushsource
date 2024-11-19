@@ -1,4 +1,5 @@
 import logging
+import re
 from concurrent import futures
 
 from more_executors import Executors
@@ -9,7 +10,7 @@ from ...helpers import (
     list_argument,
     try_int,
 )
-from ...model import AmiPushItem
+from ...model import AmiPushItem, VHDPushItem
 from ...source import Source
 from .pub_client import PubClient
 
@@ -73,26 +74,41 @@ class PubSource(Source):
         self._client.shutdown()
         self._executor.shutdown(True)
 
-    def _push_items_from_ami_json(self, json_obj):
+    def _push_items_from_json(self, json_obj):
         out = []
-
-        try:
-            push_items = AmiPushItem._from_data(json_obj)
-            out.extend(list_argument(push_items))
-        except KeyError:
-            LOG.warning("Cannot parse AMI push item/s: %s", str(json_obj))
+        first_obj = next(iter(json_obj or []), None)
+        vhd_file = r"\.(vhd|vhd\.xz)$"
+        if first_obj:
+            if re.search(vhd_file, str(first_obj.get("src"))):
+                try:
+                    push_items = VHDPushItem._from_data(json_obj)
+                    out.extend(list_argument(push_items))
+                except (KeyError, TypeError) as e:
+                    LOG.warning(
+                        "Cannot parse push item/s: %s, error: %s", str(json_obj), e
+                    )
+            else:
+                try:
+                    push_items = AmiPushItem._from_data(json_obj)
+                    out.extend(list_argument(push_items))
+                except (KeyError, TypeError) as e:
+                    LOG.warning(
+                        "Cannot parse push item/s: %s, error: %s", str(json_obj), e
+                    )
+        else:
+            LOG.warning("Pub source returned empty: %s", str(json_obj))
 
         return out
 
     def __iter__(self):
         # Get json Pub responses for all task ids
-        json_fs = [self._client.get_ami_json_f(task_id) for task_id in self._task_ids]
+        json_fs = [self._client.get_json_f(task_id) for task_id in self._task_ids]
 
         # Convert them to lists of push items
         push_items_fs = []
         for f in futures.as_completed(json_fs, timeout=self._timeout):
             push_items_fs.append(
-                self._executor.submit(self._push_items_from_ami_json, f.result())
+                self._executor.submit(self._push_items_from_json, f.result())
             )
 
         completed_fs = as_completed_with_timeout_reset(

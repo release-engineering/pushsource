@@ -4,7 +4,7 @@ from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
 from .conv import in_, instance_of, optional_str, optional
-from .vms import VMIPushItem
+from .vms import VMIPushItem, VMIRelease
 
 
 VHDGeneration = ["V1", "V2"]
@@ -65,3 +65,31 @@ class VHDPushItem(VMIPushItem):
                 'The attribute "legacy_sku_id" must only be set when'
                 ' "support_legacy" is True.'
             )
+
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate VHDPushItem from raw list or dict"""
+
+        if isinstance(data, list):
+            return [cls._from_data(elem) for elem in data]
+
+        kwargs = {
+            # base push item fields
+            "name": data["name"],
+            "build": data.get("build") or None,
+            "state": "PENDING",
+            "src": data.get("src") or None,
+            "dest": data.get("dest") or [],
+            "origin": data.get("origin") or None,
+            "description": data["description"],
+            "generation": data.get("generation") or None,
+            "sku_id": data.get("sku_id") or None,
+            "support_legacy": data.get("support_legacy") or None,
+            "release": VMIRelease._from_data(data.get("release", {})),
+            "legacy_sku_id": data.get("legacy_sku_id") or None,
+            "disk_version": data.get("disk_version") or None,
+            "recommended_sizes": data.get("recommended_sizes") or [],
+            "sas_uri": data.get("sas_uri") or None,
+        }
+
+        return cls(**kwargs)

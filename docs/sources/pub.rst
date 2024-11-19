@@ -6,6 +6,7 @@ The ``pub`` push source allows the loading of content from an instance of Pub.
 Supported content types:
 
 * AMIs
+* VHDs
 
 
 pub source URLs

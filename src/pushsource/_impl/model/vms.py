@@ -79,6 +79,23 @@ class VMIRelease(object):
     type = attr.ib(type=str, default=None, validator=optional_str)
     """Release type, typically "ga" or "beta"."""
 
+    @classmethod
+    def _from_data(cls, data):
+        """Instantiate VMIRelease from raw dict"""
+
+        kwargs = {
+            "product": data["product"],
+            "date": data["date"],
+            "arch": data["arch"],
+            "respin": int(data["respin"]),
+            "version": data.get("version") or None,
+            "base_product": data.get("base_product") or None,
+            "base_version": data.get("base_version") or None,
+            "variant": data.get("variant") or None,
+            "type": data.get("type") or None,
+        }
+        return cls(**kwargs)
+
 
 @attr.s()
 class VMIPushItem(PushItem):

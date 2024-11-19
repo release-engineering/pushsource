@@ -14,6 +14,8 @@ from pushsource import (
     AmiSecurityGroup,
     KojiBuildInfo,
     VMICloudInfo,
+    VHDPushItem,
+    VMIRelease,
 )
 
 DATAPATH = os.path.join(os.path.dirname(__file__), "data")
@@ -167,6 +169,63 @@ def test_get_ami_push_items_single_task_clouds(requests_mock):
                     from_port=22, ip_protocol="tcp", ip_ranges=["0.0.0.0/0"], to_port=22
                 ),
             ],
+        )
+    ]
+
+
+def test_get_azure_push_items_single_task_clouds(requests_mock):
+    """
+    Tests getting push item from one Stratosphere Pub task.
+    """
+    # test setup
+    task_id = 100
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+
+    requests_mock.register_uri(
+        "GET", request_url, json=make_response(task_id, "clouds.json")
+    )
+
+    # Add 404 for images.json
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    # request push items from source
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there should be exactly 1 push item
+    assert len(push_items) == 1
+
+    # with following content
+    assert push_items == [
+        VHDPushItem(
+            name="rhel-sap-ha-azure.vhd.xz",
+            state="PENDING",
+            src="/test/path/packages/rhel-sap-ec2/8.8/2116/images/rhel-sap-ha-azure.vhd.xz",
+            dest=["test-dest"],
+            build="rhel-sap-ha-azure-9.4-20240717.0",
+            build_info=KojiBuildInfo(
+                name="rhel-sap-ha-azure",
+                version="9.4",
+                release="20240717.0",
+                id=None,
+            ),
+            release=VMIRelease(
+                product="RHEL-SAP-HA",
+                date="20240717",
+                arch="x86_64",
+                respin=2116,
+                version="9.4",
+            ),
+            description="Provided by Red Hat, Inc.",
+            sas_uri="https://tesing/rhel-sap-ha-azure.vhd",
+            generation="V2",
+            support_legacy=True,
         )
     ]
 
@@ -566,7 +625,7 @@ def test_pub_source_empty_response(requests_mock, caplog):
     assert len(push_items) == 0
 
     # with details captured in logged
-    assert caplog.messages == ["Cannot parse AMI push item/s: {}"]
+    assert caplog.messages == ["Pub source returned empty: {}"]
 
 
 def test_pub_source_missing_task(requests_mock, caplog):
@@ -593,3 +652,96 @@ def test_pub_source_missing_task(requests_mock, caplog):
             _ = [item for item in source]
 
     assert "404 Client Error:" in str(exc.value)
+
+
+def test_pub_source_bad_ami(requests_mock, caplog):
+    """
+    Tests behavior when empty response is received from source.
+    """
+    # test setup
+    caplog.set_level(logging.WARNING)
+    task_id = 123456
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    json = make_response(task_id, "clouds.json")
+    json[0]["name"] = None
+
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    request_clouds_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_clouds_url, json=json)
+
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there are no push items returned
+    assert len(push_items) == 0
+
+    # with details captured in logged
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]
+
+
+def test_pub_source_bad_vhd(requests_mock, caplog):
+    """
+    Tests behavior when vhd is missing required info.
+    """
+    # test setup
+    caplog.set_level(logging.WARNING)
+    task_id = 100
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    json = make_response(task_id, "clouds.json")
+    json[0]["name"] = None
+
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    request_clouds_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_clouds_url, json=json)
+
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there are no push items returned
+    assert len(push_items) == 0
+
+    # with details captured in logged
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]
+
+
+def test_pub_source_bad_src(requests_mock, caplog):
+    """
+    Tests behavior when empty response is received from source.
+    """
+    # test setup
+    caplog.set_level(logging.WARNING)
+    task_id = 100
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    json = make_response(task_id, "clouds.json")
+    json[0]["src"] = 132456
+
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    request_clouds_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_clouds_url, json=json)
+
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there are no push items returned
+    assert len(push_items) == 0
+
+    # with details captured in logged
+    assert f"Cannot parse push item/s: {json}" in caplog.messages[0]

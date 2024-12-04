@@ -63,7 +63,7 @@ class SourceWrapper(object):
             if not hasattr(item, "src") or not item.src or not item.src.startswith("/"):
                 yield item
             else:
-                wait_exist(item.src, timeout, poll_rate)
+                wait_exist(item, timeout, poll_rate)
                 yield item
 
     def __enter__(self):

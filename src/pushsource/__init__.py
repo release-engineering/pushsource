@@ -42,3 +42,8 @@ from pushsource._impl.backend import (
     RegistrySource,
     PubSource,
 )
+
+from pushsource._impl.reader import (
+    ContentReader,
+    FileContentReader,
+)

@@ -2,6 +2,7 @@ import os
 
 from .base import ContentReader
 
+
 class FileContentReader(ContentReader):
     """
     A file content reader that provides read-only, non-seekable access to a file at the given src.
@@ -13,7 +14,7 @@ class FileContentReader(ContentReader):
 
         Parameters:
             filepath (str): Path to the file to be read.
-       """
+        """
         self._filepath = filepath
         self._file_obj = None
 
@@ -35,7 +36,7 @@ class FileContentReader(ContentReader):
         if self._file_obj is None:
             self._file_obj = open(self._filepath, "rb")
         return self._file_obj.read(size)
-    
+
     def exist(self):
         """Returns True if the file exists at the given file path"""
         return os.path.exists(self._filepath)

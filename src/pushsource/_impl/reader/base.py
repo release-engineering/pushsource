@@ -10,7 +10,7 @@ class ContentReader(BufferedIOBase):
     """
     The base class defines the interface for all the content readers that read
     from various sources like a mounted fs, S3 bucket etc. The readers are
-    buffered and non-seekable. 
+    buffered and non-seekable.
 
     Instances for a specific reader could be obtained from the method
     :meth:`~pushsource.ContentReader.get`
@@ -41,7 +41,7 @@ class ContentReader(BufferedIOBase):
     def read(self, size=-1):
         """Read and return up to `size` bytes. If `size` is negative, read until EOF."""
         raise NotImplementedError()
-    
+
     def read1(self, size=-1):
         """Read and return up to `size` bytes. If `size` is negative, read until EOF."""
         return self.read(size)
@@ -57,7 +57,7 @@ class ContentReader(BufferedIOBase):
     def seekable(self):
         """Return False to indicate the stream is not seekable."""
         return False
-    
+
     def exist(self):
         """Return whether the object exist to be read"""
         raise NotImplementedError()
@@ -122,6 +122,8 @@ class ContentReader(BufferedIOBase):
             raise ValueError("Not a valid path for content reader: %s", path)
 
         if content_type not in cls._READERS:
-            raise ValueError(f"Requested {content_type} reader but there's no such registerd reader")
-    
+            raise ValueError(
+                f"Requested {content_type} reader but there's no such registerd reader"
+            )
+
         return cls._READERS[content_type](parsed.path, *args, **kwargs)

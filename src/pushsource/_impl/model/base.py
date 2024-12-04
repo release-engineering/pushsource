@@ -16,7 +16,7 @@ from .conv import (
     optional,
     optional_str,
 )
-from..reader.base import ContentReader
+from ..reader.base import ContentReader
 
 
 LOG = logging.getLogger("pushsource")
@@ -260,7 +260,7 @@ class PushItem(object):
             A non-seekable read-only file-like object for reading the content
             from the :meth:`src`
         """
-        return ContentReader.get("file:"+self.src)
+        return ContentReader.get("file:" + self.src)
 
     def exist(self):
         """Return whether item exists at the :meth"`src`"""

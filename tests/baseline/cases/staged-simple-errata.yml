@@ -33,6 +33,7 @@ items:
     issued: 2020-02-17 09:14:49 UTC
     md5sum: null
     name: RHBA-2020:0518
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_errata
     pkglist: []
     pushcount: '1'
@@ -155,6 +156,7 @@ items:
     issued: 2020-02-13 19:00:11 UTC
     md5sum: null
     name: RHSA-2020:0509
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_errata
     pkglist:
     - module: null

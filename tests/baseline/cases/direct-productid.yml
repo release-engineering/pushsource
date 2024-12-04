@@ -17,6 +17,7 @@ items:
     - repo3
     md5sum: null
     name: some-cert
+    opener: open_src_local
     origin: direct
     products:
     - architecture:

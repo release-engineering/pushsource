@@ -7,6 +7,7 @@ from pyasn1.codec.der import decoder
 from .base import PushItem
 from .conv import convert_maybe, sloppylist
 from .. import compat_attr as attr
+from ..utils.openers import open_src_local
 
 
 # Red Hat OID namespace is "1.3.6.1.4.1.2312.9",
@@ -114,3 +115,11 @@ class ProductIdPushItem(PushItem):
             )
             result.append(product)
         return result
+
+    opener = attr.ib(type=callable, default=open_src_local, repr=False)
+    """Identical to :attr:`~pushsource.PushItem.opener`.
+
+    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`
+    
+    .. versionadded:: 2.51.0
+    """

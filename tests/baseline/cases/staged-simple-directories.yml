@@ -15,6 +15,7 @@ items:
     - dest1
     md5sum: null
     name: dest1
+    opener: open_src_local
     origin: null
     sha256sum: null
     signing_key: null
@@ -27,6 +28,7 @@ items:
     - dest2
     md5sum: null
     name: dest2
+    opener: open_src_local
     origin: null
     sha256sum: null
     signing_key: null
@@ -39,6 +41,7 @@ items:
     - origin
     md5sum: null
     name: origin
+    opener: open_src_local
     origin: null
     sha256sum: null
     signing_key: null

@@ -15,6 +15,7 @@ items:
     - dest
     md5sum: null
     name: cgw.yml
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cgw
     sha256sum: null
     signing_key: null

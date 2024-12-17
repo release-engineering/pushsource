@@ -16,6 +16,7 @@ from .conv import (
     optional,
     optional_str,
 )
+from ..reader.base import ContentReader
 
 
 LOG = logging.getLogger("pushsource")
@@ -248,3 +249,19 @@ class PushItem(object):
             updated_sums[attribute] = hasher.hexdigest()
 
         return attr.evolve(self, **updated_sums)
+
+    @property
+    def content(self):
+        """Open a file-like object for the push item using the specified
+        content type reader.
+
+        Returns:
+            :class:`~pushsource.ContentReader`
+            A non-seekable read-only file-like object for reading the content
+            from the :meth:`src`
+        """
+        return ContentReader.get("file:" + self.src)
+
+    def exist(self):
+        """Return whether item exists at the :meth"`src`"""
+        return self.content.exist()

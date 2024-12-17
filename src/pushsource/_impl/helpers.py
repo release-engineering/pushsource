@@ -154,7 +154,7 @@ def wait_exist(path, timeout, poll_rate):
     Wait until a file begins to exist or until a timeout is reached.
 
     Args:
-        path (str):
+        path (str or object):
             Path to check.
         timeout (int):
             Maximum time to wait.
@@ -163,7 +163,9 @@ def wait_exist(path, timeout, poll_rate):
     """
     max_attempts = timeout // poll_rate
     for i in range(max_attempts + 1):
-        if os.path.exists(path):
+        if isinstance(path, str) and os.path.exists(path):
+            break
+        if path.exist:
             break
         if i == max_attempts:
             if max_attempts > 0:

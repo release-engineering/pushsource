@@ -28,9 +28,9 @@ babel==2.16.0 \
     --hash=sha256:368b5b98b37c06b7daf6696391c3240c938b37767d4584413e8438c5c435fa8b \
     --hash=sha256:d1f3554ca26605fe173f3de0c65f750f5a42f924499bf134de6423582298e316
     # via sphinx
-bandit==1.8.0 \
-    --hash=sha256:b1a61d829c0968aed625381e426aa378904b996529d048f8d908fa28f6b13e38 \
-    --hash=sha256:b5bfe55a095abd9fe20099178a7c6c060f844bfd4fe4c76d28e35e4c52b9d31e
+bandit==1.8.2 \
+    --hash=sha256:df6146ad73dd30e8cbda4e29689ddda48364e36ff655dbfc86998401fcf1721f \
+    --hash=sha256:e00ad5a6bc676c0954669fe13818024d66b70e42cf5adb971480cf3b671e835f
     # via -r test-requirements.in
 black==24.10.0 \
     --hash=sha256:14b3502784f09ce2443830e3133dacf2c0110d45191ed470ecb04d0f5f6fcb0f \
@@ -732,9 +732,9 @@ pyyaml==6.0.2 \
     #   bandit
     #   pre-commit
     #   pushcollector
-referencing==0.35.1 \
-    --hash=sha256:25b42124a6c8b632a425174f24087783efb348a6f1e0008e63cd4466fedf703c \
-    --hash=sha256:eda6d3234d62814d1c64e305c1331c9a3a6132da475ab6382eaa997b21ee75de
+referencing==0.36.1 \
+    --hash=sha256:363d9c65f080d0d70bc41c721dce3c7f3e77fc09f269cd5c8813da18069a6794 \
+    --hash=sha256:ca2e6492769e3602957e9b831b94211599d2aade9477f5d44110d2530cf9aade
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -871,9 +871,9 @@ rpmdyn==2024.11.25 \
     --hash=sha256:01398bfcf9e37fde04bde2c36e7617ba0725df28a8dd130ac7d0c43d2a10cd70 \
     --hash=sha256:16917a703db9ff243641884bcce06e1f0a1f7ced6cf7418bcdba6b09ce303480
     # via -r test-requirements.in
-semver==3.0.2 \
-    --hash=sha256:6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc \
-    --hash=sha256:b1ea4686fe70b981f85359eda33199d60c53964284e0cfb4977d243e37cf4bf4
+semver==3.0.3 \
+    --hash=sha256:4bf5e5a52f98cd8377cfb99088eb743722f3d47cefc8a37e503c1e5806846b17 \
+    --hash=sha256:8769a03a93507fecdf19b6eefb08d5e95b462504871a61e29e09798822888c94
     # via pidiff
 six==1.17.0 \
     --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274 \
@@ -970,14 +970,15 @@ typing-extensions==4.12.2 \
     #   astroid
     #   black
     #   pylint
+    #   referencing
     #   rich
 urllib3==2.3.0 \
     --hash=sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df \
     --hash=sha256:f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d
     # via requests
-virtualenv==20.28.1 \
-    --hash=sha256:412773c85d4dab0409b83ec36f7a6499e72eaf08c80e81e9576bca61831c71cb \
-    --hash=sha256:5d34ab240fdb5d21549b76f9e8ff3af28252f5499fb6d6f031adac4e5a8c5329
+virtualenv==20.29.1 \
+    --hash=sha256:4e4cb403c0b0da39e13b46b1b2476e505cb0046b25f242bee80f62bf990b2779 \
+    --hash=sha256:b8b8970138d32fb606192cb97f6cd4bb644fa486be9308fb9b63f81091b5dc35
     # via pre-commit
 virtualenv-api==2.1.18 \
     --hash=sha256:2115cceaeab27faf2909780c442f4ee7a33fda9a49fe8255967432290a0557af \

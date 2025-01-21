@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.model.base &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=32913b9a" />
     <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
@@ -30,15 +30,15 @@
           <div class="body" role="main">
             
   <h1>Source code for pushsource._impl.model.base</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">frozenlist2</span><span class="w"> </span><span class="kn">import</span> <span class="n">frozenlist</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
-<span class="kn">from</span> <span class="nn">.cache</span> <span class="kn">import</span> <span class="n">TinyCache</span>
-<span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">TinyCache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.conv</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">convert_maybe</span><span class="p">,</span>
     <span class="n">md5str</span><span class="p">,</span>
     <span class="n">sha256str</span><span class="p">,</span>
@@ -57,7 +57,7 @@
 <div class="viewcode-block" id="KojiBuildInfo">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.KojiBuildInfo">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">KojiBuildInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KojiBuildInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A representation of a koji build.&quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
@@ -87,7 +87,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional attribute to store the &#39;build_id&#39; from Koji.&quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_from_nvr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nvr_str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_nvr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nvr_str</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nvr_str</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -108,7 +108,7 @@
 <div class="viewcode-block" id="PushItem">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">PushItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PushItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A PushItem represents a single piece of content to be published.</span>
 <span class="sd">    This may be an RPM, an advisory, a generic file, and so on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -199,7 +199,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic info on the koji build from which this push item was extracted, if any.&quot;&quot;&quot;</span>
 
     <span class="nd">@build_info</span><span class="o">.</span><span class="n">default</span>
-    <span class="k">def</span> <span class="nf">_default_build_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_build_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">KojiBuildInfo</span><span class="o">.</span><span class="n">_from_nvr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
 
     <span class="n">signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
@@ -217,7 +217,7 @@
 
 <div class="viewcode-block" id="PushItem.with_checksums">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>
-    <span class="k">def</span> <span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this push item with checksums present.</span>
 
 <span class="sd">        Many pushsource backends will produce push items with empty checksum attributes,</span>

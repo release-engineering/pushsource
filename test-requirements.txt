@@ -16,9 +16,9 @@ astroid==3.3.8 \
     # via
     #   pidiff
     #   pylint
-attrs==24.3.0 \
-    --hash=sha256:8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff \
-    --hash=sha256:ac96cd038792094f438ad1f6ff80837353805ac950cd2aa0e0625ef19850c308
+attrs==25.1.0 \
+    --hash=sha256:1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e \
+    --hash=sha256:c75a69e28a550a7e93789579c22aa26b0f5b83b75dc4e08fe092980051e1090a
     # via
     #   -r requirements.in
     #   -r test-requirements.in
@@ -359,9 +359,9 @@ exceptiongroup==1.2.2 \
     --hash=sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b \
     --hash=sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc
     # via pytest
-filelock==3.16.1 \
-    --hash=sha256:2082e5703d51fbf98ea75855d9d5527e33d8ff23099bec374a134febee6946b0 \
-    --hash=sha256:c249fbfcd5db47e5e2d6d62198e565475ee65e4831e2561c8e313fa7eb961435
+filelock==3.17.0 \
+    --hash=sha256:533dc2f7ba78dc2f0f531fc6c4940addf7b70a481e269a5a3b93be94ffbe8338 \
+    --hash=sha256:ee4e77401ef576ebb38cd7f13b9b28893194acc20a8e68e18730ba9c0e54660e
     # via virtualenv
 frozendict==2.4.6 ; python_version >= "3.6" \
     --hash=sha256:02331541611f3897f260900a1815b63389654951126e6e65545e529b63c08361 \
@@ -437,9 +437,9 @@ gssapi==1.9.0 \
     --hash=sha256:f2f3a46784d8127cc7ef10d3367dedcbe82899ea296710378ccc9b7cefe96f4c \
     --hash=sha256:f468fac8f3f5fca8f4d1ca19e3cd4d2e10bd91074e7285464b22715d13548afe
     # via requests-gssapi
-identify==2.6.5 \
-    --hash=sha256:14181a47091eb75b337af4c23078c9d09225cd4c48929f521f3bf16b09d02566 \
-    --hash=sha256:c10b33f250e5bba374fae86fb57f3adcebf1161bce7cdf92031915fd480c13bc
+identify==2.6.6 \
+    --hash=sha256:7bec12768ed44ea4761efb47806f0a41f86e7c0a5fdf5950d4648c90eca7e251 \
+    --hash=sha256:cbd1810bce79f8b671ecb20f53ee0ae8e86ae84b557de31d89709dc2a48ba881
     # via pre-commit
 idna==3.10 \
     --hash=sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9 \
@@ -449,9 +449,9 @@ imagesize==1.4.1 \
     --hash=sha256:0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b \
     --hash=sha256:69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a
     # via sphinx
-importlib-metadata==8.5.0 \
-    --hash=sha256:45e54197d28b7a7f1559e60b95e7c567032b602131fbd588f1497f47880aa68b \
-    --hash=sha256:71522656f0abace1d072b9e5481a48f07c138e00f079c38c8f883823f9c26bd7
+importlib-metadata==8.6.1 \
+    --hash=sha256:02a89390c1e15fdfdc0d7c6b25cb3e62650d0494005c97d6f148bf5b9787525e \
+    --hash=sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580
     # via sphinx
 importlib-resources==6.5.2 \
     --hash=sha256:185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c \
@@ -618,9 +618,9 @@ pluggy==1.5.0 \
     --hash=sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1 \
     --hash=sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669
     # via pytest
-pre-commit==4.0.1 \
-    --hash=sha256:80905ac375958c0444c65e9cebebd948b3cdb518f335a091a670a89d652139d2 \
-    --hash=sha256:efde913840816312445dc98787724647c65473daefe420785f885e8ed9a06878
+pre-commit==4.1.0 \
+    --hash=sha256:ae3f018575a588e30dfddfab9a05448bfbd6b73d78709617b5a2b853549716d4 \
+    --hash=sha256:d29e7cb346295bcc1cc75fc3e92e343495e3ea0196c9ec6ba53f49f10ab6ae7b
     # via -r test-requirements.in
 pushcollector==1.3.0 \
     --hash=sha256:18281fcd4247ca8b668c25348bbc2f9cc032912cecc7037824a74ad8adcbb1c3 \
@@ -732,9 +732,9 @@ pyyaml==6.0.2 \
     #   bandit
     #   pre-commit
     #   pushcollector
-referencing==0.36.1 \
-    --hash=sha256:363d9c65f080d0d70bc41c721dce3c7f3e77fc09f269cd5c8813da18069a6794 \
-    --hash=sha256:ca2e6492769e3602957e9b831b94211599d2aade9477f5d44110d2530cf9aade
+referencing==0.36.2 \
+    --hash=sha256:df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa \
+    --hash=sha256:e8699adbbf8b5c7de96d8ffa0eb5c158b3beafce084968e2ea8bb08c6794dcd0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -871,9 +871,9 @@ rpmdyn==2024.11.25 \
     --hash=sha256:01398bfcf9e37fde04bde2c36e7617ba0725df28a8dd130ac7d0c43d2a10cd70 \
     --hash=sha256:16917a703db9ff243641884bcce06e1f0a1f7ced6cf7418bcdba6b09ce303480
     # via -r test-requirements.in
-semver==3.0.3 \
-    --hash=sha256:4bf5e5a52f98cd8377cfb99088eb743722f3d47cefc8a37e503c1e5806846b17 \
-    --hash=sha256:8769a03a93507fecdf19b6eefb08d5e95b462504871a61e29e09798822888c94
+semver==3.0.4 \
+    --hash=sha256:9c824d87ba7f7ab4a1890799cec8596f15c1241cb473404ea1cb0c55e4b04746 \
+    --hash=sha256:afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602
     # via pidiff
 six==1.17.0 \
     --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274 \

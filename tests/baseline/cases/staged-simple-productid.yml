@@ -15,6 +15,7 @@ items:
     - dest1
     md5sum: null
     name: some-cert
+    opener: open_src_local
     origin: {{ src_dir }}/tests/staged/data/simple_productid
     products:
     - architecture:

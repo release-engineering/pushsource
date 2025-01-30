@@ -15,6 +15,7 @@ items:
     - dest1
     md5sum: null
     name: rawhide-everything.xml
+    opener: open_src_local
     origin: {{ src_dir }}/tests/staged/data/simple_comps
     sha256sum: null
     signing_key: null

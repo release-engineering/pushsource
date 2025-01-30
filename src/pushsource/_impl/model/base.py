@@ -16,6 +16,7 @@ from .conv import (
     optional,
     optional_str,
 )
+from ..reader import PushItemReader
 
 
 LOG = logging.getLogger("pushsource")
@@ -178,6 +179,14 @@ class PushItem(object):
     doesn't enforce this.
     """
 
+    opener = attr.ib(type=callable, default=None, repr=False)
+    """The opener, when given a push item, should return a file-like object
+    suitable for reading this item's bytes. The object can be retrieved from
+    :meth:`~pushsource.PushItem.content()` method.
+
+    .. versionadded:: 2.51.0
+    """
+
     def with_checksums(self):
         """Return a copy of this push item with checksums present.
 
@@ -248,3 +257,36 @@ class PushItem(object):
             updated_sums[attribute] = hasher.hexdigest()
 
         return attr.evolve(self, **updated_sums)
+
+    def content(self):
+        """Returns a read-only, non-seekable content of this push item.
+
+        For push items representing a single file, content will obtain a stream
+        for reading that file's bytes.
+        For example, ``RpmPushItem.content`` can be used to read the content of
+        an RPM; ``VMIPushItem.content`` can be used to read the content of a VMI
+        and so on.
+
+        Not every type of push item can be read in this way.
+        For example, a single ``ContainerImagePushItem`` may represent any number
+        of artifacts making up a container image, to be accessed from a container
+        image registry in the usual way - not using this method. Other types of
+        push items such as ``ErratumPushItem`` may be understood as metadata-only
+        items and do not themselves have any content. For items such as these,
+        this method will return None.
+
+
+        Returns:
+            :class:`~io.BufferedReader`
+                A non-seekable object of the push item content
+            ``None``
+                If the :attr:`~pushsource.PushItem.opener` in the pushitem is not defined to read
+                the content.
+
+        .. versionadded:: 2.51.0
+        """
+        return (
+            PushItemReader(self.opener(self), self.src or self.name)
+            if self.opener
+            else None
+        )

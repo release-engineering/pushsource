@@ -1,6 +1,7 @@
 from .base import PushItem
 from .conv import optional_str
 from .. import compat_attr as attr
+from ..utils.openers import open_src_local
 
 
 @attr.s()
@@ -31,4 +32,12 @@ class RpmPushItem(PushItem):
 
     .. _ghc-8.4-820200708061905.9edba152: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767200
     .. _ghc-8.4.4-74.module_el8+12161+cf1bd7f2: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767130
+    """
+
+    opener = attr.ib(type=callable, default=open_src_local, repr=False)
+    """Identical to :attr:`~pushsource.PushItem.opener`.
+
+    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`
+    
+    .. versionadded:: 2.51.0
     """

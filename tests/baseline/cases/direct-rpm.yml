@@ -15,6 +15,7 @@ items:
     md5sum: null
     module_build: null
     name: test.rpm
+    opener: open_src_local
     origin: custom-origin
     sha256sum: null
     signing_key: A1B2C3

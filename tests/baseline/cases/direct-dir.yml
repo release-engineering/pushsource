@@ -15,6 +15,7 @@ items:
     - /destdir
     md5sum: null
     name: srcdir
+    opener: open_src_local
     origin: direct
     sha256sum: null
     signing_key: null

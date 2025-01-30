@@ -32,6 +32,7 @@ items:
       operators.operatorframework.io.bundle.package.v1: security-profiles-operator
     md5sum: null
     name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+    opener: null
     origin: null
     product_name: null
     pull_info:
@@ -94,6 +95,7 @@ items:
         operators.operatorframework.io.bundle.package.v1: security-profiles-operator
       md5sum: null
       name: docker-image-sha256:eb6788bfdcb4c1743176a99440754e925725664e037180ab974fd64a238fae29.x86_64.tar.gz
+      opener: null
       origin: null
       product_name: null
       pull_info:
@@ -128,6 +130,7 @@ items:
     dest: []
     md5sum: null
     name: security-profiles-operator-bundle-container-0.5.2-2/operator_manifests.zip
+    opener: null
     origin: null
     related_images:
     - registry.redhat.io/compliance/openshift-security-profiles-rhel8-operator@sha256:04bd4e8dc14f2bf6fb9bfceb4c0987c059190af6fd4f4c7ca2fda2b8760315ee

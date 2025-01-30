@@ -48,6 +48,7 @@
     <span class="n">optional</span><span class="p">,</span>
     <span class="n">optional_str</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushItemReader</span>
 
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
@@ -215,6 +216,14 @@
 <span class="sd">    doesn&#39;t enforce this.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">opener</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">callable</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The opener, when given a push item, should return a file-like object</span>
+<span class="sd">    suitable for reading this item&#39;s bytes. The object can be retrieved from</span>
+<span class="sd">    :meth:`~pushsource.PushItem.content()` method.</span>
+
+<span class="sd">    .. versionadded:: 2.51.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="PushItem.with_checksums">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -287,6 +296,42 @@
             <span class="n">updated_sums</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_sums</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PushItem.content">
+<a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.content">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a read-only, non-seekable content of this push item.</span>
+
+<span class="sd">        For push items representing a single file, content will obtain a stream</span>
+<span class="sd">        for reading that file&#39;s bytes.</span>
+<span class="sd">        For example, ``RpmPushItem.content`` can be used to read the content of</span>
+<span class="sd">        an RPM; ``VMIPushItem.content`` can be used to read the content of a VMI</span>
+<span class="sd">        and so on.</span>
+
+<span class="sd">        Not every type of push item can be read in this way.</span>
+<span class="sd">        For example, a single ``ContainerImagePushItem`` may represent any number</span>
+<span class="sd">        of artifacts making up a container image, to be accessed from a container</span>
+<span class="sd">        image registry in the usual way - not using this method. Other types of</span>
+<span class="sd">        push items such as ``ErratumPushItem`` may be understood as metadata-only</span>
+<span class="sd">        items and do not themselves have any content. For items such as these,</span>
+<span class="sd">        this method will return None.</span>
+
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`~io.BufferedReader`</span>
+<span class="sd">                A non-seekable object of the push item content</span>
+<span class="sd">            ``None``</span>
+<span class="sd">                If the :attr:`~pushsource.PushItem.opener` in the pushitem is not defined to read</span>
+<span class="sd">                the content.</span>
+
+<span class="sd">        .. versionadded:: 2.51.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">PushItemReader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opener</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opener</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span></div>
 </div>
 
 </pre></div>

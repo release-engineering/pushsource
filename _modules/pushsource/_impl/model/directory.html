@@ -32,6 +32,7 @@
   <h1>Source code for pushsource._impl.model.directory</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushItem</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.openers</span><span class="w"> </span><span class="kn">import</span> <span class="n">open_src_local</span>
 
 
 <div class="viewcode-block" id="DirectoryPushItem">
@@ -42,7 +43,15 @@
 
 <span class="sd">    On a directory push item, the src attribute contains the full path to a directory tree.</span>
 <span class="sd">    It should generally be interpreted as a request to recursively publish that entire directory</span>
-<span class="sd">    tree as-is.&quot;&quot;&quot;</span></div>
+<span class="sd">    tree as-is.&quot;&quot;&quot;</span>
+
+    <span class="n">opener</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">callable</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">open_src_local</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identical to :attr:`~pushsource.PushItem.opener`.</span>
+
+<span class="sd">    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`</span>
+<span class="sd">    </span>
+<span class="sd">    .. versionadded:: 2.51.0</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 </pre></div>
 

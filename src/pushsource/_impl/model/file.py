@@ -1,6 +1,7 @@
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import optional_str, convert_maybe
+from ..utils.openers import open_src_local
 
 
 @attr.s()
@@ -52,3 +53,11 @@ class FilePushItem(PushItem):
         # - This check will also filter out NaN.
         if not -99999 <= value <= 99999:
             raise ValueError("display_order must be within range -99999 .. 99999")
+
+    opener = attr.ib(type=callable, default=open_src_local, repr=False)
+    """Identical to :attr:`~pushsource.PushItem.opener`.
+
+    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`
+    
+    .. versionadded:: 2.51.0
+    """

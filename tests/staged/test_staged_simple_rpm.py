@@ -40,6 +40,13 @@ def test_staged_simple_rpm(caplog):
             signing_key=None,
         ),
     ]
+    # RPM content is read from the source in the push items
+    assert files[0].content().name == os.path.join(
+        staged_dir, "dest1/RPMS/walrus-5.21-1.noarch.rpm"
+    )
+    assert files[1].content().name == os.path.join(
+        staged_dir, "dest1/SRPMS/test-srpm01-1.0-1.src.rpm"
+    )
     # It should also warn about this
     nonrpm_path = os.path.join(staged_dir, "dest1/RPMS/not-an-rpm.txt")
     msg = "Unexpected non-RPM %s (ignored)" % nonrpm_path

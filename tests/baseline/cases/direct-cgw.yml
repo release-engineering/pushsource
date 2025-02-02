@@ -15,6 +15,7 @@ items:
     - dest
     md5sum: null
     name: cgw.yaml
+    opener: null
     origin: direct
     sha256sum: null
     signing_key: null

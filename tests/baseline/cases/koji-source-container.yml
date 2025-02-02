@@ -21,6 +21,7 @@ items:
     labels: {}
     md5sum: null
     name: docker-image-sha256:bfe520f7c81aeb3eaeb732ab93dd76b279b6a01a16a27f1ec34d5b2fcefbb363.x86_64.tar.gz
+    opener: null
     origin: null
     product_name: null
     pull_info:

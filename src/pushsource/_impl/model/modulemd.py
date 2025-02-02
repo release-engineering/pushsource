@@ -1,5 +1,6 @@
 from .base import PushItem
 from .. import compat_attr as attr
+from ..utils.openers import open_src_local
 
 
 @attr.s()
@@ -14,6 +15,14 @@ class ModuleMdPushItem(PushItem):
     modulemd stream.
     """
 
+    opener = attr.ib(type=callable, default=open_src_local, repr=False)
+    """Identical to :attr:`~pushsource.PushItem.opener`.
+
+    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`
+    
+    .. versionadded:: 2.51.0
+    """
+
 
 @attr.s()
 class ModuleMdSourcePushItem(PushItem):
@@ -24,4 +33,12 @@ class ModuleMdSourcePushItem(PushItem):
 
     This library does not verify that the referenced file is a valid
     modulemd source document.
+    """
+
+    opener = attr.ib(type=callable, default=open_src_local, repr=False)
+    """Identical to :attr:`~pushsource.PushItem.opener`.
+
+    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`
+    
+    .. versionadded:: 2.51.0
     """

@@ -36,6 +36,10 @@ from pushsource import Source
 
 LOG = logging.getLogger("pushsource-ls")
 
+EXCLUDED_ATTRIBUTES = [
+    "opener",
+]
+
 
 class ItemDumper(yaml.SafeDumper):
     # Custom dumper adding support for any types appearing on pushitems
@@ -77,7 +81,13 @@ def format_python_black(item):
 
 
 def format_yaml(item):
-    data = {type(item).__name__: attr.asdict(item, recurse=True)}
+    data = {
+        type(item).__name__: attr.asdict(
+            item,
+            recurse=True,
+            filter=lambda attribute, _: attribute.name not in EXCLUDED_ATTRIBUTES,
+        )
+    }
     return yaml.dump([data], Dumper=ItemDumper)
 
 

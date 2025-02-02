@@ -29,6 +29,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something1.raw.xz
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2
     public_image: null
     recommended_instance_type: null
@@ -80,6 +81,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something2.raw.xz
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2
     public_image: null
     recommended_instance_type: null
@@ -131,6 +133,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something1.raw.xz
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build3
     public_image: null
     recommended_instance_type: null
@@ -180,6 +183,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something1.raw.xz
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
     recommended_sizes: []
     release:
@@ -218,6 +222,7 @@ items:
     marketplace_title_template: null
     md5sum: null
     name: something2.raw.xz
+    opener: null
     origin: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1
     recommended_sizes: []
     release:

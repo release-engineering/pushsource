@@ -31,13 +31,20 @@ SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
 DATA_DIR = os.path.abspath(os.path.join(THIS_DIR, "../.."))
 
 
+def _callable_to_str(value):
+    if not callable(value):
+        return value
+
+    return getattr(value, "__name__", repr(value))
+
+
 def asdict(value):
     # modern case must use a value_serializer to convert frozendict into a
     # serializable type.
     ret = attr.asdict(
         value,
         recurse=True,
-        value_serializer=lambda _self, _field, value: unfreeze(value),
+        value_serializer=lambda _self, _field, value: _callable_to_str(unfreeze(value)),
     )
     # yaml dump can't handle enums, so export their value instead.
     for k, v in ret.items():

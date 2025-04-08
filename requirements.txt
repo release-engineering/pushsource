@@ -307,9 +307,9 @@ jsonschema-specifications==2024.10.1 \
     --hash=sha256:0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272 \
     --hash=sha256:a09a0680616357d9a0ecf05c12ad234479f549239d0f5b55f3deea67475da9bf
     # via jsonschema
-kobo==0.39.0 \
-    --hash=sha256:45302a8d819ae0b47e0a76d3223ee64943d4e7c988379b1f8ceff3fc99ab7a85 \
-    --hash=sha256:fcf9bb7ac0ca3bc0ca2aaaff75fa974a78b3f4207037829dce2bf242def6c179
+kobo==0.40.0 \
+    --hash=sha256:435b77d49449beade28e2aa795334e7f6886ec5c0d274289ef733eaf03c79587 \
+    --hash=sha256:9950b4b43f11260de9ccbdc2dbb620621e5bf94320a62fed48fee5b29dcc5ff4
     # via -r requirements.in
 koji==1.35.2 \
     --hash=sha256:0ece53247064c6c1c772527c74176dd07a67dd78465ddd1c7bf2170f6f673244 \
@@ -540,9 +540,9 @@ six==1.17.0 \
     #   koji
     #   more-executors
     #   python-dateutil
-typing-extensions==4.13.0 \
-    --hash=sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b \
-    --hash=sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5
+typing-extensions==4.13.1 \
+    --hash=sha256:4b6cf02909eb5495cfbc3f6e8fd49217e6cc7944e145cdda8caa3734777f9e69 \
+    --hash=sha256:98795af00fb9640edec5b8e31fc647597b4691f099ad75f469a2616be1a76dff
     # via referencing
 urllib3==2.3.0 \
     --hash=sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df \

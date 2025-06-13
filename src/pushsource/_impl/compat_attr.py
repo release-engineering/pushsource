@@ -4,6 +4,7 @@ import attr
 
 ATTR_VERSION = tuple(int(x) for x in attr.__version__.split(".")[0:2])
 
+
 def s():
     kwargs = {"frozen": True, "slots": True}
     if ATTR_VERSION >= (18, 2):

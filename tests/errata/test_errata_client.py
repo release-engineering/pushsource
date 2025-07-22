@@ -113,3 +113,32 @@ def test_get_advisory_data(caplog):
         "GET https://errata.example.com/api/v1/erratum/RHSA-123456789 200",
         "Errata Tool completed call /api/v1/erratum/{id}(RHSA-123456789)",
     ]
+
+
+def test_get_advisory_data_retry(caplog):
+    caplog.set_level(logging.DEBUG)
+
+    client = ErrataHTTPClient(
+        1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
+    )
+    client._call_et.retry.sleep = mock.MagicMock()
+    client._tls.session = requests.Session()
+
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://errata.example.com/api/v1/erratum/RHSA-123456789",
+            [{"status_code": 504}, {"json": {"errata": "data"}, "status_code": 200}],
+        )
+
+        data = client.get_advisory_data("RHSA-123456789")
+
+    assert data == {"errata": "data"}
+    assert m.call_count == 2
+    assert caplog.messages == [
+        "Calling Errata Tool /api/v1/erratum/{id}(RHSA-123456789)",
+        "GET https://errata.example.com/api/v1/erratum/RHSA-123456789 504",
+        "Failed to call Errata Tool /api/v1/erratum/{id}(RHSA-123456789)",
+        "Calling Errata Tool /api/v1/erratum/{id}(RHSA-123456789)",
+        "GET https://errata.example.com/api/v1/erratum/RHSA-123456789 200",
+        "Errata Tool completed call /api/v1/erratum/{id}(RHSA-123456789)",
+    ]

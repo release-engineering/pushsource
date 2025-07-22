@@ -41,6 +41,7 @@ def test_errata_client_debug_logs(caplog):
         # disable retry just for this test
         max_attempts=1,
     )
+    client._call_et.retry.sleep = mock.MagicMock()
 
     with patch(
         "pushsource._impl.backend.errata_source.errata_client.xmlrpc_client.ServerProxy"

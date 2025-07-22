@@ -14,6 +14,13 @@ from more_executors import Executors
 from more_executors.futures import f_zip, f_map
 import requests
 import requests_gssapi
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    retry_if_exception,
+    retry_if_exception_type,
+    wait_exponential,
+)
 
 from ...compat_attr import attr
 
@@ -111,6 +118,12 @@ class ErrataClientBase(object):
         )
         return f_map(all_responses, lambda tup: ErrataRaw(*tup))
 
+    @retry(
+        retry=retry_if_exception_type(requests.exceptions.HTTPError)
+        & retry_if_exception(lambda exc: exc.response.status_code >= 500),
+        stop=stop_after_attempt(5),
+        wait=wait_exponential(multiplier=2, min=1, max=10),
+    )
     def _call_et(self, method, advisory_id):
         # These APIs have had performance issues occasionally, so let's set up some
         # detailed structured logs which can be used to check the performance.

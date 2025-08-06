@@ -10,17 +10,10 @@ from urllib.parse import urljoin
 import warnings
 
 import gssapi
-from more_executors import Executors
+from more_executors import Executors, ExceptionRetryPolicy
 from more_executors.futures import f_zip, f_map
 import requests
 import requests_gssapi
-from tenacity import (
-    retry,
-    stop_after_attempt,
-    retry_if_exception,
-    retry_if_exception_type,
-    wait_exponential,
-)
 
 from ...compat_attr import attr
 
@@ -62,6 +55,13 @@ class ErrataRaw(object):
 # pylint: disable=W0223
 class ErrataClientBase(object):
     def __init__(self, threads, url, **retry_args):
+        default_retry_policy = ExceptionRetryPolicy(
+            max_attempts=5,
+            exponent=2.0,
+            sleep=1.0,
+            exception_base=requests.exceptions.HTTPError,
+        )
+        retry_args.setdefault("retry_policy", default_retry_policy)
         self._executor = (
             Executors.thread_pool(name="pushsource-errata-client", max_workers=threads)
             .with_retry(**retry_args)
@@ -118,12 +118,6 @@ class ErrataClientBase(object):
         )
         return f_map(all_responses, lambda tup: ErrataRaw(*tup))
 
-    @retry(
-        retry=retry_if_exception_type(requests.exceptions.HTTPError)
-        & retry_if_exception(lambda exc: exc.response.status_code >= 500),
-        stop=stop_after_attempt(5),
-        wait=wait_exponential(multiplier=2, min=1, max=10),
-    )
     def _call_et(self, method, advisory_id):
         # These APIs have had performance issues occasionally, so let's set up some
         # detailed structured logs which can be used to check the performance.

@@ -121,7 +121,6 @@ def test_get_advisory_data_retry(caplog):
     client = ErrataHTTPClient(
         1, "https://errata.example.com/", "/path/to/keytab", "pub-errata@IPA.REDHAT.COM"
     )
-    client._call_et.retry.sleep = mock.MagicMock()
     client._tls.session = requests.Session()
 
     with requests_mock.Mocker() as m:

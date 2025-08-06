@@ -11,4 +11,3 @@ python-dateutil
 pytz; python_version < '3.9'
 PyYAML
 requests
-tenacity

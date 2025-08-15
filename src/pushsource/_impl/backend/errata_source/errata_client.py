@@ -10,7 +10,7 @@ from urllib.parse import urljoin
 import warnings
 
 import gssapi
-from more_executors import Executors
+from more_executors import Executors, ExceptionRetryPolicy
 from more_executors.futures import f_zip, f_map
 import requests
 import requests_gssapi
@@ -55,6 +55,13 @@ class ErrataRaw(object):
 # pylint: disable=W0223
 class ErrataClientBase(object):
     def __init__(self, threads, url, **retry_args):
+        default_retry_policy = ExceptionRetryPolicy(
+            max_attempts=5,
+            exponent=2.0,
+            sleep=1.0,
+            exception_base=requests.exceptions.HTTPError,
+        )
+        retry_args.setdefault("retry_policy", default_retry_policy)
         self._executor = (
             Executors.thread_pool(name="pushsource-errata-client", max_workers=threads)
             .with_retry(**retry_args)

@@ -1,6 +1,7 @@
+import pytest
 from pytest import raises
 
-from pushsource import VMIRelease, VMIPushItem
+from pushsource import BootMode, VMIRelease, VMIPushItem
 
 
 def test_invalidate_datestr():
@@ -42,3 +43,38 @@ def test_marketplace_title():
         name="myname",
     )
     assert pi.marketplace_title == ""
+
+
+@pytest.mark.parametrize("boot_mode", [None, "hybrid", "uefi", "legacy"])
+def test_bootmode_converter_success(boot_mode):
+    """Ensure the BootMode converter works when valid data is given."""
+
+    release = VMIRelease(
+        product="myprod", arch="x86_64", version="7.0", respin=1, date="20240101"
+    )
+
+    pi = VMIPushItem(
+        description="mydescription", name="myname", release=release, boot_mode=boot_mode
+    )
+
+    if boot_mode:
+        assert pi.boot_mode == BootMode(boot_mode)
+    else:
+        assert not pi.boot_mode
+
+
+@pytest.mark.parametrize("boot_mode", ["foo", "bar", 12])
+def test_bootmode_converter_invalid(boot_mode):
+    """Ensure the BootMode converter fails on invalid data."""
+
+    release = VMIRelease(
+        product="myprod", arch="x86_64", version="7.0", respin=1, date="20240101"
+    )
+
+    with raises(ValueError):
+        VMIPushItem(
+            description="mydescription",
+            name="myname",
+            release=release,
+            boot_mode=boot_mode,
+        )

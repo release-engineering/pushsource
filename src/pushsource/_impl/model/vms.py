@@ -4,7 +4,14 @@ import enum
 from .base import PushItem
 from .. import compat_attr as attr
 from attr import asdict
-from .conv import datestr, instance_of_str, instance_of, optional_str, optional, in_
+from .conv import (
+    convert_maybe,
+    datestr,
+    instance_of_str,
+    instance_of,
+    optional_str,
+    optional,
+)
 
 
 class BootMode(enum.Enum):
@@ -113,7 +120,7 @@ class VMIPushItem(PushItem):
     description = attr.ib(type=str, default=None, validator=instance_of_str)
     """A brief human-readable description of the image."""
 
-    boot_mode = attr.ib(type=BootMode, default=None, validator=optional(in_(BootMode)))
+    boot_mode = attr.ib(type=BootMode, default=None, converter=convert_maybe(BootMode))
     """Boot mode supported by the image (if known): uefi, legacy, or hybrid (uefi + legacy)."""
 
     cloud_info = attr.ib(

@@ -1,11 +1,10 @@
-import inspect
 import functools
+import inspect
 import logging
 import os
+from importlib.metadata import entry_points
 from threading import Lock
 from urllib import parse
-
-import pkg_resources
 
 from pushsource._impl.helpers import wait_exist
 
@@ -128,12 +127,16 @@ class Source(object):
 
     @classmethod
     def __load_entrypoints(cls):
-        for ep in pkg_resources.iter_entry_points("pushsource"):
-            # Note we're just trying to import the entry point's module, not
-            # call any method.
-            # resolve vs load is for different versions of pkg_resources.
-            # Result is assigned to a var to avoid a pylint warning.
-            _ = ep.resolve() if hasattr(ep, "resolve") else ep.load(require=False)
+        # Note we're just trying to import the entry point's module, not
+        # call any method.
+        eps = entry_points(group="pushsource")
+
+        for ep in eps:
+            try:
+                # Just import the module behind the entry point
+                _ = ep.load()
+            except Exception as e:
+                LOG.warning("Failed to load entry point %s: %s", ep, e)
 
     @classmethod
     def get(cls, source_url, **kwargs):

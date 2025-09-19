@@ -1,0 +1,75 @@
+[
+  {
+    "boot_mode": null,
+    "build": "test-prd-azure-9.6-20250730.3",
+    "build_info": {
+      "id": 3776845,
+      "name": "test-prd-azure",
+      "release": "20250730.3",
+      "version": "9.6"
+    },
+    "cloud_info": {
+      "account": "azure-na",
+      "provider": "azure"
+    },
+    "description": "",
+    "dest": [
+      "test-prd/9_6_prd"
+    ],
+    "generation": "V2",
+    "md5sum": "ac3b1c069d7b3f3ce9e77de83bb4305e",
+    "name": "test-prd-azure-9.6-20250730.3.x86_64.vhd.xz",
+    "origin": "RHBA-2025:123456",
+    "recommended_sizes": [],
+    "release": {
+      "arch": "x86_64",
+      "base_product": null,
+      "base_version": null,
+      "date": "20250730",
+      "product": "TEST-PRD",
+      "respin": 0,
+      "type": null,
+      "variant": null,
+      "version": "9.6"
+    },
+    "sas_uri": "https://test.blob.core.windows.net/pubupload/test-prd-azure-9.6-20250730.3.x86_64.vhd?se=2028-08-05T15%3A05%3A37Z&sp=r&sv=2023-08-03&sr=b&sig=fakesig",
+    "src": "/mnt/koji/packages/test-prd-azure/9.6/20250730.3/images/test-prd-azure-9.6-20250730.3.x86_64.vhd.xz",
+    "starmap_query": {
+      "billing_code_config": {},
+      "cloud": "azure",
+      "mappings": {
+        "azure-na": {
+          "destinations": [
+            {
+              "ami_version_template": null,
+              "architecture": "x86_64",
+              "destination": "test-prd/9_6_prd",
+              "id": null,
+              "meta": {
+                "generation": "V2"
+              },
+              "overwrite": false,
+              "provider": null,
+              "restrict_major": null,
+              "restrict_minor": null,
+              "restrict_version": false,
+              "tags": null,
+              "vhd_check_base_sas_only": true
+            }
+          ],
+          "meta": {
+            "generation": "V2"
+          },
+          "provider": null
+        }
+      },
+      "meta": {
+        "generation": "V2"
+      },
+      "name": "test-prd-azure",
+      "workflow": "stratosphere"
+    },
+    "state": "PUSHED",
+    "support_legacy": false
+  }
+]

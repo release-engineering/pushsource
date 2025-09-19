@@ -230,6 +230,64 @@ def test_get_azure_push_items_single_task_clouds(requests_mock):
     ]
 
 
+def test_get_azure_push_items_no_legacy_support(requests_mock):
+    """
+    Tests getting push item from one Stratosphere Pub task.
+    """
+    # test setup
+    task_id = 3776845
+    pub_url = "https://pub.example.com"
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/clouds.json?format=raw"
+    )
+
+    requests_mock.register_uri(
+        "GET", request_url, json=make_response(task_id, "clouds.json")
+    )
+
+    # Add 404 for images.json
+    request_url = os.path.join(
+        pub_url, "pub/task", str(task_id), "log/images.json?format=raw"
+    )
+    requests_mock.register_uri("GET", request_url, status_code=404)
+
+    # request push items from source
+    with Source.get("pub:%s" % pub_url, task_id=task_id) as source:
+        push_items = [item for item in source]
+
+    # there should be exactly 1 push item
+    assert len(push_items) == 1
+
+    # with following content
+    assert push_items == [
+        VHDPushItem(
+            name="test-prd-azure-9.6-20250730.3.x86_64.vhd.xz",
+            state="PENDING",
+            src="/mnt/koji/packages/test-prd-azure/9.6/20250730.3/images/test-prd-azure-9.6-20250730.3.x86_64.vhd.xz",
+            dest=["test-prd/9_6_prd"],
+            build="test-prd-azure-9.6-20250730.3",
+            build_info=KojiBuildInfo(
+                name="test-prd-azure",
+                version="9.6",
+                release="20250730.3",
+                id=None,
+            ),
+            origin="RHBA-2025:123456",
+            release=VMIRelease(
+                arch="x86_64",
+                date="20250730",
+                product="TEST-PRD",
+                respin=0,
+                version="9.6",
+            ),
+            description="",
+            sas_uri="https://test.blob.core.windows.net/pubupload/test-prd-azure-9.6-20250730.3.x86_64.vhd?se=2028-08-05T15%3A05%3A37Z&sp=r&sv=2023-08-03&sr=b&sig=fakesig",
+            generation="V2",
+            support_legacy=False,
+        )
+    ]
+
+
 def test_get_ami_push_items_rhcos_task_cloud(requests_mock):
     """
     Tests getting push item from one Stratosphere RHCOS Pub task.

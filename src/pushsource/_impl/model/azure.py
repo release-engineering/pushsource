@@ -84,7 +84,7 @@ class VHDPushItem(VMIPushItem):
             "description": data["description"],
             "generation": data.get("generation") or None,
             "sku_id": data.get("sku_id") or None,
-            "support_legacy": data.get("support_legacy") or None,
+            "support_legacy": data.get("support_legacy") or False,
             "release": VMIRelease._from_data(data.get("release", {})),
             "legacy_sku_id": data.get("legacy_sku_id") or None,
             "disk_version": data.get("disk_version") or None,

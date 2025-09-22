@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pytest import raises
+from pytest import mark, raises
 
 from pushsource import VHDPushItem, VMIRelease, AmiRelease
 
@@ -34,6 +34,30 @@ def test_invalid_legacy_sku():
     assert (
         'The attribute "legacy_sku_id" must only be set when "support_legacy" is True.'
     ) in str(exc_info.value)
+
+
+@mark.parametrize("value", [True, False, None])
+def test_support_legacy(value):
+    """Ensure ``support_legacy`` works for all expected inputs."""
+    v = VHDPushItem._from_data(
+        {
+            "name": "test",
+            "release": {
+                "product": "TEST",
+                "date": "20250730",
+                "arch": "x86_64",
+                "respin": 0,
+            },
+            "description": "test",
+            "disk_version": "1.0.0",
+            "sas_uri": "foo.com/bar",
+            "support_legacy": value,
+        }
+    )
+    if value:
+        assert v.support_legacy == value
+    else:
+        assert v.support_legacy == False
 
 
 def test_vmi_release():

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.51.2] - 2025-10-02
+
+### Fixed
+
+- `VMIPushItem` properly converts `boot_mode` entry
+- `VHDPushItem` fixed various issues with `_from_data()` method
+
 ## [2.51.1] - 2025-06-16
 
 ### Fixed
@@ -575,7 +582,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.51.1...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.51.2...HEAD
+[2.51.2]: https://github.com/release-engineering/pushsource/compare/v2.51.1...v2.51.2
 [2.51.1]: https://github.com/release-engineering/pushsource/compare/v2.51.0...v2.51.1
 [2.51.0]: https://github.com/release-engineering/pushsource/compare/v2.50.0...v2.51.0
 [2.50.0]: https://github.com/release-engineering/pushsource/compare/v2.49.0...v2.50.0

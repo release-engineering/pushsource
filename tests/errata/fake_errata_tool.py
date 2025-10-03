@@ -4,6 +4,7 @@ from mock import Mock
 import yaml
 import json
 from xmlrpc.client import Fault  # nosec B411
+from urllib3.util.retry import Retry
 
 import requests
 
@@ -54,6 +55,7 @@ class FakeErrataToolProxy(object):
     def __init__(self, controller):
         self._ctrl = controller
         self.auth = None
+        self.mount = Mock(spec=Retry)
         self.url_map = [
             (".*/api/v1/erratum/(.*)", self.get_advisory_data),
             (

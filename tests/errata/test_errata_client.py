@@ -7,6 +7,7 @@ import pytest
 import requests
 
 from pushsource._impl.backend.errata_source.errata_client import (
+    ERRATA_RETRY_STRATEGY,
     ErrataHTTPClient,
     get_errata_client,
 )
@@ -35,11 +36,14 @@ def test_init_env_vars():
     assert client.principal == "pub-errata@IPA.REDHAT.COM"
 
 
+@mock.patch("requests.adapters.HTTPAdapter")
 @mock.patch("gssapi.Name")
 @mock.patch("gssapi.Credentials.acquire")
 @mock.patch("requests.Session")
 @mock.patch("requests_gssapi.HTTPSPNEGOAuth")
-def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
+def test_get_session(
+    mock_auth, mock_session, mock_acquire, mock_name, mock_adapter, caplog
+):
     caplog.set_level(logging.DEBUG)
 
     client = ErrataHTTPClient(
@@ -57,6 +61,8 @@ def test_get_session(mock_auth, mock_session, mock_acquire, mock_name, caplog):
     )
     mock_session.assert_called_once_with()
     mock_auth.assert_called_once_with(creds=mock_acquire.return_value.creds)
+    mock_adapter.assert_called_once_with(max_retries=ERRATA_RETRY_STRATEGY)
+    assert session.mount.call_count == 2
 
     assert session == mock_session.return_value
     assert client._tls.session == mock_session.return_value

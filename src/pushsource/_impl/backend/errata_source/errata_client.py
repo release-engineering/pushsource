@@ -7,12 +7,14 @@ import tempfile
 import threading
 import xmlrpc.client as xmlrpc_client  # nosec B411
 from urllib.parse import urljoin
+from urllib3.util.retry import Retry
 import warnings
 
 import gssapi
 from more_executors import Executors
 from more_executors.futures import f_zip, f_map
 import requests
+import requests.adapters
 import requests_gssapi
 
 from ...compat_attr import attr
@@ -20,6 +22,14 @@ from ...compat_attr import attr
 LOG = logging.getLogger("pushsource.errata_client")
 
 USE_XMLRPC_CLIENT = os.environ.get("PUSHSOURCE_ERRATA_USE_XMLRPC_API") == "1"
+
+ERRATA_RETRY_STRATEGY = Retry(
+    total=5,
+    status_forcelist=range(500, 600),
+    backoff_factor=2,
+    allowed_methods=frozenset(["GET", "POST"]),
+    raise_on_status=False,
+)
 
 
 def get_errata_client(
@@ -289,6 +299,9 @@ class ErrataHTTPClient(ErrataClientBase):
 
             session = requests.Session()
             session.auth = requests_gssapi.HTTPSPNEGOAuth(creds=creds)
+            adapter = requests.adapters.HTTPAdapter(max_retries=ERRATA_RETRY_STRATEGY)
+            session.mount("https://", adapter)
+            session.mount("http://", adapter)
             self._tls.session = session
 
         return self._tls.session

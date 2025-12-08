@@ -415,6 +415,11 @@ class ErrataSource(Source):
     def _rpm_push_items_from_build(self, erratum, build_nvr, build_info):
         rpms = build_info.get("rpms") or {}
         signing_key = build_info.get("sig_key") or None
+        if signing_key:
+            # Errata Tool API may return key alias in sig_key field in format "name1,name2,...", but 
+            # we need to convert "," into "+" otherwise it would be used as multiple keys for Koji 
+            # source which would result in incorrect processing.
+            signing_key = signing_key.replace(",", "+")
         sha256sums = (build_info.get("checksums") or {}).get("sha256") or {}
         md5sums = (build_info.get("checksums") or {}).get("md5") or {}
 

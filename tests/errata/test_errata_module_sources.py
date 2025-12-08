@@ -3,7 +3,7 @@ import os
 import pytest
 
 from pushsource import Source, ModuleMdSourcePushItem
-
+from mock import patch
 
 @pytest.fixture
 def source_factory(fake_errata_tool, fake_koji, koji_dir):
@@ -161,8 +161,9 @@ def source_factory(fake_errata_tool, fake_koji, koji_dir):
 
     yield ctor
 
-
-def test_errata_module_sources(source_factory, koji_dir):
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
+def test_errata_module_sources(mock_get_rpm_header, mock_get_keys_from_headers, source_factory, koji_dir):
     """Errata source can provide ModuleMdSourcePushItems, typical scenario."""
 
     source = source_factory(errata="RHEA-2020:0346")
@@ -193,8 +194,9 @@ def test_errata_module_sources(source_factory, koji_dir):
         )
     ]
 
-
-def test_errata_module_sources_no_ftp_paths(source_factory):
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
+def test_errata_module_sources_no_ftp_paths(mock_get_rpm_header, mock_get_keys_from_headers, source_factory):
     """Errata source skips ModuleMdSourcePushItems if ET does not request any
     FTP paths for modules."""
 
@@ -207,8 +209,9 @@ def test_errata_module_sources_no_ftp_paths(source_factory):
     # Should not have found anything since ET reported no dests for modules in FTP paths
     assert src_items == []
 
-
-def test_errata_module_sources_no_cdn_list(source_factory, caplog):
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
+def test_errata_module_sources_no_cdn_list(mock_get_rpm_header, mock_get_keys_from_headers, source_factory, caplog):
     """Errata source skips ModuleMdSourcePushItems if ET does not present those
     modules in get_advisory_cdn_file_list."""
 
@@ -228,8 +231,9 @@ def test_errata_module_sources_no_cdn_list(source_factory, caplog):
         in caplog.text
     )
 
-
-def test_errata_module_missing_sources(source_factory, fake_koji):
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
+def test_errata_module_missing_sources(mock_get_rpm_header, mock_get_keys_from_headers, source_factory, fake_koji):
     """Errata source gives fatal error if ET requests some FTP paths for modules,
     yet no module sources exist on koji build."""
     source = source_factory(errata="RHEA-2020:0346")

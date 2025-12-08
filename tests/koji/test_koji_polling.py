@@ -1,8 +1,12 @@
+from typing import Any
+
+
 import os
 from mock import patch
 
 from pushsource import Source, RpmPushItem
 
+DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
 @patch.dict(
     "os.environ",
@@ -10,8 +14,10 @@ from pushsource import Source, RpmPushItem
 )
 @patch("pushsource._impl.helpers.os.path.exists")
 @patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
 def test_koji_poll_for_signed_rpm_highest_priority_key_present(
-    mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+    mock_get_rpm_header, mock_get_keys_from_headers, mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
 ):
     """Highest priority key becomes present after some time."""
 
@@ -43,6 +49,8 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_present(
         "data/signed/abc123/x86_64/foo-1.0-1.x86_64.rpm",
     )
     mock_path_exists.side_effect = [False, True, True, True]
+    mock_get_keys_from_headers.return_value = "abc123"
+
     # Eagerly fetch
     items = list(source)
 
@@ -64,8 +72,10 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_present(
 )
 @patch("pushsource._impl.helpers.os.path.exists")
 @patch("pushsource._impl.helpers.time.sleep")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header")
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
 def test_koji_poll_for_signed_rpm_highest_priority_key_absent(
-    mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+    mock_get_rpm_header, mock_get_keys_from_headers, mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
 ):
     """Highest priority key is always absent and a lower priority key is found."""
 
@@ -97,10 +107,11 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_absent(
         "data/signed/def456/x86_64/foo-1.0-1.x86_64.rpm",
     )
     mock_path_exists.side_effect = [False, False, False, False, False, True, True, True]
+    mock_get_keys_from_headers.return_value = "def456"
     # Eagerly fetch
     items = list(source)
 
-    # It should have found the RPM using the signing key we created within testdata
+    # It should have found the RPM using the signing key we return from RPM headers
     assert items[0] == RpmPushItem(
         name="foo-1.0-1.x86_64.rpm",
         state="PENDING",

@@ -3,9 +3,18 @@ from mock import patch
 from pushsource import Source
 
 
-@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch(
+    "pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header",
+    return_value="fd431d51",
+)
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
-def test_errata_modules_via_koji(mock_get_rpm_header, mock_get_keys_from_headers, fake_errata_tool, fake_koji, koji_dir):
+def test_errata_modules_via_koji(
+    mock_get_rpm_header,
+    mock_get_keys_from_headers,
+    fake_errata_tool,
+    fake_koji,
+    koji_dir,
+):
     """Errata source gives an error if ET requested modules which don't exist in koji"""
 
     source = Source.get(

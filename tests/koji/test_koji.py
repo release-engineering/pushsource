@@ -7,6 +7,7 @@ from pushsource import Source, RpmPushItem
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
+
 def test_koji_needs_url():
     """Can't obtain source without giving URL"""
 
@@ -260,7 +261,9 @@ def test_koji_uses_signing_key(fake_koji, koji_dir, caplog):
 
     # Make the signed RPM exist, make symlink to the test RPM file
     os.makedirs(os.path.dirname(signed_rpm_path))
-    os.symlink(os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path)
+    os.symlink(
+        os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path
+    )
 
     # Eagerly fetch
     items = list(source)
@@ -344,10 +347,12 @@ def test_koji_uses_signing_key_alias(fake_koji, koji_dir, caplog):
 
     # Make the signed RPM exist, make symlink to the test RPM file
     os.makedirs(os.path.dirname(signed_rpm_path))
-    os.symlink(os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path)
+    os.symlink(
+        os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path
+    )
     # Eagerly fetch
     items = list(source)
-   
+
     # It should have found the RPM using the signing key extracted from RPM header
     assert items[0] == RpmPushItem(
         name="foo-1.0-1.x86_64.rpm",

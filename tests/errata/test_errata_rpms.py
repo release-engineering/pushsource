@@ -16,10 +16,22 @@ TEST_DATA = (
     ("RHSA-2020:0509-sig-key-alias", "foo,bar,baz"),
 )
 
+
 @pytest.mark.parametrize("erratum, expected_sig_key_path", TEST_DATA)
-@patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header", return_value="fd431d51")
+@patch(
+    "pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header",
+    return_value="fd431d51",
+)
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
-def test_errata_rpms_via_koji(mock_get_rpm_header, mock_get_keys_from_headers, fake_errata_tool, erratum, expected_sig_key_path, fake_koji, koji_dir):
+def test_errata_rpms_via_koji(
+    mock_get_rpm_header,
+    mock_get_keys_from_headers,
+    fake_errata_tool,
+    erratum,
+    expected_sig_key_path,
+    fake_koji,
+    koji_dir,
+):
     """Errata source yields RPMs taken from koji source"""
 
     source = Source.get(

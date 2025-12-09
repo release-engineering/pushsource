@@ -10,6 +10,7 @@ from threading import Thread
 import koji
 from more_executors import Executors
 from more_executors.futures import f_map
+
 try:
     from kobo import rpmlib
 except Exception as ex:  # pragma: no cover, pylint: disable=broad-except
@@ -190,8 +191,8 @@ class KojiSource(Source):
             signing_key (list[str])
                 GPG signing key ID(s). If provided, content must be signed
                 using one of the provided keys. Include ``None`` if unsigned
-                should also be permitted. 
-                
+                should also be permitted.
+
                 Supports also key alias in the format ``name1+name2+...``
 
                 Keys should be listed in the order of preference.
@@ -266,7 +267,9 @@ class KojiSource(Source):
         out = []
         for key in keys:
             if key:
-                out.append(key.replace("+", ",")) # adjust alias to comma separated names of keys
+                out.append(
+                    key.replace("+", ",")
+                )  # adjust alias to comma separated names of keys
             else:
                 out.append(key)
         return out

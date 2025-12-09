@@ -8,6 +8,7 @@ from pushsource import Source, RpmPushItem
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
+
 @patch.dict(
     "os.environ",
     {"PUSHSOURCE_SRC_POLL_TIMEOUT": "60"},
@@ -17,7 +18,13 @@ DATADIR = os.path.join(os.path.dirname(__file__), "data")
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header")
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
 def test_koji_poll_for_signed_rpm_highest_priority_key_present(
-    mock_get_rpm_header, mock_get_keys_from_headers, mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+    mock_get_rpm_header,
+    mock_get_keys_from_headers,
+    mock_sleep,
+    mock_path_exists,
+    fake_koji,
+    koji_dir,
+    caplog,
 ):
     """Highest priority key becomes present after some time."""
 
@@ -75,7 +82,13 @@ def test_koji_poll_for_signed_rpm_highest_priority_key_present(
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header")
 @patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
 def test_koji_poll_for_signed_rpm_highest_priority_key_absent(
-    mock_get_rpm_header, mock_get_keys_from_headers, mock_sleep, mock_path_exists, fake_koji, koji_dir, caplog
+    mock_get_rpm_header,
+    mock_get_keys_from_headers,
+    mock_sleep,
+    mock_path_exists,
+    fake_koji,
+    koji_dir,
+    caplog,
 ):
     """Highest priority key is always absent and a lower priority key is found."""
 

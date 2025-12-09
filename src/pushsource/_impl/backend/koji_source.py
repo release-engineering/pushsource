@@ -266,12 +266,8 @@ class KojiSource(Source):
     def _parse_signing_key(self, keys):
         out = []
         for key in keys:
-            if key:
-                out.append(
-                    key.replace("+", ",")
-                )  # adjust alias to comma separated names of keys
-            else:
-                out.append(key)
+            # adjust alias to comma separated names of keys
+            out.append(key.replace("+", ",") if key else key)
         return out
 
     def _koji_check(self):

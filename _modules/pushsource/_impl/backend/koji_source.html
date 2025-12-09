@@ -43,6 +43,16 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">more_executors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Executors</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">more_executors.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">f_map</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">kobo</span><span class="w"> </span><span class="kn">import</span> <span class="n">rpmlib</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>  <span class="c1"># pragma: no cover, pylint: disable=broad-except</span>
+    <span class="c1"># If kobo.rpmlib is unavailable, let&#39;s not immediately crash.</span>
+    <span class="c1"># We will hold this exception and re-raise it only if there&#39;s an</span>
+    <span class="c1"># attempt to use the related functionality.</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">broken_rpmlib</span> <span class="k">as</span> <span class="n">rpmlib</span>
+
+    <span class="n">rpmlib</span><span class="o">.</span><span class="n">CAUSE</span> <span class="o">=</span> <span class="n">ex</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">..source</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">KojiBuildInfo</span><span class="p">,</span>
@@ -219,6 +229,8 @@
 <span class="sd">                using one of the provided keys. Include ``None`` if unsigned</span>
 <span class="sd">                should also be permitted.</span>
 
+<span class="sd">                Supports also key alias in the format ``name1+name2+...``</span>
+
 <span class="sd">                Keys should be listed in the order of preference.</span>
 
 <span class="sd">            basedir (str)</span>
@@ -252,7 +264,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">container_build</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">vmi_build</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_signing_key</span><span class="p">(</span><span class="n">list_argument</span><span class="p">(</span><span class="n">signing_key</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dest</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">PathInfo</span><span class="p">(</span><span class="n">basedir</span><span class="p">)</span>
@@ -287,6 +299,13 @@
                 <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating koji session: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
                 <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;anon_retry&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_signing_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="c1"># adjust alias to comma separated names of keys</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="k">else</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_koji_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Do a basic connection check with koji.</span>
@@ -346,7 +365,6 @@
             <span class="n">candidate</span> <span class="o">=</span> <span class="n">unsigned_path</span>
 
         <span class="n">wait_exist</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
-
         <span class="c1"># If signing keys requested, try them in order of preference</span>
         <span class="c1"># Some key should be present at this stage, let&#39;s try them all</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">:</span>
@@ -358,7 +376,10 @@
             <span class="n">candidate_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">candidate</span><span class="p">):</span>
                 <span class="n">rpm_path</span> <span class="o">=</span> <span class="n">candidate</span>
-                <span class="n">rpm_signing_key</span> <span class="o">=</span> <span class="n">key</span>
+                <span class="c1"># we may only get key alias as input, let&#39;s extract actual key ID from RPM header in all cases</span>
+                <span class="c1"># as we don&#39;t know if the provided data are alias or actual key ID</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="n">rpmlib</span><span class="o">.</span><span class="n">get_rpm_header</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+                <span class="n">rpm_signing_key</span> <span class="o">=</span> <span class="n">rpmlib</span><span class="o">.</span><span class="n">get_keys_from_header</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
                 <span class="k">break</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">:</span>

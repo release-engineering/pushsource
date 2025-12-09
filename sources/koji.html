@@ -157,6 +157,7 @@ The source will yield all VMIs identified by this list.</p></li>
 <li><p><strong>signing_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – <p>GPG signing key ID(s). If provided, content must be signed
 using one of the provided keys. Include <code class="docutils literal notranslate"><span class="pre">None</span></code> if unsigned
 should also be permitted.</p>
+<p>Supports also key alias in the format <code class="docutils literal notranslate"><span class="pre">name1+name2+...</span></code></p>
 <p>Keys should be listed in the order of preference.</p>
 </p></li>
 <li><p><strong>basedir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Base directory of koji content (e.g. /mnt/koji).

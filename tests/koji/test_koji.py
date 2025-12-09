@@ -5,6 +5,8 @@ from pytest import raises
 
 from pushsource import Source, RpmPushItem
 
+DATADIR = os.path.join(os.path.dirname(__file__), "data")
+
 
 def test_koji_needs_url():
     """Can't obtain source without giving URL"""
@@ -232,7 +234,7 @@ def test_koji_uses_signing_key(fake_koji, koji_dir, caplog):
     source = Source.get(
         "koji:https://koji.example.com/?rpm=foo-1.0-1.x86_64.rpm",
         basedir=koji_dir,
-        signing_key=["ABC123", None, "DEF456"],
+        signing_key=["ABC123", None, "F78FB195"],
     )
 
     fake_koji.rpm_data["foo-1.0-1.x86_64.rpm"] = {
@@ -254,23 +256,25 @@ def test_koji_uses_signing_key(fake_koji, koji_dir, caplog):
     signed_rpm_path = os.path.join(
         koji_dir,
         "vol/somevol/packages/foobuild/1.0/1.el8",
-        "data/signed/def456/x86_64/foo-1.0-1.x86_64.rpm",
+        "data/signed/f78fb195/x86_64/foo-1.0-1.x86_64.rpm",
     )
 
-    # Make the signed RPM exist (contents not relevant here)
+    # Make the signed RPM exist, make symlink to the test RPM file
     os.makedirs(os.path.dirname(signed_rpm_path))
-    open(signed_rpm_path, "wb")
+    os.symlink(
+        os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path
+    )
 
     # Eagerly fetch
     items = list(source)
 
-    # It should have found the RPM using the signing key we created within testdata
+    # It should have found the RPM using the signing key extracted from RPM header
     assert items[0] == RpmPushItem(
         name="foo-1.0-1.x86_64.rpm",
         state="PENDING",
         src=signed_rpm_path,
         build="foobuild-1.0-1.el8",
-        signing_key="def456",
+        signing_key="f78fb195",
     )
 
 
@@ -308,3 +312,52 @@ def test_koji_cache(fake_koji, koji_dir):
 
     # It should have stored something in the cache
     assert cache
+
+
+def test_koji_uses_signing_key_alias(fake_koji, koji_dir, caplog):
+    """RPM uses first existing of specified signing keys including multi-key alias."""
+
+    source = Source.get(
+        "koji:https://koji.example.com/?rpm=foo-1.0-1.x86_64.rpm",
+        basedir=koji_dir,
+        signing_key=["foo+bar+baz", None, "F78FB195"],
+    )
+
+    fake_koji.rpm_data["foo-1.0-1.x86_64.rpm"] = {
+        "arch": "x86_64",
+        "name": "foo",
+        "version": "1.0",
+        "release": "1",
+        "build_id": 1234,
+    }
+    fake_koji.build_data[1234] = {
+        "id": 1234,
+        "name": "foobuild",
+        "version": "1.0",
+        "release": "1.el8",
+        "nvr": "foobuild-1.0-1.el8",
+        "volume_name": "somevol",
+    }
+    # alias is converted to comma separate list ok key names
+    signed_rpm_path = os.path.join(
+        koji_dir,
+        "vol/somevol/packages/foobuild/1.0/1.el8",
+        "data/signed/foo,bar,baz/x86_64/foo-1.0-1.x86_64.rpm",
+    )
+
+    # Make the signed RPM exist, make symlink to the test RPM file
+    os.makedirs(os.path.dirname(signed_rpm_path))
+    os.symlink(
+        os.path.join(DATADIR, "rpms", "walrus-5.21-1.noarch.rpm"), signed_rpm_path
+    )
+    # Eagerly fetch
+    items = list(source)
+
+    # It should have found the RPM using the signing key extracted from RPM header
+    assert items[0] == RpmPushItem(
+        name="foo-1.0-1.x86_64.rpm",
+        state="PENDING",
+        src=signed_rpm_path,
+        build="foobuild-1.0-1.el8",
+        signing_key="f78fb195",
+    )

@@ -1,4 +1,6 @@
 import os
+import pytest
+from mock import patch
 
 from pushsource import (
     Source,
@@ -9,13 +11,32 @@ from pushsource import (
     RpmPushItem,
 )
 
+TEST_DATA = (
+    ("RHSA-2020:0509", "fd431d51"),
+    ("RHSA-2020:0509-sig-key-alias", "foo,bar,baz"),
+)
 
-def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
+
+@pytest.mark.parametrize("erratum, expected_sig_key_path", TEST_DATA)
+@patch(
+    "pushsource._impl.backend.koji_source.rpmlib.get_keys_from_header",
+    return_value="fd431d51",
+)
+@patch("pushsource._impl.backend.koji_source.rpmlib.get_rpm_header")
+def test_errata_rpms_via_koji(
+    mock_get_rpm_header,
+    mock_get_keys_from_headers,
+    fake_errata_tool,
+    erratum,
+    expected_sig_key_path,
+    fake_koji,
+    koji_dir,
+):
     """Errata source yields RPMs taken from koji source"""
 
     source = Source.get(
         "errata:https://errata.example.com",
-        errata="RHSA-2020:0509",
+        errata=erratum,
         koji_source="koji:https://koji.example.com?basedir=%s" % koji_dir,
     )
 
@@ -78,18 +99,12 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
         "nvr": "sudo-1.8.25p1-4.el8_0.3",
     }
 
-    signed_rpm_path = os.path.join(
-        koji_dir,
-        "vol/somevol/packages/foobuild/1.0/1.el8",
-        "data/signed/def456/x86_64/foo-1.0-1.x86_64.rpm",
-    )
-
     # Make signed RPMs exist (contents not relevant here)
     for filename, rpm in fake_koji.rpm_data.items():
         signed_rpm_path = os.path.join(
             koji_dir,
             "packages/sudo/1.8.25p1/4.el8_0.3/",
-            "data/signed/fd431d51/%s/%s" % (rpm["arch"], filename),
+            "data/signed/%s/%s/%s" % (expected_sig_key_path, rpm["arch"], filename),
         )
         signed_dir = os.path.dirname(signed_rpm_path)
         if not os.path.exists(signed_dir):
@@ -218,7 +233,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/ppc64le/sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+                f"{expected_sig_key_path}/ppc64le/sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             ),
             dest=["rhel-8-for-ppc64le-baseos-e4s-rpms__8_DOT_0"],
             md5sum="0d56f302617696d3511e71e1669e62c0",
@@ -233,7 +248,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/ppc64le/sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+                f"{expected_sig_key_path}/ppc64le/sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             ),
             dest=["rhel-8-for-ppc64le-baseos-e4s-debug-rpms__8_DOT_0"],
             md5sum="e242826fb38f487502cdc1f1a06991d2",
@@ -248,7 +263,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/ppc64le/sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+                f"{expected_sig_key_path}/ppc64le/sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             ),
             dest=["rhel-8-for-ppc64le-baseos-e4s-debug-rpms__8_DOT_0"],
             md5sum="e242826fb38f487502cdc1f1a06991d2",
@@ -263,7 +278,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/ppc64le/sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+                f"{expected_sig_key_path}/ppc64le/sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             ),
             dest=["rhel-8-for-ppc64le-baseos-e4s-debug-rpms__8_DOT_0"],
             md5sum="d6da7e2e3d9efe050fef2e8d047682be",
@@ -278,7 +293,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/ppc64le/sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
+                f"{expected_sig_key_path}/ppc64le/sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             ),
             dest=["rhel-8-for-ppc64le-baseos-e4s-debug-rpms__8_DOT_0"],
             md5sum="d6da7e2e3d9efe050fef2e8d047682be",
@@ -293,7 +308,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/src/sudo-1.8.25p1-4.el8_0.3.src.rpm",
+                f"{expected_sig_key_path}/src/sudo-1.8.25p1-4.el8_0.3.src.rpm",
             ),
             dest=[
                 "rhel-8-for-ppc64le-baseos-e4s-source-rpms__8_DOT_0",
@@ -311,7 +326,7 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             src=os.path.join(
                 koji_dir,
                 "packages/sudo/1.8.25p1/4.el8_0.3/data/signed",
-                "fd431d51/x86_64/sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
+                f"{expected_sig_key_path}/x86_64/sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
             ),
             dest=["rhel-8-for-x86_64-baseos-e4s-rpms__8_DOT_0"],
             md5sum="25e9470c4fe96034fe1d7525c04b5d8e",

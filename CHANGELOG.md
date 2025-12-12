@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.52.1] - 2025-12-11
+
+### Fixed
+
+- Import of `broken_rpmlib` in `KojiSource`
+
 ## [2.52.0] - 2025-12-11
 
 ### Added
@@ -588,7 +594,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.52.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.52.1...HEAD
+[2.52.1]: https://github.com/release-engineering/pushsource/compare/v2.52.0...v2.52.1
 [2.52.0]: https://github.com/release-engineering/pushsource/compare/v2.51.2...v2.52.0
 [2.51.2]: https://github.com/release-engineering/pushsource/compare/v2.51.1...v2.51.2
 [2.51.1]: https://github.com/release-engineering/pushsource/compare/v2.51.0...v2.51.1

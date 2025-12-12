@@ -17,7 +17,7 @@ except Exception as ex:  # pragma: no cover, pylint: disable=broad-except
     # If kobo.rpmlib is unavailable, let's not immediately crash.
     # We will hold this exception and re-raise it only if there's an
     # attempt to use the related functionality.
-    from .. import broken_rpmlib as rpmlib
+    from . import broken_rpmlib as rpmlib
 
     rpmlib.CAUSE = ex
 

@@ -11,6 +11,16 @@ import koji
 from more_executors import Executors
 from more_executors.futures import f_map
 
+try:
+    from kobo import rpmlib
+except Exception as ex:  # pragma: no cover, pylint: disable=broad-except
+    # If kobo.rpmlib is unavailable, let's not immediately crash.
+    # We will hold this exception and re-raise it only if there's an
+    # attempt to use the related functionality.
+    from . import broken_rpmlib as rpmlib
+
+    rpmlib.CAUSE = ex
+
 from ..source import Source
 from ..model import (
     KojiBuildInfo,
@@ -183,6 +193,8 @@ class KojiSource(Source):
                 using one of the provided keys. Include ``None`` if unsigned
                 should also be permitted.
 
+                Supports also key alias in the format ``name1+name2+...``
+
                 Keys should be listed in the order of preference.
 
             basedir (str)
@@ -216,7 +228,7 @@ class KojiSource(Source):
         )
         self._container_build = [try_int(x) for x in list_argument(container_build)]
         self._vmi_build = [try_int(x) for x in list_argument(vmi_build)]
-        self._signing_key = list_argument(signing_key)
+        self._signing_key = self._parse_signing_key(list_argument(signing_key))
         self._dest = list_argument(dest)
         self._timeout = timeout
         self._pathinfo = koji.PathInfo(basedir)
@@ -250,6 +262,13 @@ class KojiSource(Source):
                 LOG.debug("Creating koji session: %s", self._url)
                 tls.koji_session = koji.ClientSession(self._url, {"anon_retry": True})
         return tls.koji_session
+
+    def _parse_signing_key(self, keys):
+        out = []
+        for key in keys:
+            # adjust alias to comma separated names of keys
+            out.append(key.replace("+", ",") if key else key)
+        return out
 
     def _koji_check(self):
         # Do a basic connection check with koji.
@@ -309,7 +328,6 @@ class KojiSource(Source):
             candidate = unsigned_path
 
         wait_exist(candidate, timeout, poll_rate)
-
         # If signing keys requested, try them in order of preference
         # Some key should be present at this stage, let's try them all
         for key in self._signing_key:
@@ -321,7 +339,10 @@ class KojiSource(Source):
             candidate_paths.append(candidate)
             if os.path.exists(candidate):
                 rpm_path = candidate
-                rpm_signing_key = key
+                # we may only get key alias as input, let's extract actual key ID from RPM header in all cases
+                # as we don't know if the provided data are alias or actual key ID
+                header = rpmlib.get_rpm_header(candidate)
+                rpm_signing_key = rpmlib.get_keys_from_header(header)
                 break
 
         if self._signing_key:

@@ -38,6 +38,7 @@ from pushsource._impl.model import (
 from pushsource._impl.backend import (
     ErrataSource,
     KojiSource,
+    KonfluxSource,
     StagedSource,
     RegistrySource,
     PubSource,

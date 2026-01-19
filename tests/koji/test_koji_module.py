@@ -9,7 +9,6 @@ from pushsource import Source, ModuleMdPushItem, ModuleMdSourcePushItem
 
 from .fake_koji import FakeKojiController
 
-
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 

@@ -7,7 +7,6 @@ from .base import PushItem
 from .. import compat_attr as attr
 from .conv import instance_of, optional_str
 
-
 MEDIA_TYPE_ORDER = {
     "application/vnd.docker.distribution.manifest.list.v2+json": 30,
     "application/vnd.docker.distribution.manifest.v2+json": 20,

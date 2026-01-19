@@ -10,7 +10,6 @@ from dateutil import tz
 
 from .. import compat_attr as attr
 
-
 LOG = logging.getLogger("pushsource")
 HEX_PATTERN = re.compile(r"^[0-9a-f]+$")
 

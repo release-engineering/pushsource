@@ -4,7 +4,6 @@ import jsonschema
 
 from .schema import get_schema
 
-
 LOG = logging.getLogger("pushsource")
 
 

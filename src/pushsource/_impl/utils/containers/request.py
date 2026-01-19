@@ -11,7 +11,6 @@ from requests.adapters import HTTPAdapter
 # pylint: disable-next=import-error
 from requests.packages.urllib3.util import Retry
 
-
 JSONException = JSONDecodeError
 
 MEDIATYPE_SCHEMA2_V1 = "application/vnd.docker.distribution.manifest.v1+json"

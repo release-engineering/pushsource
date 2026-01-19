@@ -4,7 +4,6 @@ import pytest
 
 from pushsource._impl.utils.containers.request import _calculate_digest
 
-
 # curl -H 'Accept: application/vnd.docker.distribution.manifest.list.v2+json' -Ls \
 #   https://registry.access.redhat.com/v2/ubi8/ubi/manifests/sha256:910f6bc0b5ae9b555eb91b88d28d568099b060088616eba2867b07ab6ea457c7
 UBI8_LIST = b"""{

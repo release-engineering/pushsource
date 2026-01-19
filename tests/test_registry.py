@@ -21,7 +21,6 @@ from pushsource._impl.utils.containers import (
     MEDIATYPE_SCHEMA2_V2_LIST,
 )
 
-
 MANIFEST_V2SCH2 = {
     "schemaVersion": 2,
     "mediaType": MEDIATYPE_SCHEMA2_V2,

@@ -18,7 +18,6 @@ from .conv import (
 )
 from ..reader import PushItemReader
 
-
 LOG = logging.getLogger("pushsource")
 CHUNKSIZE = int(os.environ.get("PUSHSOURCE_CHUNKSIZE") or 1024 * 1024 * 16)
 
@@ -66,7 +65,7 @@ class KojiBuildInfo(object):
         rvn_rev = nvr_rev.split("-", 2)
 
         # Unreverse:     ['2.el8.next', '5.83.0', 'kf5-kio']
-        (r, v, n) = [s[::-1] for s in rvn_rev]
+        r, v, n = [s[::-1] for s in rvn_rev]
 
         return cls(name=n, version=v, release=r)
 

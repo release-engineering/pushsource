@@ -71,12 +71,12 @@ class FakeKojiController(object):
         for filename in filenames:
             data = {}
             rfilename = filename[-1::-1]
-            (rpm, arch, rest) = rfilename.split(".", 2)
+            rpm, arch, rest = rfilename.split(".", 2)
             rpm = rpm[-1::-1]
             assert rpm == "rpm"
             data["arch"] = arch[-1::-1]
 
-            (r, v, n) = rest.split("-", 2)
+            r, v, n = rest.split("-", 2)
             data["name"] = n[-1::-1]
             data["version"] = v[-1::-1]
             data["release"] = r[-1::-1]

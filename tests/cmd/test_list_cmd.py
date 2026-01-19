@@ -65,7 +65,7 @@ def test_typical(monkeypatch, capsys):
 
     # The output should contain push item stuff.
     # Just sample it.
-    (out, _) = capsys.readouterr()
+    out, _ = capsys.readouterr()
     assert "FilePushItem(" in out
     assert "My wonderful ISO" in out
 
@@ -112,7 +112,7 @@ def test_valid_yaml(monkeypatch, capsys):
     list_main()
 
     # The output should be valid YAML.
-    (out, _) = capsys.readouterr()
+    out, _ = capsys.readouterr()
     data = yaml.safe_load(out)
 
     # It should be a list.
@@ -127,15 +127,11 @@ def test_uses_config(monkeypatch, capsys, tmpdir):
     """pushsource-ls loads custom sources from a config file."""
 
     monkeypatch.setenv("HOME", str(tmpdir))
-    tmpdir.mkdir(".config").join("pushsource.conf").write(
-        textwrap.dedent(
-            """
+    tmpdir.mkdir(".config").join("pushsource.conf").write(textwrap.dedent("""
                 sources:
                 - name: list-cmd-test
                   url: staged:threads=2
-            """
-        ).strip()
-    )
+            """).strip())
     monkeypatch.setattr(
         sys, "argv", ["", "list-cmd-test:%s/simple_files" % STAGED_DATA_DIR]
     )
@@ -145,7 +141,7 @@ def test_uses_config(monkeypatch, capsys, tmpdir):
 
     # It should load as normal, thus proving that list-cmd-test was
     # registered from config.
-    (out, _) = capsys.readouterr()
+    out, _ = capsys.readouterr()
     assert "FilePushItem(" in out
 
 

@@ -24,6 +24,7 @@ setup(
     version="2.52.1",
     packages=find_packages("src"),
     package_dir={"": "src"},
+    package_data={"pushsource": ["py.typed"]},
     include_package_data=True,
     url="https://github.com/release-engineering/pushsource",
     license="GNU General Public License",

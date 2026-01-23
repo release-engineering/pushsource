@@ -50,7 +50,6 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushItemReader</span>
 
-
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
 <span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_CHUNKSIZE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
 
@@ -100,7 +99,7 @@
         <span class="n">rvn_rev</span> <span class="o">=</span> <span class="n">nvr_rev</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># Unreverse:     [&#39;2.el8.next&#39;, &#39;5.83.0&#39;, &#39;kf5-kio&#39;]</span>
-        <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">rvn_rev</span><span class="p">]</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">rvn_rev</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">r</span><span class="p">)</span></div>
 

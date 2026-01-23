@@ -234,7 +234,7 @@ def test_source_against_baseline(casename, case_helper):
     files.
     """
 
-    (case_text, case_data) = case_helper.load_case(casename)
+    case_text, case_data = case_helper.load_case(casename)
 
     url = case_data["url"]
 

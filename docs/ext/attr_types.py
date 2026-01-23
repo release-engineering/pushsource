@@ -24,7 +24,7 @@ def add_attr_types(app, what, name, obj, options, lines):
         # For any other cases we'll do nothing.
         return
 
-    (klass_name, field_name) = components[1:]
+    klass_name, field_name = components[1:]
     klass = getattr(sys.modules["pushsource"], klass_name)
 
     if not attr.has(klass):

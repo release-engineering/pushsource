@@ -17,7 +17,7 @@ def run(args):
 
     kwargs = {"source": "staged"}
     for kv_str in args.kv:
-        (key, value) = kv_str.split("=")
+        key, value = kv_str.split("=")
         kwargs[key] = value
 
     # If no date was applied, always force one to avoid overloading

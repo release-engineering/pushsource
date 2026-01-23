@@ -9,7 +9,6 @@ from .conv import convert_maybe, sloppylist
 from .. import compat_attr as attr
 from ..utils.openers import open_src_local
 
-
 # Red Hat OID namespace is "1.3.6.1.4.1.2312.9",
 # the trailing ".1" designates a Product Certificate.
 OID_NAMESPACE = "1.3.6.1.4.1.2312.9.1."

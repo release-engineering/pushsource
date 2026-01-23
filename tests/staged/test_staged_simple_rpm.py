@@ -2,7 +2,6 @@ import os
 
 from pushsource import Source, RpmPushItem
 
-
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
 

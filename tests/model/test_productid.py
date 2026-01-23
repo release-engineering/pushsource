@@ -3,7 +3,6 @@ from pytest import raises
 
 from pushsource import ProductIdPushItem
 
-
 THIS_DIR = os.path.dirname(__file__)
 CASE_DIR = os.path.join(THIS_DIR, "cases")
 

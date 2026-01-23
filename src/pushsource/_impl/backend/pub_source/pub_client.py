@@ -7,7 +7,6 @@ import threading
 import requests
 from more_executors import Executors
 
-
 LOG = logging.getLogger("pushsource.pub_client")
 
 

@@ -6,7 +6,6 @@ from .. import compat_attr as attr
 from .conv import in_, instance_of, optional_str, optional
 from .vms import VMIPushItem, VMIRelease
 
-
 VHDGeneration = ["V1", "V2"]
 
 

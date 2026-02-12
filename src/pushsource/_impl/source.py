@@ -2,10 +2,15 @@ import inspect
 import functools
 import logging
 import os
+import sys
 from threading import Lock
 from urllib import parse
 
-import pkg_resources
+if sys.version_info >= (3, 10): # pragma: no cover
+    from importlib.metadata import entry_points
+else:
+    # for older python use non-standard compatible module
+    from importlib_metadata import entry_points
 
 from pushsource._impl.helpers import wait_exist
 
@@ -128,12 +133,11 @@ class Source(object):
 
     @classmethod
     def __load_entrypoints(cls):
-        for ep in pkg_resources.iter_entry_points("pushsource"):
+        for ep in entry_points(group="pushsource"):
             # Note we're just trying to import the entry point's module, not
             # call any method.
-            # resolve vs load is for different versions of pkg_resources.
             # Result is assigned to a var to avoid a pylint warning.
-            _ = ep.resolve() if hasattr(ep, "resolve") else ep.load(require=False)
+            _ = ep.load()
 
     @classmethod
     def get(cls, source_url, **kwargs):

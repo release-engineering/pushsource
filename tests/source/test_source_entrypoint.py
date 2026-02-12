@@ -19,7 +19,7 @@ def test_loads_entrypoints(monkeypatch):
             created1.append(True)
 
         @classmethod
-        def resolve(cls):
+        def load(cls):
             Source.register_backend("backend1", Backend1)
 
     class Backend2(object):
@@ -27,18 +27,18 @@ def test_loads_entrypoints(monkeypatch):
             created2.append(True)
 
         @classmethod
-        def resolve(cls):
+        def load(cls):
             Source.register_backend("backend2", Backend2)
 
-    with patch("pkg_resources.iter_entry_points") as iter_ep:
-        iter_ep.return_value = [Backend1, Backend2]
+    with patch("pushsource._impl.source.entry_points") as ep:
+        ep.return_value = [Backend1, Backend2]
 
         # I should be able to get instances of those two backends
         assert Source.get("backend1:")
         assert Source.get("backend2:")
 
     # It should have found them via the expected entry point group
-    iter_ep.assert_called_once_with("pushsource")
+    ep.assert_called_once_with(group="pushsource")
 
     # Should have created one instance of each
     assert created1 == [True]

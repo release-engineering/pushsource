@@ -6,7 +6,7 @@ import sys
 from threading import Lock
 from urllib import parse
 
-if sys.version_info >= (3, 10): # pragma: no cover
+if sys.version_info >= (3, 10):  # pragma: no cover
     from importlib.metadata import entry_points
 else:
     # for older python use non-standard compatible module

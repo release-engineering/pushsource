@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pushsource._impl.backend.konflux_source.konflux_source &#8212; pushsource  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=32913b9a" />
+    <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pushsource._impl.backend.konflux_source.konflux_source</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">more_executors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Executors</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">...source</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErratumPushItem</span><span class="p">,</span> <span class="n">RpmPushItem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...</span><span class="w"> </span><span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">as_completed_with_timeout_reset</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.konflux_loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">KonfluxLoader</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource.konflux&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KonfluxSource">
+<a class="viewcode-back" href="../../../../../sources/konflux.html#pushsource.KonfluxSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KonfluxSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Source for push items loaded from Konflux JSON files.</span>
+
+<span class="sd">    This source reads advisory metadata from local JSON files organized</span>
+<span class="sd">    in subdirectories per advisory, and generates push items for RPMs</span>
+<span class="sd">    and erratum metadata.</span>
+
+<span class="sd">    The source is designed to be extensible and can support additional</span>
+<span class="sd">    content types (such as modules, container images, etc.) in the future.</span>
+
+<span class="sd">    Note: This source does not currently support filtering by architecture,</span>
+<span class="sd">    though such filtering could be added if needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KonfluxSource.__init__">
+<a class="viewcode-back" href="../../../../../sources/konflux.html#pushsource.KonfluxSource.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">advisories</span><span class="p">,</span>
+        <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new Konflux source.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            url (str):</span>
+<span class="sd">                Base directory containing advisory subdirectories.</span>
+<span class="sd">                Each subdirectory should be named after an advisory ID</span>
+<span class="sd">                and contain advisory_cdn_metadata.json and</span>
+<span class="sd">                advisory_cdn_filelist.json files.</span>
+
+<span class="sd">            advisories (str, list[str]):</span>
+<span class="sd">                Advisory ID(s) to process. Can be a single string or list.</span>
+<span class="sd">                Multiple IDs can be comma-separated.</span>
+
+<span class="sd">            threads (int):</span>
+<span class="sd">                Number of threads for concurrent processing.</span>
+
+<span class="sd">            timeout (int):</span>
+<span class="sd">                Timeout in seconds for operations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_dir</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">advisories</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span> <span class="o">=</span> <span class="n">KonfluxLoader</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-konflux&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Initialized KonfluxSource with base_dir=</span><span class="si">%s</span><span class="s2">, advisories=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield push items for all advisories.&quot;&quot;&quot;</span>
+        <span class="c1"># Process advisories in parallel</span>
+        <span class="n">futures_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_advisory</span><span class="p">,</span> <span class="n">adv_id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">adv_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed_with_timeout_reset</span><span class="p">(</span>
+            <span class="n">futures_list</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+        <span class="p">):</span>
+            <span class="c1"># Each future returns a list of push items</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+                <span class="k">yield</span> <span class="n">item</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_advisory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process a single advisory and return all its push items.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            advisory_id (str):</span>
+<span class="sd">                Advisory ID to process</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[PushItem]: List of push items for this advisory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing advisory: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">advisory_id</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Load data from JSON files</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="o">.</span><span class="n">load_advisory_data</span><span class="p">(</span><span class="n">advisory_id</span><span class="p">)</span>
+
+        <span class="c1"># Generate erratum push item</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_create_erratum_item</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+        <span class="c1"># Generate RPM push items</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_create_rpm_items</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generated </span><span class="si">%d</span><span class="s2"> push items for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">),</span> <span class="n">advisory_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_erratum_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create ErratumPushItem from advisory metadata.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            data (KonfluxAdvisoryData):</span>
+<span class="sd">                Advisory data containing metadata and filelist</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ErratumPushItem: Erratum push item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># advisory_cdn_metadata already has the right structure</span>
+        <span class="c1"># Just need to ensure it has the expected fields</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Collect all destinations from RPMs</span>
+        <span class="n">all_destinations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">build_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;rpms&quot;</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">repos</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">[</span><span class="s2">&quot;rpms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">all_destinations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">repos</span><span class="p">)</span>
+
+        <span class="c1"># ErratumPushItem._from_data expects metadata with cdn_repo for destinations</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cdn_repo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_destinations</span><span class="p">)</span>
+
+        <span class="c1"># Use the same factory method as ErrataSource</span>
+        <span class="n">erratum</span> <span class="o">=</span> <span class="n">ErratumPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="c1"># Set origin to the advisory ID</span>
+        <span class="k">return</span> <span class="n">attr</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">erratum</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_rpm_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create RpmPushItem instances from filelist data.</span>
+
+<span class="sd">        Since we don&#39;t use koji, we construct RPM push items directly</span>
+<span class="sd">        from the information in advisory_cdn_filelist.json.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            data (KonfluxAdvisoryData):</span>
+<span class="sd">                Advisory data containing metadata and filelist</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[RpmPushItem]: List of RPM push items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;rpms&quot;</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">:</span>
+                <span class="n">checksums</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">sig_key</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">rpm_filename</span><span class="p">,</span> <span class="n">destinations</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">[</span><span class="s2">&quot;rpms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Construct RPM push item</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_rpm_item</span><span class="p">(</span>
+                        <span class="n">filename</span><span class="o">=</span><span class="n">rpm_filename</span><span class="p">,</span>
+                        <span class="n">build_nvr</span><span class="o">=</span><span class="n">build_nvr</span><span class="p">,</span>
+                        <span class="n">destinations</span><span class="o">=</span><span class="n">destinations</span><span class="p">,</span>
+                        <span class="n">checksums</span><span class="o">=</span><span class="n">checksums</span><span class="p">,</span>
+                        <span class="n">signing_key</span><span class="o">=</span><span class="n">sig_key</span><span class="p">,</span>
+                        <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_rpm_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">checksums</span><span class="p">,</span> <span class="n">signing_key</span><span class="p">,</span> <span class="n">origin</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a single RpmPushItem from filelist data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            filename (str):</span>
+<span class="sd">                RPM filename</span>
+<span class="sd">            build_nvr (str):</span>
+<span class="sd">                Build NVR</span>
+<span class="sd">            destinations (list[str]):</span>
+<span class="sd">                List of repository destinations</span>
+<span class="sd">            checksums (dict):</span>
+<span class="sd">                Dict with &#39;md5&#39; and &#39;sha256&#39; checksum mappings</span>
+<span class="sd">            signing_key (str):</span>
+<span class="sd">                Signing key ID</span>
+<span class="sd">            origin (str):</span>
+<span class="sd">                Advisory ID</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RpmPushItem: RPM push item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract checksums for this specific RPM</span>
+        <span class="n">md5sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">RpmPushItem</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">=</span><span class="s2">&quot;PENDING&quot;</span><span class="p">,</span>
+            <span class="n">src</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># RPMs are stored in artifact storage</span>
+            <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">destinations</span><span class="p">),</span>
+            <span class="n">md5sum</span><span class="o">=</span><span class="n">md5sum</span><span class="p">,</span>
+            <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sum</span><span class="p">,</span>
+            <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+            <span class="n">build</span><span class="o">=</span><span class="n">build_nvr</span><span class="p">,</span>
+            <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="c1"># Register the backend</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;konflux&quot;</span><span class="p">,</span> <span class="n">KonfluxSource</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">pushsource</a></h1>
+
+
+
+<p class="blurb">A library to load push items from a variety of sources</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/base.html">Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/staged.html">Source: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/registry.html">Source: registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/konflux.html">Source: konflux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../sources/pub.html">Source: pub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/base.html">Push items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/cgw.html">Push items: cgw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/directory.html">Push items: directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/rpm.html">Push items: RPM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/modulemd.html">Push items: modulemd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/containers.html">Push items: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/ami.html">Push items: AMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/azure.html">Push items: VHD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/vmi.html">Push items: VMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/productid.html">Push items: productid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../model/comps.html">Push items: comps.xml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/staged.html">Schema: staged</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../schema/errata.html">Schema: errata</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushsource">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushsource">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2020, Red Hat.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushsource" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

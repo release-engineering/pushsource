@@ -134,7 +134,13 @@ locally mounted filesystem</p></td>
 <td><p>Obtain RPMs, container images and advisory
 metadata from Errata Tool</p></td>
 </tr>
-<tr class="row-even"><td><p>file</p></td>
+<tr class="row-even"><td><p>konflux</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">konflux:/path/to/data?advisories=RHSA-2020:0509</span></code></p></td>
+<td><p><a class="reference internal" href="sources/konflux.html#pushsource.KonfluxSource" title="pushsource.KonfluxSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">KonfluxSource</span></code></a></p></td>
+<td><p>Obtain RPMs and advisory metadata from local
+JSON files organized by advisory</p></td>
+</tr>
+<tr class="row-odd"><td><p>file</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">file:/tmp/file-to-push</span></code></p></td>
 <td rowspan="8"><p>n/a</p></td>
 <td rowspan="8"><p>Obtain a single file-backed item of various types.</p>
@@ -144,28 +150,28 @@ of string type documented on the corresponding
 Arguments of more complex types cannot be used.</p>
 </td>
 </tr>
-<tr class="row-odd"><td><p>cgw</p></td>
+<tr class="row-even"><td><p>cgw</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">cgw:/tmp/yaml-file-to-push</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>dir</p></td>
+<tr class="row-odd"><td><p>dir</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dir:/publish-src?dest=/dest1,/dest2</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>rpm</p></td>
+<tr class="row-even"><td><p>rpm</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">rpm:Downloads/python3-3.7.5-2.fc31.x86_64.rpm?signing_key=a1b2c3</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>comps</p></td>
+<tr class="row-odd"><td><p>comps</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">comps:/my/comps.xml?dest=my-target-repo</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>modulemd</p></td>
+<tr class="row-even"><td><p>modulemd</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">modulemd:modules.yaml?name=perl:5.24</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>modulemd-src</p></td>
+<tr class="row-odd"><td><p>modulemd-src</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">modulemd-src:/some/modulemd.src.txt</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>productid</p></td>
+<tr class="row-even"><td><p>productid</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">productid:/files/product.pem</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>pub</p></td>
+<tr class="row-odd"><td><p>pub</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pub:https://pub.example.com?task_id=1234</span></code></p></td>
 <td><p><a class="reference internal" href="sources/pub.html#pushsource.PubSource" title="pushsource.PubSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">PubSource</span></code></a></p></td>
 <td><p>Obtain AMIs from Pub task metadata</p></td>
@@ -314,6 +320,7 @@ pre-filled.</p>
 <li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/registry.html">Source: registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/konflux.html">Source: konflux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/pub.html">Source: pub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>

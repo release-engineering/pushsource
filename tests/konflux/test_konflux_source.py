@@ -13,7 +13,6 @@ from pushsource._impl.model import (
     RpmPushItem,
 )
 
-
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
 

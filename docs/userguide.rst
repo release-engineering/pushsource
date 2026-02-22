@@ -91,6 +91,9 @@ For detailed information, see the API reference of the associated class.
 | errata       | ``errata:https://errata.example.com?errata=RHBA-2020:1234``                 | :class:`~pushsource.ErrataSource`   | Obtain RPMs, container images and advisory         |
 |              |                                                                             |                                     | metadata from Errata Tool                          |
 +--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
+| konflux      | ``konflux:/path/to/data?advisories=RHSA-2020:0509``                         | :class:`~pushsource.KonfluxSource`  | Obtain RPMs and advisory metadata from local       |
+|              |                                                                             |                                     | JSON files organized by advisory                   |
++--------------+-----------------------------------------------------------------------------+-------------------------------------+----------------------------------------------------+
 | file         | ``file:/tmp/file-to-push``                                                  | n/a                                 | Obtain a single file-backed item of various types. |
 +--------------+-----------------------------------------------------------------------------+                                     |                                                    |
 | cgw          | ``cgw:/tmp/yaml-file-to-push``                                              |                                     |                                                    |

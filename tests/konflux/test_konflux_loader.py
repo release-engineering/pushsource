@@ -8,7 +8,6 @@ from pushsource._impl.backend.konflux_source.konflux_loader import (
     KonfluxAdvisoryData,
 )
 
-
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
 

@@ -454,9 +454,9 @@ cryptography==48.0.0 \
     --hash=sha256:f5333311663ea94f75dd408665686aaf426563556bb5283554a3539177e03b8c \
     --hash=sha256:fdfef35d751d510fcef5252703621574364fec16418c4a1e5e1055248401054b
     # via -r requirements.in
-decorator==5.2.1 \
-    --hash=sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360 \
-    --hash=sha256:d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
+decorator==5.3.0 \
+    --hash=sha256:95fda3122972c847cf0ff7e0ce2829bf25136f2526b627b3da85b60ca5f485c0 \
+    --hash=sha256:f8c2d71ede92f073144ddd7f3e9fbbc3bd0f2f29522c9d75ee648d66553834f4
     # via gssapi
 defusedxml==0.7.1 \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
@@ -609,9 +609,9 @@ identify==2.6.15 \
     --hash=sha256:1181ef7608e00704db228516541eb83a88a9f94433a8c80bb9b5bd54b1d81757 \
     --hash=sha256:e4f4864b96c6557ef2a1e1c951771838f4edc9df3a72ec7118b338801b11c7bf
     # via pre-commit
-idna==3.14 \
-    --hash=sha256:466d810d7a2cc1022bea9b037c39728d51ae7dad40d480fc9b7d7ecf98ba8ee3 \
-    --hash=sha256:e677eaf072e290f7b725f9acf0b3a2bd55f9fd6f7c70abe5f0e34823d0accf69
+idna==3.15 \
+    --hash=sha256:048adeaf8c2d788c40fee287673ccaa74c24ffd8dcf09ffa555a2fbb59f10ac8 \
+    --hash=sha256:ca962446ea538f7092a95e057da437618e886f4d349216d2b1e294abfdb65fdc
     # via requests
 imagesize==1.5.0 \
     --hash=sha256:32677681b3f434c2cb496f00e89c5a291247b35b1f527589909e008057da5899 \
@@ -867,9 +867,9 @@ python-dateutil==2.9.0.post0 \
     #   -r requirements.in
     #   -r test-requirements.in
     #   koji
-python-discovery==1.3.0 \
-    --hash=sha256:441d9ced3dfce36e113beb35ca302c71c7ef06f3c0f9c227a0b9bb3bd49b9e9f \
-    --hash=sha256:d098f1e86be5d45fe4d14bf1029294aabbd332f4321179dec85e76cddce834b0
+python-discovery==1.3.1 \
+    --hash=sha256:62f6db28064c9613e7ca76cb3f00c38c839a07c31c00dfe7ed0986493d2150a6 \
+    --hash=sha256:ed188687ebb3b82c01a17cd5ac62fc94d9f6487a7f1a0f9dfe89753fec91039c
     # via virtualenv
 pytokens==0.4.1 \
     --hash=sha256:0fc71786e629cef478cbf29d7ea1923299181d0699dbe7c3c0f4a583811d9fc1 \
@@ -1308,9 +1308,9 @@ urllib3==2.6.3 \
     --hash=sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed \
     --hash=sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4
     # via requests
-virtualenv==21.3.1 \
-    --hash=sha256:c2305bc1fddeec40699b8370d13f8d431b0701f00ce895061ce493aeded4426b \
-    --hash=sha256:d1a71cf58f2f9228fff23a1f6ec15d39785c6b32e03658d104974247145edd35
+virtualenv==21.3.3 \
+    --hash=sha256:7d5987d8369e098e41406efb780a3d4ca79280097293899e351a6407ee153ab3 \
+    --hash=sha256:f5bda277e553b1c2b3c1a8debfc30496e1288cc93ce6b7b71b3280047e317328
     # via pre-commit
 virtualenv-api==2.1.18 \
     --hash=sha256:2115cceaeab27faf2909780c442f4ee7a33fda9a49fe8255967432290a0557af \

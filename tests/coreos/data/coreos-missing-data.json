@@ -1,0 +1,21 @@
+{
+    "metadata": {},
+    "architectures": {
+      "aarch64": {
+        "images": {
+          "aws": {
+            "regions": {
+              "af-south-1": {
+                "image": "ami-09b3b126662fe7a18"
+              }
+            }
+          }
+        },
+        "rhel-coreos-extensions": {
+          "azure-disk": {
+            "url": "https://rhcos.blob.core.windows.net/imagebucket/rhcos-9.8.20260520-0-azure.aarch64.vhd"
+          }
+        }
+      }
+    }
+  }

@@ -22,6 +22,8 @@ jobs:
         run: tox -e static
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v2
       - name: Install OS packages
@@ -37,6 +39,14 @@ jobs:
         run: pip install tox
       - name: Run Tox
         run: tox -e cov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref =='refs/heads/master')
+        with:
+          use_oidc: true
+          flags: unit-tests
+          files: coverage.xml
+          fail_ci_if_error: false
   docs:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,45 @@
+{
+  "description": "An update for bash is now available.",
+  "from": "release-engineering@redhat.com",
+  "id": "RHBA-2020:1234",
+  "issued": "2020-04-01 12:00:00 UTC",
+  "pkglist": [
+    {
+      "packages": [
+        {
+          "arch": "x86_64",
+          "epoch": "0",
+          "filename": "bash-5.0.17-1.el8.x86_64.rpm",
+          "name": "bash",
+          "release": "1.el8",
+          "src": "bash-5.0.17-1.el8.src.rpm",
+          "sum": [
+            "md5",
+            "aabbccdd00112233aabbccdd00112233",
+            "sha256",
+            "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+          ],
+          "version": "5.0.17"
+        }
+      ]
+    }
+  ],
+  "pulp_user_metadata": {
+    "content_types": [
+      "rpm"
+    ]
+  },
+  "pushcount": "1",
+  "reboot_suggested": false,
+  "references": [],
+  "release": "0",
+  "rights": "Copyright 2020 Red Hat Inc",
+  "severity": "None",
+  "solution": "Install the updated package.",
+  "status": "final",
+  "summary": "Bug fix update for bash.",
+  "title": "bash bug fix update",
+  "type": "bugfix",
+  "updated": "2020-04-01 12:00:00 UTC",
+  "version": "1"
+}

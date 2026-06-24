@@ -2,6 +2,9 @@ import os
 import pytest
 import tempfile
 import json
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import anyio
 
 from pushsource import Source
 from pushsource._impl.backend.konflux_source import KonfluxSource
@@ -15,11 +18,39 @@ from pushsource._impl.model import (
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 
+# Default Pulp connection params for tests
+PULP_PARAMS = {
+    "pulp_url": "https://pulp.example.com",
+    "pulp_cert": "/path/to/cert",
+    "pulp_key": "/path/to/key",
+    "pulp_domain": "konflux-myteam-tenant",
+}
+
+
+def _mock_resolve_hrefs(func, sha256sums):
+    """Mock for anyio.run that returns a dict mapping each sha256 to a mock href."""
+    return {
+        sha256: "/pulp/api/v3/content/rpm/packages/mock-uuid/" for sha256 in sha256sums
+    }
+
 
 def test_load_single_advisory():
     """Test loading a single advisory and generating push items."""
-    with Source.get("konflux:%s?advisories=RHSA-2020:0509" % DATADIR) as source:
-        items = list(source)
+    url = (
+        "konflux:%s?"
+        "pulp_url=https://pulp.example.com"
+        "&pulp_cert=/path/to/cert"
+        "&pulp_key=/path/to/key"
+        "&pulp_domain=konflux-myteam-tenant"
+        "&advisories=RHSA-2020:0509"
+    ) % DATADIR
+    mock_href = "/pulp/api/v3/content/rpm/packages/mock-uuid/"
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.anyio.run",
+        side_effect=_mock_resolve_hrefs,
+    ):
+        with Source.get(url) as source:
+            items = list(source)
 
     # Should have 1 erratum + 7 RPMs
     assert len(items) == 8
@@ -151,7 +182,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-ppc64le-baseos-rpms__8",
                 "rhel-8-for-ppc64le-baseos-rpms__8_DOT_0",
@@ -165,7 +196,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.src.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-ppc64le-baseos-source-rpms__8",
                 "rhel-8-for-ppc64le-baseos-source-rpms__8_DOT_0",
@@ -182,7 +213,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-x86_64-baseos-e4s-rpms__8_DOT_0",
                 "rhel-8-for-x86_64-baseos-rpms__8",
@@ -197,7 +228,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-ppc64le-baseos-debug-rpms__8",
                 "rhel-8-for-ppc64le-baseos-debug-rpms__8_DOT_0",
@@ -211,7 +242,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.x86_64.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-x86_64-baseos-debug-rpms__8",
                 "rhel-8-for-x86_64-baseos-debug-rpms__8_DOT_0",
@@ -226,7 +257,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-ppc64le-baseos-debug-rpms__8",
                 "rhel-8-for-ppc64le-baseos-debug-rpms__8_DOT_0",
@@ -240,7 +271,7 @@ def test_load_single_advisory():
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.x86_64.rpm",
             state="PENDING",
-            src=None,
+            src=mock_href,
             dest=[
                 "rhel-8-for-x86_64-baseos-debug-rpms__8",
                 "rhel-8-for-x86_64-baseos-debug-rpms__8_DOT_0",
@@ -255,25 +286,33 @@ def test_load_single_advisory():
     ]
 
 
-def test_comma_separated_advisories():
-    """Test handling of comma-separated advisory IDs."""
-    # Note: We only have one advisory in test data, but we can test the parsing
-    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509,RHSA-2020:0510")
+def test_load_comma_separated_advisories():
+    """Test loading advisories specified as a comma-separated string."""
+    url = (
+        "konflux:%s?"
+        "pulp_url=https://pulp.example.com"
+        "&pulp_cert=/path/to/cert"
+        "&pulp_key=/path/to/key"
+        "&pulp_domain=konflux-myteam-tenant"
+        "&advisories=RHSA-2020:0509,RHBA-2020:1234"
+    ) % DATADIR
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.anyio.run",
+        side_effect=_mock_resolve_hrefs,
+    ):
+        with Source.get(url) as source:
+            items = list(source)
 
-    # Should parse into list
-    assert len(source._advisories) == 2
-    assert "RHSA-2020:0509" in source._advisories
-    assert "RHSA-2020:0510" in source._advisories
+    erratum_items = [i for i in items if isinstance(i, ErratumPushItem)]
+    rpm_items = [i for i in items if isinstance(i, RpmPushItem)]
 
+    # Should have both advisories
+    assert len(erratum_items) == 2
+    advisory_ids = sorted(e.name for e in erratum_items)
+    assert advisory_ids == ["RHBA-2020:1234", "RHSA-2020:0509"]
 
-def test_missing_advisory_directory():
-    """Test error handling for missing advisory directory."""
-    with pytest.raises(FileNotFoundError) as exc_info:
-        source = KonfluxSource(url=DATADIR, advisories="RHSA-9999:9999")
-        with source:
-            list(source)
-
-    assert "advisory_cdn_metadata.json" in str(exc_info.value)
+    # Should have 7 RPMs from RHSA-2020:0509 + 1 RPM from RHBA-2020:1234
+    assert len(rpm_items) == 8
 
 
 def test_invalid_json():
@@ -292,7 +331,9 @@ def test_invalid_json():
             json.dump({}, f)
 
         with pytest.raises(ValueError) as exc_info:
-            source = KonfluxSource(url=tmpdir, advisories="TEST-2020:0001")
+            source = KonfluxSource(
+                url=tmpdir, advisories="TEST-2020:0001", **PULP_PARAMS
+            )
             with source:
                 list(source)
 
@@ -301,14 +342,235 @@ def test_invalid_json():
 
 def test_context_manager():
     """Test context manager behavior."""
-    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509")
+    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509", **PULP_PARAMS)
 
     # Executor should be running
     assert source._executor is not None
 
-    with source:
-        items = list(source)
-        assert len(items) > 0
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.anyio.run",
+        side_effect=_mock_resolve_hrefs,
+    ):
+        with source:
+            items = list(source)
+            assert len(items) > 0
 
     # After exit, executor should be shutdown
     # (We can't easily test this without accessing private state)
+
+
+def test_resolve_rpm_hrefs_success():
+    """Test successful batch RPM resolution in Pulp."""
+    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509", **PULP_PARAMS)
+
+    # Mock Pulp3Client
+    mock_client = AsyncMock()
+    mock_client.__aenter__.return_value = mock_client
+    # build_query_sha256 is a sync method, use MagicMock
+    mock_client.build_query_sha256 = MagicMock(
+        return_value="(sha256=abc123 OR sha256=def456)"
+    )
+    mock_client.search_content.return_value = [
+        {
+            "pulp_href": "/pulp/api/v3/content/rpm/packages/abc-123/",
+            "name": "test-rpm-1.0-1.x86_64.rpm",
+            "sha256": "abc123",
+        },
+        {
+            "pulp_href": "/pulp/api/v3/content/rpm/packages/def-456/",
+            "name": "test-rpm-1.0-1.src.rpm",
+            "sha256": "def456",
+        },
+    ]
+
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.Pulp3Client",
+        return_value=mock_client,
+    ):
+        result = anyio.run(source._resolve_rpm_hrefs, ["abc123", "def456"])
+
+    assert result == {
+        "abc123": "/pulp/api/v3/content/rpm/packages/abc-123/",
+        "def456": "/pulp/api/v3/content/rpm/packages/def-456/",
+    }
+    mock_client.build_query_sha256.assert_called_once_with(["abc123", "def456"])
+    mock_client.search_content.assert_called_once_with(
+        query="(sha256=abc123 OR sha256=def456)",
+        fields=["pulp_href", "name", "sha256"],
+        limit=2,
+    )
+
+
+def test_resolve_rpm_hrefs_multiple_batches():
+    """Test RPM resolution splits into multiple batches."""
+    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509", **PULP_PARAMS)
+
+    mock_client = AsyncMock()
+    mock_client.__aenter__.return_value = mock_client
+    mock_client.build_query_sha256 = MagicMock(
+        side_effect=lambda sums: "(sha256=%s)" % sums[0]
+    )
+    mock_client.search_content.side_effect = [
+        [
+            {
+                "pulp_href": "/pulp/api/v3/content/rpm/packages/abc-123/",
+                "name": "test-rpm-1.0-1.x86_64.rpm",
+                "sha256": "abc123",
+            },
+        ],
+        [
+            {
+                "pulp_href": "/pulp/api/v3/content/rpm/packages/def-456/",
+                "name": "test-rpm-1.0-1.src.rpm",
+                "sha256": "def456",
+            },
+        ],
+    ]
+
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.Pulp3Client",
+        return_value=mock_client,
+    ):
+        result = anyio.run(source._resolve_rpm_hrefs, ["abc123", "def456"], 1)
+
+    assert result == {
+        "abc123": "/pulp/api/v3/content/rpm/packages/abc-123/",
+        "def456": "/pulp/api/v3/content/rpm/packages/def-456/",
+    }
+    assert mock_client.build_query_sha256.call_count == 2
+    assert mock_client.search_content.call_count == 2
+
+
+def test_resolve_rpm_hrefs_no_href():
+    """Test RPM resolution when result has no pulp_href."""
+    source = KonfluxSource(url=DATADIR, advisories="RHSA-2020:0509", **PULP_PARAMS)
+
+    mock_client = AsyncMock()
+    mock_client.__aenter__.return_value = mock_client
+    mock_client.build_query_sha256 = MagicMock(return_value="(sha256=abc123)")
+    mock_client.search_content.return_value = [
+        {
+            "name": "test-rpm-1.0-1.x86_64.rpm",
+            "sha256": "abc123",
+        }
+    ]
+
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.Pulp3Client",
+        return_value=mock_client,
+    ):
+        with pytest.raises(RuntimeError) as exc_info:
+            anyio.run(source._resolve_rpm_hrefs, ["abc123"])
+
+    assert "has no pulp_href" in str(exc_info.value)
+
+
+def test_rpm_not_found_in_pulp():
+    """Test error when RPM SHA256 is not found in Pulp results."""
+    source = KonfluxSource(url=DATADIR, advisories="RHBA-2020:1234", **PULP_PARAMS)
+
+    # Mock _resolve_rpm_hrefs to return empty map (RPM not found)
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.anyio.run"
+    ) as mock_run:
+        mock_run.return_value = {}  # No RPMs resolved
+
+        with pytest.raises(RuntimeError) as exc_info:
+            source._create_rpm_items(
+                source._loader.load_advisory_data("RHBA-2020:1234")
+            )
+
+    assert "not found in Pulp" in str(exc_info.value)
+
+
+def test_missing_sha256_checksum():
+    """Test error when RPM has no SHA256 checksum in filelist."""
+    source = KonfluxSource(url=DATADIR, advisories="RHBA-2020:1234", **PULP_PARAMS)
+
+    # Load real data then remove sha256 checksums
+    data = source._loader.load_advisory_data("RHBA-2020:1234")
+    for build_data in data.filelist.values():
+        build_data["checksums"]["sha256"] = {}
+
+    with pytest.raises(RuntimeError) as exc_info:
+        source._create_rpm_items(data)
+
+    assert "No SHA256 checksum found" in str(exc_info.value)
+
+
+def test_missing_pulp_url():
+    """Test that missing pulp_url raises RuntimeError at construction."""
+    with pytest.raises(RuntimeError) as exc_info:
+        KonfluxSource(
+            url=DATADIR,
+            advisories="RHSA-2020:0509",
+            pulp_cert="/path/to/cert",
+            pulp_key="/path/to/key",
+            pulp_domain="konflux-myteam-tenant",
+        )
+
+    assert "pulp_url" in str(exc_info.value)
+
+
+def test_missing_pulp_domain():
+    """Test that missing pulp_domain raises RuntimeError at construction."""
+    with pytest.raises(RuntimeError) as exc_info:
+        KonfluxSource(
+            url=DATADIR,
+            advisories="RHSA-2020:0509",
+            pulp_url="https://pulp.example.com",
+            pulp_cert="/path/to/cert",
+            pulp_key="/path/to/key",
+        )
+
+    assert "pulp_domain" in str(exc_info.value)
+
+
+def test_missing_pulp_auth():
+    """Test that missing Pulp auth raises RuntimeError at construction."""
+    with pytest.raises(RuntimeError) as exc_info:
+        KonfluxSource(
+            url=DATADIR,
+            advisories="RHSA-2020:0509",
+            pulp_url="https://pulp.example.com",
+            pulp_domain="konflux-myteam-tenant",
+        )
+
+    assert "authentication not configured" in str(exc_info.value)
+
+
+def test_basic_auth():
+    """Test construction with username/password authentication."""
+    source = KonfluxSource(
+        url=DATADIR,
+        advisories="RHSA-2020:0509",
+        pulp_url="https://pulp.example.com",
+        pulp_user="myuser",
+        pulp_password="mypassword",
+        pulp_domain="konflux-myteam-tenant",
+    )
+
+    assert source._pulp_client_kwargs["auth"] == ("myuser", "mypassword")
+    assert "cert" not in source._pulp_client_kwargs
+
+
+def test_build_without_rpms():
+    """Test that builds without 'rpms' key are skipped."""
+    source = KonfluxSource(url=DATADIR, advisories="RHBA-2020:1234", **PULP_PARAMS)
+
+    data = source._loader.load_advisory_data("RHBA-2020:1234")
+
+    # Add a build entry without 'rpms' key
+    data.filelist["some-build-1.0-1.el8"] = {
+        "checksums": {"md5": {}, "sha256": {}},
+        "sig_key": "FD431D51",
+    }
+
+    with patch(
+        "pushsource._impl.backend.konflux_source.konflux_source.anyio.run",
+        side_effect=_mock_resolve_hrefs,
+    ):
+        items = source._create_rpm_items(data)
+
+    # Should only have 1 RPM (from RHBA-2020:1234), not the build without rpms
+    assert len(items) == 1

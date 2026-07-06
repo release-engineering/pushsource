@@ -31,7 +31,9 @@
             
   <h1>Source code for pushsource._impl.backend.konflux_source.konflux_source</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">anyio</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">more_executors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Executors</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">...source</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
@@ -40,6 +42,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">...helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_argument</span><span class="p">,</span> <span class="n">as_completed_with_timeout_reset</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.konflux_loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">KonfluxLoader</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pubtools.pulplib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pulp3Client</span>
 
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource.konflux&quot;</span><span class="p">)</span>
 
@@ -66,6 +70,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">url</span><span class="p">,</span>
         <span class="n">advisories</span><span class="p">,</span>
+        <span class="n">pulp_url</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pulp_cert</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pulp_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pulp_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pulp_password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pulp_domain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
     <span class="p">):</span>
@@ -82,6 +92,38 @@
 <span class="sd">                Advisory ID(s) to process. Can be a single string or list.</span>
 <span class="sd">                Multiple IDs can be comma-separated.</span>
 
+<span class="sd">            pulp_url (str):</span>
+<span class="sd">                URL of hosted Pulp server</span>
+<span class="sd">                (e.g., https://packages.redhat.com/).</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_URL``</span>
+<span class="sd">                environment variable.</span>
+
+<span class="sd">            pulp_cert (str):</span>
+<span class="sd">                Path to TLS client certificate for Pulp authentication.</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_CERT``</span>
+<span class="sd">                environment variable.</span>
+
+<span class="sd">            pulp_key (str):</span>
+<span class="sd">                Path to TLS client key for Pulp authentication.</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_KEY``</span>
+<span class="sd">                environment variable.</span>
+
+<span class="sd">            pulp_user (str):</span>
+<span class="sd">                Username for Pulp basic authentication.</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_USER``</span>
+<span class="sd">                environment variable. Use with ``pulp_password``</span>
+<span class="sd">                as an alternative to certificate authentication.</span>
+
+<span class="sd">            pulp_password (str):</span>
+<span class="sd">                Password for Pulp basic authentication.</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_PASSWORD``</span>
+<span class="sd">                environment variable.</span>
+
+<span class="sd">            pulp_domain (str):</span>
+<span class="sd">                Pulp domain name (e.g., &quot;konflux-myteam-tenant&quot;).</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_DOMAIN``</span>
+<span class="sd">                environment variable.</span>
+
 <span class="sd">            threads (int):</span>
 <span class="sd">                Number of threads for concurrent processing.</span>
 
@@ -89,11 +131,56 @@
 <span class="sd">                Timeout in seconds for operations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_base_dir</span> <span class="o">=</span> <span class="n">url</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">advisories</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span> <span class="o">=</span> <span class="n">KonfluxLoader</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">advisories</span><span class="p">)</span>
+
+        <span class="c1"># Resolve Pulp params from env vars if not provided</span>
+        <span class="n">pulp_url</span> <span class="o">=</span> <span class="n">pulp_url</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_URL&quot;</span><span class="p">)</span>
+        <span class="n">pulp_cert</span> <span class="o">=</span> <span class="n">pulp_cert</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_CERT&quot;</span><span class="p">)</span>
+        <span class="n">pulp_key</span> <span class="o">=</span> <span class="n">pulp_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_KEY&quot;</span><span class="p">)</span>
+        <span class="n">pulp_user</span> <span class="o">=</span> <span class="n">pulp_user</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_USER&quot;</span><span class="p">)</span>
+        <span class="n">pulp_password</span> <span class="o">=</span> <span class="n">pulp_password</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_PASSWORD&quot;</span>
+        <span class="p">)</span>
+        <span class="n">pulp_domain</span> <span class="o">=</span> <span class="n">pulp_domain</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KONFLUX_PULP_DOMAIN&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Validate required params</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pulp_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Required parameter not provided: pulp_url&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pulp_domain</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Required parameter not provided: pulp_domain&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Validate that at least one auth method is provided</span>
+        <span class="n">has_cert_auth</span> <span class="o">=</span> <span class="n">pulp_cert</span> <span class="ow">and</span> <span class="n">pulp_key</span>
+        <span class="n">has_basic_auth</span> <span class="o">=</span> <span class="n">pulp_user</span> <span class="ow">and</span> <span class="n">pulp_password</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_cert_auth</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_basic_auth</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Pulp authentication not configured. Provide either &quot;</span>
+                <span class="s2">&quot;pulp_cert/pulp_key for mTLS or pulp_user/pulp_password &quot;</span>
+                <span class="s2">&quot;for basic authentication.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Initializing Pulp3 client: url=</span><span class="si">%s</span><span class="s2">, domain=</span><span class="si">%s</span><span class="s2">, auth=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">pulp_url</span><span class="p">,</span>
+            <span class="n">pulp_domain</span><span class="p">,</span>
+            <span class="s2">&quot;cert&quot;</span> <span class="k">if</span> <span class="n">has_cert_auth</span> <span class="k">else</span> <span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Build Pulp3Client kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pulp_client_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">pulp_url</span><span class="p">,</span>
+            <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="n">pulp_domain</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">has_cert_auth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pulp_client_kwargs</span><span class="p">[</span><span class="s2">&quot;cert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pulp_cert</span><span class="p">,</span> <span class="n">pulp_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">has_basic_auth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pulp_client_kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pulp_user</span><span class="p">,</span> <span class="n">pulp_password</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-konflux&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
         <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
@@ -189,6 +276,9 @@
 <span class="sd">        Since we don&#39;t use koji, we construct RPM push items directly</span>
 <span class="sd">        from the information in advisory_cdn_filelist.json.</span>
 
+<span class="sd">        Collects all RPM SHA256 checksums and resolves their pulp_hrefs</span>
+<span class="sd">        in a single batch query, then builds the push items.</span>
+
 <span class="sd">        Parameters:</span>
 <span class="sd">            data (KonfluxAdvisoryData):</span>
 <span class="sd">                Advisory data containing metadata and filelist</span>
@@ -196,64 +286,129 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list[RpmPushItem]: List of RPM push items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># First pass: collect all RPM info and SHA256 checksums</span>
+        <span class="n">rpm_entries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_sha256s</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">build_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="s2">&quot;rpms&quot;</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">:</span>
-                <span class="n">checksums</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">,</span> <span class="p">{})</span>
-                <span class="n">sig_key</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;rpms&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">checksums</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksums&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">sig_key</span> <span class="o">=</span> <span class="n">build_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sig_key&quot;</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">rpm_filename</span><span class="p">,</span> <span class="n">destinations</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">[</span><span class="s2">&quot;rpms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="c1"># Construct RPM push item</span>
-                    <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_rpm_item</span><span class="p">(</span>
-                        <span class="n">filename</span><span class="o">=</span><span class="n">rpm_filename</span><span class="p">,</span>
-                        <span class="n">build_nvr</span><span class="o">=</span><span class="n">build_nvr</span><span class="p">,</span>
-                        <span class="n">destinations</span><span class="o">=</span><span class="n">destinations</span><span class="p">,</span>
-                        <span class="n">checksums</span><span class="o">=</span><span class="n">checksums</span><span class="p">,</span>
-                        <span class="n">signing_key</span><span class="o">=</span><span class="n">sig_key</span><span class="p">,</span>
-                        <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">,</span>
+            <span class="k">for</span> <span class="n">rpm_filename</span><span class="p">,</span> <span class="n">destinations</span> <span class="ow">in</span> <span class="n">build_data</span><span class="p">[</span><span class="s2">&quot;rpms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">md5sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rpm_filename</span><span class="p">)</span>
+                <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rpm_filename</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">sha256sum</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="s2">&quot;No SHA256 checksum found for RPM </span><span class="si">%s</span><span class="s2"> in advisory </span><span class="si">%s</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">rpm_filename</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">)</span>
                     <span class="p">)</span>
-                    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+                <span class="n">all_sha256s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sha256sum</span><span class="p">)</span>
+                <span class="n">rpm_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">rpm_filename</span><span class="p">,</span>
+                        <span class="s2">&quot;build_nvr&quot;</span><span class="p">:</span> <span class="n">build_nvr</span><span class="p">,</span>
+                        <span class="s2">&quot;destinations&quot;</span><span class="p">:</span> <span class="n">destinations</span><span class="p">,</span>
+                        <span class="s2">&quot;md5sum&quot;</span><span class="p">:</span> <span class="n">md5sum</span><span class="p">,</span>
+                        <span class="s2">&quot;sha256sum&quot;</span><span class="p">:</span> <span class="n">sha256sum</span><span class="p">,</span>
+                        <span class="s2">&quot;signing_key&quot;</span><span class="p">:</span> <span class="n">sig_key</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Batch-resolve all SHA256 checksums to pulp_hrefs</span>
+        <span class="n">href_map</span> <span class="o">=</span> <span class="n">anyio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resolve_rpm_hrefs</span><span class="p">,</span> <span class="n">all_sha256s</span><span class="p">)</span>
+
+        <span class="c1"># Second pass: build push items using resolved hrefs</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">rpm_entries</span><span class="p">:</span>
+            <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;sha256sum&quot;</span><span class="p">]</span>
+            <span class="n">pulp_href</span> <span class="o">=</span> <span class="n">href_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sha256sum</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pulp_href</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;RPM </span><span class="si">%s</span><span class="s2"> (sha256=</span><span class="si">%s</span><span class="s2">) not found in Pulp&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span> <span class="n">sha256sum</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">RpmPushItem</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">state</span><span class="o">=</span><span class="s2">&quot;PENDING&quot;</span><span class="p">,</span>
+                    <span class="n">src</span><span class="o">=</span><span class="n">pulp_href</span><span class="p">,</span>
+                    <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;destinations&quot;</span><span class="p">]),</span>
+                    <span class="n">md5sum</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;md5sum&quot;</span><span class="p">],</span>
+                    <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sum</span><span class="p">,</span>
+                    <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">,</span>
+                    <span class="n">build</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;build_nvr&quot;</span><span class="p">],</span>
+                    <span class="n">signing_key</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;signing_key&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">items</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_create_rpm_item</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">build_nvr</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">checksums</span><span class="p">,</span> <span class="n">signing_key</span><span class="p">,</span> <span class="n">origin</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a single RpmPushItem from filelist data.</span>
+    <span class="c1"># Pulp&#39;s content search API enforces a filter complexity limit,</span>
+    <span class="c1"># rejecting queries with more than 7 OR clauses with:</span>
+    <span class="c1">#   {&quot;q&quot;: [&quot;Filter expression exceeds allowed complexity.&quot;]}</span>
+    <span class="n">_PULP_BATCH_SIZE</span> <span class="o">=</span> <span class="mi">7</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_rpm_hrefs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sha256sums</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">_PULP_BATCH_SIZE</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve SHA256 checksums to pulp_hrefs in batched queries.</span>
+
+<span class="sd">        Uses one Pulp3Client instance and queries checksums in batches</span>
+<span class="sd">        to stay within Pulp&#39;s filter complexity limits.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">            filename (str):</span>
-<span class="sd">                RPM filename</span>
-<span class="sd">            build_nvr (str):</span>
-<span class="sd">                Build NVR</span>
-<span class="sd">            destinations (list[str]):</span>
-<span class="sd">                List of repository destinations</span>
-<span class="sd">            checksums (dict):</span>
-<span class="sd">                Dict with &#39;md5&#39; and &#39;sha256&#39; checksum mappings</span>
-<span class="sd">            signing_key (str):</span>
-<span class="sd">                Signing key ID</span>
-<span class="sd">            origin (str):</span>
-<span class="sd">                Advisory ID</span>
+<span class="sd">            sha256sums (list[str]):</span>
+<span class="sd">                List of SHA256 checksums to resolve</span>
+
+<span class="sd">            batch_size (int):</span>
+<span class="sd">                Maximum number of checksums per query (default: 7)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            RpmPushItem: RPM push item</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Extract checksums for this specific RPM</span>
-        <span class="n">md5sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">checksums</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="sd">            dict: Mapping of sha256 -&gt; pulp_href</span>
 
-        <span class="k">return</span> <span class="n">RpmPushItem</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">=</span><span class="s2">&quot;PENDING&quot;</span><span class="p">,</span>
-            <span class="n">src</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># RPMs are stored in artifact storage</span>
-            <span class="n">dest</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">destinations</span><span class="p">),</span>
-            <span class="n">md5sum</span><span class="o">=</span><span class="n">md5sum</span><span class="p">,</span>
-            <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sum</span><span class="p">,</span>
-            <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
-            <span class="n">build</span><span class="o">=</span><span class="n">build_nvr</span><span class="p">,</span>
-            <span class="n">signing_key</span><span class="o">=</span><span class="n">signing_key</span><span class="p">,</span>
-        <span class="p">)</span></div>
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: If any RPM is not found or has no pulp_href</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">href_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">Pulp3Client</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_pulp_client_kwargs</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sha256sums</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+                <span class="n">batch</span> <span class="o">=</span> <span class="n">sha256sums</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_query_sha256</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+                <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">search_content</span><span class="p">(</span>
+                    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pulp_href&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256&quot;</span><span class="p">],</span>
+                    <span class="n">limit</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">sha256</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span>
+                    <span class="n">pulp_href</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pulp_href&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">pulp_href</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                            <span class="s2">&quot;RPM with SHA256 </span><span class="si">%s</span><span class="s2"> found but has no pulp_href: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">sha256</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="n">href_map</span><span class="p">[</span><span class="n">sha256</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp_href</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Found RPM in Pulp: sha256=</span><span class="si">%s</span><span class="s2">, pulp_href=</span><span class="si">%s</span><span class="s2">, name=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">sha256</span><span class="p">,</span>
+                        <span class="n">pulp_href</span><span class="p">,</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+                    <span class="p">)</span>
+
+                <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Resolved </span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2"> RPMs in Pulp (batch </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">href_map</span><span class="p">),</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">sha256sums</span><span class="p">),</span>
+                    <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">batch_size</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">href_map</span></div>
 
 
 

@@ -36,7 +36,7 @@
 <h1>Source: konflux<a class="headerlink" href="#source-konflux" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">konflux</span></code> push source allows the loading of content from local JSON files
 organized by advisory. This source is designed for use with Konflux-generated
-advisory metadata and does not require network access or external API calls.</p>
+advisory metadata and queries a Pulp 3 server to resolve RPM content hrefs.</p>
 <p>Supported content types:</p>
 <ul class="simple">
 <li><p>RPMs</p></li>
@@ -52,6 +52,10 @@ advisory metadata and does not require network access or external API calls.</p>
 <p><code class="docutils literal notranslate"><span class="pre">konflux:/path/to/konflux/data?advisories=RHSA-2020:0509</span></code></p>
 <p>Multiple advisories can be specified with a comma-separated list:</p>
 <p><code class="docutils literal notranslate"><span class="pre">konflux:/path/to/konflux/data?advisories=RHSA-2020:0509,RHSA-2020:0510</span></code></p>
+<p>Pulp 3 connection parameters (<code class="docutils literal notranslate"><span class="pre">pulp_url</span></code>, <code class="docutils literal notranslate"><span class="pre">pulp_cert</span></code>, <code class="docutils literal notranslate"><span class="pre">pulp_key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pulp_domain</span></code>) are required and can be provided as URL query parameters,
+keyword arguments to <a class="reference internal" href="base.html#pushsource.Source.get" title="pushsource.Source.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>, or environment variables
+(see <a class="reference internal" href="#pushsource.KonfluxSource" title="pushsource.KonfluxSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">KonfluxSource</span></code></a> for details).</p>
 <p>The base directory should contain subdirectories named after each advisory ID.
 Each advisory subdirectory must contain:</p>
 <ul class="simple">
@@ -108,9 +112,9 @@ Each advisory subdirectory must contain:</p>
 <ul class="simple">
 <li><p>Reads from local JSON files rather than querying the Errata API</p></li>
 <li><p>Does not require Koji integration</p></li>
+<li><p>Queries Pulp 3 by SHA256 to resolve RPM <code class="docutils literal notranslate"><span class="pre">pulp_href</span></code> for Pulp-to-Pulp syncing</p></li>
 <li><p>Does not currently support filtering by architecture (this use case may be supported in the future)</p></li>
 <li><p>Currently produces RPMs and advisories (additional content types such as modules and container images can be supported in the future)</p></li>
-<li><p>RPM push items have <code class="docutils literal notranslate"><span class="pre">src=None</span></code> (no local RPM files, only metadata)</p></li>
 </ul>
 </section>
 </section>
@@ -118,7 +122,7 @@ Each advisory subdirectory must contain:</p>
 <h2>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.KonfluxSource">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KonfluxSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advisories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/konflux_source/konflux_source.html#KonfluxSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KonfluxSource" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KonfluxSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advisories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_cert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/konflux_source/konflux_source.html#KonfluxSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KonfluxSource" title="Link to this definition">¶</a></dt>
 <dd><p>Source for push items loaded from Konflux JSON files.</p>
 <p>This source reads advisory metadata from local JSON files organized
 in subdirectories per advisory, and generates push items for RPMs
@@ -129,7 +133,7 @@ content types (such as modules, container images, etc.) in the future.</p>
 though such filtering could be added if needed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushsource.KonfluxSource.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advisories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/konflux_source/konflux_source.html#KonfluxSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KonfluxSource.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advisories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_cert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulp_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pushsource/_impl/backend/konflux_source/konflux_source.html#KonfluxSource.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KonfluxSource.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new Konflux source.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -140,6 +144,26 @@ and contain advisory_cdn_metadata.json and
 advisory_cdn_filelist.json files.</p></li>
 <li><p><strong>advisories</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Advisory ID(s) to process. Can be a single string or list.
 Multiple IDs can be comma-separated.</p></li>
+<li><p><strong>pulp_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – URL of hosted Pulp server
+(e.g., <a class="reference external" href="https://packages.redhat.com/">https://packages.redhat.com/</a>).
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_URL</span></code>
+environment variable.</p></li>
+<li><p><strong>pulp_cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client certificate for Pulp authentication.
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_CERT</span></code>
+environment variable.</p></li>
+<li><p><strong>pulp_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client key for Pulp authentication.
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_KEY</span></code>
+environment variable.</p></li>
+<li><p><strong>pulp_user</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Username for Pulp basic authentication.
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_USER</span></code>
+environment variable. Use with <code class="docutils literal notranslate"><span class="pre">pulp_password</span></code>
+as an alternative to certificate authentication.</p></li>
+<li><p><strong>pulp_password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Password for Pulp basic authentication.
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_PASSWORD</span></code>
+environment variable.</p></li>
+<li><p><strong>pulp_domain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pulp domain name (e.g., “konflux-myteam-tenant”).
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_DOMAIN</span></code>
+environment variable.</p></li>
 <li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of threads for concurrent processing.</p></li>
 <li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Timeout in seconds for operations.</p></li>
 </ul>

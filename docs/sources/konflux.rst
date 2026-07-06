@@ -3,7 +3,7 @@ Source: konflux
 
 The ``konflux`` push source allows the loading of content from local JSON files
 organized by advisory. This source is designed for use with Konflux-generated
-advisory metadata and does not require network access or external API calls.
+advisory metadata and queries a Pulp 3 server to resolve RPM content hrefs.
 
 Supported content types:
 
@@ -27,6 +27,11 @@ For example, referencing a single advisory would look like:
 Multiple advisories can be specified with a comma-separated list:
 
 ``konflux:/path/to/konflux/data?advisories=RHSA-2020:0509,RHSA-2020:0510``
+
+Pulp 3 connection parameters (``pulp_url``, ``pulp_cert``, ``pulp_key``,
+``pulp_domain``) are required and can be provided as URL query parameters,
+keyword arguments to :meth:`~pushsource.Source.get`, or environment variables
+(see :class:`~pushsource.KonfluxSource` for details).
 
 The base directory should contain subdirectories named after each advisory ID.
 Each advisory subdirectory must contain:
@@ -87,9 +92,9 @@ Unlike the `ErrataSource`, the `KonfluxSource`:
 
 * Reads from local JSON files rather than querying the Errata API
 * Does not require Koji integration
+* Queries Pulp 3 by SHA256 to resolve RPM ``pulp_href`` for Pulp-to-Pulp syncing
 * Does not currently support filtering by architecture (this use case may be supported in the future)
 * Currently produces RPMs and advisories (additional content types such as modules and container images can be supported in the future)
-* RPM push items have ``src=None`` (no local RPM files, only metadata)
 
 Python API reference
 --------------------

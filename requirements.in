@@ -5,6 +5,7 @@ frozenlist2
 kobo
 koji>=1.18
 more-executors>=2.7.0
+pubtools-pulplib>=2.44.0
 pushcollector
 pyasn1
 python-dateutil

@@ -1,0 +1,18 @@
+{
+  "bash-5.0.17-1.el8": {
+    "checksums": {
+      "md5": {
+        "bash-5.0.17-1.el8.x86_64.rpm": "aabbccdd00112233aabbccdd00112233"
+      },
+      "sha256": {
+        "bash-5.0.17-1.el8.x86_64.rpm": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+      }
+    },
+    "rpms": {
+      "bash-5.0.17-1.el8.x86_64.rpm": [
+        "rhel-8-for-x86_64-baseos-rpms__8"
+      ]
+    },
+    "sig_key": "fd431d51"
+  }
+}

@@ -39,7 +39,7 @@ a <a class="reference internal" href="../sources/staged.html#staging-structure">
 <p>The latest version of this schema is available in raw form at
 <a class="reference external" href="https://release-engineering.github.io/pushsource/cloud-schema.yaml">https://release-engineering.github.io/pushsource/cloud-schema.yaml</a>.</p>
 <div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>---
-# Schema for metadata file &quot;resources.yaml&quot; accompanying a
+# Schema for metadata file "resources.yaml" accompanying a
 # cloud staged source.
 #
 # For general information about staging directories, see:
@@ -61,13 +61,13 @@ definitions:
                 type: string
                 minLength: 1
             version:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             base_product:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             base_version:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             variant:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             arch:
                 type: string
                 enum:
@@ -76,12 +76,12 @@ definitions:
             respin:
                 type: integer
             type:
-                $ref: &quot;#/definitions/optional_string&quot;
-                enum: [&#39;ga&#39;, &#39;beta&#39;, null]
+                $ref: "#/definitions/optional_string"
+                enum: ['ga', 'beta', null]
             date:
                 type: string
                 minLength: 1
-                pattern: &quot;^[0-9]{8}$&quot;
+                pattern: "^[0-9]{8}$"
         required:
         - product
         - date
@@ -92,14 +92,14 @@ definitions:
         # A field which may hold a non-empty string, or null.
         type:
         - string
-        - &quot;null&quot;
+        - "null"
         minLength: 1
 
     ami_billing_codes:
         # Billing codes for an AMI
         type:
         - object
-        - &quot;null&quot;
+        - "null"
         properties:
             name:
                 type: string
@@ -123,14 +123,14 @@ type: object
 properties:
     api:
       type: string
-      enum: [&quot;v1&quot;]
+      enum: ["v1"]
     resource:
       type: string
-      enum: [&quot;CloudImage&quot;]
+      enum: ["CloudImage"]
     images:
       type: array
       items:
-        $ref: &quot;#/definitions/image&quot;
+        $ref: "#/definitions/image"
     build:
       type: object
       properties:
@@ -140,11 +140,11 @@ properties:
     description:
       type: string
     boot_mode:
-      enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+      enum: [ 'hybrid', 'uefi', 'legacy', null ]
     type:
-      enum: [&#39;AMI&#39;, &#39;VHD&#39;, null]
+      enum: ['AMI', 'VHD', null]
     release:
-      $ref: &quot;#/definitions/ami_release&quot;
+      $ref: "#/definitions/ami_release"
 
     region:
         # AWS region to which this AMI should be pushed.
@@ -181,12 +181,12 @@ properties:
         minLength: 1
 
     description:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
 
     sriov_net_support:
         type:
         - string
-        - &quot;null&quot;
+        - "null"
         enum:
         - simple
         - null
@@ -194,54 +194,54 @@ properties:
     ena_support:
         type:
         - boolean
-        - &quot;null&quot;
+        - "null"
 
     uefi_support:
         type:
         - boolean
-        - &quot;null&quot;
+        - "null"
 
     billing_codes:
-        $ref: &quot;#/definitions/ami_billing_codes&quot;
+        $ref: "#/definitions/ami_billing_codes"
 
     boot_mode:
-        enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+        enum: [ 'hybrid', 'uefi', 'legacy', null ]
 
     public_image:
         type:
         - boolean
-        - &quot;null&quot;
+        - "null"
     release_notes:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
 
     usage_instructions:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
 
     recommended_instance_type:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
 
     marketplace_entity_type:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
 
     scanning_port:
         type:
             - number
-            - &quot;null&quot;
+            - "null"
         minimum: 0
         maximum: 65536
 
     user_name:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
     version_title:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
     marketplace_title_template:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
     marketplace_name:
-        $ref: &quot;#/definitions/optional_string&quot;
+        $ref: "#/definitions/optional_string"
     security_groups:
         type:
             - array
-            - &quot;null&quot;
+            - "null"
         items:
             type: object
             properties:
@@ -254,7 +254,7 @@ properties:
             if:
                 properties:
                     ip_protocol:
-                        enum: [&quot;icmp&quot;, &quot;icmpv6&quot;]
+                        enum: ["icmp", "icmpv6"]
             then:
                 properties:
                     from_port:
@@ -279,14 +279,14 @@ properties:
     access_endpoint_url:
         type:
         - object
-        - &quot;null&quot;
+        - "null"
         properties:
             port:
                 type: number
                 minimum: 0
                 maximum: 65536
             protocol:
-                enum: [&quot;http&quot;, &quot;https&quot;]
+                enum: ["http", "https"]
 
 required:
 - api

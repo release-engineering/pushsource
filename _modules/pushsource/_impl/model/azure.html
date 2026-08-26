@@ -38,14 +38,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.conv</span><span class="w"> </span><span class="kn">import</span> <span class="n">in_</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional_str</span><span class="p">,</span> <span class="n">optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.vms</span><span class="w"> </span><span class="kn">import</span> <span class="n">VMIPushItem</span><span class="p">,</span> <span class="n">VMIRelease</span>
 
-<span class="n">VHDGeneration</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="s2">&quot;V2&quot;</span><span class="p">]</span>
+<span class="n">VHDGeneration</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"V1"</span><span class="p">,</span> <span class="s2">"V2"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="VHDPushItem">
 <a class="viewcode-back" href="../../../../model/azure.html#pushsource.VHDPushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">VHDPushItem</span><span class="p">(</span><span class="n">VMIPushItem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a Virtual Hard Disk (or VHD).</span>
+<span class="w">    </span><span class="sd">"""A :class:`~pushsource.PushItem` representing a Virtual Hard Disk (or VHD).</span>
 
 <span class="sd">    For push items of this type, the :meth:`~pushsource.PushItem.src` attribute</span>
 <span class="sd">    refers to a file containing the VHD file..</span>
@@ -53,76 +53,76 @@
 <span class="sd">    This library does not verify that the referenced file is a valid</span>
 <span class="sd">    snapshot.</span>
 
-<span class="sd">    Note: As some attributes can not be obtained directly from Koji they&#39;re marked</span>
+<span class="sd">    Note: As some attributes can not be obtained directly from Koji they're marked</span>
 <span class="sd">    as optional in the `attrs` validators. With this the VHDPushItem objects can be</span>
 <span class="sd">    created without these attributes and the missing values can be added later by</span>
 <span class="sd">    using `attrs.evolve`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">generation</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;V2&quot;</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">VHDGeneration</span><span class="p">)))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;VHD generation. It can be ``V1`` or ``V2``.&quot;&quot;&quot;</span>
+    <span class="n">generation</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"V2"</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">in_</span><span class="p">(</span><span class="n">VHDGeneration</span><span class="p">)))</span>
+<span class="w">    </span><span class="sd">"""VHD generation. It can be ``V1`` or ``V2``."""</span>
 
     <span class="n">sku_id</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SKU ID for the VM image generation, generally being the Plan ID.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""SKU ID for the VM image generation, generally being the Plan ID."""</span>
 
     <span class="n">support_legacy</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;If the image ``generation == V2`` but also supports ``V1``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""If the image ``generation == V2`` but also supports ``V1``."""</span>
 
     <span class="n">legacy_sku_id</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ``V1`` SKU ID (only if ``support_legacy`` is true).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The ``V1`` SKU ID (only if ``support_legacy`` is true)."""</span>
 
     <span class="n">disk_version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The image&#39;s disk version according to Azure&#39;s format {int}.{int}.{int}&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The image's disk version according to Azure's format {int}.{int}.{int}"""</span>
 
     <span class="n">recommended_sizes</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
         <span class="n">converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">frozenlist</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of recommended VM sizes in Azure, for example [&#39;a1-standard&#39;, &#39;a5&#39;, &#39;a7&#39;]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""List of recommended VM sizes in Azure, for example ['a1-standard', 'a5', 'a7']"""</span>
 
     <span class="n">sas_uri</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The SAS URI to be associated with the disk_version.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The SAS URI to be associated with the disk_version."""</span>
 
     <span class="nd">@disk_version</span><span class="o">.</span><span class="n">validator</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">__validate_disk_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="c1"># pylint: disable=unused-argument</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\d+\.)(\d+\.)(\*|\d+)$&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^(\d+\.)(\d+\.)(\*|\d+)$"</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;Invalid disk version. Expected format: </span><span class="si">{int}</span><span class="s2">.</span><span class="si">{int}</span><span class="s2">.</span><span class="si">{int}</span><span class="s2">&quot;</span>
+                <span class="sa">r</span><span class="s2">"Invalid disk version. Expected format: </span><span class="si">{int}</span><span class="s2">.</span><span class="si">{int}</span><span class="s2">.</span><span class="si">{int}</span><span class="s2">"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">legacy_sku_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">support_legacy</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;The attribute &quot;legacy_sku_id&quot; must only be set when&#39;</span>
-                <span class="s1">&#39; &quot;support_legacy&quot; is True.&#39;</span>
+                <span class="s1">'The attribute "legacy_sku_id" must only be set when'</span>
+                <span class="s1">' "support_legacy" is True.'</span>
             <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_from_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate VHDPushItem from raw list or dict&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Instantiate VHDPushItem from raw list or dict"""</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
 
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="c1"># base push item fields</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;build&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;PENDING&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;dest&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dest&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>
-            <span class="s2">&quot;origin&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;generation&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;sku_id&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sku_id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;support_legacy&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;support_legacy&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
-            <span class="s2">&quot;release&quot;</span><span class="p">:</span> <span class="n">VMIRelease</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;release&quot;</span><span class="p">,</span> <span class="p">{})),</span>
-            <span class="s2">&quot;legacy_sku_id&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;legacy_sku_id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;disk_version&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;disk_version&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;recommended_sizes&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recommended_sizes&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>
-            <span class="s2">&quot;sas_uri&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sas_uri&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+            <span class="s2">"build"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"build"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"state"</span><span class="p">:</span> <span class="s2">"PENDING"</span><span class="p">,</span>
+            <span class="s2">"src"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"src"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"dest"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"dest"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>
+            <span class="s2">"origin"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"origin"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">"description"</span><span class="p">],</span>
+            <span class="s2">"generation"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"generation"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"sku_id"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sku_id"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"support_legacy"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"support_legacy"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">"release"</span><span class="p">:</span> <span class="n">VMIRelease</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"release"</span><span class="p">,</span> <span class="p">{})),</span>
+            <span class="s2">"legacy_sku_id"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"legacy_sku_id"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"disk_version"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"disk_version"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"recommended_sizes"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"recommended_sizes"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>
+            <span class="s2">"sas_uri"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sas_uri"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>

@@ -87,7 +87,7 @@ name multiple times, and also by comma-separated values.</p>
 </pre></div>
 </div>
 <p>Here are some example URLs:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Load some RPMs from the Fedora Project&#39;s koji
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Load some RPMs from the Fedora Project's koji
 koji:https://koji.fedoraproject.org/kojihub?rpm=python3-3.7.5-2.fc31.x86_64.rpm,python3-3.7.5-2.fc31.src.rpm
 
 # Load an advisory from Errata Tool
@@ -203,7 +203,7 @@ of push items to existing sources.</p>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">FilePushItem</span><span class="p">):</span>
       <span class="n">publish_file</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unexpected push item type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+      <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Unexpected push item type: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -250,11 +250,11 @@ imported when <a class="reference internal" href="sources/base.html#pushsource.S
 pushsource 2.17.0 or later.</p>
 <p>For example, in setup.py, one may declare:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
-  <span class="s2">&quot;pushsource&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="s2">"pushsource"</span><span class="p">:</span> <span class="p">[</span>
       <span class="c1"># Left-hand side can be anything.</span>
       <span class="c1"># Right-hand side is the name of your module which, on import time,</span>
-      <span class="c1"># should perform a call to &quot;Source.register_backend&quot;.</span>
-      <span class="s2">&quot;mybackend = mylib.my_pushsource_backend&quot;</span><span class="p">,</span>
+      <span class="c1"># should perform a call to "Source.register_backend".</span>
+      <span class="s2">"mybackend = mylib.my_pushsource_backend"</span><span class="p">,</span>
   <span class="p">]</span>
 <span class="p">},</span>
 </pre></div>
@@ -272,13 +272,13 @@ frequently is used with Fedora Koji, it would be cumbersome to require the user 
 pass the Fedora Koji URL every time the source is used. This can be fixed by
 creating a <cite>fedkoji</cite> alias, which delegates to the <cite>koji</cite> backend with some arguments
 pre-filled.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># make a &#39;fedkoji&#39; backend which is simply the koji backend</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># make a 'fedkoji' backend which is simply the koji backend</span>
 <span class="c1"># pointed at a particular URL</span>
-<span class="n">fedkoji_backend</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span><span class="s1">&#39;koji:https://koji.fedoraproject.org/kojihub&#39;</span><span class="p">)</span>
-<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s1">&#39;fedkoji&#39;</span><span class="p">,</span> <span class="n">fedkoji_backend</span><span class="p">)</span>
+<span class="n">fedkoji_backend</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">get_partial</span><span class="p">(</span><span class="s1">'koji:https://koji.fedoraproject.org/kojihub'</span><span class="p">)</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s1">'fedkoji'</span><span class="p">,</span> <span class="n">fedkoji_backend</span><span class="p">)</span>
 
 <span class="c1"># fedora koji now accessible without specifying URL</span>
-<span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fedkoji:rpm=python3-3.7.5-2.fc31.x86_64.rpm,...&#39;</span><span class="p">)</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'fedkoji:rpm=python3-3.7.5-2.fc31.x86_64.rpm,...'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -60,17 +60,17 @@ definitions:
         - type: integer
           minimum: 0
         - type: string
-          pattern: &quot;^[0-9]*$&quot;
+          pattern: "^[0-9]*$"
 
     optional_string:
         # A field which may hold a string, or null.
         type:
         - string
-        - &quot;null&quot;
+        - "null"
     containerlistitem:
         type: object
         patternProperties:
-            &quot;.*&quot;:
+            ".*":
                 type: object
                 properties:
                     digest:
@@ -78,11 +78,11 @@ definitions:
                     images:
                         type: object
                         patternProperties:
-                            &quot;.*&quot;:
+                            ".*":
                                 type: object
                                 properties:
                                     digest:
-                                        type: [&quot;string&quot;, &quot;null&quot;]
+                                        type: ["string", "null"]
                                 required:
                                     - digest
                 required:
@@ -92,13 +92,13 @@ definitions:
     container_list:
         type: array
         items:
-            $ref: &quot;#/definitions/containerlistitem&quot;
+            $ref: "#/definitions/containerlistitem"
         uniqueItems: true
 
     reference_list:
         type: array
         items:
-            $ref: &quot;#/definitions/reference&quot;
+            $ref: "#/definitions/reference"
         uniqueItems: true
 
     reference:
@@ -113,9 +113,9 @@ definitions:
                 type:
                 - integer
                 - string
-                - &quot;null&quot;
+                - "null"
             title:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             type:
                 type: string
         required:
@@ -127,7 +127,7 @@ definitions:
     pkg_collection_list:
         type: array
         items:
-            $ref: &quot;#/definitions/pkg_collection&quot;
+            $ref: "#/definitions/pkg_collection"
         uniqueItems: true
 
     pkg_collection:
@@ -140,7 +140,7 @@ definitions:
             packages:
                 type: array
                 items:
-                    $ref: &quot;#/definitions/pkg&quot;
+                    $ref: "#/definitions/pkg"
                 uniqueItems: true
 
     pkg:
@@ -149,7 +149,7 @@ definitions:
             arch:
                 type: string
             epoch:
-                $ref: &quot;#/definitions/intstr&quot;
+                $ref: "#/definitions/intstr"
             filename:
                 type: string
             name:
@@ -168,8 +168,8 @@ definitions:
                 items:
                     type: string
                 examples:
-                - [&quot;md5&quot;, &quot;0d56f302617696d3511e71e1669e62c0&quot;,
-                   &quot;sha256&quot;, &quot;31c4f73af90c6d267cc5281c59e4a93ae3557b2253d9a8e3fef55f3cafca6e54&quot;]
+                - ["md5", "0d56f302617696d3511e71e1669e62c0",
+                   "sha256", "31c4f73af90c6d267cc5281c59e4a93ae3557b2253d9a8e3fef55f3cafca6e54"]
 
         required:
         - name
@@ -189,12 +189,12 @@ properties:
     issued:
         type: string
     pushcount:
-        $ref: &quot;#/definitions/intstr&quot;
+        $ref: "#/definitions/intstr"
     # Note: this is also present under each package (if there are any).
     reboot_suggested:
         type: boolean
     release:
-        $ref: &quot;#/definitions/intstr&quot;
+        $ref: "#/definitions/intstr"
     rights:
         type: string
     severity:
@@ -212,11 +212,11 @@ properties:
     updated:
         type: string
     version:
-        $ref: &quot;#/definitions/intstr&quot;
+        $ref: "#/definitions/intstr"
     references:
-        $ref: &quot;#/definitions/reference_list&quot;
+        $ref: "#/definitions/reference_list"
     pkglist:
-        $ref: &quot;#/definitions/pkg_collection_list&quot;
+        $ref: "#/definitions/pkg_collection_list"
 
 required:
 - description

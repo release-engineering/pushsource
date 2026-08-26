@@ -40,10 +40,10 @@
 <a class="viewcode-back" href="../../../../model/rpm.html#pushsource.RpmPushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">RpmPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a single RPM.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A :class:`~pushsource.PushItem` representing a single RPM."""</span>
 
     <span class="n">module_build</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;NVR for the koji module build through which this push item was located, if any.</span>
+<span class="w">    </span><span class="sd">"""NVR for the koji module build through which this push item was located, if any.</span>
 
 <span class="sd">    For a modular RPM push item, there may be two koji builds in play:</span>
 
@@ -60,21 +60,21 @@
 <span class="sd">        Example: `ghc-8.4.4-74.module_el8+12161+cf1bd7f2`_</span>
 <span class="sd">        is a valid build for ``ghc-8.4.4-74.module_el8+12161+cf1bd7f2.x86_64.rpm``.</span>
 
-<span class="sd">    Note that the ``module_build`` itself isn&#39;t a property of the RPM but rather should</span>
+<span class="sd">    Note that the ``module_build`` itself isn't a property of the RPM but rather should</span>
 <span class="sd">    be considered contextual information on how any given RPM was located. The same RPM</span>
 <span class="sd">    may have different values of ``module_build`` when loaded from different contexts.</span>
 
 <span class="sd">    .. _ghc-8.4-820200708061905.9edba152: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767200</span>
 <span class="sd">    .. _ghc-8.4.4-74.module_el8+12161+cf1bd7f2: https://koji.fedoraproject.org/koji/buildinfo?buildID=1767130</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">opener</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">callable</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">open_src_local</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identical to :attr:`~pushsource.PushItem.opener`.</span>
+<span class="w">    </span><span class="sd">"""Identical to :attr:`~pushsource.PushItem.opener`.</span>
 
 <span class="sd">    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`</span>
 <span class="sd">    </span>
 <span class="sd">    .. versionadded:: 2.51.0</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    """</span></div>
 
 </pre></div>
 

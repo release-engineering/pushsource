@@ -45,7 +45,7 @@ the <a class="reference internal" href="#pushsource.Source.get" title="pushsourc
 <p>Though not mandatory, instances of <code class="docutils literal notranslate"><span class="pre">Source</span></code> are preferably used
 via <code class="docutils literal notranslate"><span class="pre">with</span></code> statements to ensure that all resources are cleaned up
 when no longer needed, as in example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;some-url&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'some-url'</span><span class="p">)</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
         <span class="n">do_something</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </pre></div>

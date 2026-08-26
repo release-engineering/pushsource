@@ -58,8 +58,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.staged_unsupported</span><span class="w"> </span><span class="kn">import</span> <span class="n">StagedUnsupportedMixin</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.staged_cgw</span><span class="w"> </span><span class="kn">import</span> <span class="n">StagedCGWMixin</span>
 
-<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
-<span class="n">METADATA_FILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;staged.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;staged.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;staged.json&quot;</span><span class="p">,</span> <span class="s2">&quot;pub-mapfile.json&quot;</span><span class="p">]</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"pushsource"</span><span class="p">)</span>
+<span class="n">METADATA_FILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"staged.yaml"</span><span class="p">,</span> <span class="s2">"staged.yml"</span><span class="p">,</span> <span class="s2">"staged.json"</span><span class="p">,</span> <span class="s2">"pub-mapfile.json"</span><span class="p">]</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
 
 
@@ -78,22 +78,22 @@
     <span class="n">StagedUnsupportedMixin</span><span class="p">,</span>
     <span class="n">StagedCGWMixin</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses a directory with a predefined layout (a &quot;staging directory&quot;) as</span>
-<span class="sd">    the source of push items.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Uses a directory with a predefined layout (a "staging directory") as</span>
+<span class="sd">    the source of push items."""</span>
 
-    <span class="c1"># To keep code maintainable, this class doesn&#39;t directly support any file</span>
+    <span class="c1"># To keep code maintainable, this class doesn't directly support any file</span>
     <span class="c1"># types; separate files are expected to register themselves here.</span>
     <span class="n">_FILE_TYPES</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="StagedSource.__init__">
 <a class="viewcode-back" href="../../../../../sources/staged.html#pushsource.StagedSource.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new source.</span>
+<span class="w">        </span><span class="sd">"""Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            url (list[str])</span>
 <span class="sd">                URL(s) of locally accessible staging directories, e.g.</span>
-<span class="sd">                ``&quot;/mnt/staging/my-content-for-push&quot;``.</span>
+<span class="sd">                ``"/mnt/staging/my-content-for-push"``.</span>
 
 <span class="sd">                These directories must follow the documented layout for staging areas.</span>
 
@@ -104,7 +104,7 @@
 <span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
 <span class="sd">                made during each step.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StagedSource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
@@ -113,7 +113,7 @@
         <span class="c1"># Note: this executor does not have a retry.</span>
         <span class="c1"># NFS already does a lot of its own retries.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-staged&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"pushsource-staged"</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_timeout</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
         <span class="p">)</span></div>
@@ -127,7 +127,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Possible improvement would be to handle the separate dirs concurrently.</span>
-        <span class="c1"># However, may not be worthwhile, as  in practice I&#39;m not sure the ability</span>
+        <span class="c1"># However, may not be worthwhile, as  in practice I'm not sure the ability</span>
         <span class="c1"># to pass more than a single staging directory is ever used (?)</span>
         <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
             <span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_push_items_for_topdir</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">]</span>
@@ -145,13 +145,13 @@
 
         <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">metadata_file</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metadata_file</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metadata_file</span><span class="p">,</span> <span class="s2">"rt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
             <span class="c1"># Save a copy of the file for later reference</span>
             <span class="n">Collector</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">attach_file</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">metadata_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">metadata_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".json"</span><span class="p">):</span>
                 <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">metadata</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
@@ -159,10 +159,10 @@
         <span class="k">return</span> <span class="n">StagingMetadata</span><span class="o">.</span><span class="n">from_data</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">metadata_file</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_for_leafdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leafdir</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Scanning </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Scanning </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span> <span class="o">==</span> <span class="s2">&quot;RAW&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span> <span class="o">==</span> <span class="s2">"RAW"</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span>
                 <span class="n">DirectoryPushItem</span><span class="p">(</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">leafdir</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">leafdir</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="p">[</span><span class="n">leafdir</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span>
@@ -171,33 +171,33 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">[</span><span class="n">leafdir</span><span class="o">.</span><span class="n">file_type</span><span class="p">](</span><span class="n">leafdir</span><span class="o">=</span><span class="n">leafdir</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_for_topdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topdir</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking files in: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Checking files in: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
 
         <span class="c1"># wait for path availability</span>
-        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
-        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_RATE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;30&quot;</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"PUSHSOURCE_SRC_POLL_TIMEOUT"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"PUSHSOURCE_SRC_POLL_RATE"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"30"</span><span class="p">)</span>
         <span class="n">wait_exist</span><span class="p">(</span><span class="n">topdir</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
 
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_metadata</span><span class="p">(</span><span class="n">topdir</span><span class="p">)</span>
 
         <span class="n">destdirs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="n">topdir</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;logs&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"logs"</span><span class="p">:</span>
                 <span class="n">destdirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">destdirs</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> has no destination directories&quot;</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
-            <span class="c1"># If there&#39;s no directories AND no metadata file, the caller most likely</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2"> has no destination directories"</span><span class="p">,</span> <span class="n">topdir</span><span class="p">)</span>
+            <span class="c1"># If there's no directories AND no metadata file, the caller most likely</span>
             <span class="c1"># provided an incorrect path. (If the caller expects to provide empty</span>
             <span class="c1"># staging areas sometimes, they can signal this by including empty metadata.)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="o">.</span><span class="n">filename</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> does not appear to be a staging directory&quot;</span> <span class="o">%</span> <span class="n">topdir</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2"> does not appear to be a staging directory"</span> <span class="o">%</span> <span class="n">topdir</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="c1"># All directories which may contain files to be processed</span>
         <span class="n">all_leaf_dirs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">destdir</span> <span class="ow">in</span> <span class="n">destdirs</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RAW&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"RAW"</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_FILE_TYPES</span><span class="p">):</span>
                 <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="n">file_type</span><span class="p">)</span>
                 <span class="n">all_leaf_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">StagingLeafDir</span><span class="p">(</span>
@@ -226,7 +226,7 @@
 
 
 
-<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;staged&quot;</span><span class="p">,</span> <span class="n">StagedSource</span><span class="p">)</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">"staged"</span><span class="p">,</span> <span class="n">StagedSource</span><span class="p">)</span>
 </pre></div>
 
           </div>

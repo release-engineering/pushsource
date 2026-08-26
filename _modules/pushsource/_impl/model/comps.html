@@ -39,22 +39,22 @@
 <a class="viewcode-back" href="../../../../model/comps.html#pushsource.CompsXmlPushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CompsXmlPushItem</span><span class="p">(</span><span class="n">PushItem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~pushsource.PushItem` representing a comps XML file.</span>
+<span class="w">    </span><span class="sd">"""A :class:`~pushsource.PushItem` representing a comps XML file.</span>
 
 <span class="sd">    For push items of this type, the :meth:`~pushsource.PushItem.src`</span>
 <span class="sd">    attribute refers to a file containing a comps XML file (package</span>
 <span class="sd">    group definitions) in the format used by yum &amp; dnf.</span>
 
 <span class="sd">    This library does not verify that the referenced file is valid.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">opener</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">callable</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">open_src_local</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identical to :attr:`~pushsource.PushItem.opener`.</span>
+<span class="w">    </span><span class="sd">"""Identical to :attr:`~pushsource.PushItem.opener`.</span>
 
 <span class="sd">    This defaults to reading content as file from :attr:`~pushsource.PushItem.src`</span>
 <span class="sd">    </span>
 <span class="sd">    .. versionadded:: 2.51.0</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    """</span></div>
 
 </pre></div>
 

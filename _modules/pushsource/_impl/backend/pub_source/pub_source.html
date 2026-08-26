@@ -46,13 +46,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">...source</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pub_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">PubClient</span>
 
-<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"pushsource"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PubSource">
 <a class="viewcode-back" href="../../../../../sources/pub.html#pushsource.PubSource">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PubSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses push item list from Pub as the source of push items.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Uses push item list from Pub as the source of push items."""</span>
 
 <div class="viewcode-block" id="PubSource.__init__">
 <a class="viewcode-back" href="../../../../../sources/pub.html#pushsource.PubSource.__init__">[docs]</a>
@@ -63,12 +63,12 @@
         <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new source.</span>
+<span class="w">        </span><span class="sd">"""Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            url (src)</span>
-<span class="sd">                Base URL of Pub Tool, e.g. &quot;http://pub.example.com&quot;,</span>
-<span class="sd">                &quot;https://pub.example.com:8123&quot;.</span>
+<span class="sd">                Base URL of Pub Tool, e.g. "http://pub.example.com",</span>
+<span class="sd">                "https://pub.example.com:8123".</span>
 
 <span class="sd">            task_id (int, str, list[str], list[int])</span>
 <span class="sd">                Task ID(s) to be used as push item source.</span>
@@ -81,7 +81,7 @@
 <span class="sd">            timeout (int)</span>
 <span class="sd">                Number of seconds after which an error is raised, if no progress is</span>
 <span class="sd">                made during queries to Pub.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">force_https</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_task_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_task_ids</span><span class="p">(</span>
@@ -89,9 +89,9 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">PubClient</span><span class="p">(</span><span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
-        <span class="c1"># This executor doesn&#39;t use retry because pub-client executor already does that.</span>
+        <span class="c1"># This executor doesn't use retry because pub-client executor already does that.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-pub&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">"pushsource-pub"</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span>
         <span class="p">)</span><span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span></div>
 
 
@@ -101,7 +101,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Invalid Pub task ID: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Invalid Pub task ID: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -114,15 +114,15 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_obj</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">first_obj</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">json_obj</span> <span class="ow">or</span> <span class="p">[]),</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">vhd_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\.(vhd|vhd\.xz)$&quot;</span>
+        <span class="n">vhd_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"\.(vhd|vhd\.xz)$"</span>
         <span class="k">if</span> <span class="n">first_obj</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">vhd_file</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">first_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">vhd_file</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">first_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"src"</span><span class="p">))):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">push_items</span> <span class="o">=</span> <span class="n">VHDPushItem</span><span class="o">.</span><span class="n">_from_data</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">list_argument</span><span class="p">(</span><span class="n">push_items</span><span class="p">))</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="s2">&quot;Cannot parse push item/s: </span><span class="si">%s</span><span class="s2">, error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">),</span> <span class="n">e</span>
+                        <span class="s2">"Cannot parse push item/s: </span><span class="si">%s</span><span class="s2">, error: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">),</span> <span class="n">e</span>
                     <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -130,10 +130,10 @@
                     <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">list_argument</span><span class="p">(</span><span class="n">push_items</span><span class="p">))</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="s2">&quot;Cannot parse push item/s: </span><span class="si">%s</span><span class="s2">, error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">),</span> <span class="n">e</span>
+                        <span class="s2">"Cannot parse push item/s: </span><span class="si">%s</span><span class="s2">, error: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">),</span> <span class="n">e</span>
                     <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Pub source returned empty: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">))</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Pub source returned empty: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_obj</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">out</span>
 
@@ -157,7 +157,7 @@
 
 
 
-<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;pub&quot;</span><span class="p">,</span> <span class="n">PubSource</span><span class="p">)</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">"pub"</span><span class="p">,</span> <span class="n">PubSource</span><span class="p">)</span>
 </pre></div>
 
           </div>

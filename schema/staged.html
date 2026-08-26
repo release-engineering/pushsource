@@ -40,7 +40,7 @@
 <p>The latest version of this schema is available in raw form at
 <a class="reference external" href="https://release-engineering.github.io/pushsource/staged-schema.yaml">https://release-engineering.github.io/pushsource/staged-schema.yaml</a>.</p>
 <div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>---
-# Schema for metadata file &quot;staged.yaml&quot; or &quot;pub-mapfile.json&quot;
+# Schema for metadata file "staged.yaml" or "pub-mapfile.json"
 # accompanying a staged source.
 #
 # For general information about staging directories, see:
@@ -61,7 +61,7 @@ definitions:
             version:
                 # Version of the file format.
                 # There is only a single supported version now.
-                const: &quot;0.2&quot;
+                const: "0.2"
 
         requiredProperties:
         - version
@@ -72,21 +72,21 @@ definitions:
         type: object
         properties:
             files:
-                $ref: &quot;#/definitions/file_list&quot;
+                $ref: "#/definitions/file_list"
         additionalProperties: false
 
     attributes_any:
         type: object
         anyOf:
-        - $ref: &quot;#/definitions/attributes_ami&quot;
-        - $ref: &quot;#/definitions/attributes_file&quot;
+        - $ref: "#/definitions/attributes_ami"
+        - $ref: "#/definitions/attributes_file"
 
     attributes_ami:
         # Attributes for Amazon Machine Images (AMIs).
         properties:
 
             release:
-                $ref: &quot;#/definitions/ami_release&quot;
+                $ref: "#/definitions/ami_release"
 
             region:
                 # AWS region to which this AMI should be pushed.
@@ -123,12 +123,12 @@ definitions:
                 minLength: 1
 
             description:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
 
             sriov_net_support:
                 type:
                 - string
-                - &quot;null&quot;
+                - "null"
                 enum:
                 - simple
                 - null
@@ -136,55 +136,55 @@ definitions:
             ena_support:
                 type:
                 - boolean
-                - &quot;null&quot;
+                - "null"
 
             uefi_support:
                 type:
                 - boolean
-                - &quot;null&quot;
+                - "null"
 
             billing_codes:
-                $ref: &quot;#/definitions/ami_billing_codes&quot;
+                $ref: "#/definitions/ami_billing_codes"
 
             boot_mode:
-                enum: [ &#39;hybrid&#39;, &#39;uefi&#39;, &#39;legacy&#39;, null ]
+                enum: [ 'hybrid', 'uefi', 'legacy', null ]
 
             public_image:
                 type:
                 - boolean
-                - &quot;null&quot;
+                - "null"
             release_notes:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
 
             usage_instructions:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
 
             recommended_instance_type:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
 
             marketplace_entity_type:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
 
 
             scanning_port:
                 type:
                     - number
-                    - &quot;null&quot;
+                    - "null"
                 minimum: 0
                 maximum: 65536
 
             user_name:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             version_title:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             marketplace_title_template:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             marketplace_name:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             security_groups:
                 type:
                     - array
-                    - &quot;null&quot;
+                    - "null"
                 items:
                     type: object
                     properties:
@@ -197,7 +197,7 @@ definitions:
                     if:
                         properties:
                             ip_protocol:
-                                enum: [&quot;icmp&quot;, &quot;icmpv6&quot;]
+                                enum: ["icmp", "icmpv6"]
                     then:
                         properties:
                             from_port:
@@ -222,14 +222,14 @@ definitions:
             access_endpoint_url:
                 type:
                 - object
-                - &quot;null&quot;
+                - "null"
                 properties:
                     port:
                         type: number
                         minimum: 0
                         maximum: 65536
                     protocol:
-                        enum: [&quot;http&quot;, &quot;https&quot;]
+                        enum: ["http", "https"]
 
         required:
         - release
@@ -258,8 +258,8 @@ definitions:
         type: array
         items:
             anyOf:
-            - $ref: &quot;#/definitions/file&quot;
-            - $ref: &quot;#/definitions/unsupported_file&quot;
+            - $ref: "#/definitions/file"
+            - $ref: "#/definitions/unsupported_file"
         uniqueItems: true
 
     file:
@@ -278,11 +278,11 @@ definitions:
                 minLength: 3
 
             sha256sum:
-                # SHA256 checksum of this file&#39;s content, as a hex digest.
+                # SHA256 checksum of this file's content, as a hex digest.
                 type: string
                 minLength: 64
                 maxLength: 64
-                pattern: &quot;^[0-9a-fA-F]+$&quot;
+                pattern: "^[0-9a-fA-F]+$"
 
             version:
                 # A version string for display purposes
@@ -297,7 +297,7 @@ definitions:
 
             attributes:
                 # Additional metadata, differs per content type.
-                $ref: &quot;#/definitions/attributes_any&quot;
+                $ref: "#/definitions/attributes_any"
 
         additionalProperties: false
 
@@ -309,7 +309,7 @@ definitions:
         properties:
             relative_path:
                 type: string
-                pattern: &quot;^[^/]+/(DOCKER|CHANNEL_DUMPS)/&quot;
+                pattern: "^[^/]+/(DOCKER|CHANNEL_DUMPS)/"
         required:
         - relative_path
 
@@ -321,13 +321,13 @@ definitions:
                 type: string
                 minLength: 1
             version:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             base_product:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             base_version:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             variant:
-                $ref: &quot;#/definitions/optional_string&quot;
+                $ref: "#/definitions/optional_string"
             arch:
                 type: string
                 enum:
@@ -336,12 +336,12 @@ definitions:
             respin:
                 type: integer
             type:
-                $ref: &quot;#/definitions/optional_string&quot;
-                enum: [&#39;ga&#39;, &#39;beta&#39;, null]
+                $ref: "#/definitions/optional_string"
+                enum: ['ga', 'beta', null]
             date:
                 type: string
                 minLength: 1
-                pattern: &quot;^[0-9]{8}$&quot;
+                pattern: "^[0-9]{8}$"
         required:
         - product
         - date
@@ -352,14 +352,14 @@ definitions:
         # A field which may hold a non-empty string, or null.
         type:
         - string
-        - &quot;null&quot;
+        - "null"
         minLength: 1
 
     ami_billing_codes:
         # Billing codes for an AMI
         type:
         - object
-        - &quot;null&quot;
+        - "null"
         properties:
             name:
                 type: string
@@ -377,9 +377,9 @@ definitions:
 type: object
 properties:
     header:
-        $ref: &quot;#/definitions/header&quot;
+        $ref: "#/definitions/header"
     payload:
-        $ref: &quot;#/definitions/payload&quot;
+        $ref: "#/definitions/payload"
 
 required:
 - header

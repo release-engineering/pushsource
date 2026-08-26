@@ -46,8 +46,8 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">kobo</span><span class="w"> </span><span class="kn">import</span> <span class="n">rpmlib</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>  <span class="c1"># pragma: no cover, pylint: disable=broad-except</span>
-    <span class="c1"># If kobo.rpmlib is unavailable, let&#39;s not immediately crash.</span>
-    <span class="c1"># We will hold this exception and re-raise it only if there&#39;s an</span>
+    <span class="c1"># If kobo.rpmlib is unavailable, let's not immediately crash.</span>
+    <span class="c1"># We will hold this exception and re-raise it only if there's an</span>
     <span class="c1"># attempt to use the related functionality.</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">broken_rpmlib</span> <span class="k">as</span> <span class="n">rpmlib</span>
 
@@ -76,7 +76,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.modulemd</span><span class="w"> </span><span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.koji_containers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContainerArchiveHelper</span><span class="p">,</span> <span class="n">MIME_TYPE_MANIFEST_LIST</span>
 
-<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"pushsource"</span><span class="p">)</span>
 <span class="n">CACHE_LOCK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
 
 <span class="c1"># Arguments used for retry policy.</span>
@@ -90,19 +90,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
-        <span class="n">archives_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;archives&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">ident</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">archives_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"archives"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">ident</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ident</span> <span class="ow">in</span> <span class="n">archives_cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji archives </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Get koji archives </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">listArchives</span><span class="p">(</span><span class="n">ident</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
-            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"archives"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"archives"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">[</span><span class="s2">"nvr"</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">GetBuildCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -112,24 +112,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
-        <span class="n">build_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">build_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"build"</span><span class="p">,</span> <span class="p">{})</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="ow">in</span> <span class="n">build_cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji build </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Get koji build </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">getBuild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">build</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span>
+            <span class="n">build</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"build"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Build is saved under both NVR and ID</span>
             <span class="n">build</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
             <span class="k">if</span> <span class="n">build</span><span class="p">:</span>
-                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
-                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"build"</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"build"</span><span class="p">][</span><span class="n">build</span><span class="p">[</span><span class="s2">"nvr"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">build</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="n">build</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"build"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="n">build</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_archives</span> <span class="ow">and</span> <span class="n">build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">ListArchivesCommand</span><span class="p">(</span><span class="n">build</span><span class="p">))</span>
 
@@ -140,28 +140,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
-        <span class="n">rpm_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;rpm&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">rpm_cache</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"rpm"</span><span class="p">,</span> <span class="p">{})</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span> <span class="ow">in</span> <span class="n">rpm_cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get koji RPM </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Get koji RPM </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">getRPM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">koji_queue</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
-        <span class="c1"># We have to get the RPM&#39;s build as well.</span>
-        <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]:</span>
-            <span class="n">build_id</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">][</span><span class="s2">&quot;build_id&quot;</span><span class="p">]</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"rpm"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">result</span>
+        <span class="c1"># We have to get the RPM's build as well.</span>
+        <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"rpm"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">]:</span>
+            <span class="n">build_id</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"rpm"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ident</span><span class="p">][</span><span class="s2">"build_id"</span><span class="p">]</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">build_id</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="KojiSource">
 <a class="viewcode-back" href="../../../../sources/koji.html#pushsource.KojiSource">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">KojiSource</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses koji artifacts as the source of push items.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Uses koji artifacts as the source of push items."""</span>
 
-    <span class="n">_BATCH_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_KOJI_BATCH_SIZE&quot;</span><span class="p">,</span> <span class="s2">&quot;100&quot;</span><span class="p">))</span>
+    <span class="n">_BATCH_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KOJI_BATCH_SIZE"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">))</span>
 
 <div class="viewcode-block" id="KojiSource.__init__">
 <a class="viewcode-back" href="../../../../sources/koji.html#pushsource.KojiSource.__init__">[docs]</a>
@@ -181,7 +181,7 @@
         <span class="n">cache</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">executor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new source.</span>
+<span class="w">        </span><span class="sd">"""Create a new source.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            url (str)</span>
@@ -255,7 +255,7 @@
 
 <span class="sd">            executor (concurrent.futures.Executor)</span>
 <span class="sd">                A custom executor used to submit calls to koji.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">rpm</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span> <span class="o">=</span> <span class="p">[</span><span class="n">try_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">module_build</span><span class="p">)]</span>
@@ -272,7 +272,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span> <span class="o">=</span> <span class="n">threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">executor</span>
-            <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pushsource-koji&quot;</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">Executors</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"pushsource-koji"</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_retry</span><span class="p">(</span><span class="o">**</span><span class="n">RETRY_ARGS</span><span class="p">)</span>
             <span class="o">.</span><span class="n">with_cancel_on_shutdown</span><span class="p">()</span>
         <span class="p">)</span>
@@ -294,17 +294,17 @@
         <span class="c1"># A koji client session.</span>
         <span class="c1"># Each thread uses a separate client.</span>
         <span class="k">with</span> <span class="n">CACHE_LOCK</span><span class="p">:</span>
-            <span class="n">tls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;tls&quot;</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">())</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tls</span><span class="p">,</span> <span class="s2">&quot;koji_session&quot;</span><span class="p">):</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating koji session: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
-                <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;anon_retry&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+            <span class="n">tls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"tls"</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">())</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tls</span><span class="p">,</span> <span class="s2">"koji_session"</span><span class="p">):</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Creating koji session: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+                <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span> <span class="o">=</span> <span class="n">koji</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="p">{</span><span class="s2">"anon_retry"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">tls</span><span class="o">.</span><span class="n">koji_session</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_signing_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="c1"># adjust alias to comma separated names of keys</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="k">else</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"+"</span><span class="p">,</span> <span class="s2">","</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="k">else</span> <span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_koji_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -314,36 +314,36 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_koji_get_version</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Communication error with koji at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Communication error with koji at </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ex</span>
 
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connected to koji </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Connected to koji </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_koji_get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">CACHE_LOCK</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;koji_version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;koji_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">getKojiVersion</span><span class="p">()</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;koji_version&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"koji_version"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"koji_version"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_koji_session</span><span class="o">.</span><span class="n">getKojiVersion</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"koji_version"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">][</span><span class="n">rpm</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"rpm"</span><span class="p">][</span><span class="n">rpm</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"build"</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_archives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">&quot;archives&quot;</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="s2">"archives"</span><span class="p">][</span><span class="n">build_id</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_rpm_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;RPM metadata for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"RPM metadata for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
-        <span class="n">notfound</span> <span class="o">=</span> <span class="p">[</span><span class="n">RpmPushItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rpm</span><span class="p">),</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;NOTFOUND&quot;</span><span class="p">)]</span>
+        <span class="n">notfound</span> <span class="o">=</span> <span class="p">[</span><span class="n">RpmPushItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rpm</span><span class="p">),</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">"NOTFOUND"</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;RPM not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rpm</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"RPM not found in koji: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">rpm</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">notfound</span>
 
-        <span class="n">build</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_build</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;build_id&quot;</span><span class="p">])</span>
+        <span class="n">build</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_build</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">"build_id"</span><span class="p">])</span>
         <span class="n">build_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">build</span><span class="p">)</span>
         <span class="n">rpm_path</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">unsigned_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">rpm</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
@@ -351,8 +351,8 @@
 
         <span class="n">candidate_paths</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
-        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_SRC_POLL_RATE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;30&quot;</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"PUSHSOURCE_SRC_POLL_TIMEOUT"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="n">poll_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"PUSHSOURCE_SRC_POLL_RATE"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"30"</span><span class="p">)</span>
 
         <span class="c1"># If signing keys requested, try them in order of preference</span>
         <span class="c1"># We will wait up to timeout for the highest-priority key to appear</span>
@@ -366,7 +366,7 @@
 
         <span class="n">wait_exist</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">poll_rate</span><span class="p">)</span>
         <span class="c1"># If signing keys requested, try them in order of preference</span>
-        <span class="c1"># Some key should be present at this stage, let&#39;s try them all</span>
+        <span class="c1"># Some key should be present at this stage, let's try them all</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signing_key</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -376,8 +376,8 @@
             <span class="n">candidate_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">candidate</span><span class="p">):</span>
                 <span class="n">rpm_path</span> <span class="o">=</span> <span class="n">candidate</span>
-                <span class="c1"># we may only get key alias as input, let&#39;s extract actual key ID from RPM header in all cases</span>
-                <span class="c1"># as we don&#39;t know if the provided data are alias or actual key ID</span>
+                <span class="c1"># we may only get key alias as input, let's extract actual key ID from RPM header in all cases</span>
+                <span class="c1"># as we don't know if the provided data are alias or actual key ID</span>
                 <span class="n">header</span> <span class="o">=</span> <span class="n">rpmlib</span><span class="o">.</span><span class="n">get_rpm_header</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
                 <span class="n">rpm_signing_key</span> <span class="o">=</span> <span class="n">rpmlib</span><span class="o">.</span><span class="n">get_keys_from_header</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
                 <span class="k">break</span>
@@ -386,12 +386,12 @@
             <span class="c1"># If signing keys requested: we either found an RPM above, or an error occurs</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">rpm_path</span><span class="p">:</span>
                 <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="s2">&quot;RPM not found in koji at path(s): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">candidate_paths</span><span class="p">)</span>
+                    <span class="s2">"RPM not found in koji at path(s): </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">candidate_paths</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="n">notfound</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># If no signing key requested, we just use the calculated path directly</span>
-            <span class="c1"># and don&#39;t even test for its existence. Note: absence of test for existence</span>
+            <span class="c1"># and don't even test for its existence. Note: absence of test for existence</span>
             <span class="c1"># is ported from old code and is not necessarily the best way.</span>
             <span class="n">rpm_path</span> <span class="o">=</span> <span class="n">unsigned_path</span>
 
@@ -401,7 +401,7 @@
                 <span class="n">src</span><span class="o">=</span><span class="n">rpm_path</span><span class="p">,</span>
                 <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
                 <span class="n">signing_key</span><span class="o">=</span><span class="n">rpm_signing_key</span><span class="p">,</span>
-                <span class="n">build</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">],</span>
+                <span class="n">build</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">"nvr"</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="p">]</span>
 
@@ -409,19 +409,19 @@
         <span class="n">ok_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_filter_filename</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ok_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ok_names</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Skipping module </span><span class="si">%s</span><span class="s2"> due to module_filter_filename&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Skipping module </span><span class="si">%s</span><span class="s2"> due to module_filter_filename"</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_module_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
-        <span class="c1"># Return the best value for &quot;name&quot; we can calculate for a given modulemd</span>
+        <span class="c1"># Return the best value for "name" we can calculate for a given modulemd</span>
         <span class="c1"># push item. In practice this means setting the push item name to NSVCA,</span>
         <span class="c1"># if the modulemd file exists and can be parsed as a single module.</span>
         <span class="c1"># NSVCA is a more meaningful name for the item than modulemd.&lt;arch&gt;.txt,</span>
         <span class="c1"># which will be the same for all modules of the same arch.</span>
         <span class="c1">#</span>
-        <span class="c1"># Why only &quot;if the modulemd file exists&quot;? Well, it&#39;s only going to exist</span>
+        <span class="c1"># Why only "if the modulemd file exists"? Well, it's only going to exist</span>
         <span class="c1"># if the caller has mounted the NFS volume associated with koji. This will</span>
         <span class="c1"># be true in production, and we could give a fatal error when this is not</span>
         <span class="c1"># the case, but it seems like a very harsh requirement. e.g. most of the</span>
@@ -430,18 +430,18 @@
         <span class="c1"># meaning attempting to use the examples will immediately hit a brick wall.</span>
         <span class="c1">#</span>
         <span class="c1"># So, this is a compromise. If the file exists, it has to be valid, and we</span>
-        <span class="c1"># use it; this gives the best behavior in production. If the file doesn&#39;t</span>
-        <span class="c1"># exist, that&#39;s OK, and that&#39;s a compromise to avoid making the dev and test</span>
+        <span class="c1"># use it; this gives the best behavior in production. If the file doesn't</span>
+        <span class="c1"># exist, that's OK, and that's a compromise to avoid making the dev and test</span>
         <span class="c1"># requirements too onerous.</span>
         <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">basename</span> <span class="o">==</span> <span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">basename</span> <span class="o">==</span> <span class="s2">"modulemd.src.txt"</span><span class="p">:</span>
             <span class="c1"># These are modulemd packager files and not the built files with NSVCA,</span>
             <span class="c1"># do not attempt to parse</span>
             <span class="k">return</span> <span class="n">basename</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
-            <span class="c1"># Don&#39;t have the file, don&#39;t attempt to parse</span>
+            <span class="c1"># Don't have the file, don't attempt to parse</span>
             <span class="k">return</span> <span class="n">basename</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -449,26 +449,26 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="c1"># If we fail, make it clear what we were attempting to do before raising</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
-                <span class="s2">&quot;In koji build </span><span class="si">%s</span><span class="s2">, cannot load module metadata from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span>
+                <span class="s2">"In koji build </span><span class="si">%s</span><span class="s2">, cannot load module metadata from </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span>
             <span class="p">)</span>
             <span class="k">raise</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_module_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for modulemd on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Looking for modulemd on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Module build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Module build not found in koji: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
-        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;module&quot;</span><span class="p">]</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"btype"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"module"</span><span class="p">]</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">),</span> <span class="n">module</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="s2">"module"</span><span class="p">),</span> <span class="n">module</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">]</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_filtered</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
@@ -477,53 +477,53 @@
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_module_name</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
 
             <span class="n">klass</span> <span class="o">=</span> <span class="n">ModuleMdPushItem</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;modulemd.src.txt&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"modulemd.src.txt"</span><span class="p">:</span>
                 <span class="n">klass</span> <span class="o">=</span> <span class="n">ModuleMdSourcePushItem</span>
 
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nvr&quot;</span><span class="p">])</span>
+                <span class="n">klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"nvr"</span><span class="p">])</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_container_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for container images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Looking for container images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Container image build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Container image build not found in koji: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="c1"># The metadata we are interested in is documented here:</span>
         <span class="c1"># https://github.com/containerbuildsystem/atomic-reactor/blob/061d92e63cf27ae030e8ceed388ec34f51afb17b/docs/koji.md#type-specific-metadata</span>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="c1"># Per above doc, it is preferred to use the metadata under &#39;typeinfo&#39; if present</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"typeinfo"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="c1"># Per above doc, it is preferred to use the metadata under 'typeinfo' if present</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Build </span><span class="si">%s</span><span class="s2"> not recognized as a container image build&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Build </span><span class="si">%s</span><span class="s2"> not recognized as a container image build"</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
 
         <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
 
         <span class="n">image_archives</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">elem</span>
             <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span>
-            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type_name&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;tar&quot;</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"btype"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"image"</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type_name"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"tar"</span>
         <span class="p">]</span>
 
-        <span class="n">media_types</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;media_types&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">media_types</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"media_types"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">MIME_TYPE_MANIFEST_LIST</span> <span class="ow">in</span> <span class="n">media_types</span><span class="p">:</span>
             <span class="c1"># in manifest list case it is OK to have multiple archives (different arches).</span>
             <span class="k">pass</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_archives</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="c1"># If we don&#39;t have a manifest list, we expect to have an image for one arch.</span>
-            <span class="c1"># If there&#39;s not exactly one, it&#39;s unclear what&#39;s going on and we&#39;d better halt.</span>
+            <span class="c1"># If we don't have a manifest list, we expect to have an image for one arch.</span>
+            <span class="c1"># If there's not exactly one, it's unclear what's going on and we'd better halt.</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;Could not find (exactly) one container image archive on koji build </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="s2">"Could not find (exactly) one container image archive on koji build </span><span class="si">%s</span><span class="s2">"</span>
                 <span class="o">%</span> <span class="n">nvr</span>
             <span class="p">)</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
@@ -535,7 +535,7 @@
             <span class="n">helper</span> <span class="o">=</span> <span class="n">ContainerArchiveHelper</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">)</span>
 
             <span class="n">klass</span> <span class="o">=</span> <span class="n">ContainerImagePushItem</span>
-            <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sources_for_nvr&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sources_for_nvr"</span><span class="p">):</span>
                 <span class="c1"># This is a source image.</span>
                 <span class="n">klass</span> <span class="o">=</span> <span class="n">SourceContainerImagePushItem</span>
 
@@ -543,19 +543,19 @@
                 <span class="n">klass</span><span class="p">(</span>
                     <span class="c1"># TODO: name might be changed once we start parsing</span>
                     <span class="c1"># the metadata from atomic-reactor.</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">],</span>
                     <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
                     <span class="c1"># Note, we should be able to use the default KojiBuild</span>
-                    <span class="c1"># construction from NVR here. The reason we don&#39;t is that</span>
-                    <span class="c1"># there is some &quot;impossible&quot; test data in Pub which has</span>
+                    <span class="c1"># construction from NVR here. The reason we don't is that</span>
+                    <span class="c1"># there is some "impossible" test data in Pub which has</span>
                     <span class="c1"># brew builds whose NVR does not match their (n, v, r)</span>
-                    <span class="c1"># in the build data and it&#39;s quite tough to fix that now.</span>
+                    <span class="c1"># in the build data and it's quite tough to fix that now.</span>
                     <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">build_id</span><span class="p">),</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
-                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"version"</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"release"</span><span class="p">],</span>
                     <span class="p">),</span>
                     <span class="n">source_tags</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">source_tags</span><span class="p">,</span>
                     <span class="n">labels</span><span class="o">=</span><span class="n">helper</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
@@ -572,39 +572,39 @@
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_vmi_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for virtual machine images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Looking for virtual machine images on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Virtual machine image build not found in koji: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Virtual machine image build not found in koji: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="c1"># VMI has the {&#39;typeinfo&#39;: {&#39;image&#39;:{}}} on extra</span>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
+        <span class="c1"># VMI has the {'typeinfo': {'image':{}}} on extra</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"typeinfo"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span>
 
         <span class="c1"># Container images have the key `container_koji_task_id` set on extras:</span>
         <span class="c1"># https://github.com/containerbuildsystem/atomic-reactor/blob/master/docs/koji.md?plain=1#L79</span>
-        <span class="k">if</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;container_koji_task_id&quot;</span><span class="p">):</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;The build </span><span class="si">%s</span><span class="s2"> is for container images.&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+        <span class="k">if</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"container_koji_task_id"</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"The build </span><span class="si">%s</span><span class="s2"> is for container images."</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Build </span><span class="si">%s</span><span class="s2"> not recognized as a virtual machine image build&quot;</span> <span class="o">%</span> <span class="n">nvr</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Build </span><span class="si">%s</span><span class="s2"> not recognized as a virtual machine image build"</span> <span class="o">%</span> <span class="n">nvr</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="n">archives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">archives</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;meta.json&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">archive</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"meta.json"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_push_items_from_rhcos_build</span><span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
         <span class="c1"># Supported types of VMI archives</span>
-        <span class="n">ami_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;raw-xz&quot;</span><span class="p">]</span>
-        <span class="n">azure_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;vhd&quot;</span><span class="p">,</span> <span class="s2">&quot;vhd-compressed&quot;</span><span class="p">]</span>
+        <span class="n">ami_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"raw-xz"</span><span class="p">]</span>
+        <span class="n">azure_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"vhd"</span><span class="p">,</span> <span class="s2">"vhd-compressed"</span><span class="p">]</span>
         <span class="n">cloud_types</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ami_types</span><span class="p">:</span>
@@ -617,63 +617,63 @@
         <span class="n">vmi_archives</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">elem</span>
             <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">archives</span>
-            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;btype&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span>
-            <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type_name&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"btype"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"image"</span>
+            <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type_name"</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="p">]</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># Generate the respective PushItem type for each archive</span>
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">vmi_archives</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
-            <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">"btype"</span><span class="p">])</span>
+            <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">])</span>
 
-            <span class="n">extra</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arch&quot;</span><span class="p">)</span>
-            <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;boot_mode&quot;</span><span class="p">)</span>
+            <span class="n">extra</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"arch"</span><span class="p">)</span>
+            <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"boot_mode"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">boot_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">BootMode</span><span class="p">(</span><span class="n">boot_mode</span><span class="p">)</span>
 
-            <span class="n">klass</span> <span class="o">=</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;type_name&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">VMIPushItem</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">cloud_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">archive</span><span class="p">[</span><span class="s2">"type_name"</span><span class="p">])</span> <span class="ow">or</span> <span class="n">VMIPushItem</span>
 
             <span class="n">rel_klass</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
 
             <span class="c1"># The given name will be composed by the product name and cloud</span>
-            <span class="c1"># marketpalce name, like &quot;rhel-azure&quot; or &quot;rhel-sap-azure&quot;.</span>
+            <span class="c1"># marketpalce name, like "rhel-azure" or "rhel-sap-azure".</span>
             <span class="c1"># We just want to get the product name without the cloud name,</span>
-            <span class="c1"># like &quot;rhel&quot; and &quot;rhel-sap&quot; in our examples respectively.</span>
-            <span class="n">splitted_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+            <span class="c1"># like "rhel" and "rhel-sap" in our examples respectively.</span>
+            <span class="n">splitted_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">product</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">splitted_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="s2">"-"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">splitted_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">product</span> <span class="o">=</span> <span class="n">splitted_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Try to get the resping version from release, if available</span>
-            <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">])</span>
+            <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">"release"</span><span class="p">])</span>
             <span class="n">respin</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">respin</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">respin</span>
 
             <span class="n">release</span> <span class="o">=</span> <span class="n">rel_klass</span><span class="p">(</span>
                 <span class="n">arch</span><span class="o">=</span><span class="n">arch</span><span class="p">,</span>
-                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;completion_time&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"completion_time"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">product</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
-                <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"version"</span><span class="p">],</span>
                 <span class="n">respin</span><span class="o">=</span><span class="n">respin</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">klass</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span>
-                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">archive</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">],</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
                     <span class="n">dest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dest</span><span class="p">,</span>
                     <span class="n">src</span><span class="o">=</span><span class="n">item_src</span><span class="p">,</span>
                     <span class="n">boot_mode</span><span class="o">=</span><span class="n">boot_mode</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
                     <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">build_id</span><span class="p">),</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
-                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+                        <span class="n">version</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"version"</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"release"</span><span class="p">],</span>
                     <span class="p">),</span>
-                    <span class="n">md5sum</span><span class="o">=</span><span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;checksum&quot;</span><span class="p">),</span>
+                    <span class="n">md5sum</span><span class="o">=</span><span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"checksum"</span><span class="p">),</span>
                     <span class="n">release</span><span class="o">=</span><span class="n">release</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -682,47 +682,47 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_push_items_from_rhcos_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for core os assembler build on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Looking for core os assembler build on </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
-        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">build_id</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="n">archives</span> <span class="o">=</span> <span class="n">archives</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archives</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">archive</span> <span class="ow">in</span> <span class="n">archives</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;meta.json&quot;</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;btype&quot;</span><span class="p">])</span>
-                <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"filename"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"meta.json"</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pathinfo</span><span class="o">.</span><span class="n">typedir</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">"btype"</span><span class="p">])</span>
+                <span class="n">item_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">])</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">item_src</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive_file</span><span class="p">:</span>
                     <span class="n">rhcos_meta_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">archive_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"typeinfo"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
 
-        <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arch&quot;</span><span class="p">)</span>
+        <span class="n">arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"arch"</span><span class="p">)</span>
 
-        <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;boot_mode&quot;</span><span class="p">)</span>
+        <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"boot_mode"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">boot_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">boot_mode</span> <span class="o">=</span> <span class="n">BootMode</span><span class="p">(</span><span class="n">boot_mode</span><span class="p">)</span>
 
         <span class="n">rhcos_container_config</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;coreos-assembler.container-config-git&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"coreos-assembler.container-config-git"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="p">)</span>
-        <span class="n">branch</span> <span class="o">=</span> <span class="n">rhcos_container_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;branch&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">version</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">branch</span> <span class="o">=</span> <span class="n">rhcos_container_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"branch"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">branch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">""</span>
 
         <span class="c1"># Try to get the resping version from release, if available</span>
-        <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">])</span>
+        <span class="n">respin</span> <span class="o">=</span> <span class="n">try_int</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">"release"</span><span class="p">])</span>
         <span class="n">respin</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">respin</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">respin</span>
 
         <span class="n">vms_with_custom_meta_data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># add aws ami</span>
-        <span class="k">for</span> <span class="n">ami</span> <span class="ow">in</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">&quot;amis&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">ami</span> <span class="ow">in</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">"amis"</span><span class="p">]:</span>
             <span class="n">vms_with_custom_meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;marketplace_name&quot;</span><span class="p">:</span> <span class="s2">&quot;aws&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;push_item_class&quot;</span><span class="p">:</span> <span class="n">AmiPushItem</span><span class="p">,</span>
-                    <span class="s2">&quot;custom_meta_data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hvm&quot;</span><span class="p">),</span>
+                    <span class="s2">"marketplace_name"</span><span class="p">:</span> <span class="s2">"aws"</span><span class="p">,</span>
+                    <span class="s2">"push_item_class"</span><span class="p">:</span> <span class="n">AmiPushItem</span><span class="p">,</span>
+                    <span class="s2">"custom_meta_data"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">"region"</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">),</span>
+                        <span class="s2">"src"</span><span class="p">:</span> <span class="n">ami</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hvm"</span><span class="p">),</span>
                     <span class="p">},</span>
                 <span class="p">}</span>
             <span class="p">)</span>
@@ -730,76 +730,76 @@
         <span class="c1"># add vm for azure</span>
         <span class="n">vms_with_custom_meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;marketplace_name&quot;</span><span class="p">:</span> <span class="s2">&quot;azure&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;push_item_class&quot;</span><span class="p">:</span> <span class="n">VHDPushItem</span><span class="p">,</span>
-                <span class="s2">&quot;custom_meta_data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">&quot;azure&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+                <span class="s2">"marketplace_name"</span><span class="p">:</span> <span class="s2">"azure"</span><span class="p">,</span>
+                <span class="s2">"push_item_class"</span><span class="p">:</span> <span class="n">VHDPushItem</span><span class="p">,</span>
+                <span class="s2">"custom_meta_data"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"src"</span><span class="p">:</span> <span class="n">rhcos_meta_data</span><span class="p">[</span><span class="s2">"azure"</span><span class="p">][</span><span class="s2">"url"</span><span class="p">],</span>
                 <span class="p">},</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">vm_item</span> <span class="ow">in</span> <span class="n">vms_with_custom_meta_data</span><span class="p">:</span>
-            <span class="n">klass</span> <span class="o">=</span> <span class="n">vm_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;push_item_class&quot;</span><span class="p">)</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">vm_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"push_item_class"</span><span class="p">)</span>
             <span class="n">rel_klass</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_RELEASE_TYPE</span>
             <span class="n">release</span> <span class="o">=</span> <span class="n">rel_klass</span><span class="p">(</span>
                 <span class="n">arch</span><span class="o">=</span><span class="n">arch</span><span class="p">,</span>
-                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;completion_time&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">product</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                <span class="n">date</span><span class="o">=</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"completion_time"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">product</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
                 <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
                 <span class="n">respin</span><span class="o">=</span><span class="n">respin</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">images</span> <span class="o">=</span> <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;images&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">vm_target</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;marketplace_name&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">vm_target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"images"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">vm_target</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">"marketplace_name"</span><span class="p">])</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">vm_target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sha256"</span><span class="p">)</span>
 
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">klass</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
-                    <span class="n">description</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;summary&quot;</span><span class="p">),</span>
-                    <span class="o">**</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;custom_meta_data&quot;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">),</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">rhcos_meta_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"summary"</span><span class="p">),</span>
+                    <span class="o">**</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">"custom_meta_data"</span><span class="p">],</span>
                     <span class="n">boot_mode</span><span class="o">=</span><span class="n">boot_mode</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">nvr</span><span class="p">,</span>
                     <span class="n">build_info</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">build_id</span><span class="p">),</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
                         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;release&quot;</span><span class="p">],</span>
+                        <span class="n">release</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s2">"release"</span><span class="p">],</span>
                     <span class="p">),</span>
                     <span class="n">sha256sum</span><span class="o">=</span><span class="n">sha256sum</span><span class="p">,</span>
                     <span class="n">release</span><span class="o">=</span><span class="n">release</span><span class="p">,</span>
-                    <span class="n">marketplace_name</span><span class="o">=</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">&quot;marketplace_name&quot;</span><span class="p">]</span>
+                    <span class="n">marketplace_name</span><span class="o">=</span><span class="n">vm_item</span><span class="p">[</span><span class="s2">"marketplace_name"</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_operator_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvr</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">archives</span><span class="p">,</span> <span class="n">container_items</span><span class="p">):</span>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeinfo&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">operator_manifests</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operator-manifests&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">operator_archive_name</span> <span class="o">=</span> <span class="n">operator_manifests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;archive&quot;</span><span class="p">)</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">image_operator_manifests</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operator_manifests&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">related_images</span> <span class="o">=</span> <span class="n">image_operator_manifests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;related_images&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">pullspecs</span> <span class="o">=</span> <span class="n">related_images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pullspecs&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="n">operator_related_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">pullspecs</span> <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;new&quot;</span><span class="p">)]</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">typeinfo</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"typeinfo"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">operator_manifests</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"operator-manifests"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">operator_archive_name</span> <span class="o">=</span> <span class="n">operator_manifests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"archive"</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">typeinfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">image_operator_manifests</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"operator_manifests"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">related_images</span> <span class="o">=</span> <span class="n">image_operator_manifests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"related_images"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">pullspecs</span> <span class="o">=</span> <span class="n">related_images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pullspecs"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">operator_related_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">[</span><span class="s2">"new"</span><span class="p">]</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">pullspecs</span> <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"new"</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">operator_archive_name</span><span class="p">:</span>
             <span class="c1"># Try legacy form</span>
-            <span class="n">operator_archive_name</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operator_manifests_archive&quot;</span><span class="p">)</span>
+            <span class="n">operator_archive_name</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"operator_manifests_archive"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">operator_archive_name</span><span class="p">:</span>
             <span class="c1"># No operator manifests on this build</span>
             <span class="k">return</span>
 
         <span class="n">operator_archive</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">operator_archive_name</span>
+            <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">archives</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">]</span> <span class="o">==</span> <span class="n">operator_archive_name</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">operator_archive</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;koji build </span><span class="si">%s</span><span class="s2"> metadata refers to missing operator-manifests &quot;</span>
-                <span class="s1">&#39;archive &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span>
+                <span class="s2">"koji build </span><span class="si">%s</span><span class="s2"> metadata refers to missing operator-manifests "</span>
+                <span class="s1">'archive "</span><span class="si">%s</span><span class="s1">"'</span>
             <span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nvr</span><span class="p">,</span> <span class="n">operator_archive_name</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
@@ -878,13 +878,13 @@
                         <span class="n">pending_commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
                     <span class="k">except</span> <span class="n">Empty</span><span class="p">:</span>
                         <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji fetch queue emptied&quot;</span><span class="p">)</span>
+                        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"koji fetch queue emptied"</span><span class="p">)</span>
 
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji multicall: about to execute </span><span class="si">%s</span><span class="s2"> call(s)&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"koji multicall: about to execute </span><span class="si">%s</span><span class="s2"> call(s)"</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 
                 <span class="n">session</span><span class="o">.</span><span class="n">call_all</span><span class="p">()</span>
 
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;koji multicall: executed </span><span class="si">%s</span><span class="s2"> call(s)&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"koji multicall: executed </span><span class="si">%s</span><span class="s2"> call(s)"</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 
                 <span class="c1"># multicall is now done.</span>
                 <span class="c1"># Save the result to cache from each command.</span>
@@ -897,7 +897,7 @@
                 <span class="k">if</span> <span class="n">pending_commands</span><span class="p">:</span>
                     <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error during koji fetches&quot;</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"Error during koji fetches"</span><span class="p">)</span>
             <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="k">raise</span>
 
@@ -923,20 +923,20 @@
         <span class="c1"># of multicall.</span>
         <span class="n">koji_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
 
-        <span class="c1"># We&#39;ll need to obtain all RPMs referenced by filename</span>
+        <span class="c1"># We'll need to obtain all RPMs referenced by filename</span>
         <span class="k">for</span> <span class="n">rpm_filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rpm</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetRpmCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">rpm_filename</span><span class="p">))</span>
 
-        <span class="c1"># We&#39;ll need to obtain all builds from which we want modules,</span>
+        <span class="c1"># We'll need to obtain all builds from which we want modules,</span>
         <span class="c1"># as well as the archives from those</span>
         <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
-        <span class="c1"># We&#39;ll need to obtain all container image builds</span>
+        <span class="c1"># We'll need to obtain all container image builds</span>
         <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container_build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
-        <span class="c1"># We&#39;ll need to obtain all virtual machine image builds</span>
+        <span class="c1"># We'll need to obtain all virtual machine image builds</span>
         <span class="k">for</span> <span class="n">build_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmi_build</span><span class="p">:</span>
             <span class="n">koji_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">GetBuildCommand</span><span class="p">(</span><span class="n">ident</span><span class="o">=</span><span class="n">build_id</span><span class="p">,</span> <span class="n">list_archives</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
@@ -944,7 +944,7 @@
         <span class="n">fetch_exceptions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fetch_threads</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Thread</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;koji-</span><span class="si">%s</span><span class="s2">-fetch-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"koji-</span><span class="si">%s</span><span class="s2">-fetch-</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
                 <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_do_fetch</span><span class="p">,</span>
                 <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">koji_queue</span><span class="p">,</span> <span class="n">fetch_exceptions</span><span class="p">),</span>
             <span class="p">)</span>
@@ -975,7 +975,7 @@
             <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
 
         <span class="c1"># Re-raise exceptions, if any.</span>
-        <span class="c1"># If we got more than one, we&#39;re only propagating the first.</span>
+        <span class="c1"># If we got more than one, we're only propagating the first.</span>
         <span class="k">if</span> <span class="n">fetch_exceptions</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">fetch_exceptions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -999,7 +999,7 @@
 
 
 
-<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">&quot;koji&quot;</span><span class="p">,</span> <span class="n">KojiSource</span><span class="p">)</span>
+<span class="n">Source</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s2">"koji"</span><span class="p">,</span> <span class="n">KojiSource</span><span class="p">)</span>
 </pre></div>
 
           </div>

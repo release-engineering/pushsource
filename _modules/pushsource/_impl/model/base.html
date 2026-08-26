@@ -50,33 +50,33 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushItemReader</span>
 
-<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pushsource&quot;</span><span class="p">)</span>
-<span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PUSHSOURCE_CHUNKSIZE&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"pushsource"</span><span class="p">)</span>
+<span class="n">CHUNKSIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_CHUNKSIZE"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="KojiBuildInfo">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.KojiBuildInfo">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">KojiBuildInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A representation of a koji build.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A representation of a koji build."""</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;name&#39; component of build&#39;s NVR.</span>
+<span class="w">    </span><span class="sd">"""'name' component of build's NVR.</span>
 
-<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the name is &quot;kf5-kio&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Example: in "kf5-kio-5.83.0-2.el8.next", the name is "kf5-kio".</span>
+<span class="sd">    """</span>
 
     <span class="n">version</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;version&#39; component of build&#39;s NVR.</span>
+<span class="w">    </span><span class="sd">"""'version' component of build's NVR.</span>
 
-<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the version is &quot;5.83.0&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Example: in "kf5-kio-5.83.0-2.el8.next", the version is "5.83.0".</span>
+<span class="sd">    """</span>
 
     <span class="n">release</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;release&#39; component of build&#39;s NVR.</span>
+<span class="w">    </span><span class="sd">"""'release' component of build's NVR.</span>
 
-<span class="sd">    Example: in &quot;kf5-kio-5.83.0-2.el8.next&quot;, the release is &quot;2.el8.next&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Example: in "kf5-kio-5.83.0-2.el8.next", the release is "2.el8.next".</span>
+<span class="sd">    """</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
@@ -84,21 +84,21 @@
         <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">int</span><span class="p">)),</span>
         <span class="n">converter</span><span class="o">=</span><span class="n">convert_maybe</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional attribute to store the &#39;build_id&#39; from Koji.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Optional attribute to store the 'build_id' from Koji."""</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_from_nvr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nvr_str</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nvr_str</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="c1"># Initial state: &#39;kf5-kio-5.83.0-2.el8.next&#39;</span>
-        <span class="c1"># Reverse:       &#39;txen.8le.2-0.38.5-oik-5fk&#39;</span>
+        <span class="c1"># Initial state: 'kf5-kio-5.83.0-2.el8.next'</span>
+        <span class="c1"># Reverse:       'txen.8le.2-0.38.5-oik-5fk'</span>
         <span class="n">nvr_rev</span> <span class="o">=</span> <span class="n">nvr_str</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="c1"># Split:         [&#39;txen.8le.2&#39;, &#39;0.38.5&#39;, &#39;oik-5fk&#39;]</span>
-        <span class="n">rvn_rev</span> <span class="o">=</span> <span class="n">nvr_rev</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Split:         ['txen.8le.2', '0.38.5', 'oik-5fk']</span>
+        <span class="n">rvn_rev</span> <span class="o">=</span> <span class="n">nvr_rev</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-        <span class="c1"># Unreverse:     [&#39;2.el8.next&#39;, &#39;5.83.0&#39;, &#39;kf5-kio&#39;]</span>
+        <span class="c1"># Unreverse:     ['2.el8.next', '5.83.0', 'kf5-kio']</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">rvn_rev</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">r</span><span class="p">)</span></div>
@@ -109,94 +109,94 @@
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem">[docs]</a>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PushItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A PushItem represents a single piece of content to be published.</span>
+<span class="w">    </span><span class="sd">"""A PushItem represents a single piece of content to be published.</span>
 <span class="sd">    This may be an RPM, an advisory, a generic file, and so on.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A name for this push item.</span>
+<span class="w">    </span><span class="sd">"""A name for this push item.</span>
 
-<span class="sd">    A push item&#39;s name may be any short identifying string which is meaningful</span>
+<span class="sd">    A push item's name may be any short identifying string which is meaningful</span>
 <span class="sd">    to end-users.</span>
 
 <span class="sd">    In the common case of a regular file, a push item name will simply be a filename,</span>
 <span class="sd">    optionally including leading path components.</span>
 
 <span class="sd">    In all cases, a non-empty name must be provided.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">state</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;PENDING&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The state of this push item.</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"PENDING"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""The state of this push item.</span>
 
 <span class="sd">    In the majority of cases, push sources will produce push items with</span>
 <span class="sd">    a state of ``PENDING``, with the caller expected to later evolve the state.</span>
 
 <span class="sd">    In rare cases, push sources may produce push items with other states, such</span>
 <span class="sd">    as ``INVALIDFILE`` to indicate that the source located invalid content.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">src</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The source of this push item.</span>
+<span class="w">    </span><span class="sd">"""The source of this push item.</span>
 
 <span class="sd">    If the push item is a file, this will be the full path to the file.</span>
 <span class="sd">    If the push item does not represent a file, this will generally be omitted.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">dest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
         <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">,</span> <span class="n">frozenlist</span><span class="p">),</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Destination of this push item.</span>
+<span class="w">    </span><span class="sd">"""Destination of this push item.</span>
 
-<span class="sd">    The meaning of &quot;dest&quot; differs depending on the source used and its configuration.</span>
+<span class="sd">    The meaning of "dest" differs depending on the source used and its configuration.</span>
 
-<span class="sd">    Examples for possible uses of &quot;dest&quot; include:</span>
+<span class="sd">    Examples for possible uses of "dest" include:</span>
 
 <span class="sd">    * a path to a directory (for items pushed using rsync)</span>
 <span class="sd">    * a Pulp repository name (for items pushed using Pulp)</span>
 
 <span class="sd">    :type: list[str]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">md5sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">md5str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hex digest of MD5 checksum for this push item, if available.</span>
+<span class="w">    </span><span class="sd">"""Hex digest of MD5 checksum for this push item, if available.</span>
 
 <span class="sd">    .. seealso::</span>
 
 <span class="sd">        :meth:`with_checksums`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">sha256sum</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">sha256str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hex digest of SHA256 checksum for this push item, if available.</span>
+<span class="w">    </span><span class="sd">"""Hex digest of SHA256 checksum for this push item, if available.</span>
 
 <span class="sd">    .. seealso::</span>
 
 <span class="sd">        :meth:`with_checksums`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A string representing the origin of this push item.</span>
+<span class="w">    </span><span class="sd">"""A string representing the origin of this push item.</span>
 
-<span class="sd">    The &quot;origin&quot; field is expected to record some info on how this push item</span>
+<span class="sd">    The "origin" field is expected to record some info on how this push item</span>
 <span class="sd">    was discovered. The exact semantics depend on the specific source backend</span>
 <span class="sd">    in use.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">build</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;NVR for the koji build from which this push item was extracted, if any.</span>
+<span class="w">    </span><span class="sd">"""NVR for the koji build from which this push item was extracted, if any.</span>
 
 <span class="sd">    .. seealso::</span>
 
 <span class="sd">        :meth:`build_info`, which provides the same info in parsed form.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">build_info</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
         <span class="nb">type</span><span class="o">=</span><span class="n">KojiBuildInfo</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">((</span><span class="n">KojiBuildInfo</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic info on the koji build from which this push item was extracted, if any.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Basic info on the koji build from which this push item was extracted, if any."""</span>
 
     <span class="nd">@build_info</span><span class="o">.</span><span class="n">default</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_default_build_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -208,31 +208,31 @@
         <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span>
         <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">),</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;If this push item was GPG signed, this should be an identifier for the</span>
+<span class="w">    </span><span class="sd">"""If this push item was GPG signed, this should be an identifier for the</span>
 <span class="sd">    signing key used.</span>
 
-<span class="sd">    Generally a short key ID such as &quot;F21541EB&quot; is used, though the library</span>
-<span class="sd">    doesn&#39;t enforce this.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Generally a short key ID such as "F21541EB" is used, though the library</span>
+<span class="sd">    doesn't enforce this.</span>
+<span class="sd">    """</span>
 
     <span class="n">opener</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">callable</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The opener, when given a push item, should return a file-like object</span>
-<span class="sd">    suitable for reading this item&#39;s bytes. The object can be retrieved from</span>
+<span class="w">    </span><span class="sd">"""The opener, when given a push item, should return a file-like object</span>
+<span class="sd">    suitable for reading this item's bytes. The object can be retrieved from</span>
 <span class="sd">    :meth:`~pushsource.PushItem.content()` method.</span>
 
 <span class="sd">    .. versionadded:: 2.51.0</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="PushItem.with_checksums">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this push item with checksums present.</span>
+<span class="w">        </span><span class="sd">"""Return a copy of this push item with checksums present.</span>
 
 <span class="sd">        Many pushsource backends will produce push items with empty checksum attributes,</span>
 <span class="sd">        since checksum calculation may be expensive and may not be required in all cases.</span>
 
 <span class="sd">        The rule of thumb is that a pushsource will only provide checksums if they were</span>
-<span class="sd">        available in metadata, so that reading the push item&#39;s file was unnecessary.</span>
+<span class="sd">        available in metadata, so that reading the push item's file was unnecessary.</span>
 <span class="sd">        For example:</span>
 
 <span class="sd">        - with ``errata`` push source, checksums are generally available by default, because</span>
@@ -263,24 +263,24 @@
 <span class="sd">                the item does not reference a file).</span>
 
 <span class="sd">        .. versionadded:: 1.2.0</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
 
         <span class="n">hashers</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">md5sum</span><span class="p">:</span>
-            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span> <span class="s2">&quot;md5sum&quot;</span><span class="p">))</span>  <span class="c1"># nosec B324</span>
+            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"md5"</span><span class="p">),</span> <span class="s2">"md5sum"</span><span class="p">))</span>  <span class="c1"># nosec B324</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sha256sum</span><span class="p">:</span>
-            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span> <span class="s2">&quot;sha256sum&quot;</span><span class="p">))</span>
+            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"sha256"</span><span class="p">),</span> <span class="s2">"sha256sum"</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">hashers</span><span class="p">:</span>
             <span class="c1"># Nothing to do</span>
             <span class="k">return</span> <span class="bp">self</span>
 
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start read: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Start read: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">src_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">src_file</span><span class="p">:</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">chunk</span> <span class="o">=</span> <span class="n">src_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">CHUNKSIZE</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
@@ -288,7 +288,7 @@
                 <span class="k">for</span> <span class="n">hasher</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
                     <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;End read: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"End read: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
 
         <span class="n">updated_sums</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">hasher</span><span class="p">,</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">hashers</span><span class="p">:</span>
@@ -300,10 +300,10 @@
 <div class="viewcode-block" id="PushItem.content">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.content">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a read-only, non-seekable content of this push item.</span>
+<span class="w">        </span><span class="sd">"""Returns a read-only, non-seekable content of this push item.</span>
 
 <span class="sd">        For push items representing a single file, content will obtain a stream</span>
-<span class="sd">        for reading that file&#39;s bytes.</span>
+<span class="sd">        for reading that file's bytes.</span>
 <span class="sd">        For example, ``RpmPushItem.content`` can be used to read the content of</span>
 <span class="sd">        an RPM; ``VMIPushItem.content`` can be used to read the content of a VMI</span>
 <span class="sd">        and so on.</span>
@@ -325,7 +325,7 @@
 <span class="sd">                the content.</span>
 
 <span class="sd">        .. versionadded:: 2.51.0</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">PushItemReader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opener</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opener</span>

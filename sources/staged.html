@@ -96,15 +96,15 @@ Each staging directory must use the <a class="reference internal" href="#staging
 <code class="docutils literal notranslate"><span class="pre">RPMS</span></code> which have all necessary metadata built-in to the file format.</p>
 <p>Here’s an example to give an idea of the metadata controlled by this file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">header</span><span class="p">:</span>
-   <span class="n">version</span><span class="p">:</span> <span class="s2">&quot;0.2&quot;</span> <span class="c1"># current schema version - don&#39;t change</span>
+   <span class="n">version</span><span class="p">:</span> <span class="s2">"0.2"</span> <span class="c1"># current schema version - don't change</span>
 
 <span class="n">payload</span><span class="p">:</span>
    <span class="n">files</span><span class="p">:</span>
-      <span class="c1"># desired name, doesn&#39;t need to be same as staged filename</span>
-    <span class="o">-</span> <span class="n">filename</span><span class="p">:</span> <span class="s2">&quot;RHEL-6.7-20150429.0-Client-i386-boot.iso&quot;</span>
+      <span class="c1"># desired name, doesn't need to be same as staged filename</span>
+    <span class="o">-</span> <span class="n">filename</span><span class="p">:</span> <span class="s2">"RHEL-6.7-20150429.0-Client-i386-boot.iso"</span>
 
       <span class="c1"># path relative to staging directory</span>
-      <span class="n">relative_path</span><span class="p">:</span> <span class="s2">&quot;rhel-6-desktop-beta-isos__6Client__i386/FILES/RHEL-6.7-20150429.0-Client-i386-boot.iso&quot;</span>
+      <span class="n">relative_path</span><span class="p">:</span> <span class="s2">"rhel-6-desktop-beta-isos__6Client__i386/FILES/RHEL-6.7-20150429.0-Client-i386-boot.iso"</span>
 
       <span class="c1"># SHA256 checksum</span>
       <span class="n">sha256sum</span><span class="p">:</span> <span class="n">b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c</span>
@@ -112,7 +112,7 @@ Each staging directory must use the <a class="reference internal" href="#staging
       <span class="c1"># Additional attributes</span>
       <span class="n">attributes</span><span class="p">:</span>
          <span class="c1"># human-readable description</span>
-         <span class="n">description</span><span class="p">:</span> <span class="s2">&quot;Red Hat Enterprise Linux 6.7 Boot DVD&quot;</span>
+         <span class="n">description</span><span class="p">:</span> <span class="s2">"Red Hat Enterprise Linux 6.7 Boot DVD"</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="../schema/staged.html#staging-schema"><span class="std std-ref">Schema: staged</span></a> provides a complete reference of the fields which can be set by this

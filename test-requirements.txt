@@ -898,9 +898,9 @@ pubtools==1.4.5 \
     --hash=sha256:04544718ad40fc689814e93e5af4cd343ab4688f2883e5e2cae29c8e2d7ae2cd \
     --hash=sha256:c7270bcb8e3a7677f838023603f93e687d9efc2b63248e600bf625580b3bf3bf
     # via pubtools-pulplib
-pubtools-pulplib==2.44.0 \
-    --hash=sha256:04c343db7884ca81b5f9f5985f28ee3bfb0f34aeab2cf5a154a9011a2c89e2ac \
-    --hash=sha256:151f1f4d1529a1652de4b74ea31bc7bde455146cae049f28b5eeb3d73791a3ac
+pubtools-pulplib==2.45.0 \
+    --hash=sha256:538933115da1871cd69fc96bb52c16f275ed1cc55dce2f3501d66670f77a6d4c \
+    --hash=sha256:68671cb77ccfba3d5dc21b8268d724f459f99ce6f1a4b5fa2d9e10a89adc73e4
     # via -r requirements.in
 pushcollector==1.3.0 \
     --hash=sha256:18281fcd4247ca8b668c25348bbc2f9cc032912cecc7037824a74ad8adcbb1c3 \
@@ -1412,9 +1412,9 @@ urllib3==2.6.3 \
     --hash=sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed \
     --hash=sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4
     # via requests
-virtualenv==21.7.7 \
-    --hash=sha256:67a6a68fef3ad8ca16b8b89f33fd8f97996cc0bf0db31629d07ecf8dec539a2c \
-    --hash=sha256:6874376f99ba6b8d4e3ee8bde67f9285412400c7d5b29ba41ee6daa5e0221bdc
+virtualenv==21.7.8 \
+    --hash=sha256:1dc49c790072a9072cb1803f9bd62aa69cd583077cada32390f75505cdc64c9b \
+    --hash=sha256:3040eb3cbf5d32b10ffd57d167e6a162237ad82ba7d8cf1400a1efed593d85ac
     # via pre-commit
 virtualenv-api==2.1.18 \
     --hash=sha256:2115cceaeab27faf2909780c442f4ee7a33fda9a49fe8255967432290a0557af \

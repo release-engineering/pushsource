@@ -60,33 +60,34 @@ class KonfluxSource(Source):
                 URL of hosted Pulp server
                 (e.g., https://packages.redhat.com/).
                 If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_URL``
-                environment variable.
+                or ``PUBTOOLS_PULP3_URL`` environment variable.
 
             pulp_cert (str):
                 Path to TLS client certificate for Pulp authentication.
                 If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_CERT``
-                environment variable.
+                or ``PUBTOOLS_PULP3_CERT`` environment variable.
 
             pulp_key (str):
                 Path to TLS client key for Pulp authentication.
-                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_KEY``
-                environment variable.
+                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_CERT_KEY``
+                or ``PUBTOOLS_PULP3_CERT_KEY`` environment variable.
 
             pulp_user (str):
                 Username for Pulp basic authentication.
                 If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_USER``
-                environment variable. Use with ``pulp_password``
-                as an alternative to certificate authentication.
+                or ``PUBTOOLS_PULP3_USER`` environment variable.
+                Use with ``pulp_password`` as an alternative to
+                certificate authentication.
 
             pulp_password (str):
                 Password for Pulp basic authentication.
                 If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_PASSWORD``
-                environment variable.
+                or ``PUBTOOLS_PULP3_PASSWORD`` environment variable.
 
             pulp_domain (str):
                 Pulp domain name (e.g., "konflux-myteam-tenant").
                 If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_DOMAIN``
-                environment variable.
+                or ``PUBTOOLS_PULP3_DOMAIN`` environment variable.
 
             threads (int):
                 Number of threads for concurrent processing.
@@ -102,15 +103,39 @@ class KonfluxSource(Source):
 
         self._advisories = list_argument(advisories)
 
-        # Resolve Pulp params from env vars if not provided
-        pulp_url = pulp_url or os.environ.get("PUSHSOURCE_KONFLUX_PULP_URL")
-        pulp_cert = pulp_cert or os.environ.get("PUSHSOURCE_KONFLUX_PULP_CERT")
-        pulp_key = pulp_key or os.environ.get("PUSHSOURCE_KONFLUX_PULP_KEY")
-        pulp_user = pulp_user or os.environ.get("PUSHSOURCE_KONFLUX_PULP_USER")
-        pulp_password = pulp_password or os.environ.get(
-            "PUSHSOURCE_KONFLUX_PULP_PASSWORD"
+        # Resolve Pulp params from env vars if not provided.
+        # PUBTOOLS_PULP3_* env vars are shared with pubtools-pulp's Pulp3ClientService.
+        # PUSHSOURCE_KONFLUX_PULP_* env vars are pushsource-specific overrides.
+        pulp_url = (
+            pulp_url
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_URL")
+            or os.environ.get("PUBTOOLS_PULP3_URL")
         )
-        pulp_domain = pulp_domain or os.environ.get("PUSHSOURCE_KONFLUX_PULP_DOMAIN")
+        pulp_cert = (
+            pulp_cert
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_CERT")
+            or os.environ.get("PUBTOOLS_PULP3_CERT")
+        )
+        pulp_key = (
+            pulp_key
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_CERT_KEY")
+            or os.environ.get("PUBTOOLS_PULP3_CERT_KEY")
+        )
+        pulp_user = (
+            pulp_user
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_USER")
+            or os.environ.get("PUBTOOLS_PULP3_USER")
+        )
+        pulp_password = (
+            pulp_password
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_PASSWORD")
+            or os.environ.get("PUBTOOLS_PULP3_PASSWORD")
+        )
+        pulp_domain = (
+            pulp_domain
+            or os.environ.get("PUSHSOURCE_KONFLUX_PULP_DOMAIN")
+            or os.environ.get("PUBTOOLS_PULP3_DOMAIN")
+        )
 
         # Validate required params
         if not pulp_url:

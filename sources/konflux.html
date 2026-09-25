@@ -138,34 +138,35 @@ though such filtering could be added if needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Base directory containing advisory subdirectories.
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Base directory containing advisory subdirectories.
 Each subdirectory should be named after an advisory ID
 and contain advisory_cdn_metadata.json and
 advisory_cdn_filelist.json files.</p></li>
-<li><p><strong>advisories</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Advisory ID(s) to process. Can be a single string or list.
+<li><p><strong>advisories</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Advisory ID(s) to process. Can be a single string or list.
 Multiple IDs can be comma-separated.</p></li>
-<li><p><strong>pulp_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – URL of hosted Pulp server
+<li><p><strong>pulp_url</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – URL of hosted Pulp server
 (e.g., <a class="reference external" href="https://packages.redhat.com/">https://packages.redhat.com/</a>).
 If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_URL</span></code>
-environment variable.</p></li>
-<li><p><strong>pulp_cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client certificate for Pulp authentication.
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_URL</span></code> environment variable.</p></li>
+<li><p><strong>pulp_cert</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client certificate for Pulp authentication.
 If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_CERT</span></code>
-environment variable.</p></li>
-<li><p><strong>pulp_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client key for Pulp authentication.
-If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_KEY</span></code>
-environment variable.</p></li>
-<li><p><strong>pulp_user</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Username for Pulp basic authentication.
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_CERT</span></code> environment variable.</p></li>
+<li><p><strong>pulp_key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to TLS client key for Pulp authentication.
+If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_CERT_KEY</span></code>
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_CERT_KEY</span></code> environment variable.</p></li>
+<li><p><strong>pulp_user</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Username for Pulp basic authentication.
 If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_USER</span></code>
-environment variable. Use with <code class="docutils literal notranslate"><span class="pre">pulp_password</span></code>
-as an alternative to certificate authentication.</p></li>
-<li><p><strong>pulp_password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Password for Pulp basic authentication.
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_USER</span></code> environment variable.
+Use with <code class="docutils literal notranslate"><span class="pre">pulp_password</span></code> as an alternative to
+certificate authentication.</p></li>
+<li><p><strong>pulp_password</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Password for Pulp basic authentication.
 If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_PASSWORD</span></code>
-environment variable.</p></li>
-<li><p><strong>pulp_domain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pulp domain name (e.g., “konflux-myteam-tenant”).
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_PASSWORD</span></code> environment variable.</p></li>
+<li><p><strong>pulp_domain</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pulp domain name (e.g., “konflux-myteam-tenant”).
 If omitted, uses <code class="docutils literal notranslate"><span class="pre">PUSHSOURCE_KONFLUX_PULP_DOMAIN</span></code>
-environment variable.</p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of threads for concurrent processing.</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Timeout in seconds for operations.</p></li>
+or <code class="docutils literal notranslate"><span class="pre">PUBTOOLS_PULP3_DOMAIN</span></code> environment variable.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of threads for concurrent processing.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Timeout in seconds for operations.</p></li>
 </ul>
 </dd>
 </dl>

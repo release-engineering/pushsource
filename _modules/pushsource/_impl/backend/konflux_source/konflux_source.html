@@ -96,33 +96,34 @@
 <span class="sd">                URL of hosted Pulp server</span>
 <span class="sd">                (e.g., https://packages.redhat.com/).</span>
 <span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_URL``</span>
-<span class="sd">                environment variable.</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_URL`` environment variable.</span>
 
 <span class="sd">            pulp_cert (str):</span>
 <span class="sd">                Path to TLS client certificate for Pulp authentication.</span>
 <span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_CERT``</span>
-<span class="sd">                environment variable.</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_CERT`` environment variable.</span>
 
 <span class="sd">            pulp_key (str):</span>
 <span class="sd">                Path to TLS client key for Pulp authentication.</span>
-<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_KEY``</span>
-<span class="sd">                environment variable.</span>
+<span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_CERT_KEY``</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_CERT_KEY`` environment variable.</span>
 
 <span class="sd">            pulp_user (str):</span>
 <span class="sd">                Username for Pulp basic authentication.</span>
 <span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_USER``</span>
-<span class="sd">                environment variable. Use with ``pulp_password``</span>
-<span class="sd">                as an alternative to certificate authentication.</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_USER`` environment variable.</span>
+<span class="sd">                Use with ``pulp_password`` as an alternative to</span>
+<span class="sd">                certificate authentication.</span>
 
 <span class="sd">            pulp_password (str):</span>
 <span class="sd">                Password for Pulp basic authentication.</span>
 <span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_PASSWORD``</span>
-<span class="sd">                environment variable.</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_PASSWORD`` environment variable.</span>
 
 <span class="sd">            pulp_domain (str):</span>
 <span class="sd">                Pulp domain name (e.g., "konflux-myteam-tenant").</span>
 <span class="sd">                If omitted, uses ``PUSHSOURCE_KONFLUX_PULP_DOMAIN``</span>
-<span class="sd">                environment variable.</span>
+<span class="sd">                or ``PUBTOOLS_PULP3_DOMAIN`` environment variable.</span>
 
 <span class="sd">            threads (int):</span>
 <span class="sd">                Number of threads for concurrent processing.</span>
@@ -138,15 +139,39 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_advisories</span> <span class="o">=</span> <span class="n">list_argument</span><span class="p">(</span><span class="n">advisories</span><span class="p">)</span>
 
-        <span class="c1"># Resolve Pulp params from env vars if not provided</span>
-        <span class="n">pulp_url</span> <span class="o">=</span> <span class="n">pulp_url</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_URL"</span><span class="p">)</span>
-        <span class="n">pulp_cert</span> <span class="o">=</span> <span class="n">pulp_cert</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_CERT"</span><span class="p">)</span>
-        <span class="n">pulp_key</span> <span class="o">=</span> <span class="n">pulp_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_KEY"</span><span class="p">)</span>
-        <span class="n">pulp_user</span> <span class="o">=</span> <span class="n">pulp_user</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_USER"</span><span class="p">)</span>
-        <span class="n">pulp_password</span> <span class="o">=</span> <span class="n">pulp_password</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">"PUSHSOURCE_KONFLUX_PULP_PASSWORD"</span>
+        <span class="c1"># Resolve Pulp params from env vars if not provided.</span>
+        <span class="c1"># PUBTOOLS_PULP3_* env vars are shared with pubtools-pulp's Pulp3ClientService.</span>
+        <span class="c1"># PUSHSOURCE_KONFLUX_PULP_* env vars are pushsource-specific overrides.</span>
+        <span class="n">pulp_url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_url</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_URL"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_URL"</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">pulp_domain</span> <span class="o">=</span> <span class="n">pulp_domain</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_DOMAIN"</span><span class="p">)</span>
+        <span class="n">pulp_cert</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_cert</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_CERT"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_CERT"</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pulp_key</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_key</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_CERT_KEY"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_CERT_KEY"</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pulp_user</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_user</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_USER"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_USER"</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pulp_password</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_password</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_PASSWORD"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_PASSWORD"</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pulp_domain</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pulp_domain</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUSHSOURCE_KONFLUX_PULP_DOMAIN"</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PUBTOOLS_PULP3_DOMAIN"</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Validate required params</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pulp_url</span><span class="p">:</span>

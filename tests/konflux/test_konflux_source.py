@@ -554,6 +554,92 @@ def test_basic_auth():
     assert "cert" not in source._pulp_client_kwargs
 
 
+def test_env_var_resolution_pubtools(monkeypatch):
+    """Test that PUBTOOLS_PULP3_* env vars are used when params are omitted."""
+    monkeypatch.setenv("PUBTOOLS_PULP3_URL", "https://pulp.env.example.com")
+    monkeypatch.setenv("PUBTOOLS_PULP3_DOMAIN", "env-tenant")
+    monkeypatch.setenv("PUBTOOLS_PULP3_USER", "env-user")
+    monkeypatch.setenv("PUBTOOLS_PULP3_PASSWORD", "env-password")
+
+    source = KonfluxSource(
+        url=DATADIR,
+        advisories="RHSA-2020:0509",
+    )
+
+    assert source._pulp_client_kwargs == {
+        "url": "https://pulp.env.example.com",
+        "domain": "env-tenant",
+        "auth": ("env-user", "env-password"),
+    }
+
+
+def test_env_var_resolution_pushsource(monkeypatch):
+    """Test that PUSHSOURCE_KONFLUX_PULP_* env vars take precedence over PUBTOOLS_PULP3_*."""
+    monkeypatch.setenv("PUBTOOLS_PULP3_URL", "https://pulp.pubtools.example.com")
+    monkeypatch.setenv("PUBTOOLS_PULP3_DOMAIN", "pubtools-tenant")
+    monkeypatch.setenv("PUBTOOLS_PULP3_USER", "pubtools-user")
+    monkeypatch.setenv("PUBTOOLS_PULP3_PASSWORD", "pubtools-password")
+    monkeypatch.setenv(
+        "PUSHSOURCE_KONFLUX_PULP_URL", "https://pulp.pushsource.example.com"
+    )
+    monkeypatch.setenv("PUSHSOURCE_KONFLUX_PULP_DOMAIN", "pushsource-tenant")
+    monkeypatch.setenv("PUSHSOURCE_KONFLUX_PULP_USER", "pushsource-user")
+    monkeypatch.setenv("PUSHSOURCE_KONFLUX_PULP_PASSWORD", "pushsource-password")
+
+    source = KonfluxSource(
+        url=DATADIR,
+        advisories="RHSA-2020:0509",
+    )
+
+    assert source._pulp_client_kwargs == {
+        "url": "https://pulp.pushsource.example.com",
+        "domain": "pushsource-tenant",
+        "auth": ("pushsource-user", "pushsource-password"),
+    }
+
+
+def test_env_var_cert_auth(monkeypatch):
+    """Test that PUBTOOLS_PULP3_CERT and PUBTOOLS_PULP3_CERT_KEY env vars work for cert auth."""
+    monkeypatch.setenv("PUBTOOLS_PULP3_URL", "https://pulp.env.example.com")
+    monkeypatch.setenv("PUBTOOLS_PULP3_DOMAIN", "env-tenant")
+    monkeypatch.setenv("PUBTOOLS_PULP3_CERT", "/env/path/to/cert")
+    monkeypatch.setenv("PUBTOOLS_PULP3_CERT_KEY", "/env/path/to/key")
+
+    source = KonfluxSource(
+        url=DATADIR,
+        advisories="RHSA-2020:0509",
+    )
+
+    assert source._pulp_client_kwargs == {
+        "url": "https://pulp.env.example.com",
+        "domain": "env-tenant",
+        "cert": ("/env/path/to/cert", "/env/path/to/key"),
+    }
+
+
+def test_params_override_env_vars(monkeypatch):
+    """Test that explicit params take precedence over env vars."""
+    monkeypatch.setenv("PUBTOOLS_PULP3_URL", "https://pulp.env.example.com")
+    monkeypatch.setenv("PUBTOOLS_PULP3_DOMAIN", "env-tenant")
+    monkeypatch.setenv("PUBTOOLS_PULP3_USER", "env-user")
+    monkeypatch.setenv("PUBTOOLS_PULP3_PASSWORD", "env-password")
+
+    source = KonfluxSource(
+        url=DATADIR,
+        advisories="RHSA-2020:0509",
+        pulp_url="https://pulp.param.example.com",
+        pulp_domain="param-tenant",
+        pulp_user="param-user",
+        pulp_password="param-password",
+    )
+
+    assert source._pulp_client_kwargs == {
+        "url": "https://pulp.param.example.com",
+        "domain": "param-tenant",
+        "auth": ("param-user", "param-password"),
+    }
+
+
 def test_build_without_rpms():
     """Test that builds without 'rpms' key are skipped."""
     source = KonfluxSource(url=DATADIR, advisories="RHBA-2020:1234", **PULP_PARAMS)

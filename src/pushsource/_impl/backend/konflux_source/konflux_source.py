@@ -331,6 +331,7 @@ class KonfluxSource(Source):
                     origin=data.advisory_id,
                     build=entry["build_nvr"],
                     signing_key=entry["signing_key"],
+                    opener=None,
                 )
             )
 

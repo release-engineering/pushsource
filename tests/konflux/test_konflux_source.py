@@ -192,6 +192,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.src.rpm",
@@ -209,6 +210,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -224,6 +226,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
@@ -238,6 +241,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -253,6 +257,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
@@ -267,6 +272,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -282,6 +288,7 @@ def test_load_single_advisory():
             origin="RHSA-2020:0509",
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
+            opener=None,
         ),
     ]
 

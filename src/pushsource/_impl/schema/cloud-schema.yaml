@@ -76,6 +76,8 @@ definitions:
       properties:
         path:
           type: string
+        remote:
+          type: string
         architecture:
           type: string
 

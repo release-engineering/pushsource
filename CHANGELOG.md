@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - n/a
 
+## [2.54.0] - 2026-09-30
+
+### Changed
+
+- Support `PUBTOOLS_PULP3_*` env vars for Hosted Pulp credentials
+
+### Fixed
+
+- Set `opener=None` for KonfluxSource RPM items
+
 ## [2.53.0] - 2026-09-02
 
 ### Added
@@ -606,7 +616,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.53.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.54.0...HEAD
+[2.54.0]: https://github.com/release-engineering/pushsource/compare/v2.53.0...v2.54.0
 [2.53.0]: https://github.com/release-engineering/pushsource/compare/v2.52.2...v2.53.0
 [2.52.2]: https://github.com/release-engineering/pushsource/compare/v2.52.1...v2.52.2
 [2.52.1]: https://github.com/release-engineering/pushsource/compare/v2.52.0...v2.52.1

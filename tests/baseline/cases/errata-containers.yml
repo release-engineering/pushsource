@@ -60,6 +60,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-96350-20200707073241-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -112,6 +113,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-80524-20200707075228-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -164,6 +166,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-26015-20200707073243-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -216,6 +219,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-73090-20200707074057-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -268,6 +272,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-37981-20200707074058-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -320,6 +325,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-50417-20200707075226-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -373,6 +379,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-46533-20200707080442-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -425,6 +432,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-55835-20200707072221-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -477,6 +485,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-13969-20200707075057-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -529,6 +538,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-10148-20200707075227-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -581,6 +591,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-29839-20200707075658-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -633,6 +644,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-50813-20200707072548-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -685,6 +697,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-39763-20200707075226-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -737,6 +750,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-34026-20200707075658-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -789,6 +803,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-62041-20200707075700-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -841,6 +856,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-22606-20200707072222-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -894,6 +910,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-13114-20200707080444-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -946,6 +963,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-37691-20200707074057-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -998,6 +1016,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-12128-20200707073242-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1050,6 +1069,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-37648-20200707075920-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: sriov-network-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1102,6 +1122,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-30090-20200707073241-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1154,6 +1175,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-50460-20200707072547-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1206,6 +1228,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-11742-20200707072220-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1258,6 +1281,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-31452-20200707075921-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1310,6 +1334,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-20098-20200707075056-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1362,6 +1387,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-23776-20200707075920-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1414,6 +1440,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-78708-20200707075057-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1466,6 +1493,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-65912-20200707074059-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: amd64
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1519,6 +1547,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-12704-20200707080441-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1571,6 +1600,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-40827-20200707075058-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: ppc64le
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1623,6 +1653,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-85934-20200707072549-ppc64le
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1675,6 +1706,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-31634-20200707072549-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1727,6 +1759,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-35990-20200707075659-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1779,6 +1812,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-97582-20200707075920-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: s390x
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1832,6 +1866,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-48676-20200707080442-s390x
     src: null
     state: PENDING
+    to_sync: false
 - ContainerImagePushItem:
     arch: arm64
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
@@ -1884,6 +1919,7 @@ items:
     - rhaos-4.3-rhel-7-candidate-76837-20200707072220-aarch64
     src: null
     state: PENDING
+    to_sync: false
 - ErratumPushItem:
     build: null
     build_info: null
@@ -1981,6 +2017,7 @@ items:
 
       via new operator metadata containers.'
     title: OpenShift Container Platform 4.3.28 OLM Operators metadata update
+    to_sync: false
     type: bugfix
     updated: 2020-07-08 22:16:09 UTC
     version: '3'
@@ -2040,6 +2077,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-20098-20200707075056-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2088,6 +2126,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-78708-20200707075057-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2136,6 +2175,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-13969-20200707075057-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2184,6 +2224,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-40827-20200707075058-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: cluster-logging-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -2194,6 +2235,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -2250,6 +2292,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-97582-20200707075920-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2298,6 +2341,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-37648-20200707075920-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2346,6 +2390,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-23776-20200707075920-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2394,6 +2439,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-31452-20200707075921-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: cluster-nfd-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -2404,6 +2450,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -2460,6 +2507,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-50417-20200707075226-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2508,6 +2556,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-39763-20200707075226-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2556,6 +2605,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-10148-20200707075227-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2604,6 +2654,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-80524-20200707075228-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: elasticsearch-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -2614,6 +2665,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -2670,6 +2722,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-50460-20200707072547-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2718,6 +2771,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-50813-20200707072548-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2766,6 +2820,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-31634-20200707072549-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2814,6 +2869,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-85934-20200707072549-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: local-storage-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -2824,6 +2880,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -2880,6 +2937,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-46533-20200707080442-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2928,6 +2986,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-12704-20200707080441-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -2976,6 +3035,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-48676-20200707080442-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3024,6 +3084,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-13114-20200707080444-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: openshift-enterprise-ansible-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -3034,6 +3095,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -3090,6 +3152,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-34026-20200707075658-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3138,6 +3201,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-29839-20200707075658-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3186,6 +3250,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-35990-20200707075659-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3234,6 +3299,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-62041-20200707075700-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: openshift-enterprise-template-service-broker-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -3244,6 +3310,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -3300,6 +3367,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-73090-20200707074057-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3348,6 +3416,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-37691-20200707074057-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3396,6 +3465,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-37981-20200707074058-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3444,6 +3514,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-65912-20200707074059-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: ose-metering-ansible-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -3454,6 +3525,7 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
     build_info:
@@ -3510,6 +3582,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-76837-20200707072220-aarch64
       src: null
       state: PENDING
+      to_sync: false
     - arch: amd64
       build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3558,6 +3631,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-11742-20200707072220-x86_64
       src: null
       state: PENDING
+      to_sync: false
     - arch: s390x
       build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3606,6 +3680,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-55835-20200707072221-s390x
       src: null
       state: PENDING
+      to_sync: false
     - arch: ppc64le
       build: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1
       build_info:
@@ -3654,6 +3729,7 @@ items:
       - rhaos-4.3-rhel-7-candidate-22606-20200707072222-ppc64le
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: ose-ptp-operator-metadata-container-v4.3.28.202006290519.p0.prod-1/operator_manifests.zip
@@ -3664,3 +3740,4 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false

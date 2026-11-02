@@ -331,7 +331,10 @@ class KonfluxSource(Source):
                     origin=data.advisory_id,
                     build=entry["build_nvr"],
                     signing_key=entry["signing_key"],
+                    # Content lives in a remote Pulp (src is a Pulp href), so it
+                    # has no local file to upload and must be synced in.
                     opener=None,
+                    to_sync=True,
                 )
             )
 

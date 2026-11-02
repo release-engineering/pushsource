@@ -21,6 +21,7 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_directories/dest1/RAW
     state: PENDING
+    to_sync: false
 - DirectoryPushItem:
     build: null
     build_info: null
@@ -34,6 +35,7 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_directories/dest2/RAW
     state: PENDING
+    to_sync: false
 - DirectoryPushItem:
     build: null
     build_info: null
@@ -47,3 +49,4 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_directories/origin/RAW
     state: PENDING
+    to_sync: false

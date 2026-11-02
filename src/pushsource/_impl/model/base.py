@@ -186,6 +186,21 @@ class PushItem(object):
     .. versionadded:: 2.51.0
     """
 
+    to_sync = attr.ib(type=bool, default=False, validator=instance_of(bool))
+    """Whether this item's content must be synced into the target system from a
+    remote source, rather than uploaded from local content.
+
+    This is set to ``True`` by sources which produce items whose content already
+    resides in a remote location (such as a remote Pulp) referenced by
+    :meth:`src`. In that case the content has no local file and cannot be
+    uploaded; it must instead be synced from the remote source.
+
+    Consumers should rely on this flag, rather than inferring intent from the
+    shape of :meth:`src` or the absence of an :meth:`opener`.
+
+    .. versionadded:: 2.55.0
+    """
+
     def with_checksums(self):
         """Return a copy of this push item with checksums present.
 

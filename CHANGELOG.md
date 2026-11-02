@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Added
+
+- Added `to_sync` attribute on `PushItem`, set to `True` by `KonfluxSource` for
+  RPM items whose content resides in a remote Pulp and must be synced in rather
+  than uploaded. Consumers should rely on this flag instead of inferring intent
+  from `src` or the absence of an `opener`.
 
 ## [2.54.0] - 2026-09-30
 

@@ -32,3 +32,4 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_productid/dest1/PRODUCTID/some-cert
     state: PENDING
+    to_sync: false

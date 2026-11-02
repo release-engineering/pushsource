@@ -53,6 +53,7 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something1.raw.xz
     sriov_net_support: null
     state: PENDING
+    to_sync: false
     type: AMI
     uefi_support: null
     usage_instructions: null
@@ -105,6 +106,7 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build2/something2.raw.xz
     sriov_net_support: null
     state: PENDING
+    to_sync: false
     type: AMI
     uefi_support: null
     usage_instructions: null
@@ -157,6 +159,7 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build3/something1.raw.xz
     sriov_net_support: null
     state: PENDING
+    to_sync: false
     type: AMI
     uefi_support: null
     usage_instructions: null
@@ -203,6 +206,7 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something1.raw.xz
     state: PENDING
     support_legacy: false
+    to_sync: false
 - VHDPushItem:
     boot_mode: null
     build: null
@@ -242,3 +246,4 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_cloud/starmap/CLOUD_IMAGES/build1/something2.raw.xz
     state: PENDING
     support_legacy: false
+    to_sync: false

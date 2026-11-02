@@ -23,6 +23,7 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_files/dest1/ISOS/test.txt
     state: PENDING
+    to_sync: false
     version: null
 - FilePushItem:
     build: null
@@ -39,6 +40,7 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_files/dest2/FILES/some-file
     state: PENDING
+    to_sync: false
     version: 1.2.3
 - FilePushItem:
     build: null
@@ -55,4 +57,5 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_files/dest2/ISOS/some-iso
     state: PENDING
+    to_sync: false
     version: null

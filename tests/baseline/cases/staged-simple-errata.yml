@@ -118,6 +118,7 @@ items:
     summary: Updated devtools/rust-toolset-rhel7 container image is now available
       for Red Hat Developer Tools.
     title: updated devtools/rust-toolset-rhel7 container image
+    to_sync: false
     type: bugfix
     updated: 2020-02-17 09:14:49 UTC
     version: '1'
@@ -282,6 +283,7 @@ items:
       a detailed severity rating, is available for each vulnerability from the CVE
       link(s) in the References section.'
     title: 'Important: sudo security update'
+    to_sync: false
     type: security
     updated: 2020-02-13 19:00:11 UTC
     version: '3'

@@ -43,3 +43,4 @@ items:
     - rhos-16.1-rhel-8-containers-candidate-83243-20210621202300-x86_64
     src: null
     state: PENDING
+    to_sync: false

@@ -20,3 +20,4 @@ items:
     signing_key: null
     src: /some/path/to/modules.yaml
     state: PENDING
+    to_sync: false

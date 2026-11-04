@@ -224,6 +224,21 @@
 <span class="sd">    .. versionadded:: 2.51.0</span>
 <span class="sd">    """</span>
 
+    <span class="n">to_sync</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">"""Whether this item's content must be synced into the target system from a</span>
+<span class="sd">    remote source, rather than uploaded from local content.</span>
+
+<span class="sd">    This is set to ``True`` by sources which produce items whose content already</span>
+<span class="sd">    resides in a remote location (such as a remote Pulp) referenced by</span>
+<span class="sd">    :meth:`src`. In that case the content has no local file and cannot be</span>
+<span class="sd">    uploaded; it must instead be synced from the remote source.</span>
+
+<span class="sd">    Consumers should rely on this flag, rather than inferring intent from the</span>
+<span class="sd">    shape of :meth:`src` or the absence of an :meth:`opener`.</span>
+
+<span class="sd">    .. versionadded:: 2.55.0</span>
+<span class="sd">    """</span>
+
 <div class="viewcode-block" id="PushItem.with_checksums">
 <a class="viewcode-back" href="../../../../model/base.html#pushsource.PushItem.with_checksums">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_checksums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

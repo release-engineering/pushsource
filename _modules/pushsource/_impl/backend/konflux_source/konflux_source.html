@@ -369,7 +369,10 @@
                     <span class="n">origin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">advisory_id</span><span class="p">,</span>
                     <span class="n">build</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">"build_nvr"</span><span class="p">],</span>
                     <span class="n">signing_key</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">"signing_key"</span><span class="p">],</span>
+                    <span class="c1"># Content lives in a remote Pulp (src is a Pulp href), so it</span>
+                    <span class="c1"># has no local file to upload and must be synced in.</span>
                     <span class="n">opener</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">to_sync</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 

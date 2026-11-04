@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- n/a
+
+## [2.55.0] - 2026-11-04
+
 ### Added
 
 - Added `to_sync` attribute on `PushItem`, set to `True` by `KonfluxSource` for
@@ -621,7 +625,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial stable release of project
 
-[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.54.0...HEAD
+[Unreleased]: https://github.com/release-engineering/pushsource/compare/v2.55.0...HEAD
+[2.55.0]: https://github.com/release-engineering/pushsource/compare/v2.54.0...v2.55.0
 [2.54.0]: https://github.com/release-engineering/pushsource/compare/v2.53.0...v2.54.0
 [2.53.0]: https://github.com/release-engineering/pushsource/compare/v2.52.2...v2.53.0
 [2.52.2]: https://github.com/release-engineering/pushsource/compare/v2.52.1...v2.52.2

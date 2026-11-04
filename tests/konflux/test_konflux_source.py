@@ -65,6 +65,12 @@ def test_load_single_advisory():
     # Should have 7 RPMs total
     assert len(rpm_items) == 7
 
+    # Every RPM's content lives in a remote Pulp, so it must be synced in
+    # rather than uploaded; the source signals this explicitly via to_sync.
+    assert all(rpm.to_sync for rpm in rpm_items)
+    # The erratum is ordinary metadata (not remote content), so it is not synced.
+    assert erratum.to_sync is False
+
     # Validate erratum string representation
     assert str(erratum) == "RHSA-2020:0509: Important: sudo security update"
 
@@ -193,6 +199,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.src.rpm",
@@ -211,6 +218,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -227,6 +235,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
@@ -242,6 +251,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-debuginfo-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -258,6 +268,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.ppc64le.rpm",
@@ -273,6 +284,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
         RpmPushItem(
             name="sudo-debugsource-1.8.25p1-4.el8_0.3.x86_64.rpm",
@@ -289,6 +301,7 @@ def test_load_single_advisory():
             build="sudo-1.8.25p1-4.el8_0.3",
             signing_key="FD431D51",
             opener=None,
+            to_sync=True,
         ),
     ]
 

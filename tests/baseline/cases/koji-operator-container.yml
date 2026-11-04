@@ -64,6 +64,7 @@ items:
     - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
     src: null
     state: PENDING
+    to_sync: false
 - OperatorManifestPushItem:
     build: security-profiles-operator-bundle-container-0.5.2-2
     build_info:
@@ -127,6 +128,7 @@ items:
       - rhaos-4.11-rhel-8-containers-candidate-46533-20230301150354-x86_64
       src: null
       state: PENDING
+      to_sync: false
     dest: []
     md5sum: null
     name: security-profiles-operator-bundle-container-0.5.2-2/operator_manifests.zip
@@ -140,3 +142,4 @@ items:
     signing_key: null
     src: null
     state: PENDING
+    to_sync: false

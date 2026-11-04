@@ -21,3 +21,4 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_comps/dest1/COMPS/rawhide-everything.xml
     state: PENDING
+    to_sync: false

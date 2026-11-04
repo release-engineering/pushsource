@@ -21,3 +21,4 @@ items:
     signing_key: null
     src: my/great/cgw.yaml
     state: PENDING
+    to_sync: false

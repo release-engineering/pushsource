@@ -21,3 +21,4 @@ items:
     signing_key: A1B2C3
     src: /some/test.rpm
     state: PENDING
+    to_sync: false

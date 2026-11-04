@@ -24,4 +24,5 @@ items:
     signing_key: null
     src: my/great/file.txt
     state: PENDING
+    to_sync: false
     version: null

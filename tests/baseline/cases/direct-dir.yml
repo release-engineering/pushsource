@@ -21,3 +21,4 @@ items:
     signing_key: null
     src: /srcdir
     state: PENDING
+    to_sync: false

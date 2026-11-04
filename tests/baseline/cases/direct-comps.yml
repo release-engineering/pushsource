@@ -20,3 +20,4 @@ items:
     signing_key: null
     src: mycomps.xml
     state: WHATEVA
+    to_sync: false

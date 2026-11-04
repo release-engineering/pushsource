@@ -21,3 +21,4 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_cgw/dest/CGW/cgw.yml
     state: PENDING
+    to_sync: false

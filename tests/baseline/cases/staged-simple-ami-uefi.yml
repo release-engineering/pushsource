@@ -49,6 +49,7 @@ items:
     src: {{ src_dir }}/tests/staged/data/simple_ami_with_uefi/dest1/AWS_IMAGES/fake-image.raw
     sriov_net_support: simple
     state: PENDING
+    to_sync: false
     type: access
     uefi_support: true
     usage_instructions: null

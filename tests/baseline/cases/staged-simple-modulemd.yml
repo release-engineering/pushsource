@@ -21,3 +21,4 @@ items:
     signing_key: null
     src: {{ src_dir }}/tests/staged/data/simple_modulemd/dest1/MODULEMD/some-modules.yaml
     state: PENDING
+    to_sync: false

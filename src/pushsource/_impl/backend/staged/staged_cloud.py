@@ -1,6 +1,8 @@
 import logging
 import os
+import posixpath
 import yaml
+from urllib.parse import urlsplit
 
 from .staged_base import StagedBaseMixin, handles_type
 from ...model import (
@@ -15,6 +17,19 @@ from ...model import (
 LOG = logging.getLogger("pushsource")
 
 
+def _resolve_image_src(image, origin):
+    path = image.get("path")
+    remote = image.get("remote")
+    if path and remote:
+        raise ValueError("must not set both 'path' and 'remote'")
+    if not path and not remote:
+        raise ValueError("must set exactly one of 'path' or 'remote'")
+    if remote:
+        name = posixpath.basename(urlsplit(remote).path) or remote
+        return name, remote
+    return path, os.path.join(origin, path)
+
+
 class StagedCloudMixin(StagedBaseMixin):
     def __get_product_name(self, base_name):
         splitted_name = base_name.split("-")
@@ -27,8 +42,8 @@ class StagedCloudMixin(StagedBaseMixin):
     def __build_ami_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
         release_resources = resources.get("release") or {}
-        name = image.get("path")
-        src = os.path.join(origin, name)
+        name, src = _resolve_image_src(image, origin)
+        remote = image.get("remote")
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
             version=build_resources.get("version"),
@@ -99,13 +114,16 @@ class StagedCloudMixin(StagedBaseMixin):
             if key in resources:
                 image_kwargs[key] = resources.get(key)
 
+        if remote:
+            image_kwargs["image_id"] = remote
+
         return AmiPushItem(**image_kwargs)
 
     def __build_azure_push_item(self, resources, origin, image, dest):
         build_resources = resources.get("build")
         release_resources = resources.get("release") or {}
-        name = image.get("path")
-        src = os.path.join(origin, name)
+        name, src = _resolve_image_src(image, origin)
+        remote = image.get("remote")
         build_info = KojiBuildInfo(
             name=build_resources.get("name"),
             version=build_resources.get("version"),
@@ -131,6 +149,8 @@ class StagedCloudMixin(StagedBaseMixin):
             "sha256sum": image.get("sha256sum"),
             "release": VMIRelease(**release_kwargs),
         }
+        if remote:
+            image_kwargs["sas_uri"] = remote
         return VHDPushItem(**image_kwargs)
 
     @handles_type(
@@ -149,8 +169,9 @@ class StagedCloudMixin(StagedBaseMixin):
         images_info = raw.get("images") or []
         out = []
         for image in images_info:
-            if "/" in image.get("path"):
-                LOG.warning("Unexpected '/' in %s (ignored)", image.get("path"))
+            path = image.get("path")
+            if path and "/" in path:
+                LOG.warning("Unexpected '/' in %s (ignored)", path)
                 return
             if image_type == "AMI":
                 out.append(

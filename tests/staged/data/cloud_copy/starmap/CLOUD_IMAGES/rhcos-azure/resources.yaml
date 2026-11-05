@@ -1,0 +1,14 @@
+api: v1
+resource: CloudImage
+images:
+  - remote: "https://rhcos.blob.core.windows.net/imagebucket/rhcos-9.6.20251212-1-azure.x86_64.vhd"
+    architecture: x86_64
+build:
+  name: RHCOS
+  respin: "0"
+  version: "4.21"
+release:
+  date: "20260603"
+description: ""
+boot_mode: hybrid
+type: VHD
